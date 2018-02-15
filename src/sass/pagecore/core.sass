@@ -1,0 +1,292 @@
+@import "features"
+
+
+//
+// Rem
+// --------------------------------------------------
+
+\:root
+  font-size: $rem
+
+@if $rem--tablet-portrait != $rem
+  +for-tablet-portrait
+    \:root
+      font-size: $rem--tablet-portrait
+
+@if $rem--tablet-landscape != $rem--tablet-portrait
+  +for-tablet-landscape
+    \:root
+      font-size: $rem--tablet-landscape
+
+@if $rem--desktop != $rem--tablet-landscape
+  +for-desktop
+    \:root
+      font-size: $rem--desktop
+
+@if $rem--big-desktop != $rem--desktop
+  +for-big-desktop
+    \:root
+      font-size: $rem--big-desktop
+
+
+//
+// Html & Body
+// --------------------------------------------------
+
+html,
+body
+  height: 100%
+  width: 100%
+
+html
+  box-sizing: border-box
+
+body
+  background-color: $color-background
+  color: $content-font-color
+  font-family: $font-content
+  font-weight: $content-font-weight
+  line-height: $content-font-line-height
+  -moz-osx-font-smoothing: grayscale
+  -webkit-font-smoothing: antialiased
+
+
+//
+// Headings
+// --------------------------------------------------
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6
+  color: $heading-font-color
+  font-family: $font-heading
+  font-size: $heading-font-size
+  font-weight: $heading-font-weight
+
+
+//
+// Link
+// --------------------------------------------------
+
+a
+  color: $link-font-color--basic
+  text-decoration: $link-text-decoration--basic
+  cursor: pointer
+
+  &:hover
+    color: $link-font-color--hover
+    text-decoration: $link-text-decoration--hover
+
+  &:active
+    color: $link-font-color--activ
+    text-decoration: $link-text-decoration--activ
+
+
+//
+// Button
+// --------------------------------------------------
+
+button
+  background: $button-background--basic
+  border: $button-border--basic
+  border-radius: $button-border-radius
+  color: $button-font-color--basic
+  cursor: pointer
+  font-family: $button-font-family
+  font-size: $button-font-size
+  font-weight: $button-font-weight
+  letter-spacing: inherit
+  outline: 0
+  padding: $button-padding
+  -webkit-font-smoothing: inherit
+
+  &:hover
+    background: $button-background--hover
+    border: $button-border--hover
+    color: $button-font-color--hover
+
+  &:active
+    background: $button-background--activ
+    border: $button-border--activ
+    color: $button-font-color--activ
+
+
+//
+// Form
+// --------------------------------------------------
+
+input[type="color"],
+input[type="date"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="email"],
+input[type="month"],
+input[type="number"],
+input[type="password"],
+input[type="search"],
+input[type="tel"],
+input[type="text"],
+input[type="time"],
+input[type="url"],
+input[type="week"],
+input:not([type]),
+textarea,
+select
+  background: $input-background--basic
+  border: $input-border--basic
+  border-radius: $input-border-radius
+  color: $input-font-color--basic
+  display: block
+  font-family: $input-font-family
+  font-size: $input-font-size
+  font-weight: $input-font-weight
+  outline: 0
+  padding: $input-padding
+  width: 100%
+
+  &:hover
+    background: $input-background--hover
+    border: $input-border--hover
+    color: $input-font-color--hover
+
+  &:focus
+    background: $input-background--focus
+    border: $input-border--focus
+    color: $input-font-color--focus
+
+  &::placeholder
+    color: $input-placeholder-color
+
+textarea
+  resize: vertical
+
+select
+  -webkit-appearance: none
+  -moz-appearance: none
+
+select,
+select:hover,
+select:focus
+  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' width='12' height='14' %3E %3Cpolygon points='0,6 6,0 12,6' fill='#{svg-safe-hex($input-select-arrow-color)}'/%3E %3Cpolygon points='0,8 12,8 6,14' fill='#{svg-safe-hex($input-select-arrow-color)}'/%3E %3C/svg%3E")
+  background-repeat: no-repeat
+  background-position: right 12px center
+  padding-right: 36px
+
+
+input[type="checkbox"],
+input[type="radio"]
+  margin-left: 5px
+  margin-right: 5px
+
+label
+  display: block
+
+
+//
+// All elements
+// --------------------------------------------------
+
+*,
+*:before,
+*:after
+  box-sizing: inherit
+
+
+//
+// List
+// --------------------------------------------------
+
+ul
+  list-style: none
+
+
+//
+// Media
+// --------------------------------------------------
+
+img
+  max-width: 100%
+  display: inline-block
+  vertical-align: top
+  text-align: center
+
+
+embed,
+iframe,
+object,
+audio,
+video
+  height: auto
+  max-width: 100%
+
+
+//
+// iframe
+// --------------------------------------------------
+
+iframe
+  border: 0
+
+
+//
+// Table
+// --------------------------------------------------
+
+table
+  border-collapse: collapse
+  border-spacing: 0
+
+td,
+th
+  padding: 0
+  text-align: left
+
+
+//
+// Horizontal rule
+// --------------------------------------------------
+
+hr
+  border: 0
+  height: $hr-height
+  background: $hr-background
+
+
+//
+// Reset margin & padding
+// --------------------------------------------------
+// Source: github.com/jgthms/minireset.css
+
+html,
+body,
+p,
+ol,
+ul,
+li,
+dl,
+dt,
+dd,
+blockquote,
+figure,
+fieldset,
+legend,
+pre,
+iframe,
+hr,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6
+  margin: 0
+  padding: 0
+
+button,
+input,
+select,
+textarea
+  margin: 0

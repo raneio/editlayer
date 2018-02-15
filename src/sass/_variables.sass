@@ -1,0 +1,178 @@
+//
+// Responsive
+// --------------------------------------------------
+// $rem is font size and others is relative to it
+
+$rem: 14px
+$rem--tablet-portrait: 14px
+$rem--tablet-landscape: 16px
+$rem--desktop: 18px
+$rem--big-desktop: 18px
+
+$breakpoint--tablet-portrait: 600px
+$breakpoint--tablet-landscape: 900px
+$breakpoint--desktop: 1200px
+$breakpoint--big-desktop: 1800px
+
+$container-horizontal-padding: 16px
+$container-horizontal-padding--tablet-portrait: 32px
+$container-horizontal-padding--tablet-landscape: 48px
+$container-horizontal-padding--desktop: 64px
+$container-horizontal-padding--big-desktop: 96px
+
+$container-max-width: 1200px
+$container-vertical-padding: 6rem
+
+
+//
+// Fonts
+// --------------------------------------------------
+
+$font-content: 'Open Sans', sans-serif
+$font-heading: 'Open Sans', sans-serif
+
+
+//
+// Colors
+// --------------------------------------------------
+
+$color-background: #ffffff
+$color-content: #32325D
+$color-primary: #656FDE
+$color-secondary: #D680D4
+$color-tertiary: #F5BF68
+
+$color-background--light: #F6F9FC
+$color-background--semi-light: #EDF2F7
+$color-content--light: #6B7C93
+
+// invert
+$color-background--invert: #212529
+$color-content--invert: #FFFFFF
+$color-primary--invert: $color-primary
+$color-secondary--invert: $color-secondary
+$color-tertiary--invert: $color-tertiary
+
+
+//
+// Content
+// --------------------------------------------------
+
+$content-font-color: $color-content
+$content-font-line-height: 1.5
+$content-font-weight: 400
+
+// invert
+$content-font-color--invert: $color-content--invert
+$content-font-weight--invert: 600
+
+
+//
+// Heading
+// --------------------------------------------------
+
+$heading-font-color: $color-content
+$heading-font-size: 1.6rem
+$heading-font-weight: 600
+
+// invert
+$heading-font-color--invert: $content-font-color--invert
+$heading-font-weight--invert: $heading-font-weight
+
+
+//
+// Links
+// --------------------------------------------------
+
+$link-font-color--basic: $color-primary
+$link-font-color--hover: mix(black, $color-primary, 10%)
+$link-font-color--activ: mix(black, $color-primary, 20%)
+
+$link-text-decoration--basic: none
+$link-text-decoration--hover: none
+$link-text-decoration--activ: none
+
+// invert
+$link-font-color--basic-invert: #ffffff
+$link-font-color--hover-invert: mix($color-content--invert, $link-font-color--basic-invert, 10%)
+$link-font-color--activ-invert: mix($color-content--invert, $link-font-color--basic-invert, 20%)
+
+
+//
+// Buttons
+// --------------------------------------------------
+
+$button-border-radius: .3em
+$button-font-family: $font-content
+$button-font-size: 1em
+$button-font-weight: 700
+$button-padding: .7rem 1.4rem
+
+$button-background--basic: $color-background
+$button-background--hover: $color-background
+$button-background--activ: $color-background
+
+$button-border--basic: none
+$button-border--hover: none
+$button-border--activ: none
+
+$button-font-color--basic: $color-content
+$button-font-color--hover: $color-content
+$button-font-color--activ: $color-content
+
+// invert
+$button-background--basic-invert: $color-background--invert
+$button-background--hover-invert: mix($color-content--invert, $color-background--invert, 5%)
+$button-background--activ-invert: mix($color-content--invert, $color-background--invert, 5%)
+
+$button-border--basic-invert: none
+$button-border--hover-invert: none
+$button-border--activ-invert: none
+
+$button-font-color--basic-invert: $color-background--invert
+$button-font-color--hover-invert: $color-background--invert
+$button-font-color--activ-invert: $color-background--invert
+
+
+//
+// Inputs
+// --------------------------------------------------
+
+$input-color-background: $color-background
+$input-color-border: #D1DAE3
+$input-color-content: $color-content
+$input-color-highlight: $color-primary
+
+$input-border-radius: $button-border-radius
+$input-font-family: $font-content
+$input-font-size: 1.1rem
+$input-font-weight: 400
+$input-padding: 1.2em 1em
+$input-placeholder-color: mix($input-color-content, $input-color-background, 30%)
+$input-select-arrow-color: mix($input-color-content, $input-color-background, 50%)
+
+$input-background--basic: $input-color-background
+$input-background--hover: $input-color-background
+$input-background--focus: $input-color-background
+
+$input-border--basic: 1px solid $input-color-border
+$input-border--hover: 1px solid mix($input-color-border, $input-color-content, 80%)
+$input-border--focus: 1px solid $input-color-highlight
+
+$input-font-color--basic: $input-color-content
+$input-font-color--hover: $input-color-content
+$input-font-color--focus: $input-color-content
+
+// invert
+// TODO Add invert colors to inputs
+
+
+//
+// Horizontal rule
+// --------------------------------------------------
+
+$hr-background: mix($color-content, $color-background, 50%)
+$hr-height: 1px
+
+// invert
+$hr-background--invert: mix($color-content--invert, $color-background--invert, 50%)

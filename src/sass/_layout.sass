@@ -1,0 +1,231 @@
+.layout
+  display: grid
+  grid-template-columns: 22rem auto
+  height: 100vh
+
+  .aside
+    grid-column-start: 1
+    grid-column-end: 2
+    background-color: $color-background--light
+    display: flex
+    flex-direction: column
+    max-height: 100vh
+    overflow-x: hidden
+
+    .header
+      flex-shrink: 0
+      padding: .5rem 1.5rem
+      display: flex
+      width: 100%
+      align-items: center
+      justify-content: space-between
+      box-shadow: inset 0 -2px 0 0 $color-background--semi-light
+      position: relative
+
+      &::after
+        content: ''
+        position: absolute
+        bottom: -2rem
+        left: 0
+        right: 0
+        height: 2rem
+        background: linear-gradient(to bottom, $color-background--light 0%, transparent 100%)
+        z-index: 1
+        pointer-events: none
+
+      .title
+        font-size: 1.5rem
+        text-transform: uppercase
+        font-weight: 800
+        letter-spacing: -.07em
+
+    .content
+      +margin-to-childs()
+      flex-grow: 1
+      overflow: auto
+      padding: 1.5rem
+      transition: transform .1s linear, opacity .1s linear
+      opacity: 1
+
+      &.-to-forward
+        transform: translateX(-50%)
+        opacity: 0
+
+      &.-to-forward-end
+        transition: transform 0s linear, opacity 0s linear
+        transform: translateX(50%)
+        opacity: 0
+
+      &.-to-back
+        transform: translateX(50%)
+        opacity: 0
+
+      &.-to-back-end
+        transition: transform 0s linear, opacity 0s linear
+        transform: translateX(-50%)
+        opacity: 0
+
+      .breadcrumb
+        z-index: 2
+        +grid('default', .5rem)
+        align-items: center
+
+        .crumbs
+          font-size: .8rem
+
+          .crumb
+            display: inline-block
+
+            & + .crumb
+              padding-left: 1.5em
+              position: relative
+
+              &::after
+                content: '>'
+                position: absolute
+                top: 50%
+                left: .5em
+                transform: translateY(-50%)
+                color: mix(transparent, $color-content--light, 50%)
+
+      .items
+        +margin-to-childs(1rem)
+
+        .item
+          text-transform: none
+          font-weight: 600
+          text-align: left
+          position: relative
+
+          &::before
+            content: ''
+            display: block
+            position: absolute
+            left: 0
+            top: 0
+            bottom: 0
+            width: 0
+            background-color: $color-primary
+            border-top-left-radius: $button-border-radius
+            border-bottom-left-radius: $button-border-radius
+            transition: width .2s
+
+          &.-active::before
+            width: 8px
+
+          &.-draft::after
+            content: 'draft'
+            display: block
+            position: absolute
+            right: .5rem
+            top: .25rem
+            font-size: .7rem
+            color: $color-tertiary
+
+          &.-parent
+
+            &::after
+              content: '>'
+              display: flex
+              position: absolute
+              right: 0
+              top: 0
+              bottom: 0
+              width: 3rem
+              border-left: 1px solid mix(transparent, $color-content--light, 80%)
+              justify-content: center
+              align-items: center
+              color: $color-primary
+              font-weight: 400
+              font-size: 1.4rem
+
+          .preview
+
+            &.-text
+              font-size: .9rem
+              font-weight: 400
+
+            &.-image
+              margin-left: -1.4rem
+              margin-right: -1.4rem
+              margin-bottom: -.7rem
+              margin-top: .7rem
+
+              img
+                border-bottom-left-radius: $button-border-radius
+                border-bottom-right-radius: $button-border-radius
+
+    .footer
+      flex-shrink: 0
+      font-size: .8rem
+      text-align: center
+      +margin-to-childs(1rem)
+      padding: 1rem 1.5rem
+      position: relative
+      box-shadow: inset 0 2px 0 0 $color-background--semi-light
+
+      &::after
+        content: ''
+        position: absolute
+        top: -2rem
+        left: 0
+        right: 0
+        height: 2rem
+        background: linear-gradient(to top, $color-background--light 0%, transparent 100%)
+        z-index: 1
+        pointer-events: none
+
+  .main
+    grid-column-start: 2
+    grid-column-end: 3
+    overflow: auto
+    padding: 1rem 2rem
+    +margin-to-childs()
+
+    .header
+      background-color: $color-background--light
+      border-radius: $button-border-radius
+      padding: 1rem 1.5rem
+      display: flex
+      justify-content: space-between
+
+      .heading
+
+
+      .description
+        font-size: .9rem
+        color: $color-content--light
+
+
+      .nav
+        +grid('compact', 2rem)
+        align-items: stretch
+        text-transform: uppercase
+
+        .item
+          position: relative
+          display: flex
+          align-items: center
+
+          &.-active::after
+            content: ''
+            display: block
+            position: absolute
+            left: 1.5rem
+            right: -.5rem
+            bottom: -1rem
+            height: 10px
+            background-color: $color-primary
+            transition: width .2s
+
+
+          a
+            color: $color-content
+            padding-top: 1rem
+            padding-bottom: 1rem
+            margin-top: -1rem
+            margin-bottom: -1rem
+
+    .CodeMirror
+      border-radius: $button-border-radius
+      height: auto

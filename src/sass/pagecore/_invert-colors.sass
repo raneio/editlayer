@@ -1,0 +1,47 @@
+//
+// Invert colors
+// --------------------------------------------------
+// .my-element
+//   +invert-colors
+
+@mixin invert-colors()
+
+  background-color: $color-background--invert
+  color: $content-font-color--invert
+  font-weight: $content-font-weight--invert
+
+  a
+    color: $link-font-color--basic-invert
+
+    &:hover
+      color: $link-font-color--hover-invert
+
+    &:active
+      color: $link-font-color--activ-invert
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6
+    color: $heading-font-color--invert
+    font-weight: $heading-font-weight--invert
+
+  button
+    background: $button-background--basic-invert
+    border: $button-border--basic-invert
+    color: $button-font-color--basic-invert
+
+    &:hover
+      background: $button-background--hover-invert
+      border: $button-border--hover-invert
+      color: $button-font-color--hover-invert
+
+    &:active
+      background: $button-background--activ-invert
+      border: $button-border--activ-invert
+      color: $button-font-color--activ-invert
+
+  hr
+    border-color: $hr-background--invert

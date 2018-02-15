@@ -1,0 +1,176 @@
+//
+// Responsive
+// --------------------------------------------------
+// $rem is font size and others is relative to it
+
+$rem: 14px !default
+$rem--tablet-portrait: 16px !default
+$rem--tablet-landscape: 18px !default
+$rem--desktop: 20px !default
+$rem--big-desktop: 20px !default
+
+$breakpoint--tablet-portrait: 600px !default
+$breakpoint--tablet-landscape: 900px !default
+$breakpoint--desktop: 1200px !default
+$breakpoint--big-desktop: 1800px !default
+
+$container-horizontal-padding: 16px !default
+$container-horizontal-padding--tablet-portrait: 32px !default
+$container-horizontal-padding--tablet-landscape: 48px !default
+$container-horizontal-padding--desktop: 64px !default
+$container-horizontal-padding--big-desktop: 96px !default
+
+$container-max-width: 1200px !default
+$container-vertical-padding: 6rem !default
+
+
+//
+// Fonts
+// --------------------------------------------------
+
+$font-content: 'Source Sans Pro', sans-serif !default
+$font-heading: 'Source Sans Pro', sans-serif !default
+
+
+//
+// Colors
+// --------------------------------------------------
+
+$color-background: #ffffff !default
+$color-content: #000000 !default
+$color-primary: #23B638 !default
+$color-secondary: #17C671 !default
+$color-tertiary: #74B5E5 !default
+
+
+// invert
+$color-background--invert: #000000 !default
+$color-content--invert: #ffffff !default
+$color-primary--invert: $color-primary !default
+$color-secondary--invert: $color-secondary !default
+$color-tertiary--invert: $color-tertiary !default
+
+
+//
+// Content
+// --------------------------------------------------
+
+$content-font-color: $color-content !default
+$content-font-line-height: 1.5 !default
+$content-font-weight: 300 !default
+
+// invert
+$content-font-color--invert: $color-content--invert !default
+$content-font-weight--invert: 400 !default
+
+
+//
+// Heading
+// --------------------------------------------------
+
+$heading-font-color: $content-font-color !default
+$heading-font-size: 1.7rem !default
+$heading-font-weight: 400 !default
+
+
+// invert
+$heading-font-color--invert: $content-font-color--invert !default
+$heading-font-weight--invert: $heading-font-weight !default
+
+
+//
+// Links
+// --------------------------------------------------
+
+$link-font-color--basic: $color-secondary !default
+$link-font-color--hover: mix($color-content, $link-font-color--basic, 10%) !default
+$link-font-color--activ: mix($color-content, $link-font-color--basic, 20%) !default
+
+$link-text-decoration--basic: none !default
+$link-text-decoration--hover: none !default
+$link-text-decoration--activ: none !default
+
+// invert
+$link-font-color--basic-invert: $color-secondary--invert !default
+$link-font-color--hover-invert: mix($color-content--invert, $link-font-color--basic-invert, 10%) !default
+$link-font-color--activ-invert: mix($color-content--invert, $link-font-color--basic-invert, 20%) !default
+
+
+//
+// Buttons
+// --------------------------------------------------
+
+$button-border-radius: .2em !default
+$button-font-family: $font-content !default
+$button-font-size: 1em !default
+$button-font-weight: 500 !default
+$button-padding: 1em 2em !default
+
+$button-background--basic: $color-primary !default
+$button-background--hover: mix($color-background, $color-primary, 10%) !default
+$button-background--activ: mix($color-background, $color-primary, 10%) !default
+
+$button-border--basic: 1px solid $color-primary !default
+$button-border--hover: 1px solid mix($color-background, $color-primary, 10%) !default
+$button-border--activ: 1px solid mix($color-background, $color-primary, 20%) !default
+
+$button-font-color--basic: $color-background !default
+$button-font-color--hover: $color-background !default
+$button-font-color--activ: $color-background !default
+
+// invert
+$button-background--basic-invert: $color-primary--invert !default
+$button-background--hover-invert: mix($color-background--invert, $color-primary--invert, 10%) !default
+$button-background--activ-invert: mix($color-background--invert, $color-primary--invert, 20%) !default
+
+$button-border--basic-invert: 1px solid $color-primary--invert !default
+$button-border--hover-invert: 1px solid mix($color-background--invert, $color-primary--invert, 10%) !default
+$button-border--activ-invert: 1px solid mix($color-background--invert, $color-primary--invert, 20%) !default
+
+$button-font-color--basic-invert: $color-background--invert !default
+$button-font-color--hover-invert: $color-background--invert !default
+$button-font-color--activ-invert: $color-background--invert !default
+
+
+//
+// Inputs
+// --------------------------------------------------
+
+$input-color-background: $color-background !default
+$input-color-border: mix($color-content, $color-background, 50%) !default
+$input-color-content: $color-content !default
+$input-color-highlight: $color-primary !default
+
+$input-border-radius: 0 !default
+$input-font-family: $font-content !default
+$input-font-size: 1rem !default
+$input-font-weight: 400 !default
+$input-padding: .5em .7em !default
+$input-placeholder-color: mix($input-color-content, $input-color-background, 30%) !default
+$input-select-arrow-color: mix($input-color-content, $input-color-background, 50%) !default
+
+$input-background--basic: $input-color-background !default
+$input-background--hover: $input-color-background !default
+$input-background--focus: $input-color-background !default
+
+$input-border--basic: 1px solid $input-color-border !default
+$input-border--hover: 1px solid mix($input-color-border, $input-color-content, 80%) !default
+$input-border--focus: 1px solid $input-color-highlight !default
+
+$input-font-color--basic: $input-color-content !default
+$input-font-color--hover: $input-color-content !default
+$input-font-color--focus: $input-color-content !default
+
+// invert
+// TODO Add invert colors to inputs
+
+
+//
+// Horizontal rule
+// --------------------------------------------------
+
+$hr-background: mix($color-content, $color-background, 50%)
+$hr-height: 1px
+
+// invert
+$hr-background--invert: mix($color-content--invert, $color-background--invert, 50%)
