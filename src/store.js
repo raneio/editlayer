@@ -4,99 +4,10 @@ import Vuex from 'vuex'
 import uuid from 'uuid/v4'
 import firebase from './firebase'
 import router from './router'
+import buildSchema from './utils/buildSchema'
 
 Vue.use(Vuex)
 Vue.use(firebase)
-
-Vue.use(Vuex)
-
-const simpleToAdvanceInSchema = (schema) => {
-  _.each(schema, (value, key) => {
-    if (!_.includes(['EDITOR', 'CONTENT', 'PATH', 'NAME', 'DEFAULT', 'TYPE'], key)) {
-
-      if (_.isArray(value)) {
-        schema[key] = {
-          ARRAY: value[0],
-        }
-
-        value = simpleToAdvanceInSchema(value)
-      }
-
-      if (_.isString(value)) {
-        schema[key] = {
-          EDITOR: value,
-        }
-      }
-    }
-
-    if (_.isPlainObject(value)) {
-      value = simpleToAdvanceInSchema(value)
-    }
-  })
-
-  return schema
-}
-
-const addArraysAndPathsToSchema = (schema, draft, parentPath = false) => {
-  _.each(schema, (value, key) => {
-    let path = (!parentPath) ? key : `${parentPath}.${key}`
-
-    if (_.has(value, 'ARRAY')) {
-      let items = _.get(draft, path)
-
-      _.each(items, (itemValue, itemKey) => {
-        _.set(value, `${itemKey}.ORDER`, itemValue.ORDER)
-
-        _.each(value.ARRAY, (arrayValue, arrayKey) => {
-          _.set(value, `${itemKey}.${arrayKey}`, _.cloneDeep(arrayValue))
-        })
-      })
-    }
-
-    if (_.isPlainObject(value) && key !== 'ARRAY') {
-      value.PATH = path
-      value = addArraysAndPathsToSchema(value, draft, path)
-    }
-  })
-
-  return schema
-}
-
-const addDataToSchema = (schema, draft) => {
-  _.each(schema, (value, key) => {
-    if (_.isPlainObject(value) && key !== 'ARRAY') {
-
-      if (!_.has(value, 'NAME')) {
-        value.NAME = key
-      }
-
-      if (_.has(value, 'EDITOR')) {
-        value.TYPE = 'value'
-      } else if (_.has(value, 'ARRAY')) {
-        value.TYPE = 'array'
-      } else {
-        value.TYPE = 'object'
-      }
-
-      if (_.has(value, 'EDITOR')) {
-        let content = _.get(draft, value.PATH)
-
-        if (content) {
-          value.CONTENT = content
-        } else if (_.has(value, 'DEFAULT')) {
-          value.CONTENT = value.DEFAULT
-        } else {
-          value.CONTENT = null
-        }
-      }
-
-      value = addDataToSchema(value, draft)
-    }
-  })
-
-  return schema
-}
-
 
 export default new Vuex.Store({
 
@@ -118,6 +29,10 @@ export default new Vuex.Store({
       }).orderBy(['filename']).value()
     },
 
+    activeFile (state, getters) {
+      return _.find(getters.files, { fileId: state.route.params.id })
+    },
+
     schema (state) {
       if (!state.route.params.id || !state.files || !state.files[state.route.params.id]) return {}
 
@@ -130,12 +45,7 @@ export default new Vuex.Store({
         return {}
       }
 
-      schema = simpleToAdvanceInSchema(schema)
-      schema = addArraysAndPathsToSchema(schema, state.files[state.route.params.id].draft)
-      // schema = addNamesTypesToSchema(schema)
-      schema = addDataToSchema(schema, state.files[state.route.params.id].draft)
-
-      return schema
+      return buildSchema(schema, state.files[state.route.params.id].draft)
     },
 
   },
@@ -222,6 +132,7 @@ export default new Vuex.Store({
     },
 
     newFile ({state, dispatch}, filename) {
+      let fileId = Math.random().toString(36).slice(-4)
       let defaultSchema = {
         title: {
           EDITOR: "text"
@@ -257,6 +168,14 @@ export default new Vuex.Store({
     },
 
     saveSchema ({state}, payload) {
+
+      try {
+      	JSON.parse(payload.schema)
+      } catch (err) {
+        console.error('Not Saved: Schema Syntax Error')
+        return false
+      }
+
       firebase.db.collection('files').doc(payload.fileId).update({
         schema: payload.schema,
       })
@@ -268,13 +187,14 @@ export default new Vuex.Store({
       let updateData = {}
       updateData[`draft.${payload.path}`] = payload.content
 
+      console.log('updateContent', updateData)
+
       firebase.db.collection('files').doc(payload.fileId).update(updateData)
       .then(() => console.log('Content successfully updated!'))
       .catch((error) => console.error('Error updating content:', error))
     },
 
     newArrayItem ({state, dispatch}, payload) {
-      console.log('payload', payload)
       let randomKey = `-${Math.random().toString(36).slice(-4)}`
       let path = `draft.${payload.path}`
       let newPath = `${path}.${randomKey}`
@@ -315,6 +235,22 @@ export default new Vuex.Store({
       .then((docRef) => console.log('Added version:', docRef.id))
       .catch((error) => console.log('Error adding version:', error))
     },
+
+    // uploadImages ({state, dispatch}, images) {
+    //   let file = images[0]
+    //   let randomKey = Math.random().toString(36).slice(-4)
+    //   let path = `${randomKey}/${file.name}`
+    //   let storageRef = firebase.storage.ref().child(`images/${path}`)
+    //
+    //   storageRef.put(file)
+    //   .then((snapshot) => {
+    //     console.log('Uploaded a blob or file!', snapshot)
+    //   })
+    //   .catch((error) => {
+    //     dispatch('uploadImages', images)
+    //   })
+    //
+    // },
 
   },
 

@@ -1,5 +1,6 @@
 <script>
 import _ from 'lodash'
+import titleCase from 'title-case'
 
 
 export default {
@@ -47,6 +48,18 @@ export default {
 
   },
 
+  methods: {
+
+    stringToTitle (text) {
+      if (_.endsWith(text, '.json')) {
+        text = text.slice(0, -5)
+      }
+
+      return titleCase(text)
+    }
+
+  },
+
 }
 </script>
 
@@ -58,7 +71,7 @@ export default {
   @click="selectItem(item)"
 >
 
-  <div v-text="item.NAME"/>
+  <div v-text="stringToTitle(item.NAME)"/>
 
   <div
     class="preview -text"
@@ -70,7 +83,7 @@ export default {
     class="preview -image"
     v-if="preview.type === 'image'"
   >
-    <img :src="preview.content" alt="">
+    <img :src="preview.content + '?w=350&h=110&fit=crop'" alt="">
   </div>
 
   <!-- <div class="image" v-if="item.previewType === 'image'">

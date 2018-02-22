@@ -1,11 +1,46 @@
 .layout
   display: grid
+  grid-template-rows: 3rem auto
   grid-template-columns: 22rem auto
   height: 100vh
 
-  .aside
+  .top-nav
+    grid-column-start: 1
+    grid-column-end: 3
+    grid-row-start: 1
+    grid-row-end: 2
+    background-color: $color-primary
+    display: flex
+    justify-content: space-between
+
+    .item
+      +invert-colors()
+      padding: 1rem .25rem
+      background-color: transparent
+      font-size: .8rem
+      text-transform: uppercase
+      font-weight: 400
+      text-align: center
+      cursor: pointer
+
+      &:hover .content
+        opacity: 1
+
+      .content
+        transition: opacity .2s
+        opacity: .8
+
+      &.-primary
+        background-color: $color-primary
+
+      &.-secondary
+        background-color: $color-secondary
+
+  .side-panel
     grid-column-start: 1
     grid-column-end: 2
+    grid-row-start: 2
+    grid-row-end: 3
     background-color: $color-background--light
     display: flex
     flex-direction: column
@@ -13,31 +48,30 @@
     overflow-x: hidden
 
     .header
-      flex-shrink: 0
       padding: .5rem 1.5rem
-      display: flex
-      width: 100%
-      align-items: center
-      justify-content: space-between
-      box-shadow: inset 0 -2px 0 0 $color-background--semi-light
-      position: relative
+      border-bottom: 1px solid $color-background--semi-light
 
-      &::after
-        content: ''
-        position: absolute
-        bottom: -2rem
-        left: 0
-        right: 0
-        height: 2rem
-        background: linear-gradient(to bottom, $color-background--light 0%, transparent 100%)
-        z-index: 1
-        pointer-events: none
+      .breadcrumb
+        +grid('default', .5rem)
+        align-items: center
 
-      .title
-        font-size: 1.5rem
-        text-transform: uppercase
-        font-weight: 800
-        letter-spacing: -.07em
+        .crumbs
+          font-size: .8rem
+
+          .crumb
+            display: inline-block
+
+            & + .crumb
+              padding-left: 1.5em
+              position: relative
+
+              &::after
+                content: '>'
+                position: absolute
+                top: 50%
+                left: .5em
+                transform: translateY(-50%)
+                color: mix(transparent, $color-content--light, 50%)
 
     .content
       +margin-to-childs()
@@ -64,29 +98,6 @@
         transition: transform 0s linear, opacity 0s linear
         transform: translateX(-50%)
         opacity: 0
-
-      .breadcrumb
-        z-index: 2
-        +grid('default', .5rem)
-        align-items: center
-
-        .crumbs
-          font-size: .8rem
-
-          .crumb
-            display: inline-block
-
-            & + .crumb
-              padding-left: 1.5em
-              position: relative
-
-              &::after
-                content: '>'
-                position: absolute
-                top: 50%
-                left: .5em
-                transform: translateY(-50%)
-                color: mix(transparent, $color-content--light, 50%)
 
       .items
         +margin-to-childs(1rem)
@@ -146,14 +157,17 @@
               font-weight: 400
 
             &.-image
-              margin-left: -1.4rem
-              margin-right: -1.4rem
-              margin-bottom: -.7rem
-              margin-top: .7rem
+              margin-left: -1.5rem
+              margin-right: -1.5rem
+              margin-bottom: -.5rem
+              margin-top: .5rem
 
               img
                 border-bottom-left-radius: $button-border-radius
                 border-bottom-right-radius: $button-border-radius
+                height: 6em
+                width: 100%
+                object-fit: cover
 
     .footer
       flex-shrink: 0
@@ -175,9 +189,11 @@
         z-index: 1
         pointer-events: none
 
-  .main
+  .main-content
     grid-column-start: 2
     grid-column-end: 3
+    grid-row-start: 2
+    grid-row-end: 3
     overflow: auto
     padding: 1rem 2rem
     +margin-to-childs()

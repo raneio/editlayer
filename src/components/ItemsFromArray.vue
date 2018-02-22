@@ -1,6 +1,6 @@
 <script>
-import Item from '@/components/Item'
 import _ from 'lodash'
+import Item from '@/components/Item'
 
 
 export default {
@@ -8,6 +8,15 @@ export default {
 
   components: {
     Item,
+  },
+
+  data () {
+    return {
+      movingArrayItem: {
+        idx: null,
+        path: null,
+      },
+    }
   },
 
   computed: {
@@ -20,7 +29,6 @@ export default {
       let path = _.replace(this.$route.params.path, />/g, '.')
       let parentPath = _.chain(path).split('.').dropRight().dropRight().join('.').value()
       let activeItem = _.get(this.schema, path)
-
       if (_.get(activeItem, 'TYPE') === 'array') {
         return activeItem
       } else {
@@ -32,29 +40,32 @@ export default {
       return this.$store.getters.files
     },
 
-    groups () {
-      let groups = {}
+    arrayItems () {
+      let arrayItems = []
       let source = []
+      let lastItem = null
 
       _.each(this.activeSchema, (value, key) => {
-        if (_.startsWith(key, '-')) {
+        if (_.startsWith(key, '-') && value.DELETED !== true) {
           source.push(value)
         }
       })
 
       source = _.sortBy(source, ['ORDER'])
 
-      _.each(source, (groupValue, groupKey) => {
-        if (_.isPlainObject(groupValue) && groupKey !== 'ARRAY') {
-          _.each(groupValue, (itemValue, itemKey) => {
-            if (_.isPlainObject(itemValue)) {
-              _.set(groups, `${groupKey}.${itemKey}`, itemValue)
-            }
+      _.each(source, (arrayItemValue, arrayItemIdx) => {
+        if (_.isPlainObject(arrayItemValue) && arrayItemIdx !== 'ARRAY') {
+          _.each(arrayItemValue, (itemValue, itemKey) => {
+            _.set(arrayItems, `${arrayItemIdx}.${itemKey}`, itemValue)
           })
         }
       })
 
-      return groups
+      return arrayItems
+    },
+
+    arrayItemsAmount () {
+      return this.arrayItems.length
     },
 
   },
@@ -72,13 +83,9 @@ export default {
     newItem () {
       let path = _.replace(this.$route.params.path, />/g, '.')
 
-      console.log('before', path)
-
       if (path !== this.activeSchema.PATH && _.includes(path, '.-')) {
         path = _.chain(path).split('.-').slice(0, -1).join('.-').value()
       }
-
-      console.log('after', path)
 
       this.$store.dispatch('newArrayItem', {
         fileId: this.$route.params.id,
@@ -93,15 +100,12 @@ export default {
         return false
       }
 
-      _.each(this.activeSchema, (value) => {
-        let firstItem = _.find(value, { TYPE: 'value' })
+      let firstItem = _.find(this.arrayItems[0], { TYPE: 'value' })
 
-        if (firstItem) {
-          let firstItemPath = _.replace(firstItem.PATH, /\./g, '>')
-          this.$router.replace({ name: 'edit', params: { id: this.$route.params.id, path: firstItemPath }})
-          return false
-        }
-      })
+      if (firstItem && this.activeSchema.TYPE === 'array') {
+        let firstItemPath = _.replace(firstItem.PATH, /\./g, '>')
+        this.$router.replace({ name: 'edit', params: { id: this.$route.params.id, path: firstItemPath }})
+      }
     },
 
     goBack () {
@@ -120,6 +124,58 @@ export default {
       return !!(path === _.replace(this.$route.params.path, />/g, '.'))
     },
 
+    moveArrayItem (arrayItem, arrayIdx) {
+      arrayIdx = _.toNumber(arrayIdx)
+
+      this.movingArrayItem = {
+        idx: arrayIdx,
+        path: arrayItem.PATH,
+      }
+    },
+
+    moveHere (arrayItem, arrayIdx) {
+      arrayIdx = _.toNumber(arrayIdx)
+      let newOrder = null
+
+      if (arrayItem === 'first') {
+        newOrder = this.arrayItems[0].ORDER - 1
+      } else if (arrayItem === 'last') {
+        newOrder = this.arrayItems[this.arrayItems.length-1].ORDER + 1
+      } else if (arrayIdx === 0) {
+        newOrder = arrayItem.ORDER - 1
+      } else {
+        newOrder = (this.arrayItems[arrayIdx-1].ORDER + arrayItem.ORDER) / 2
+      }
+
+      this.$store.dispatch('updateContent', {
+        fileId: this.$route.params.id,
+        path: `${this.movingArrayItem.path}.ORDER`,
+        content: newOrder,
+      })
+
+      this.movingArrayItem = {
+        idx: null,
+        path: null,
+      }
+    },
+
+    moveCancel (arrayItem) {
+      if (arrayItem.PATH !== this.movingArrayItem.path) return false
+
+      this.movingArrayItem = {
+        idx: null,
+        path: null,
+      }
+    },
+
+    deleteArrayItem (arrayItem) {
+      this.$store.dispatch('updateContent', {
+        fileId: this.$route.params.id,
+        path: `${arrayItem.PATH}.DELETED`,
+        content: true,
+      })
+    },
+
   },
 
   created () {
@@ -131,52 +187,52 @@ export default {
 
 
 <template>
-<section class="groups">
+<section class="array-items" :class="{ '-moving': movingArrayItem.path !== null}">
 
   <div class="button-row">
     <button class="button -primary -outline" @click="newItem()">New Item</button>
   </div>
 
-  <div
-    class="items"
-    v-for="items in groups">
+  <div class="array-item" v-for="(arrayItem, arrayIdx) in arrayItems">
+
+    <button
+      class="move-here button -primary"
+      v-if="movingArrayItem.path !== null && movingArrayItem.path !== arrayItem.PATH && movingArrayItem.idx !== arrayIdx - 1"
+      @click="moveHere(arrayItem, arrayIdx)"
+    >
+      Move Here
+    </button>
 
     <div class="tools">
-      <a href="#" class="link">Edit item</a>
+      <a @click="moveArrayItem(arrayItem, arrayIdx)" class="link">Move</a>
+      <a @click="deleteArrayItem(arrayItem)" class="link -delete">Delete</a>
     </div>
 
-    <Item
-      v-for="item in items"
-      :item="item"
-      :selectItem="selectItem"
-      :key="item.path"
-    />
-
-    <!-- <div
-      class="button item"
-      :class="{'-parent': item.TYPE === 'object' || item.TYPE === 'array', '-active': isActive(item.PATH)}"
-      v-for="item in items"
-      @click="selectItem(item)"
+    <div
+      class="items"
+      :class="{ '-moving': movingArrayItem.path === arrayItem.PATH}"
+      @click="moveCancel(arrayItem)"
     >
 
-      <div v-text="item.NAME"/>
+      <Item
+        v-for="item in arrayItem"
+        v-if="typeof item === 'object'"
+        :item="item"
+        :selectItem="selectItem"
+        :key="item.PATH"
+      />
 
-      <div class="preview" v-if="item.preview">
-
-        <div
-          v-if="item.preview.type === 'text'"
-          v-text="item.preview.content"
-        />
-
-        <div class="image" v-if="item.preview.type === 'image'">
-          <img :src="item.preview.content" alt="">
-        </div>
-
-      </div>
-
-    </div> -->
+    </div>
 
   </div>
+
+  <button
+    class="move-last button -primary"
+    v-if="movingArrayItem.path !== null && movingArrayItem.idx !== arrayItems.length-1"
+    @click="moveHere('last')"
+  >
+    Move Here
+  </button>
 
 </section>
 </template>
@@ -187,20 +243,22 @@ export default {
 // You can use variables, mixins and functions of Page Core
 @import '../sass/features'
 
-.groups
+.array-items
   +margin-to-childs(2rem)
 
   .button-row
-    margin-top: 2rem
-    text-align: center
+    transition: opacity .2s
 
     .button
-      min-width: 60%
+      min-width: 100%
 
   .tools
-    font-size: .8rem
-    text-align: right
-    margin-bottom: -.5rem
+    transition: opacity .2s
+    +grid('default', .5rem)
+    justify-content: flex-end
+    font-size: .7rem
+    text-transform: uppercase
+    margin-bottom: 0
 
     .link
       margin-top: -.5rem
@@ -208,8 +266,63 @@ export default {
       padding-top: .5rem
       padding-bottom: .5rem
 
-  .items
+      &.-delete:hover
+        color: $color-danger
+
+  .move-here
+    position: absolute
+    top: 0
+    left: 0
+    right: 0
+    transform: translateY(-50%)
+    z-index: 1
+    width: 100%
+
+  .move-last
+    display: block
+    width: 100%
+
+  .array-item
     border-top: 1px solid $color-background--semi-light
     padding-top: .7rem
+    position: relative
+
+  .items
+    transition: transform .2s
+
+    .item
+      margin-top: .5rem
+      transition: opacity .2s, transform .2s
+
+  &.-moving
+
+    .button-row,
+    .tools
+      opacity: 0
+      pointer-events: none
+
+    .items
+      transform: scale(.95)
+      position: relative
+
+      .item
+        pointer-events: none
+        opacity: .5
+
+      &.-moving
+        cursor: pointer
+
+        &::after
+          content: ''
+          position: absolute
+          top: -2rem
+          left: -1rem
+          right: -1rem
+          bottom: -2rem
+          border: 2px dashed $color-primary
+          border-radius: $button-border-radius
+
+        .item
+          opacity: .9
 
 </style>

@@ -39,8 +39,9 @@ export default {
     },
 
     downloadUrl () {
-      let filePath = encodeURIComponent('files/' + this.activeFileId + '/' + this.activeFile.filename)
-      return `https://firebasestorage.googleapis.com/v0/b/editlayerapp.appspot.com/o/${filePath}?alt=media&token=${this.activeFile.downloadToken}`
+      return `https://storage.googleapis.com/editlayerapp.appspot.com/files/${this.activeFileId}/${this.activeFile.filename}`
+      // let filePath = encodeURIComponent('files/' + this.activeFileId + '/' + this.activeFile.filename)
+      // return `https://firebasestorage.googleapis.com/v0/b/editlayerapp.appspot.com/o/${filePath}?alt=media&token=${this.activeFile.downloadToken}`
     },
 
     tab () {
@@ -123,9 +124,33 @@ export default {
 <template>
 <section class="layout -admin-mode">
 
-  <aside class="aside">
-
+  <nav class="side-nav">
     <header class="header">
+      <div class="item" @click="newFile()">
+        <div class="content">
+          <img src="../../public/icon-file.svg" alt="">
+          <div>New File</div>
+        </div>
+      </div>
+    </header>
+
+    <footer class="footer">
+      <div class="item" @click.prevent="logout()">
+        <div class="content">
+          <img src="../../public/icon-account.svg" alt="">
+        </div>
+      </div>
+      <div class="item -primary" @click="switchMode()">
+        <div class="content">
+          Switch Mode
+        </div>
+      </div>
+    </footer>
+  </nav>
+
+  <aside class="side-panel">
+
+    <!-- <header class="header">
 
       <div class="title">
         Admin Mode
@@ -140,7 +165,7 @@ export default {
         New File
       </button>
 
-    </header>
+    </header> -->
 
     <section class="content">
 
@@ -158,17 +183,17 @@ export default {
 
     </section>
 
-    <footer class="footer">
+    <!-- <footer class="footer">
       <UserInfo/>
 
       <div class="button -primary -outline" @click="switchMode()">
         Switch to Edit Mode
       </div>
-    </footer>
+    </footer> -->
 
   </aside>
 
-  <main class="main">
+  <main class="main-content">
 
     <header class="header">
 
@@ -212,7 +237,7 @@ export default {
 
     <div v-if="tab === 'url'">
       <a :href="downloadUrl" target="_blank">
-        {{ downloadUrl}}
+        {{ downloadUrl }}
       </a>
     </div>
 
@@ -229,10 +254,13 @@ export default {
 
 .layout.-admin-mode
 
-  .aside .content .item::before
+  .side-nav
     background-color: $color-secondary
 
-  .main .header .item.-active::after
+  .side-panel .content .item::before
+    background-color: $color-secondary
+
+  .main-content .header .item.-active::after
     background-color: $color-secondary
 
 </style>

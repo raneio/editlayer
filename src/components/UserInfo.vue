@@ -32,7 +32,9 @@ export default {
 
 <template>
 <section class="user-info">
-  {{ email }} | <a href="#" @click.prevent="logout()">Logout</a>
+  <div @click.prevent="logout()">
+    <img src="../../public/icon-account.svg" alt="">
+  </div>
 </section>
 </template>
 
