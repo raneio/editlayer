@@ -1,5 +1,6 @@
 <script>
 import _ from 'lodash'
+import slugg from 'slugg'
 import firebase from '../firebase'
 
 export default {
@@ -50,15 +51,16 @@ export default {
     uploadImages (event) {
       let files = event.target.files
       let file = files[0]
-      let randomKey = Math.random().toString(36).slice(-4)
-      let path = `${randomKey}/${file.name}`
+      let ext = file.name.split('.').pop()
+      let basename = slugg(file.name.substring(0, file.name.length - ext.length - 1))
+      let random = Math.random().toString(36).slice(-5)
+      let filename = `${basename}-${random}.${ext}`
 
-      console.log('file', file)
-      this.uploading.filename =  file.name
+      this.uploading.filename =  filename
       this.uploading.url =  URL.createObjectURL(file)
       this.content =  this.uploading.url
 
-      let storageRef = firebase.storage.ref().child(`images/${path}`)
+      let storageRef = firebase.storage.ref().child(`imgix/${filename}`)
       let uploadTask = storageRef.put(file)
 
       uploadTask.on('state_changed', (snapshot) => {
@@ -66,9 +68,18 @@ export default {
         this.uploading.progress = progress
 
       }, (error) => {
-        this.uploadImages(event)
+        event.tries = (!event.tries) ? 1 : event.tries + 1
+
+        if (event.tries < 5) {
+          console.log('Retry', event.tries)
+          this.uploadImages(event)
+        } else {
+          console.error('Image uploading faild', error)
+        }
+
+
       }, () => {
-        this.content = `https://editlayer.imgix.net/${path}`
+        this.content = `https://editlayer.imgix.net/${filename}`
         this.uploading.progress = 0
       })
 

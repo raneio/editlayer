@@ -40,7 +40,7 @@ export default {
     // },
 
     newFile () {
-      let name = prompt('Name', '');
+      let name = prompt('Name of JSON', 'Project X');
 
       if (name != null && name != '') {
           this.$store.dispatch('newFile', {
@@ -64,12 +64,12 @@ export default {
     </a>
 
     <button class="button -link -new" @click="newFile()">
-      + New File
+      + New JSON
     </button>
   </header>
 
   <div class="no-items" v-if="files !== null && files.length === 0">
-    <div>No files - create first file</div>
+    <div>No files - create first JOSN file</div>
   </div>
 
   <div class="no-items" v-if="files === null">

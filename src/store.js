@@ -1,10 +1,8 @@
 import _ from 'lodash'
 import Vue from 'vue'
 import Vuex from 'vuex'
-import uuid from 'uuid/v4'
 import slugg from 'slugg'
-// import firebase from 'firebase'
-// import md5 from 'blueimp-md5'
+import axios from 'axios'
 import firebase from './firebase'
 import router from './router'
 import buildSchema from './utils/buildSchema'
@@ -145,7 +143,7 @@ export default new Vuex.Store({
             name: (doc.data().name) ? doc.data().name : doc.data().filename,
             schema: (doc.data().schema) ? doc.data().schema : null,
             draft: (doc.data().draft) ? doc.data().draft : null,
-            downloadToken: (doc.data().downloadToken) ? doc.data().downloadToken : null,
+            // downloadToken: (doc.data().downloadToken) ? doc.data().downloadToken : null,
             published: (doc.data().published) ? doc.data().published : null,
           }
         })
@@ -154,8 +152,8 @@ export default new Vuex.Store({
     },
 
     newFile ({state, dispatch}, payload) {
-      // let fileId = Math.random().toString(36).slice(-4)
-      let filename = slugg(payload.name) + '.json'
+      let fileId = Math.random().toString(36).slice(-5)
+      let filename = slugg(payload.name)
 
       let defaultSchema = {
         title: "text",
@@ -170,20 +168,29 @@ export default new Vuex.Store({
         name: payload.name,
         schema: JSON.stringify(schema, '', '\t'),
         roles: {},
-        downloadToken: uuid(),
+        // downloadToken: uuid(),
       }
 
       newFile.roles[state.user.id] = 'admin'
 
-      firebase.firestore.collection('files').add(newFile)
+      firebase.firestore.collection('files').doc(fileId).set(newFile)
       .then((docRef) => {
-        console.log('File added:', docRef.id)
+        console.log('File added:', fileId)
 
         if (payload.redirect !== false) {
-          router.push({ name: 'schema', params: { id: docRef.id }})
+          router.push({ name: 'schema', params: { id: fileId }})
         }
       })
-      .catch(error => console.error('File adding error:', error))
+      .catch(error => {
+        payload.tries = (!payload.tries) ? 1 : payload.tries + 1
+
+        if (payload.tries < 5) {
+          console.log('Retry', payload.tries)
+          dispatch('newFile', payload)
+        } else {
+          console.error('File adding error:', error)
+        }
+      })
     },
 
     saveSchema ({state}, payload) {
@@ -276,7 +283,7 @@ export default new Vuex.Store({
         publishedAt: firebase.firestoreTimestamp,
         content: payload.content,
         filename: payload.filename,
-        downloadToken: payload.downloadToken,
+        // downloadToken: payload.downloadToken,
       })
       .then((docRef) => console.log('Added version:', docRef.id))
       .catch((error) => console.error('Error adding version:', error))
@@ -291,6 +298,23 @@ export default new Vuex.Store({
       firebase.firestore.collection('files').doc(payload.fileId).update(publishedData)
       .then(() => console.log('Published successfully updated!'))
       .catch((error) => console.error('Error updating published:', error))
+
+      // TODO: Move this to the firebase functions
+      _.delay(() => {
+        axios({
+          method: 'post',
+          url: 'https://api.imgix.com/v2/image/purger',
+          auth: {
+            username: 'jRj2WRDWN5ED3TkdGJUEHFfUMHhjbA8j',
+            password: '',
+          },
+          data: {
+            url: `https://editlayer.imgix.net/${payload.fileId}/${payload.filename}.json`,
+          },
+        })
+        .then((response) => console.log('Imgix purge done', response))
+        .catch((error) => console.error('Imgix purge faild', error))
+      }, 3000)
 
     },
 

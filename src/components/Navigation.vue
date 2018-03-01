@@ -20,12 +20,17 @@ export default {
       return this.$store.getters.activeFile
     },
 
-    jsonUrl () {
+    jsonStorage () {
       if (!this.activeFile) return false
       return `https://storage.googleapis.com/editlayerapp.appspot.com/files/${this.$route.params.id}/${this.activeFile.filename}`
     },
 
-    jsonUrlTarget () {
+    jsonImgix () {
+      if (!this.activeFile) return false
+      return `https://editlayer.imgix.net/${this.$route.params.id}/${this.activeFile.filename}.json`
+    },
+
+    jsonTarget () {
       if (!this.activeFile) return false
       return this.activeFile.fileId
     },
@@ -47,7 +52,7 @@ export default {
         fileId: this.$route.params.id,
         content: content,
         filename: this.activeFile.filename,
-        downloadToken: this.activeFile.downloadToken,
+        // downloadToken: this.activeFile.downloadToken,
       })
     },
 
@@ -135,8 +140,8 @@ export default {
   <a
     v-if="$route.params.id"
     class="item"
-    :href="jsonUrl"
-    :target="jsonUrlTarget"
+    :href="jsonImgix"
+    :target="jsonTarget"
   >
     <img class="icon" src="../assets/icon-link.svg" alt="">
     JSON File

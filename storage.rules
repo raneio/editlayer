@@ -6,5 +6,8 @@ service firebase.storage {
     match /images/{randomId}/{file} {
       allow write: if resource == null;
     }
+    match /imgix/{file} {
+      allow write: if resource == null;
+    }
   }
 }

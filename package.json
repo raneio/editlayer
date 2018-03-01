@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "animejs": "^2.2.0",
+    "axios": "^0.18.0",
     "blueimp-md5": "^2.10.0",
     "change-case": "^3.0.2",
     "deep-object-diff": "^1.1.0",
