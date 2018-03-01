@@ -3,58 +3,39 @@ button,
   @extend button
   box-shadow: 0 5px 12px 0 mix(transparent, $color-content, 90%), 0 2px 5px 0 mix(transparent, black, 93%)
   text-transform: uppercase
-  transition: transform .3s
+  transition: transform .2s
   text-align: center
 
-  &:hover,
-  &.-active
-    transform: scale(1.025, 1)
+  // &:hover
+    // transform: translateY(-.07em)
+    // transform: scale(1.025, 1)
+    // filter: saturate(30%)
 
-  &.-primary
-    background-color: $color-primary
-    color: $color-background
+  // &.-active
 
-    &.-outline
-      box-shadow: 0 0 0 1px $color-primary, 0 5px 12px 0 mix(transparent, $color-content, 90%), 0 2px 5px 0 mix(transparent, black, 93%)
-      background-color: transparent
-      color: $color-primary
+  // &.-primary
+  //   background-color: $color-primary
+  //   color: $color-background
+  //
+  // &.-secondary
+  //   background-color: $color-secondary
+  //   color: $color-background
 
-  &.-secondary
-    background-color: $color-secondary
-    color: $color-background
+  &.-link
+    background-color: transparent
+    border: none
+    box-shadow: none
+    font-weight: 600
+    padding-left: 0
+    padding-right: 0
+    color: $color-link
 
-    &.-outline
-      box-shadow: 0 0 0 1px $color-secondary, 0 5px 12px 0 mix(transparent, $color-content, 90%), 0 2px 5px 0 mix(transparent, black, 93%)
-      background-color: transparent
-      color: $color-secondary
-
-  &.-tertiary
-    background-color: $color-tertiary
-    color: $color-background
-
-  &.-invert
-    +invert-colors()
-
-  &.-circle
-    border-radius: 50%
-    width: 2em
-    height: 2em
-    padding: 0
-    display: flex
-    justify-content: center
-    align-items: center
-
-    &:hover,
-    &.-active
-      transform: scale(1.025)
-
-  &.-large
-    font-size: 1.3rem
-
-  // &.-low
-  //   padding-top: .5rem
-  //   padding-bottom: .5rem
+    &.-new
+      color: $color-new
 
   &[disabled]
-    opacity: .2
+    opacity: .5
     cursor: not-allowed
+
+    // &:hover
+    //   transform: none

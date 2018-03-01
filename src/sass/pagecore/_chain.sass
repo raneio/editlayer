@@ -1,0 +1,16 @@
+//
+// Chain
+// --------------------------------------------------
+// .my-element
+//   +chain(1rem)
+
+@mixin chain($gap: 0, $display: 'block')
+
+  @if $display == 'block'
+    display: flex
+
+  @if $display == 'inline'
+    display: inline-flex
+
+  > * + *
+    margin-left: $gap

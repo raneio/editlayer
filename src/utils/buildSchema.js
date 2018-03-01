@@ -1,10 +1,16 @@
+import titleCase from 'title-case'
+
 const simpleToAdvance = (schema) => {
   _.each(schema, (value, key) => {
-    if (!_.includes(['EDITOR', 'CONTENT', 'PATH', 'NAME', 'DEFAULT', 'TYPE'], key)) {
+    if (!_.includes(['EDITOR', 'CONTENT', 'PATH', 'NAME', 'DEFAULT', 'TYPE', 'INFO'], key)) {
 
       if (_.isArray(value)) {
         schema[key] = {
           ARRAY: value[0],
+        }
+
+        if (value[0].NAME) {
+          schema[key].NAME = value[0].NAME
         }
 
         value = simpleToAdvance(value)
@@ -34,7 +40,7 @@ const addArraysAndPaths = (schema, draft, parentPath = false) => {
 
       _.each(items, (itemValue, itemKey) => {
         _.set(value, `${itemKey}.ORDER`, itemValue.ORDER)
-        _.set(value, `${itemKey}.DELETED`, itemValue.DELETED)
+        // _.set(value, `${itemKey}.DELETED`, itemValue.DELETED)
 
         _.each(value.ARRAY, (arrayValue, arrayKey) => {
           _.set(value, `${itemKey}.${arrayKey}`, _.cloneDeep(arrayValue))
@@ -56,7 +62,7 @@ const addData = (schema, draft) => {
     if (_.isPlainObject(value) && key !== 'ARRAY') {
 
       if (!_.has(value, 'NAME')) {
-        value.NAME = key
+        value.NAME = titleCase(key)
       }
 
       if (_.has(value, 'EDITOR')) {

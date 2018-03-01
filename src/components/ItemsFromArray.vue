@@ -1,13 +1,19 @@
 <script>
 import _ from 'lodash'
 import Item from '@/components/Item'
+import BackButton from '@/components/BackButton'
 
 
 export default {
   name: 'ItemsFromArray',
 
+  props: {
+    selectItem: Function,
+  },
+
   components: {
     Item,
+    BackButton,
   },
 
   data () {
@@ -46,7 +52,7 @@ export default {
       let lastItem = null
 
       _.each(this.activeSchema, (value, key) => {
-        if (_.startsWith(key, '-') && value.DELETED !== true) {
+        if (_.startsWith(key, '-')) {
           source.push(value)
         }
       })
@@ -100,6 +106,10 @@ export default {
         return false
       }
 
+      if (this.$route.name !== 'edit') {
+        return false
+      }
+
       let firstItem = _.find(this.arrayItems[0], { TYPE: 'value' })
 
       if (firstItem && this.activeSchema.TYPE === 'array') {
@@ -108,17 +118,16 @@ export default {
       }
     },
 
-    goBack () {
-      let backItem = this.breadcrumb[this.breadcrumb.length-2]
-      if (backItem) {
-        this.selectItem(backItem, 'back')
-      }
-    },
-
-    selectItem (value, direction = false) {
-      let path = _.replace(value.PATH, /\./g, '>')
-      this.$router.push({ name: 'edit', params: { id: this.$route.params.id, path: path }})
-    },
+    // selectItem (value) {
+    //   let routeName = this.$route.name
+    //
+    //   if (value.TYPE === 'value') {
+    //     routeName = 'edit'
+    //   }
+    //
+    //   let path = _.replace(value.PATH, /\./g, '>')
+    //   this.$router.push({ name: routeName, params: { id: this.$route.params.id, path: path }})
+    // },
 
     isActive (path) {
       return !!(path === _.replace(this.$route.params.path, />/g, '.'))
@@ -169,10 +178,9 @@ export default {
     },
 
     deleteArrayItem (arrayItem) {
-      this.$store.dispatch('updateContent', {
+      this.$store.dispatch('delteArrayItem', {
         fileId: this.$route.params.id,
-        path: `${arrayItem.PATH}.DELETED`,
-        content: true,
+        path: arrayItem.PATH,
       })
     },
 
@@ -189,8 +197,15 @@ export default {
 <template>
 <section class="array-items" :class="{ '-moving': movingArrayItem.path !== null}">
 
-  <div class="button-row">
-    <button class="button -primary -outline" @click="newItem()">New Item</button>
+  <header class='header'>
+    <BackButton/>
+    <button class="button -link -new" @click="newItem()">
+      + New Item
+    </button>
+  </header>
+
+  <div class="no-items" v-if="arrayItems.length === 0">
+    <div>No items - add first item</div>
   </div>
 
   <div class="array-item" v-for="(arrayItem, arrayIdx) in arrayItems">
@@ -204,8 +219,8 @@ export default {
     </button>
 
     <div class="tools">
-      <a @click="moveArrayItem(arrayItem, arrayIdx)" class="link">Move</a>
-      <a @click="deleteArrayItem(arrayItem)" class="link -delete">Delete</a>
+      <button @click="moveArrayItem(arrayItem, arrayIdx)" class="button -link -primary">Move</button>
+      <button @click="deleteArrayItem(arrayItem)" class="button -link -primary -delete">Delete</button>
     </div>
 
     <div
@@ -244,34 +259,19 @@ export default {
 @import '../sass/features'
 
 .array-items
-  +margin-to-childs(2rem)
-
-  .button-row
-    transition: opacity .2s
-
-    .button
-      min-width: 100%
 
   .tools
-    transition: opacity .2s
-    +grid('default', .5rem)
+    +chain(.5rem)
     justify-content: flex-end
-    font-size: .7rem
-    text-transform: uppercase
-    margin-bottom: 0
+    transition: opacity .2s
+    font-size: .8rem
 
-    .link
-      margin-top: -.5rem
-      margin-bottom: -.5rem
-      padding-top: .5rem
-      padding-bottom: .5rem
-
-      &.-delete:hover
-        color: $color-danger
+    .-delete:hover
+      color: $color-danger
 
   .move-here
     position: absolute
-    top: 0
+    top: .25rem
     left: 0
     right: 0
     transform: translateY(-50%)
@@ -281,29 +281,35 @@ export default {
   .move-last
     display: block
     width: 100%
+    margin-top: 1rem
 
   .array-item
-    border-top: 1px solid $color-background--semi-light
-    padding-top: .7rem
+    border-top: 1px solid $color-hr
+    padding-top: .5rem
     position: relative
 
+    & + .array-item
+      margin-top: 2rem
+
   .items
+    +margin-to-childs(.5rem)
+    position: relative
     transition: transform .2s
 
     .item
-      margin-top: .5rem
       transition: opacity .2s, transform .2s
 
   &.-moving
 
-    .button-row,
+    .header,
     .tools
       opacity: 0
       pointer-events: none
 
+    .array-item
+      border-top-color: transparent
+
     .items
-      transform: scale(.95)
-      position: relative
 
       .item
         pointer-events: none
@@ -311,18 +317,26 @@ export default {
 
       &.-moving
         cursor: pointer
+        transform: scale(.95)
 
         &::after
           content: ''
           position: absolute
           top: -2rem
-          left: -1rem
-          right: -1rem
           bottom: -2rem
-          border: 2px dashed $color-primary
+          left: -.75rem
+          right: -.75rem
+          border: 3px dashed $color-active
           border-radius: $button-border-radius
 
         .item
-          opacity: .9
+          opacity: 1
+
+  .no-items
+    margin-top: 1rem
+    color: $color-disabled
+    font-size: .9rem
+    font-style: italic
+    text-align: center
 
 </style>

@@ -15,6 +15,14 @@ export default {
     }
   },
 
+  computed: {
+
+    // activeSchema () {
+    //   return this.$store.getters.activeSchema
+    // },
+
+  },
+
   watch: {
 
     'editorData.content' (value) {

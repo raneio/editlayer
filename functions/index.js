@@ -29,10 +29,13 @@ exports.publishJson = functions.firestore.document('files/{fileId}/versions/{ver
   const bucket = admin.storage().bucket()
   const db = admin.firestore()
   const versionData = event.data.data()
-  const jsonFileContent = JSON.stringify(versionData.content)
   const destinationFilePath = `files/${event.params.fileId}/${versionData.filename}`
 
-  fs.writeFileSync(tempFilePath, jsonFileContent)
+  const jsonFileContent = _.merge(versionData.content, {
+    PUBLISHED_AT: versionData.publishedAt,
+  })
+
+  fs.writeFileSync(tempFilePath, JSON.stringify(jsonFileContent))
 
   bucket.upload(tempFilePath, {
     destination: destinationFilePath,

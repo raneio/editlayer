@@ -68,7 +68,7 @@ export default {
       }, (error) => {
         this.uploadImages(event)
       }, () => {
-        this.content = `https://pic.imgix.net/${path}`
+        this.content = `https://editlayer.imgix.net/${path}`
         this.uploading.progress = 0
       })
 
@@ -83,6 +83,20 @@ export default {
 <template>
 <section class="editor -image">
 
+  <div class="tools">
+
+    <div class="filename">{{ filename }}</div>
+
+    <button
+      @click="$refs['file-input'].click()"
+      class="button"
+      :disabled="uploading.progress > 0"
+    >
+      Change Image
+    </button>
+
+  </div>
+
   <div class="preview">
 
     <img class="image" :src="content" alt="" v-if="!uploading.url">
@@ -92,7 +106,6 @@ export default {
       <div class="progress" :style="{ height: uploading.progress + '%'}"/>
     </div>
 
-    <div class="filename">{{ filename }}</div>
   </div>
 
   <input
@@ -100,16 +113,8 @@ export default {
     type="file"
     ref="file-input"
     @change="uploadImages($event)"
-    accept="image/png, image/jpeg, image/gif"
+    accept="image/png, image/jpeg, image/gif, image/svg+xml"
   >
-
-  <button
-    @click="$refs['file-input'].click()"
-    class="button -primary"
-    :disabled="uploading.progress > 0"
-  >
-    Change Image
-  </button>
 
 </section>
 </template>
@@ -121,22 +126,32 @@ export default {
 @import '../sass/features'
 
 .editor
-  +margin-to-childs()
-  text-align: center
+  +margin-to-childs(.75rem)
+  // text-align: center
 
 .file-input
   display: none
 
-.preview
-  +margin-to-childs(.25rem)
-
-  .image
-    max-height: calc(100vh - 13rem)
-    box-shadow: 0 5px 12px 0 mix(transparent, $color-content, 90%), 0 2px 5px 0 mix(transparent, black, 93%)
+.tools
+  +chain()
+  justify-content: space-between
+  align-items: flex-end
 
   .filename
     font-size: .8rem
-    color: $color-content--light
+    color: $color-disabled
+
+.preview
+  background-image: url('../assets/image-background.png')
+  background-position: center
+  box-shadow: 0 5px 12px 0 mix(transparent, $color-content, 90%), 0 2px 5px 0 mix(transparent, black, 93%)
+  min-height: 10rem
+  display: flex
+  justify-content: center
+  align-items: center
+
+  .image
+    max-height: 30rem
 
   .uploading
     position: relative
@@ -148,6 +163,8 @@ export default {
       width: 100%
       transition: height .2s
       background-color: mix(transparent, $color-background, 10%)
+
+
 
 // Under /deep/ you can also change style of child components
 .editor /deep/

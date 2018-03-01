@@ -11,7 +11,9 @@ firebase.initializeApp({
 })
 
 export default {
-  db: firebase.firestore(),
+  firestore: firebase.firestore(),
+  firestoreDelete: firebase.firestore.FieldValue.delete(),
+  firestoreTimestamp: firebase.firestore.FieldValue.serverTimestamp(),
   auth: firebase.auth(),
   storage: firebase.storage(),
 }

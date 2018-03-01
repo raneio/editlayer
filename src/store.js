@@ -2,6 +2,9 @@ import _ from 'lodash'
 import Vue from 'vue'
 import Vuex from 'vuex'
 import uuid from 'uuid/v4'
+import slugg from 'slugg'
+// import firebase from 'firebase'
+// import md5 from 'blueimp-md5'
 import firebase from './firebase'
 import router from './router'
 import buildSchema from './utils/buildSchema'
@@ -12,9 +15,9 @@ Vue.use(firebase)
 export default new Vuex.Store({
 
   state: {
-    files: {},
+    files: null,
     user: {
-      isLoggedIn: false,
+      isLoggedIn: null,
       id: null,
       email: null,
     },
@@ -23,6 +26,8 @@ export default new Vuex.Store({
   getters: {
 
     files (state) {
+      if (state.files === null) return null
+
       return _.chain(state.files).map((value, key) => {
         value.fileId = key
         return value
@@ -30,7 +35,13 @@ export default new Vuex.Store({
     },
 
     activeFile (state, getters) {
-      return _.find(getters.files, { fileId: state.route.params.id })
+      let activeFile = _.find(getters.files, { fileId: state.route.params.id })
+
+      if (getters.files !== null && state.route.params.id && !activeFile) {
+        router.push({ name: state.route.name })
+      }
+
+      return activeFile
     },
 
     schema (state) {
@@ -41,11 +52,20 @@ export default new Vuex.Store({
       try {
       	schema = JSON.parse(state.files[state.route.params.id].schema)
       } catch (err) {
-        console.warn('Schema Syntax Error')
-        return {}
+        return schema
       }
 
       return buildSchema(schema, state.files[state.route.params.id].draft)
+    },
+
+    activeSchema (state, getters) {
+      let path = _.replace(state.route.params.path, />/g, '.')
+
+      if (_.has(getters.schema, path)) {
+        return _.get(getters.schema, path)
+      } else {
+        return {}
+      }
     },
 
   },
@@ -92,79 +112,78 @@ export default new Vuex.Store({
       })
     },
 
-    authLogin ({state, commit}, payload) {
-      firebase.auth.signInWithEmailAndPassword(payload.email, payload.password)
-    },
+    // authLogin ({state, commit}, payload) {
+    //   firebase.auth.signInWithEmailAndPassword(payload.email, payload.password)
+    // },
 
     authLogout ({state, commit}) {
       firebase.auth.signOut()
     },
 
-    authRegister ({state, commit}, payload) {
-      firebase.auth.createUserWithEmailAndPassword(payload.email, payload.password)
-      .then(user => {
-
-        firebase.db.collection('users').doc(user.uid).set({
-          email: user.email,
-        })
-        .then(() => console.log('Added user:', user.email))
-        .catch((error) => console.log('Adding user error:', error))
-
-      })
-      .catch(error => console.log('register error', error.message))
-    },
+    // authRegister ({state, commit}, payload) {
+    //   firebase.auth.createUserWithEmailAndPassword(payload.email, payload.password)
+    //   .then(user => {
+    //
+    //     firebase.firestore.collection('users').doc(user.uid).set({
+    //       email: user.email,
+    //     })
+    //     .then(() => console.log('Added user:', user.email))
+    //     .catch((error) => console.log('Adding user error:', error))
+    //
+    //   })
+    //   .catch(error => console.log('register error', error.message))
+    // },
 
     getFilesFromDatabase ({state, commit, dispatch}) {
-      firebase.db.collection('files').where(`roles.${state.user.id}`, '==', 'admin').onSnapshot((querySnapshot) => {
+      firebase.firestore.collection('files').where(`roles.${state.user.id}`, '==', 'admin').onSnapshot((querySnapshot) => {
         let files = {}
         querySnapshot.forEach((doc) => {
           files[doc.id] = {
             fileId: doc.id,
             role: 'admin',
             filename: doc.data().filename,
-            schema: doc.data().schema,
-            draft: doc.data().draft,
-            downloadToken: doc.data().downloadToken,
+            name: (doc.data().name) ? doc.data().name : doc.data().filename,
+            schema: (doc.data().schema) ? doc.data().schema : null,
+            draft: (doc.data().draft) ? doc.data().draft : null,
+            downloadToken: (doc.data().downloadToken) ? doc.data().downloadToken : null,
+            published: (doc.data().published) ? doc.data().published : null,
           }
         })
         commit('setFile', files)
       })
     },
 
-    newFile ({state, dispatch}, filename) {
-      let fileId = Math.random().toString(36).slice(-4)
+    newFile ({state, dispatch}, payload) {
+      // let fileId = Math.random().toString(36).slice(-4)
+      let filename = slugg(payload.name) + '.json'
+
       let defaultSchema = {
-        title: {
-          EDITOR: "text"
-        },
-        description: {
-          EDITOR: "textarea"
-        }
+        title: "text",
+        description: "textarea",
+        photo: "image",
       }
 
+      let schema = (payload.schema) ? payload.schema : defaultSchema
+
       let newFile = {
-        filename: `${filename}.json`,
-        schema: JSON.stringify(defaultSchema, '', '\t'),
+        filename: filename,
+        name: payload.name,
+        schema: JSON.stringify(schema, '', '\t'),
         roles: {},
         downloadToken: uuid(),
       }
 
       newFile.roles[state.user.id] = 'admin'
 
-      firebase.db.collection('files').add(newFile)
+      firebase.firestore.collection('files').add(newFile)
       .then((docRef) => {
         console.log('File added:', docRef.id)
 
-        dispatch('publishJson', {
-          fileId: docRef.id,
-          content: {},
-          filename: newFile.filename,
-          downloadToken: newFile.downloadToken,
-        })
-
-        router.push({ name: 'admin', params: { id: docRef.id, tab: 'schema' }})
+        if (payload.redirect !== false) {
+          router.push({ name: 'schema', params: { id: docRef.id }})
+        }
       })
-      .catch(error => console.log('File adding error:', error))
+      .catch(error => console.error('File adding error:', error))
     },
 
     saveSchema ({state}, payload) {
@@ -176,7 +195,9 @@ export default new Vuex.Store({
         return false
       }
 
-      firebase.db.collection('files').doc(payload.fileId).update({
+      // console.log('saveSchema', payload)
+
+      firebase.firestore.collection('files').doc(payload.fileId).update({
         schema: payload.schema,
       })
       .then(() => console.log('Schema successfully written!'))
@@ -189,10 +210,33 @@ export default new Vuex.Store({
 
       console.log('updateContent', updateData)
 
-      firebase.db.collection('files').doc(payload.fileId).update(updateData)
+      firebase.firestore.collection('files').doc(payload.fileId).update(updateData)
       .then(() => console.log('Content successfully updated!'))
       .catch((error) => console.error('Error updating content:', error))
     },
+
+    delteArrayItem ({state}, payload) {
+      let updateData = {}
+      updateData[`draft.${payload.path}`] = firebase.firestoreDelete
+
+      console.log('deleteValue', updateData)
+
+      firebase.firestore.collection('files').doc(payload.fileId).update(updateData)
+      .then(() => console.log('Value successfully deleted!'))
+      .catch((error) => console.error('Error deleting value:', error))
+    },
+
+    // updateStatus ({state}, payload) {
+    //   let updateData = {
+    //     status: payload.status,
+    //   }
+    //
+    //   console.log('updateStatus', updateData)
+    //
+    //   firebase.firestore.collection('files').doc(payload.fileId).update(updateData)
+    //   .then(() => console.log('Status successfully updated!'))
+    //   .catch((error) => console.error('Error updating Status:', error))
+    // },
 
     newArrayItem ({state, dispatch}, payload) {
       let randomKey = `-${Math.random().toString(36).slice(-4)}`
@@ -217,7 +261,7 @@ export default new Vuex.Store({
         ORDER: order,
       }
 
-      firebase.db.collection('files').doc(payload.fileId).update(updateData)
+      firebase.firestore.collection('files').doc(payload.fileId).update(updateData)
       .then(() => console.log('New item added!'))
       .catch((error) => console.error('Error new item:', error))
 
@@ -225,15 +269,29 @@ export default new Vuex.Store({
       router.push({ name: 'edit', params: { id: payload.fileId, path: pathUrl }})
     },
 
-    publishJson ({state}, payload) {
-      firebase.db.collection('files').doc(payload.fileId).collection('versions').add({
+    publishJson ({state, dispatch, getters}, payload) {
+
+      firebase.firestore.collection('files').doc(payload.fileId).collection('versions').add({
         publishedBy: state.user.id,
+        publishedAt: firebase.firestoreTimestamp,
         content: payload.content,
         filename: payload.filename,
         downloadToken: payload.downloadToken,
       })
       .then((docRef) => console.log('Added version:', docRef.id))
-      .catch((error) => console.log('Error adding version:', error))
+      .catch((error) => console.error('Error adding version:', error))
+
+      let publishedData = {
+        'published.draft': getters.activeFile.draft,
+        'published.schema': getters.activeFile.schema,
+      }
+
+      console.log('publishedData', publishedData)
+
+      firebase.firestore.collection('files').doc(payload.fileId).update(publishedData)
+      .then(() => console.log('Published successfully updated!'))
+      .catch((error) => console.error('Error updating published:', error))
+
     },
 
     // uploadImages ({state, dispatch}, images) {

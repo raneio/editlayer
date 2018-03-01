@@ -1,5 +1,6 @@
 <script>
 import _ from 'lodash'
+// import * as monaco from '@timkendrick/monaco-editor'
 
 export default {
   name: 'EditorTextarea',
@@ -30,6 +31,7 @@ export default {
 
   mounted () {
     this.$refs['textarea'].focus()
+    // monaco.editor.create(document.getElementById('elementId'), {})
   },
 
 }
@@ -40,6 +42,10 @@ export default {
 <section class="editor -textarea">
 
   <textarea ref="textarea" rows="8" cols="80" v-model="content"/>
+
+  <!-- <div id="elementId">
+    Foobar
+  </div> -->
 
 </section>
 </template>

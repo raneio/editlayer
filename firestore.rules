@@ -1,7 +1,54 @@
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write;
+
+    match /users/{userId} {
+      allow read: if userId == request.auth.uid;
+      allow create: if request.auth != null
+      							&& request.resource.data.email == request.auth.token.email;
     }
+
+    match /files/{fileId} {
+    	function isRole(roles) {
+      	return resource.data.roles[request.auth.uid] in roles;
+      }
+
+      function allowDraft () {
+      	return isRole(['admin', 'editor'])
+        		&& request.writeFields.size() == 1
+        		&& request.writeFields[0].matches('^draft\\..*');
+      }
+
+      function allowPublished () {
+      	return isRole(['admin', 'editor'])
+        		&& request.writeFields.size() == 2
+        		&& request.writeFields[0] == 'published.schema' || request.writeFields[1] == 'published.schema'
+        		&& request.writeFields[0] == 'published.draft' || request.writeFields[1] == 'published.draft'
+      }
+
+      function allowSchema () {
+      	return isRole(['admin'])
+        		&& request.writeFields.size() == 1
+        		&& request.writeFields[0] == 'schema';
+      }
+
+    	allow list: if isRole(['admin', 'editor']);
+
+      allow create: if request.auth != null
+      							&& request.resource.data.roles[request.auth.uid] == 'admin';
+
+      allow update: if allowDraft()
+      							|| allowPublished()
+                    || allowSchema();
+
+    }
+
+    match /files/{fileId}/versions/{versionId} {
+      function isRole(roles) {
+        return get(/databases/$(database)/documents/files/$(fileId)).data.roles[request.auth.uid] in roles;
+      }
+
+      allow create: if isRole(['admin', 'editor']);
+    }
+
   }
 }

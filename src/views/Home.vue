@@ -1,4 +1,6 @@
 <script>
+import anime from 'animejs'
+
 export default {
   name: 'home',
 }
@@ -8,12 +10,24 @@ export default {
 <template>
 <section class="home">
 
-  <div class="content">
-    <h1 class="heading">Editlayer</h1>
-    <div class="">
-      <router-link :to="{ name: 'admin', params: {} }">Admin Mode</router-link> |
-      <router-link :to="{ name: 'edit', params: {} }">Edit Mode</router-link>
+  <div class="content animated fadeIn">
+
+    <div>
+      <h1 class="heading -logo">Editlayer</h1>
+      <div class="subheading">Editable JSON File</div>
     </div>
+
+    <!-- <div class="call-to-action"><router-link class="button" :to="{ name: 'edit', params: {} }">Try alpha v1</router-link></div> -->
+
+    <form class="subscribe" action="https://www.getrevue.co/profile/editlayer/add_subscriber" method="post" target="_blank">
+        <input class="email" placeholder="Your email address..." type="email" name="member[email]">
+        <input class="button" type="submit" value="Ask invite" name="member[subscribe]" id="member_submit">
+    </form>
+
+    <div class="version">
+      Current Version: <strong>Alpha 2</strong>
+    </div>
+
   </div>
 
 </section>
@@ -33,6 +47,32 @@ export default {
 
 .content
   +margin-to-childs()
+  padding-bottom: 5rem
+
+.heading.-logo
+  line-height: 1em
+  font-size: 3rem
+
+.subheading
+  font-style: italic
+
+.call-to-action
+
+.subscribe
+  +chain()
+
+  .email
+    border-top-right-radius: 0
+    border-bottom-right-radius: 0
+    width: 20rem
+
+  .button
+    border-top-left-radius: 0
+    border-bottom-left-radius: 0
+
+.version
+  color: $color-disabled
+  font-size: .8rem
 
 
 </style>

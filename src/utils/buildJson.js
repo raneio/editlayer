@@ -8,9 +8,9 @@ const basicToJson = (schema, result = {}) => {
       _.set(result, `${value.PATH}.ORDER`, value.ORDER)
     }
 
-    if (_.has(value, 'DELETED') && _.has(value, 'PATH')) {
-      _.set(result, `${value.PATH}.DELETED`, value.DELETED)
-    }
+    // if (_.has(value, 'DELETED') && _.has(value, 'PATH')) {
+    //   _.set(result, `${value.PATH}.DELETED`, value.DELETED)
+    // }
 
     if (_.isPlainObject(value)) {
       basicToJson(value, result)
@@ -26,10 +26,8 @@ const arrayToJson = (schema, result = {}, path = false) => {
     schema = _.sortBy(schema, 'ORDER')
 
     _.each(schema, (value, key) => {
-      if (value.DELETED !== true) {
-        value = _.omit(value, ['ORDER', 'DELETED'])
-        array.push(value)
-      }
+      value = _.omit(value, ['ORDER'])
+      array.push(value)
     })
 
     _.set(result, path, array)

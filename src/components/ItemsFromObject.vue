@@ -1,13 +1,19 @@
 <script>
-import Item from '@/components/Item'
 import _ from 'lodash'
+import Item from '@/components/Item'
+import BackButton from '@/components/BackButton'
 
 
 export default {
   name: 'ItemsFromObject',
 
+  props: {
+    selectItem: Function,
+  },
+
   components: {
     Item,
+    BackButton,
   },
 
   computed: {
@@ -62,12 +68,17 @@ export default {
   methods: {
 
     findFirstItem () {
+      if (!this.activeSchema) return false
+      if (this.$route.name !== 'edit') return false
+
       let path = _.replace(this.$route.params.path, />/g, '.')
+      if (path !== '' && path !== this.activeSchema.PATH) return false
+
       let firstItem = _.find(this.activeSchema, { TYPE: 'value' })
 
-      if (!this.activeSchema || path !== this.activeSchema.PATH) {
-        return false
-      }
+      // if (!firstItem && _.size(this.activeSchema) === 1) {
+      //   firstItem = _.find(this.activeSchema)
+      // }
 
       if (firstItem && this.activeSchema.TYPE !== 'value') {
         let firstItemPath = _.replace(firstItem.PATH, /\./g, '>')
@@ -75,17 +86,16 @@ export default {
       }
     },
 
-    goBack () {
-      let backItem = this.breadcrumb[this.breadcrumb.length-2]
-      if (backItem) {
-        this.selectItem(backItem, 'back')
-      }
-    },
-
-    selectItem (value, direction = false) {
-      let path = _.replace(value.PATH, /\./g, '>')
-      this.$router.push({ name: 'edit', params: { id: this.$route.params.id, path: path }})
-    },
+    // selectItem (value) {
+    //   let routeName = this.$route.name
+    //
+    //   if (value.TYPE === 'value') {
+    //     routeName = 'edit'
+    //   }
+    //
+    //   let path = _.replace(value.PATH, /\./g, '>')
+    //   this.$router.push({ name: routeName, params: { id: this.$route.params.id, path: path }})
+    // },
 
     isActive (path) {
       return !!(path === _.replace(this.$route.params.path, />/g, '.'))
@@ -104,36 +114,16 @@ export default {
 <template>
 <section class="items">
 
+  <header class='header'>
+    <BackButton/>
+  </header>
+
   <Item
     v-for="item in items"
     :item="item"
     :selectItem="selectItem"
     :key="item.path"
   />
-
-  <!-- <div
-    class="button item"
-    :class="{'-parent': item.TYPE === 'object' || item.TYPE === 'array', '-active': isActive(item.PATH)}"
-    v-for="item in items"
-    @click="selectItem(item)"
-  >
-
-    <div v-text="item.NAME"/>
-
-    <div class="preview" v-if="item.preview">
-
-      <div
-        v-if="item.preview.type === 'text'"
-        v-text="item.preview.content"
-      />
-
-      <div class="image" v-if="item.preview.type === 'image'">
-        <img :src="item.preview.content" alt="">
-      </div>
-
-    </div>
-
-  </div> -->
 
 </section>
 </template>

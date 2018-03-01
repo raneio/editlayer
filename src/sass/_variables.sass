@@ -36,23 +36,36 @@ $font-heading: 'Open Sans', sans-serif
 // Colors
 // --------------------------------------------------
 
+$color-active: #9151A8
 $color-background: #ffffff
 $color-content: #32325D
-$color-primary: #656FDE
-$color-secondary: #D680D4
-$color-tertiary: #F5BF68
-
-$color-background--light: #F6F9FC
-$color-background--semi-light: #EDF2F7
-$color-content--light: #6B7C93
 $color-danger: #DF6389
+$color-disabled: #6A7C92
+$color-draft: #F6C06C
+$color-hr: #EDF2F7
+$color-info: #88BBF9
+$color-light: #F6F9FC
+$color-link: #6667C4
+$color-navigation: #3B3C71
+$color-new: #4CB2AC
+
+// $color-background: #ffffff
+// $color-content: #32325D
+// $color-primary: #656FDE
+// $color-secondary: red
+// $color-tertiary: red
+
+// $color-background--light: #F6F9FC
+// $color-background--semi-light: #EDF2F7
+// $color-content--light: #6B7C93
+// $color-danger: #DF6389
 
 // invert
-$color-background--invert: #212529
+$color-background--invert: #1B1E27
 $color-content--invert: #FFFFFF
-$color-primary--invert: $color-primary
-$color-secondary--invert: $color-secondary
-$color-tertiary--invert: $color-tertiary
+// $color-primary--invert: $color-link
+// $color-secondary--invert: $color-secondary
+// $color-tertiary--invert: $color-tertiary
 
 
 //
@@ -65,7 +78,7 @@ $content-font-weight: 400
 
 // invert
 $content-font-color--invert: $color-content--invert
-$content-font-weight--invert: 600
+$content-font-weight--invert: 400
 
 
 //
@@ -73,7 +86,7 @@ $content-font-weight--invert: 600
 // --------------------------------------------------
 
 $heading-font-color: $color-content
-$heading-font-size: 1.6rem
+$heading-font-size: 1rem
 $heading-font-weight: 600
 
 // invert
@@ -85,16 +98,16 @@ $heading-font-weight--invert: $heading-font-weight
 // Links
 // --------------------------------------------------
 
-$link-font-color--basic: $color-primary
-$link-font-color--hover: mix(black, $color-primary, 30%)
-$link-font-color--activ: mix(black, $color-primary, 50%)
+$link-font-color--basic: $color-link
+$link-font-color--hover: mix(white, $color-link, 30%)
+$link-font-color--activ: mix(white, $color-link, 50%)
 
 $link-text-decoration--basic: none
 $link-text-decoration--hover: none
 $link-text-decoration--activ: none
 
 // invert
-$link-font-color--basic-invert: #ffffff
+$link-font-color--basic-invert: $color-content--invert
 $link-font-color--hover-invert: mix($color-content--invert, $link-font-color--basic-invert, 10%)
 $link-font-color--activ-invert: mix($color-content--invert, $link-font-color--basic-invert, 20%)
 
@@ -107,73 +120,52 @@ $button-border-radius: .3em
 $button-font-family: $font-content
 $button-font-size: 1em
 $button-font-weight: 700
-$button-padding: .5rem 1.5rem
+$button-padding: .75em 1.5em
 
-$button-background--basic: $color-background
-$button-background--hover: $color-background
-$button-background--activ: $color-background
+$button-background--basic: $color-link
+$button-background--hover: mix(white, $color-link, 10%)
+$button-background--activ: mix($color-active, $color-link, 30%)
 
 $button-border--basic: none
 $button-border--hover: none
 $button-border--activ: none
 
-$button-font-color--basic: $color-content
-$button-font-color--hover: $color-content
-$button-font-color--activ: $color-content
-
-// invert
-$button-background--basic-invert: $color-background--invert
-$button-background--hover-invert: mix($color-content--invert, $color-background--invert, 5%)
-$button-background--activ-invert: mix($color-content--invert, $color-background--invert, 5%)
-
-$button-border--basic-invert: none
-$button-border--hover-invert: none
-$button-border--activ-invert: none
-
-$button-font-color--basic-invert: $color-background--invert
-$button-font-color--hover-invert: $color-background--invert
-$button-font-color--activ-invert: $color-background--invert
+$button-font-color--basic: $color-background
+$button-font-color--hover: $color-background
+$button-font-color--activ: $color-background
 
 
 //
 // Inputs
 // --------------------------------------------------
 
-$input-color-background: $color-background
-$input-color-border: #D1DAE3
-$input-color-content: $color-content
-$input-color-highlight: $color-primary
-
 $input-border-radius: $button-border-radius
 $input-font-family: $font-content
-$input-font-size: 1.1rem
+$input-font-size: 1rem
 $input-font-weight: 400
 $input-padding: 1.2em 1em
-$input-placeholder-color: mix($input-color-content, $input-color-background, 30%)
-$input-select-arrow-color: mix($input-color-content, $input-color-background, 50%)
+$input-placeholder-color: mix($color-content, $color-background, 30%)
+$input-select-arrow-color: mix($color-content, $color-background, 50%)
 
-$input-background--basic: $input-color-background
-$input-background--hover: $input-color-background
-$input-background--focus: $input-color-background
+$input-background--basic: mix(white, $color-content, 99%)
+$input-background--hover: mix(white, $color-content, 99%)
+$input-background--focus: mix(white, $color-active, 98%)
 
-$input-border--basic: 1px solid $input-color-border
-$input-border--hover: 1px solid mix($input-color-border, $input-color-content, 80%)
-$input-border--focus: 1px solid $input-color-highlight
+$input-border--basic: 1px solid mix(white, $color-content, 80%)
+$input-border--hover: 1px solid mix(white, $color-content, 60%)
+$input-border--focus: 1px solid mix(white, $color-active, 40%)
 
-$input-font-color--basic: $input-color-content
-$input-font-color--hover: $input-color-content
-$input-font-color--focus: $input-color-content
-
-// invert
-// TODO Add invert colors to inputs
+$input-font-color--basic: $color-content
+$input-font-color--hover: $color-content
+$input-font-color--focus: $color-content
 
 
 //
 // Horizontal rule
 // --------------------------------------------------
 
-$hr-background: mix($color-content, $color-background, 50%)
+$hr-color: $color-hr
 $hr-height: 1px
 
 // invert
-$hr-background--invert: mix($color-content--invert, $color-background--invert, 50%)
+$hr-color--invert: $color-hr

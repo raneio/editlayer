@@ -5,7 +5,7 @@ import titleCase from 'title-case'
 
 
 export default {
-  name: 'Breadcrumb',
+  name: 'BackButton',
 
   computed: {
 
@@ -65,24 +65,15 @@ export default {
         })
       }
 
-      // if (this.files.length > 1) {
-      //   breadcrumb.unshift({
-      //     name: 'Home',
-      //   })
-      // }
+      if (this.files.length > 1) {
+        breadcrumb.unshift({
+          name: 'Home',
+        })
+      }
 
 
       return breadcrumb
     },
-
-    // showBreadcrumb () {
-    //   return true
-    //   if (this.breadcrumb.length === 1 && !_.find(this.navItems, { type: 'object' })) {
-    //     return false
-    //   } else {
-    //     return true
-    //   }
-    // },
 
   },
 
@@ -96,12 +87,14 @@ export default {
       return titleCase(text)
     },
 
-    // goBack () {
-    //   let backItem = this.breadcrumb[this.breadcrumb.length-2]
-    //   if (backItem) {
-    //     this.selectItem(backItem)
-    //   }
-    // },
+    goBack () {
+      let backItem = this.breadcrumb[this.breadcrumb.length-2]
+      if (backItem) {
+        this.selectItem(backItem)
+      } else {
+        this.selectItem('home')
+      }
+    },
 
     selectItem (item) {
       let path = _.replace(item.path, /\./g, '>')
@@ -135,6 +128,8 @@ export default {
         easing: 'linear',
         duration: 100,
       })
+
+
     },
 
   },
@@ -144,72 +139,29 @@ export default {
 
 
 <template>
-<section class="breadcrumb">
-
-  <div class="crumb" v-if="!$route.params.id">
-    <img src="../assets/icon-home-disabled.svg" alt="">
-    <!-- <div>DASHBOARD</div> -->
-  </div>
-
-  <a @click="selectItem({})" class="crumb button -link" v-if="$route.params.id">
-    <img src="../assets/icon-home.svg" alt="">
-    <!-- <div>DASHBOARD</div> -->
-  </a>
-
-  <div v-for="(item, idx) in breadcrumb" class="crumb">
-
-    <img src="../assets/icon-crumb.svg" alt="">
-
-    <button
-      class="button -link"
-      v-if="idx < breadcrumb.length-1"
-      v-text="item.name"
-      @click.prevent="selectItem(item)"
-    />
-
-    <span
-      v-else
-      v-text="item.name"
-    />
-
-  </div>
-</section>
+<button
+  class="button -link"
+  @click.prevent="goBack()"
+>
+  <img class="icon" src="../assets/icon-back.svg" alt="">
+  <div>Back</div>
+</button>
 </template>
+
 
 <style lang="sass" scoped>
 @import '../sass/features'
 
-.breadcrumb
+.button
   +chain(.75rem)
-  transition: opacity .2s
-  // padding-left: .5rem
-  // padding-right: .5rem
-  padding-bottom: .25rem
-  font-size: .9rem
-  border-bottom: 1px solid $color-hr
-  height: 3rem
-  color: $color-disabled
+  // padding-left: 1.5em
+  // position: relative
 
-  .crumb
-    +chain(.75rem)
-    align-items: center
-
-  .button
-    // text-transform: none
-
-    &[disabled]
-      cursor: default
-
-  // .crumb + .crumb
-    // padding-left: 1.5em
-    // position: relative
-    //
-    // &::after
-    //   content: '>'
-    //   position: absolute
-    //   top: 50%
-    //   left: .5em
-    //   transform: translateY(-50%)
-    //   color: mix(transparent, $color-content--invert, 50%)
+  // &::after
+  //   content: '<'
+  //   position: absolute
+  //   top: 50%
+  //   left: .5em
+  //   transform: translateY(-50%)
 
 </style>
