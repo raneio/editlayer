@@ -21,44 +21,19 @@ const b2 = new B2({
 
 exports.publishJson = functions.firestore.document('files/{fileId}/versions/{versionId}').onCreate((event) => {
   const tempFilePath = '/tmp/tempfile.json'
-  // const bucket = admin.storage().bucket()
   const bucket = admin.storage().bucket('editlayer')
   const versionData = event.data.data()
-  // const destinationFilePath = `imgix/${event.params.fileId}/${versionData.filename}.json`
   const destinationFilePath = `${event.params.fileId}/${versionData.filename}.json`
 
   console.log('versionId', event.params.versionId)
 
   const jsonFileContent = _.merge(versionData.content, {
-    ASSETS_URL: `https://cdn.editlayer.com/${event.params.fileId}/`,
+    // ASSETS_FOLDER: `https://cdn.editlayer.com/${event.params.fileId}/`,
     PUBLISHED_AT: versionData.publishedAt,
     VERSION_ID: event.params.versionId,
   })
 
-  // let json = Buffer.from(JSON.stringify(jsonFileContent), 'utf8')
-  //
-  // return b2.authorize()
-  // .then((response) => {
-  //   return b2.getUploadUrl('e8737a5408146ab06a1c051e')
-  // })
-  // .then((response) => {
-  //   return b2.uploadFile({
-  //     uploadUrl: response.data.uploadUrl,
-  //     uploadAuthToken: response.data.authorizationToken,
-  //     filename: destinationFilePath,
-  //     data: json,
-  //   })
-  // })
-  // .then((response) => {
-  //   console.log('File uploaded to B2', response)
-  //   return true
-  // })
-  // .catch((error) => console.error('Upload file to B2 failed', error.message))
-
   fs.writeFileSync(tempFilePath, JSON.stringify(jsonFileContent, null, 2))
-
-  // let jsonBlob = new Blob([JSON.stringify(jsonFileContent, null, 2)], {type : 'application/json'});
-  // let jsonFile = Buffer.from(JSON.stringify(jsonFileContent), 'utf8')
 
   return bucket.upload(tempFilePath, {
     destination: destinationFilePath,

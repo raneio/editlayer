@@ -32,23 +32,17 @@ export default {
     preview () {
 
       if (_.includes(['image'], this.item.EDITOR)) {
-        let content = `${this.$store.state.storageUrlPrefix}${this.$route.params.id}/${this.item.CONTENT}`
-
-        // if (_.startsWith(content, 'https://editlayer.storage.googleapis.com/')) {
-        //   let imageUrl = content.substring('https://editlayer.storage.googleapis.com/'.length)
-        //   content = `https://editlayer.imgix.net/${imageUrl}?w=360&h=110&fit=crop&crop=faces`
+        // let content = null
+        //
+        // if (this.item.CONTENT !== null) {
+        //   content = `${this.$store.state.storageUrlPrefix}${this.$route.params.id}/${this.item.CONTENT}`
         // }
 
         return {
           type: 'image',
-          content: content,
+          content: this.item.CONTENT,
         }
-      // } else if (this.item.STATUS) {
-      //   return {
-      //       type: 'status',
-      //       status: this.item.STATUS,
-      //       class: `-${this.item.STATUS}`,
-      //   }
+
       } else if (this.item.CONTENT) {
         let content = this.item.CONTENT
 
@@ -83,6 +77,7 @@ export default {
 }
 </script>
 
+echo '[]' > cors-config.json
 
 <template>
 <section
@@ -110,7 +105,7 @@ export default {
     class="preview -image"
     v-if="preview.type === 'image'"
   >
-    <img class="image" :src="preview.content" alt="">
+    <img class="image" :src="preview.content" alt="" v-if="preview.content !== null">
   </div>
 
   <img class="icon" src="../assets/icon-forward.svg" alt="" v-if="isParent || isFile">

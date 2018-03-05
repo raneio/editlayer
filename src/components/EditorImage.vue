@@ -36,8 +36,9 @@ export default {
     },
 
     previewImage () {
-      if (!this.content === null) return false
-      return `${this.$store.state.storageUrlPrefix}${this.$route.params.id}/${this.content}`
+      return this.content
+      // if (this.content === null) return false
+      // return `${this.$store.state.storageUrlPrefix}${this.$route.params.id}/${this.content}`
     },
 
   },
@@ -86,61 +87,11 @@ export default {
 
     },
 
-    // optimizeImage (event) {
-    //   console.log('event.target', event.target)
-    //   let image = event.target.files[0]
-    //   let fileId = this.$route.params.id
-    //
-    //   if (!image) return false
-    //
-    //   console.log('image', image)
-    //
-    //   // the user-selected image will be loaded into this image
-    //   const img = new Image()
-    //
-    //   // when it's loaded, we can perform any kind of processing we need on it
-    //   img.onload = () => {
-    //     console.log('img', img)
-    //     // create the canvas so we can draw stuff
-    //     let canvas = document.createElement('canvas')
-    //     let ctx = canvas.getContext('2d')
-    //
-    //     // for our purposes, scale the canvas to match the source image
-    //     canvas.width = img.width
-    //     canvas.height = img.height
-    //
-    //     // draw the source image on the canvas
-    //     ctx.drawImage(img, 0, 0, img.width, img.height)
-    //
-    //     // just draw some watermark text over the image
-    //     // we could do anything else the canvas allows us to do (which is a lot)
-    //     ctx.font = "100px sans-serif"
-    //     ctx.fillStyle = '#666'
-    //     ctx.fillText("EDITLAYER", 100, 100)
-    //
-    //     // convert the canvas to a Blob, and call a callback so the caller can do something with it
-    //     canvas.toBlob((imageBlob) => {
-    //       this.uploadImages(imageBlob, image)
-    //     }, image.type)
-    //   }
-    //
-    //   // the file reader triggers the whole process, once it's loaded from the user's selected image
-    //   const fileReader = new FileReader()
-    //   fileReader.onload = (e) => {
-    //     // setting the image source will trigger the image.onload event above
-    //     img.src = e.target.result
-    //   };
-    //
-    //   // load the file data
-    //   fileReader.readAsDataURL(image)
-    //
-    // },
-
     uploadImages (scaledImage, orginalImage, tries = 0) {
       let fileId = this.$route.params.id
 
-      console.log('scaledImage', scaledImage)
-      console.log('orginalImage', orginalImage)
+      // console.log('scaledImage', scaledImage)
+      // console.log('orginalImage', orginalImage)
 
       if (!scaledImage || !orginalImage) return false
 
@@ -168,10 +119,18 @@ export default {
       // this.uploading.filename =  filename
       // this.uploading.url = URL.createObjectURL(scaledImage)
 
-      let uploadTask = firebase.storage.ref().child(`${fileId}/${filename}`).put(scaledImage)
+      let uploadImage = scaledImage
+      let savedSize = 100 - (scaledImage.size / orginalImage.size * 100)
+
+      if (savedSize < 10) {
+        uploadImage = orginalImage
+      }
+
+      let uploadTask = firebase.storage.ref().child(`${fileId}/${filename}`).put(uploadImage)
       .then(() => {
-        this.content = filename
+        this.content = `${this.$store.state.storageUrlPrefix}${fileId}/${filename}`
         this.uploading.url = null
+        this.uploading.filename = null
 
         // let imgUrl = `https://editlayer.imgix.net/${fileId}/${filename}`
         // let imgUrl = `${this.$store.state.storageUrlPrefix}${fileId}/${filename}`
@@ -197,64 +156,7 @@ export default {
       .catch((error) => console.error('Image upload failed', error))
 
 
-      // uploadTask.on('state_changed', (snapshot) => {
-      //   let progress = 100 - (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-      //   this.uploading.progress = progress
-      // })
-
     },
-
-    // uploadImagesORGINAL (event) {
-    //   let files = event.target.files
-    //   let file = files[0]
-    //   let fileId = this.$route.params.id
-    //
-    //   console.log('upload', fileId)
-    //
-    //   if (!file) return false
-    //
-    //   let ext = file.name.split('.').pop()
-    //   let basename = slugg(file.name.substring(0, file.name.length - ext.length - 1))
-    //   let randomSuffix = Math.random().toString(36).slice(-3)
-    //   let filename = `${basename}-${randomSuffix}.${ext}`
-    //
-    //   this.uploading.filename =  filename
-    //   this.uploading.url = URL.createObjectURL(file)
-    //
-    //   let storageRef = firebase.storage.ref().child(`imgix/${fileId}/${filename}`)
-    //   let uploadTask = storageRef.put(file)
-    //
-    //   uploadTask.on('state_changed', (snapshot) => {
-    //     let progress = 100 - (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-    //     this.uploading.progress = progress
-    //
-    //   }, (error) => {
-    //     event.tries = (!event.tries) ? 1 : event.tries + 1
-    //
-    //     if (event.tries < 5) {
-    //       console.log('Retry', event.tries)
-    //       this.uploadImages(event)
-    //     } else {
-    //       console.error('Image uploading faild', error)
-    //     }
-    //
-    //
-    //   }, () => {
-    //     let imgUrl = `https://editlayer.imgix.net/${fileId}/${filename}`
-    //     this.uploading.progress = 0
-    //
-    //     let img = new Image()
-    //
-    //     img.onload = (event) => {
-    //       console.log('onload')
-    //       this.content = imgUrl
-    //       this.uploading.url = null
-    //     }
-    //
-    //     img.src = imgUrl
-    //   })
-    //
-    // },
 
   },
 
@@ -292,7 +194,7 @@ export default {
 
   <div class="preview">
 
-    <img class="image" :src="previewImage" alt="" v-if="!uploading.url">
+    <img class="image" :src="previewImage" alt="" v-if="!uploading.url && previewImage !== false">
 
     <div class="uploading" v-if="uploading.url">
       <img class="image" :src="uploading.url" alt="">

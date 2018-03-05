@@ -14,7 +14,11 @@ export default {
 
     <div>
       <h1 class="heading -logo">Editlayer</h1>
-      <div class="subheading">Edit Content in JSON File</div>
+      <div class="subheading">JSON Based CMS</div>
+      <!-- <div class="subheading">Edit Content in JSON</div> -->
+      <!-- <div class="subheading">Create &amp; Edit JSON Content</div> -->
+      <!-- <div class="subheading">Edit Content and Publish JSON</div> -->
+      <!-- <div class="subheading">Let your customers edit content in JSON</div> -->
     </div>
 
     <!-- <div class="call-to-action"><router-link class="button" :to="{ name: 'edit', params: {} }">Try alpha v1</router-link></div> -->
@@ -25,7 +29,7 @@ export default {
     </form>
 
     <div class="version">
-      Current Version: <strong>Alpha 2</strong>
+      Current Version: <strong>Alpha 3</strong>
     </div>
 
   </div>
@@ -52,6 +56,7 @@ export default {
 .heading.-logo
   line-height: 1em
   font-size: 3rem
+  // text-transform: none
 
 .subheading
   font-style: italic
