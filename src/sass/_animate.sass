@@ -1,4 +1,14 @@
+// https://github.com/daneden/animate.css
+
 $use-fadeIn: true
 $use-fadeOut: true
+$use-pulse: true
 
 @import "../../node_modules/animate-sass/animate"
+
+
+@keyframes spin
+  from
+    transform: rotate(0deg)
+  to
+    transform: rotate(360deg)

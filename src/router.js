@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
-import AdminMode from './views/AdminMode.vue'
-import Editlayer from './views/Editlayer.vue'
+import Home from '@/views/Home.vue'
+// import AdminMode from '@/views/AdminMode.vue'
+import Editlayer from '@/views/Editlayer.vue'
 
 Vue.use(Router)
 

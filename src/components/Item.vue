@@ -32,9 +32,16 @@ export default {
     preview () {
 
       if (_.includes(['image'], this.item.EDITOR)) {
+        let content = `${this.$store.state.storageUrlPrefix}${this.$route.params.id}/${this.item.CONTENT}`
+
+        // if (_.startsWith(content, 'https://editlayer.storage.googleapis.com/')) {
+        //   let imageUrl = content.substring('https://editlayer.storage.googleapis.com/'.length)
+        //   content = `https://editlayer.imgix.net/${imageUrl}?w=360&h=110&fit=crop&crop=faces`
+        // }
+
         return {
           type: 'image',
-          content: this.item.CONTENT,
+          content: content,
         }
       // } else if (this.item.STATUS) {
       //   return {
@@ -103,7 +110,7 @@ export default {
     class="preview -image"
     v-if="preview.type === 'image'"
   >
-    <img :src="preview.content + '?w=360&h=110&fit=crop&crop=faces'" alt="">
+    <img class="image" :src="preview.content" alt="">
   </div>
 
   <img class="icon" src="../assets/icon-forward.svg" alt="" v-if="isParent || isFile">
@@ -136,7 +143,7 @@ export default {
   background-color: $color-background
   color: $color-content
   display: block
-  padding: .75rem 1rem
+  padding: .75em 1rem
 
   &::after
     content: ''
@@ -159,19 +166,19 @@ export default {
     opacity: 1
 
   &.-parent
-    +chain(.75rem)
+    +chain(.75em)
     text-transform: uppercase
     color: $color-link
-    font-size: .9rem
+    font-size: .9em
     justify-content: flex-end
-    padding-top: 1rem
-    padding-bottom: 1rem
+    padding-top: 1em
+    padding-bottom: 1em
 
   &.-file
-    +chain(.75rem)
+    +chain(.75em)
     justify-content: space-between
-    padding-top: 1rem
-    padding-bottom: 1rem
+    padding-top: 1em
+    padding-bottom: 1em
 
   .content
     flex-grow: 1
@@ -179,31 +186,30 @@ export default {
   .preview
 
     &.-text
-      font-size: .8rem
+      font-size: .8em
       color: $color-disabled
       font-weight: 400
 
     &.-image
       margin-left: -1rem
       margin-right: -1rem
-      margin-bottom: -.75rem
-      margin-top: .4rem
+      margin-bottom: -.75em
+      margin-top: .4em
       position: relative
-      // background-color: $color-disabled
       background-image: url('../assets/image-background.png')
       background-position: center
       border-bottom-left-radius: $button-border-radius
       border-bottom-right-radius: $button-border-radius
-      height: 6rem
+      height: 6em
       display: flex
       justify-content: center
       align-items: center
 
-      img
+      .image
         border-bottom-left-radius: $button-border-radius
         border-bottom-right-radius: $button-border-radius
-        max-height: 6em
-        max-width: 100%
+        height: 6em
+        width: 100%
         object-fit: cover
 
 </style>

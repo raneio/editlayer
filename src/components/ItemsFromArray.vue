@@ -292,12 +292,39 @@ export default {
       margin-top: 2rem
 
   .items
-    +margin-to-childs(.5rem)
+    +margin-to-childs(.3rem)
     position: relative
     transition: transform .2s
 
     .item
+      font-size: 1rem
       transition: opacity .2s, transform .2s
+      border-radius: 0
+
+      &::after
+        border-top-left-radius: 0
+        border-bottom-left-radius: 0
+
+      .image
+        border-radius: 0
+
+      &:first-of-type
+        border-top-left-radius: $button-border-radius
+        border-top-right-radius: $button-border-radius
+
+        &::after
+          border-top-left-radius: $button-border-radius
+
+      &:last-of-type
+        border-bottom-left-radius: $button-border-radius
+        border-bottom-right-radius: $button-border-radius
+
+        &::after
+          border-bottom-left-radius: $button-border-radius
+
+        .image
+          border-bottom-left-radius: $button-border-radius
+          border-bottom-right-radius: $button-border-radius
 
   &.-moving
 
@@ -338,5 +365,16 @@ export default {
     font-size: .9rem
     font-style: italic
     text-align: center
+
+.array-items /deep/
+
+  .item .preview.-image .image
+    border-radius: 0
+
+  .item:last-of-type .preview.-image .image
+    border-bottom-left-radius: $button-border-radius
+    border-bottom-right-radius: $button-border-radius
+
+
 
 </style>

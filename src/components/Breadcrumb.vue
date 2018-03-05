@@ -65,6 +65,13 @@ export default {
         })
       }
 
+      if (this.$route.name === 'settings') {
+        breadcrumb.push({
+          name: 'Settings',
+          fileId: this.$route.params.id,
+        })
+      }
+
       // if (this.files.length > 1) {
       //   breadcrumb.unshift({
       //     name: 'Home',
@@ -106,6 +113,12 @@ export default {
     selectItem (item) {
       let path = _.replace(item.path, /\./g, '>')
 
+      let routeName = this.$route.name
+
+      if (routeName === 'settings') {
+        routeName = 'edit'
+      }
+
       anime.timeline()
       .add({
         targets: '.side-panel > .content',
@@ -120,11 +133,11 @@ export default {
         duration: 0,
         complete: (anim) => {
           if (item.fileId && path) {
-            this.$router.push({ name: this.$route.name, params: { id: item.fileId, path: path }})
+            this.$router.push({ name: routeName, params: { id: item.fileId, path: path }})
           } else if (item.fileId) {
-            this.$router.push({ name: this.$route.name, params: { id: item.fileId }})
+            this.$router.push({ name: routeName, params: { id: item.fileId }})
           } else {
-            this.$router.push({ name: this.$route.name })
+            this.$router.push({ name: routeName })
           }
         },
       })

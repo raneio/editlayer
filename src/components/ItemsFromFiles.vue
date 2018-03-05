@@ -40,7 +40,7 @@ export default {
     // },
 
     newFile () {
-      let name = prompt('Name of JSON', 'Project X');
+      let name = prompt('Name', 'Project');
 
       if (name != null && name != '') {
           this.$store.dispatch('newFile', {
@@ -64,7 +64,7 @@ export default {
     </a>
 
     <button class="button -link -new" @click="newFile()">
-      + New JSON
+      + New Project
     </button>
   </header>
 

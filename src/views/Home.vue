@@ -14,7 +14,7 @@ export default {
 
     <div>
       <h1 class="heading -logo">Editlayer</h1>
-      <div class="subheading">Editable JSON File</div>
+      <div class="subheading">Edit Content in JSON File</div>
     </div>
 
     <!-- <div class="call-to-action"><router-link class="button" :to="{ name: 'edit', params: {} }">Try alpha v1</router-link></div> -->

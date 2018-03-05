@@ -1,18 +1,29 @@
 <script>
+import Breadcrumb from '@/components/Breadcrumb'
+
 export default {
   name: 'Settings',
+
+  components: {
+    Breadcrumb,
+  },
 }
 </script>
 
 
 <template>
 <main class="settings">
-  <h1 class="heading">
-    Settings
-  </h1>
-  <p>
-    User permissions, file removing, and other settings will become later.
-  </p>
+  <Breadcrumb/>
+
+  <section class="group">
+    <h1 class="heading">
+      Settings
+    </h1>
+    <p>
+      User permissions, file removing, and other settings will come  available later.
+    </p>
+  </section>
+
 </main>
 </template>
 
@@ -22,6 +33,7 @@ export default {
 
 .settings
   overflow-y: auto
-  padding: 2.5rem
+  padding: .25rem 2.5rem 2.5rem
+  +margin-to-childs(2rem)
 
 </style>

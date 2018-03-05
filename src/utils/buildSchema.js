@@ -9,7 +9,7 @@ const simpleToAdvance = (schema) => {
           ARRAY: value[0],
         }
 
-        if (value[0].NAME) {
+        if (_.has(value[0], 'NAME')) {
           schema[key].NAME = value[0].NAME
         }
 

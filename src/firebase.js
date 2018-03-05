@@ -6,7 +6,7 @@ firebase.initializeApp({
   authDomain: 'editlayerapp.firebaseapp.com',
   databaseURL: 'https://editlayerapp.firebaseio.com',
   projectId: 'editlayerapp',
-  storageBucket: 'editlayerapp.appspot.com',
+  storageBucket: 'editlayer',
   messagingSenderId: '859710668845',
 })
 

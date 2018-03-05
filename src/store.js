@@ -3,9 +3,9 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import slugg from 'slugg'
 import axios from 'axios'
-import firebase from './firebase'
-import router from './router'
-import buildSchema from './utils/buildSchema'
+import firebase from '@/firebase'
+import router from '@/router'
+import buildSchema from '@/utils/buildSchema'
 
 Vue.use(Vuex)
 Vue.use(firebase)
@@ -13,6 +13,10 @@ Vue.use(firebase)
 export default new Vuex.Store({
 
   state: {
+    // storageUrlPrefix: 'https://editlayer.imgix.net/',
+    // storageUrlPrefix: 'https://editlayer.storage.googleapis.com/',
+    // storageUrlPrefix: 'https://f001.backblazeb2.com/file/editlayer/',
+    storageUrlPrefix: 'https://cdn.editlayer.com/',
     files: null,
     user: {
       isLoggedIn: null,
@@ -152,8 +156,12 @@ export default new Vuex.Store({
     },
 
     newFile ({state, dispatch}, payload) {
-      let fileId = Math.random().toString(36).slice(-5)
-      let filename = slugg(payload.name)
+      // let filename = slugg(payload.name)
+      let fileId = slugg(payload.name)
+
+      if (payload.tries > 0) {
+        fileId = `${fileId}-${Math.random().toString(36).slice(-3)}`
+      }
 
       let defaultSchema = {
         title: "text",
@@ -164,7 +172,7 @@ export default new Vuex.Store({
       let schema = (payload.schema) ? payload.schema : defaultSchema
 
       let newFile = {
-        filename: filename,
+        filename: 'content',
         name: payload.name,
         schema: JSON.stringify(schema, '', '\t'),
         roles: {},
@@ -233,18 +241,6 @@ export default new Vuex.Store({
       .catch((error) => console.error('Error deleting value:', error))
     },
 
-    // updateStatus ({state}, payload) {
-    //   let updateData = {
-    //     status: payload.status,
-    //   }
-    //
-    //   console.log('updateStatus', updateData)
-    //
-    //   firebase.firestore.collection('files').doc(payload.fileId).update(updateData)
-    //   .then(() => console.log('Status successfully updated!'))
-    //   .catch((error) => console.error('Error updating Status:', error))
-    // },
-
     newArrayItem ({state, dispatch}, payload) {
       let randomKey = `-${Math.random().toString(36).slice(-4)}`
       let path = `draft.${payload.path}`
@@ -276,61 +272,31 @@ export default new Vuex.Store({
       router.push({ name: 'edit', params: { id: payload.fileId, path: pathUrl }})
     },
 
-    publishJson ({state, dispatch, getters}, payload) {
-
-      firebase.firestore.collection('files').doc(payload.fileId).collection('versions').add({
-        publishedBy: state.user.id,
-        publishedAt: firebase.firestoreTimestamp,
-        content: payload.content,
-        filename: payload.filename,
-        // downloadToken: payload.downloadToken,
-      })
-      .then((docRef) => console.log('Added version:', docRef.id))
-      .catch((error) => console.error('Error adding version:', error))
-
-      let publishedData = {
-        'published.draft': getters.activeFile.draft,
-        'published.schema': getters.activeFile.schema,
-      }
-
-      console.log('publishedData', publishedData)
-
-      firebase.firestore.collection('files').doc(payload.fileId).update(publishedData)
-      .then(() => console.log('Published successfully updated!'))
-      .catch((error) => console.error('Error updating published:', error))
-
-      // TODO: Move this to the firebase functions
-      _.delay(() => {
-        axios({
-          method: 'post',
-          url: 'https://api.imgix.com/v2/image/purger',
-          auth: {
-            username: 'jRj2WRDWN5ED3TkdGJUEHFfUMHhjbA8j',
-            password: '',
-          },
-          data: {
-            url: `https://editlayer.imgix.net/${payload.fileId}/${payload.filename}.json`,
-          },
-        })
-        .then((response) => console.log('Imgix purge done', response))
-        .catch((error) => console.error('Imgix purge faild', error))
-      }, 3000)
-
-    },
-
-    // uploadImages ({state, dispatch}, images) {
-    //   let file = images[0]
-    //   let randomKey = Math.random().toString(36).slice(-4)
-    //   let path = `${randomKey}/${file.name}`
-    //   let storageRef = firebase.storage.ref().child(`images/${path}`)
+    // publishJson ({state, dispatch, getters}, payload) {
     //
-    //   storageRef.put(file)
-    //   .then((snapshot) => {
-    //     console.log('Uploaded a blob or file!', snapshot)
+    //   firebase.firestore.collection('files').doc(payload.fileId).collection('versions').add({
+    //     publishedBy: state.user.id,
+    //     publishedAt: firebase.firestoreTimestamp,
+    //     content: payload.content,
+    //     filename: payload.filename,
+    //     // downloadToken: payload.downloadToken,
     //   })
-    //   .catch((error) => {
-    //     dispatch('uploadImages', images)
+    //   .then((docRef) => {
+    //     let versionId = docRef.id
+    //     console.log('Added version:', versionId)
     //   })
+    //   .catch((error) => console.error('Error adding version:', error))
+    //
+    //   let publishedData = {
+    //     'published.draft': getters.activeFile.draft,
+    //     'published.schema': getters.activeFile.schema,
+    //   }
+    //
+    //   console.log('publishedData', publishedData)
+    //
+    //   firebase.firestore.collection('files').doc(payload.fileId).update(publishedData)
+    //   .then(() => console.log('Published successfully updated!'))
+    //   .catch((error) => console.error('Error updating published:', error))
     //
     // },
 

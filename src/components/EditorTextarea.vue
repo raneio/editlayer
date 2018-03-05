@@ -25,7 +25,7 @@ export default {
 
     content: _.debounce(function () {
       this.saveFunction(this.editorData, this.content)
-    }, 1000),
+    }, 500),
 
   },
 
