@@ -342,7 +342,7 @@ export default new Vuex.Store({
 
       let uploadImage = payload.image
 
-      if (payload.image.type !== 'image/gif') {
+      if (_.includes(['image/jpeg', 'image/png'], payload.image.type)) {
 
         const imageCompressor = new ImageCompressor()
         let optimizedImage = await imageCompressor.compress(payload.image, {
@@ -376,7 +376,10 @@ export default new Vuex.Store({
         filename = `${filenameWithoutExt}-${randomId}.png`
       } else if (uploadImage.type === 'image/gif') {
         filename = `${filenameWithoutExt}-${randomId}.gif`
+      } else if (uploadImage.type === 'image/svg+xml') {
+        filename = `${filenameWithoutExt}-${randomId}.svg`
       } else {
+        console.error('Unsupported file type', uploadImage.type)
         return false
       }
 

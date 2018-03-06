@@ -30,5 +30,9 @@ export default new Router({
       path: '/settings/:id?/:path?',
       component: Editlayer,
     },
+    {
+      path: '/admin',
+      redirect: { name: 'edit' }
+    },
   ]
 })

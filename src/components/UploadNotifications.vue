@@ -20,19 +20,21 @@ export default {
 <template>
 <section class="upload-notifications">
 
-  <transition name="fade">
-  <div class="upload-process" v-for="uploadProcess in uploadProcesses" v-if="uploadProcess.status !== 'done'">
+  <div v-for="uploadProcess in uploadProcesses">
+    <transition name="fade">
+    <div class="upload-process" v-if="uploadProcess.status !== 'done'">
 
-    <img class="image" :src="uploadProcess.blobUrl" alt="" v-if="uploadProcess.blobUrl">
+      <img class="image" :src="uploadProcess.blobUrl" alt="" v-if="uploadProcess.blobUrl">
 
-    <div class="content">
-      <div class="filename" v-text="uploadProcess.filename"></div>
-      <div class="progress-bar" :style="{ width: uploadProcess.percent + '%'}">
+      <div class="content">
+        <div class="filename" v-text="uploadProcess.filename"></div>
+        <div class="progress-bar" :style="{ width: uploadProcess.percent + '%'}">
+      </div>
+
+      </div>
     </div>
-
-    </div>
+    </transition>
   </div>
-  </transition>
 
 </section>
 </template>
