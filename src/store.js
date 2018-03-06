@@ -90,14 +90,14 @@ export default new Vuex.Store({
       })
     },
 
-    setUploadProsess (state, payload) {
+    setUploadProcess (state, payload) {
       Vue.set(state.uploadProcesses, `${payload.projectId}>${payload.path}`, {
         projectId: payload.projectId,
         path: payload.path,
         filename: payload.filename,
         blobUrl: payload.blobUrl,
         percent: 0,
-        status: payload.status,
+        status: 'started',
       })
     },
 
@@ -108,9 +108,23 @@ export default new Vuex.Store({
         status: payload.status,
       })
 
-
-
       Vue.set(state.uploadProcesses, `${payload.projectId}>${payload.path}`, updatedUploadProcess)
+    },
+
+    setPublishProcess (state, payload) {
+      Vue.set(state.publishProcesses, payload.projectId, {
+        status: 'publishing',
+      })
+    },
+
+    updatePublishProcess (state, payload) {
+      let currentPublishProcess = _.get(state.publishProcesses, payload.projectId)
+      let updatedPublishProcess = _.merge(currentPublishProcess, {
+        versionId: payload.versionId,
+        status: payload.status,
+      })
+
+      Vue.set(state.publishProcesses, payload.projectId, updatedPublishProcess)
     },
 
   },
@@ -221,6 +235,95 @@ export default new Vuex.Store({
 
     publishJson ({state, commit, dispatch}, payload) {
 
+      commit('setPublishProcess', {
+        projectId: payload.projectId,
+      })
+
+      firebase.firestore
+        .collection('projects')
+        .doc(payload.projectId)
+        .collection('versions')
+        .add({
+          publishedBy: payload.publishedBy,
+          publishedAt: firebase.firestoreTimestamp,
+          content: payload.content,
+          filename: payload.filename,
+        })
+        .then((docRef) => {
+          let versionId = docRef.id
+          // this.publish.versionId = versionId
+          console.log('Added version:', versionId)
+
+          commit('updatePublishProcess', {
+            projectId: payload.projectId,
+            versionId: versionId,
+          })
+
+          dispatch('isPublishReady', _.merge(payload, {
+            versionId: versionId,
+          }))
+        })
+        .catch((error) => console.error('Error adding version:', error))
+
+    },
+
+    isPublishReady ({state, commit, dispatch}, payload)  {
+      payload.publishTries = (!payload.publishTries) ? 1 : payload.publishTries + 1
+
+      if (payload.publishTries > 30) {
+        console.error('Publishing failed, try again.')
+        commit('updatePublishProcess', {
+          projectId: payload.projectId,
+          status: 'error',
+        })
+        return false
+      }
+
+      let random = Math.random().toString(36).slice(-4)
+
+      axios({
+        url: `${state.storageUrlPrefix}${payload.projectId}/${payload.filename}.json?${random}`,
+        responseType: 'json',
+      })
+      .then((response) => {
+
+        console.log('version', payload.versionId, response.data.VERSION_ID)
+
+        if (payload.versionId !== response.data.VERSION_ID) {
+          console.log('Try again', payload.publishTries)
+          _.delay(() => {
+            dispatch('isPublishReady', payload)
+          }, 1000)
+        } else {
+
+          let publishedData = {
+            'published.draft': payload.draft,
+            'published.schema': payload.schema,
+          }
+
+          firebase.firestore
+            .collection('projects')
+            .doc(payload.projectId)
+            .update(publishedData)
+            .then(() => {
+              // this.publish.running = false
+              commit('updatePublishProcess', {
+                projectId: payload.projectId,
+                status: 'done',
+              })
+              console.log('Published successfully updated!')
+            })
+            .catch((error) => console.error('Publishing failed', error))
+        }
+
+      })
+      .catch((error) => {
+        // console.error('Getting published JSON failed try again', error.response)
+        _.delay(() => {
+          dispatch('isPublishReady', payload)
+        }, 1000)
+      })
+
     },
 
     async uploadImage ({state, commit, dispatch}, payload) {
@@ -229,13 +332,12 @@ export default new Vuex.Store({
       let filenameWithoutExt = slugg(payload.image.name.replace(/\.[^/.]+$/, ''))
       let randomId = Math.random().toString(36).slice(-5)
 
-      commit('setUploadProsess', {
+      commit('setUploadProcess', {
         projectId: payload.projectId,
         path: payload.path,
         filename: filenameWithoutExt,
         blobUrl: URL.createObjectURL(payload.image),
         percent: 0,
-        status: 'started',
       })
 
       let uploadImage = payload.image
