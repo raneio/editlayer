@@ -10,7 +10,7 @@ export default {
 <template>
 <section class="home">
 
-  <div class="content animated fadeIn">
+  <div class="content">
 
     <div>
       <h1 class="heading -logo">Editlayer</h1>

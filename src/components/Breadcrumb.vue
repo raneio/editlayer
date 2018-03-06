@@ -9,12 +9,12 @@ export default {
 
   computed: {
 
-    files () {
-      return this.$store.getters.files
-    },
+    // files () {
+    //   return this.$store.getters.projects
+    // },
 
-    activeFile () {
-      return this.$store.getters.activeFile
+    activeProject () {
+      return this.$store.getters.activeProject
     },
 
     schema () {
@@ -51,28 +51,28 @@ export default {
           breadcrumb.unshift({
             name: this.stringToTitle(item.NAME),
             path: path,
-            fileId: this.$route.params.id,
+            projectId: this.$route.params.id,
           })
         }
 
         breadcrumbItems = _.dropRight(breadcrumbItems)
       }
 
-      if (this.$route.params.id && this.activeFile) {
+      if (this.$route.params.id && this.activeProject) {
         breadcrumb.unshift({
-          name: this.activeFile.name,
-          fileId: this.$route.params.id,
+          name: this.activeProject.name,
+          projectId: this.$route.params.id,
         })
       }
 
       if (this.$route.name === 'settings') {
         breadcrumb.push({
           name: 'Settings',
-          fileId: this.$route.params.id,
+          projectId: this.$route.params.id,
         })
       }
 
-      // if (this.files.length > 1) {
+      // if (this.projects.length > 1) {
       //   breadcrumb.unshift({
       //     name: 'Home',
       //   })
@@ -132,10 +132,10 @@ export default {
         translateX: '-100%',
         duration: 0,
         complete: (anim) => {
-          if (item.fileId && path) {
-            this.$router.push({ name: routeName, params: { id: item.fileId, path: path }})
-          } else if (item.fileId) {
-            this.$router.push({ name: routeName, params: { id: item.fileId }})
+          if (item.projectId && path) {
+            this.$router.push({ name: routeName, params: { id: item.projectId, path: path }})
+          } else if (item.projectId) {
+            this.$router.push({ name: routeName, params: { id: item.projectId }})
           } else {
             this.$router.push({ name: routeName })
           }

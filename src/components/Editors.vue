@@ -25,7 +25,7 @@ export default {
 
     editorData () {
       return {
-        fileId: this.$route.params.id,
+        projectId: this.$route.params.id,
         path: this.activeSchema.PATH,
         content: this.activeSchema.CONTENT,
       }
@@ -37,7 +37,7 @@ export default {
 
     saveContent (editorData, content) {
       this.$store.dispatch('updateContent', {
-        fileId: editorData.fileId,
+        projectId: editorData.projectId,
         path: editorData.path,
         content: content,
       })

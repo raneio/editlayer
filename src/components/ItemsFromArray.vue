@@ -1,5 +1,6 @@
 <script>
 import _ from 'lodash'
+import firebase from '@/firebase'
 import Item from '@/components/Item'
 import BackButton from '@/components/BackButton'
 
@@ -42,8 +43,12 @@ export default {
       }
     },
 
-    files () {
-      return this.$store.getters.files
+    projectId () {
+      return this.$route.params.id
+    },
+
+    projects () {
+      return this.$store.getters.projects
     },
 
     arrayItems () {
@@ -87,16 +92,45 @@ export default {
   methods: {
 
     newItem () {
-      let path = _.replace(this.$route.params.path, />/g, '.')
+      let itemPath = _.replace(this.$route.params.path, />/g, '.')
 
-      if (path !== this.activeSchema.PATH && _.includes(path, '.-')) {
-        path = _.chain(path).split('.-').slice(0, -1).join('.-').value()
+      if (itemPath !== this.activeSchema.PATH && _.includes(itemPath, '.-')) {
+        itemPath = _.chain(itemPath).split('.-').slice(0, -1).join('.-').value()
       }
 
-      this.$store.dispatch('newArrayItem', {
-        fileId: this.$route.params.id,
-        path: path,
+      let randomKey = `-${Math.random().toString(36).slice(-4)}`
+      let path = `draft.${itemPath}`
+      let newPath = `${path}.${randomKey}`
+      let items = _.get(this.projects[this.projectId], path)
+      let order = 0
+
+      if (_.has(this.projects[this.projectId], newPath)) {
+        this.newItem()
+        return false
+      }
+
+      _.each(items, (item, key) => {
+        if (order >= item.ORDER) {
+          order = item.ORDER - 1
+        }
       })
+
+      let updateData = {}
+      updateData[newPath] = {
+        ORDER: order,
+      }
+
+      firebase.firestore.collection('projects').doc(this.projectId).update(updateData)
+      .then(() => console.log('New item added!'))
+      .catch((error) => console.error('Error new item:', error))
+
+      let pathUrl = _.replace(`${itemPath}.${randomKey}`, /\./g, '>')
+      this.$router.push({ name: 'edit', params: { id: this.projectId, path: pathUrl }})
+
+      // this.$store.dispatch('newArrayItem', {
+      //   projectId: this.projectId,
+      //   path: path,
+      // })
     },
 
     findFirstItem () {
@@ -114,7 +148,7 @@ export default {
 
       if (firstItem && this.activeSchema.TYPE === 'array') {
         let firstItemPath = _.replace(firstItem.PATH, /\./g, '>')
-        this.$router.replace({ name: 'edit', params: { id: this.$route.params.id, path: firstItemPath }})
+        this.$router.replace({ name: 'edit', params: { id: this.projectId, path: firstItemPath }})
       }
     },
 
@@ -126,7 +160,7 @@ export default {
     //   }
     //
     //   let path = _.replace(value.PATH, /\./g, '>')
-    //   this.$router.push({ name: routeName, params: { id: this.$route.params.id, path: path }})
+    //   this.$router.push({ name: routeName, params: { id: this.projectId, path: path }})
     // },
 
     isActive (path) {
@@ -157,7 +191,7 @@ export default {
       }
 
       this.$store.dispatch('updateContent', {
-        fileId: this.$route.params.id,
+        projectId: this.projectId,
         path: `${this.movingArrayItem.path}.ORDER`,
         content: newOrder,
       })
@@ -178,10 +212,12 @@ export default {
     },
 
     deleteArrayItem (arrayItem) {
-      this.$store.dispatch('delteArrayItem', {
-        fileId: this.$route.params.id,
-        path: arrayItem.PATH,
-      })
+      let updateData = {}
+      updateData[`draft.${arrayItem.PATH}`] = firebase.firestoreDelete
+
+      firebase.firestore.collection('projects').doc(this.projectId).update(updateData)
+      .then(() => console.log('Item successfully deleted!'))
+      .catch((error) => console.error('Error deleting item', error))
     },
 
   },
@@ -197,7 +233,7 @@ export default {
 <template>
 <section class="array-items" :class="{ '-moving': movingArrayItem.path !== null}">
 
-  <header class='header'>
+  <header class="header">
     <BackButton/>
     <button class="button -link -new" @click="newItem()">
       + New Item

@@ -5,6 +5,7 @@ import Navigation from '@/components/Navigation'
 import SidePanel from '@/components/SidePanel'
 import MainContent from '@/components/MainContent'
 import Settings from '@/components/Settings'
+import UploadNotifications from '@/components/UploadNotifications'
 
 
 export default {
@@ -16,6 +17,7 @@ export default {
     SidePanel,
     MainContent,
     Settings,
+    UploadNotifications,
   },
 
 }
@@ -23,7 +25,7 @@ export default {
 
 
 <template>
-<section class="animated fadeIn">
+<section>
 
   <Auth v-if="$store.state.user.isLoggedIn === false"/>
 
@@ -32,6 +34,7 @@ export default {
     <SidePanel v-if="$route.name === 'edit' || $route.name === 'schema'"/>
     <MainContent v-if="$route.name === 'edit' || $route.name === 'schema'"/>
     <Settings v-if="$route.name === 'settings'"/>
+    <UploadNotifications/>
   </section>
 
 </section>

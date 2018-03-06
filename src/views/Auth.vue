@@ -66,7 +66,7 @@ export default {
         .then(() => {
           console.log('Added user', user.email)
 
-          this.$store.dispatch('newFile', {
+          this.$store.dispatch('newProject', {
             name: '1. Simple Example',
             redirect: false,
             schema: {
@@ -76,7 +76,7 @@ export default {
             },
           })
 
-          this.$store.dispatch('newFile', {
+          this.$store.dispatch('newProject', {
             name: '2. Advanced Example',
             redirect: false,
             schema: {

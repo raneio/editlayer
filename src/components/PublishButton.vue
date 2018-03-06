@@ -29,39 +29,39 @@ export default {
       return this.$store.getters.schema
     },
 
-    activeFile () {
-      return this.$store.getters.activeFile
+    activeProject () {
+      return this.$store.getters.activeProject
     },
 
     // jsonStorage () {
-    //   if (!this.activeFile) return false
-    //   return `https://editlayer.storage.googleapis.com/${this.$route.params.id}/${this.activeFile.filename}`
+    //   if (!this.activeProject) return false
+    //   return `https://editlayer.storage.googleapis.com/${this.$route.params.id}/${this.activeProject.filename}`
     // },
 
     jsonUrl () {
-      if (!this.activeFile) return false
-      return `${this.$store.state.storageUrlPrefix}${this.$route.params.id}/${this.activeFile.filename}.json`
+      if (!this.activeProject) return false
+      return `${this.$store.state.storageUrlPrefix}${this.$route.params.id}/${this.activeProject.filename}.json`
     },
 
     // jsonImgix () {
-    //   if (!this.activeFile) return false
-    //   return `https://editlayer.imgix.net/${this.$route.params.id}/${this.activeFile.filename}.json`
+    //   if (!this.activeProject) return false
+    //   return `https://editlayer.imgix.net/${this.$route.params.id}/${this.activeProject.filename}.json`
     // },
 
     jsonTarget () {
-      if (!this.activeFile) return false
-      return this.activeFile.fileId
+      if (!this.activeProject) return false
+      return this.activeProject.projectId
     },
 
     isDraft () {
-      if (!this.activeFile) return false
-      if (!this.activeFile.published) return true
-      return !_.isEqual(this.activeFile.draft, this.activeFile.published.draft) || this.activeFile.schema !== this.activeFile.published.schema
+      if (!this.activeProject) return false
+      if (!this.activeProject.published) return true
+      return !_.isEqual(this.activeProject.draft, this.activeProject.published.draft) || this.activeProject.schema !== this.activeProject.published.schema
     },
 
     neverPublished () {
-      if (!this.activeFile) return false
-      return this.activeFile.published === null
+      if (!this.activeProject) return false
+      return this.activeProject.published === null
     },
 
     publishStatus () {
@@ -82,14 +82,14 @@ export default {
       let content = buildJson(this.schema)
 
       this.publish.running = true
-      this.publish.draft = this.activeFile.draft
-      this.publish.schema = this.activeFile.schema
+      this.publish.draft = this.activeProject.draft
+      this.publish.schema = this.activeProject.schema
 
-      firebase.firestore.collection('files').doc(this.activeFile.fileId).collection('versions').add({
+      firebase.firestore.collection('projects').doc(this.activeProject.projectId).collection('versions').add({
         publishedBy: this.$store.state.user.id,
         publishedAt: firebase.firestoreTimestamp,
         content: content,
-        filename: this.activeFile.filename,
+        filename: this.activeProject.filename,
         // downloadToken: payload.downloadToken,
       })
       .then((docRef) => {
@@ -114,8 +114,8 @@ export default {
       let random = Math.random().toString(36).slice(-4)
 
       axios({
-        // url: `https://editlayer.imgix.net/${this.activeFile.fileId}/${this.activeFile.filename}.json?${random}`,
-        url: `${this.$store.state.storageUrlPrefix}${this.activeFile.fileId}/${this.activeFile.filename}.json?${random}`,
+        // url: `https://editlayer.imgix.net/${this.activeProject.projectId}/${this.activeProject.filename}.json?${random}`,
+        url: `${this.$store.state.storageUrlPrefix}${this.activeProject.projectId}/${this.activeProject.filename}.json?${random}`,
         responseType: 'json',
       })
       .then((response) => {
@@ -131,7 +131,7 @@ export default {
             'published.schema': this.publish.schema,
           }
 
-          firebase.firestore.collection('files').doc(this.activeFile.fileId).update(publishedData)
+          firebase.firestore.collection('projects').doc(this.activeProject.projectId).update(publishedData)
           .then(() => {
             this.publish.running = false
             console.log('Published successfully updated!')
@@ -171,7 +171,7 @@ export default {
     class="item -publish"
     @click="publishJson()"
   >
-      <img class="icon animated pulse infinite" src="../assets/icon-publish.svg" alt="">
+      <img class="icon" src="../assets/icon-publish.svg" alt="">
       Publish
   </div>
 

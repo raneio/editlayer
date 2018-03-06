@@ -1,7 +1,7 @@
 <script>
 import _ from 'lodash'
 import anime from 'animejs'
-import ItemsFromFiles from '@/components/ItemsFromFiles'
+import ItemsFromProjects from '@/components/ItemsFromProjects'
 import ItemsFromObject from '@/components/ItemsFromObject'
 import ItemsFromArray from '@/components/ItemsFromArray'
 
@@ -9,7 +9,7 @@ export default {
   name: 'SidePanel',
 
   components: {
-    ItemsFromFiles,
+    ItemsFromProjects,
     ItemsFromObject,
     ItemsFromArray,
   },
@@ -17,12 +17,12 @@ export default {
   methods: {
 
     selectItem (item) {
-      let fileId = (item.FILE_ID) ? item.FILE_ID : this.$route.params.id
+      let projectId = (item.FILE_ID) ? item.FILE_ID : this.$route.params.id
       let routeName = (item.TYPE === 'value') ? 'edit' : this.$route.name
       let path = _.replace(item.PATH, /\./g, '>')
 
       if (item.TYPE === 'value') {
-        this.$router.push({ name: routeName, params: { id: fileId, path: path }})
+        this.$router.push({ name: routeName, params: { id: projectId, path: path }})
         return false
       }
 
@@ -40,9 +40,9 @@ export default {
         duration: 0,
         complete: (anim) => {
           if (path) {
-            this.$router.push({ name: routeName, params: { id: fileId, path: path }})
+            this.$router.push({ name: routeName, params: { id: projectId, path: path }})
           } else {
-            this.$router.push({ name: routeName, params: { id: fileId }})
+            this.$router.push({ name: routeName, params: { id: projectId }})
           }
         },
       })
@@ -100,7 +100,7 @@ export default {
       let grandparent = _.get(this.schema, _.chain(path).split('.').dropRight(2).join('.').value())
 
       if (!this.$route.params.id) {
-        return 'file'
+        return 'project'
       } else if (this.activeSchema && this.activeSchema.TYPE === 'array') {
         return 'array'
       } else if (grandparent && this.activeSchema && grandparent.TYPE === 'array' && this.activeSchema.TYPE === 'value') {
@@ -120,7 +120,7 @@ export default {
 <aside class="side-panel">
   <div class="content">
 
-    <ItemsFromFiles :selectItem="selectItem" v-if="activeType === 'file'"/>
+    <ItemsFromProjects :selectItem="selectItem" v-if="activeType === 'project'"/>
     <ItemsFromObject :selectItem="selectItem" v-if="activeType === 'object'"/>
     <ItemsFromArray :selectItem="selectItem" v-if="activeType === 'array'"/>
 

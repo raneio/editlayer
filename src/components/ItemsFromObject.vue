@@ -43,9 +43,9 @@ export default {
       }
     },
 
-    files () {
-      return this.$store.getters.files
-    },
+    // files () {
+    //   return this.$store.getters.projects
+    // },
 
     items () {
       return _.filter(this.activeSchema, (value) => {
@@ -114,7 +114,7 @@ export default {
 <template>
 <section class="items">
 
-  <header class='header'>
+  <header class="header">
     <BackButton/>
   </header>
 

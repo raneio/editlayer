@@ -7,7 +7,7 @@ service cloud.firestore {
       							&& request.resource.data.email == request.auth.token.email;
     }
 
-    match /files/{fileId} {
+    match /projects/{projectId} {
     	function isRole(roles) {
       	return resource.data.roles[request.auth.uid] in roles;
       }
@@ -42,9 +42,9 @@ service cloud.firestore {
 
     }
 
-    match /files/{fileId}/versions/{versionId} {
+    match /projects/{projectId}/versions/{versionId} {
       function isRole(roles) {
-        return get(/databases/$(database)/documents/files/$(fileId)).data.roles[request.auth.uid] in roles;
+        return get(/databases/$(database)/documents/projects/$(projectId)).data.roles[request.auth.uid] in roles;
       }
 
       allow create: if isRole(['admin', 'editor']);

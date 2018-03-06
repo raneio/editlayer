@@ -1,8 +1,6 @@
 <script>
 import _ from 'lodash'
 import slugg from 'slugg'
-import loadImage from 'blueimp-load-image'
-import Dropzone from 'dropzone'
 import ImageCompressor from 'image-compressor.js'
 import firebase from '../firebase'
 
@@ -27,18 +25,26 @@ export default {
 
   computed: {
 
+    projectId () {
+      return this.$route.params.id
+    },
+
     filename () {
-      if (!this.uploading.filename) {
-        return this.content
-      } else {
-        return this.uploading.filename
-      }
+    return _.chain(this.content).split('/').pop().value()
     },
 
     previewImage () {
       return this.content
       // if (this.content === null) return false
       // return `${this.$store.state.storageUrlPrefix}${this.$route.params.id}/${this.content}`
+    },
+
+    uploadProcess () {
+      if (_.has(this.$store.state.uploadProcesses, `${this.projectId}>${this.$route.params.path}`)) {
+        return _.get(this.$store.state.uploadProcesses, `${this.projectId}>${this.$route.params.path}`)
+      } else {
+        return null
+      }
     },
 
   },
@@ -57,113 +63,126 @@ export default {
 
   methods: {
 
-    optimizeImage (event) {
-      let me = this
-      const file = event.target.files[0]
+    uploadImage (event) {
+      let image = event.target.files[0]
+      this.$refs['file-input'].value = ''
+      if (!image) return false
 
-      if (!file) return false
-
-      this.uploading.filename =  file.name
-      this.uploading.url = URL.createObjectURL(file)
-
-      if (file.type === 'image/gif') {
-        console.log('GIF', file)
-        this.uploadImages(file, file)
-        return false
-      }
-
-      new ImageCompressor(file, {
-        quality: .6,
-        convertSize: 3000000,
-        maxWidth: 1000,
-        maxHeight: 1000,
-        success(result) {
-          me.uploadImages(result, file)
-        },
-        error(e) {
-          console.error('Image optimize failed', e.message);
-        },
-      });
-
-    },
-
-    uploadImages (scaledImage, orginalImage, tries = 0) {
-      let fileId = this.$route.params.id
-
-      // console.log('scaledImage', scaledImage)
-      // console.log('orginalImage', orginalImage)
-
-      if (!scaledImage || !orginalImage) return false
-
-      let orginalExt = orginalImage.name.split('.').pop()
-      let basename = slugg(orginalImage.name.substring(0, orginalImage.name.length - orginalExt.length - 1))
-      let randomSuffix = Math.random().toString(36).slice(-5)
-      let ext = ''
-
-      if (scaledImage.type === 'image/jpeg') {
-        ext = 'jpg'
-      } else if (scaledImage.type === 'image/png') {
-        ext = 'png'
-      } else if (scaledImage.type === 'image/gif') {
-        ext = 'gif'
-      } else {
-        console.error('Not supported file type.', scaledImage.type)
-        return false
-      }
-
-
-      let filename = `${basename}-${randomSuffix}.${ext}`
-      // let randomSuffix = Math.random().toString(36).slice(-3)
-      // let filename = `foobar-${randomSuffix}.jpg`
-
-      // this.uploading.filename =  filename
-      // this.uploading.url = URL.createObjectURL(scaledImage)
-
-      let uploadImage = scaledImage
-      let savedSize = 100 - (scaledImage.size / orginalImage.size * 100)
-
-      if (savedSize < 10) {
-        uploadImage = orginalImage
-      }
-
-      let uploadTask = firebase.storage.ref().child(`${fileId}/${filename}`).put(uploadImage)
-      .then(() => {
-        this.content = `${this.$store.state.storageUrlPrefix}${fileId}/${filename}`
-        this.uploading.url = null
-        this.uploading.filename = null
-
-        // let imgUrl = `https://editlayer.imgix.net/${fileId}/${filename}`
-        // let imgUrl = `${this.$store.state.storageUrlPrefix}${fileId}/${filename}`
-        // this.uploading.progress = 0
-        //
-        // let img = new Image()
-        //
-        // img.onload = (event) => {
-        //   console.log('onload')
-        //   this.content = imgUrl
-        //   this.uploading.url = null
-        // }
-        //
-        // img.onerror = (event) => {
-        //   _.delay(() => {
-        //     img.src = `${imgUrl}?${Math.random().toString(36).slice(-5)}`
-        //   }, 1000)
-        // }
-        //
-        // img.src = imgUrl
-
+      this.$store.dispatch('uploadImage', {
+        projectId: this.projectId,
+        path: this.$route.params.path,
+        image: image,
       })
-      .catch((error) => console.error('Image upload failed', error))
-
-
     },
 
-  },
+    // async optimizeImage (event) {
+    //   const selectedImage = event.target.files[0]
+    //   if (!selectedImage) return false
+    //   if (!_.startsWith(selectedImage.type, 'image/')) return false
+    //
+    //   this.$store.dispatch('uploadFile', {
+    //     projectId: this.projectId,
+    //     path: this.$route.params.path,
+    //     filename: filename,
+    //     blobUrl: URL.createObjectURL(selectedImage),
+    //   })
+    //
+    //   let filenameWithoutExt = slugg(selectedImage.name.replace(/\.[^/.]+$/, ''))
+    //   let randomId = Math.random().toString(36).slice(-5)
+    //
+    //   // this.uploading.filename =  selectedImage.name
+    //   // this.uploading.url = URL.createObjectURL(selectedImage)
+    //
+    //   // if (selectedImage.type === 'image/gif') {
+    //   //   console.log('GIF', selectedImage)
+    //   //   this.uploadImages(selectedImage, selectedImage)
+    //   //   return false
+    //   // }
+    //
+    //   const imageCompressor = new ImageCompressor()
+    //   let optimizedImage = await imageCompressor.compress(selectedImage, {
+    //     quality: .6,
+    //     convertSize: 1000000,
+    //     maxWidth: 1000,
+    //     maxHeight: 1000,
+    //   })
+    //   .then((result) => {
+    //     console.log('Image optimized')
+    //     return result
+    //   })
+    //   .catch((error) => console.error('Image optimize failed', error.message))
+    //
+    //   let uploadImage = optimizedImage
+    //   let savedSize = 100 - (optimizedImage.size / selectedImage.size * 100)
+    //
+    //   if (savedSize < 10) {
+    //     uploadImage = selectedImage
+    //   }
+    //
+    //   let ext = null
+    //   if (uploadImage.type === 'image/jpeg') {
+    //     ext = 'jpg'
+    //   } else if (uploadImage.type === 'image/png') {
+    //     ext = 'png'
+    //   } else if (uploadImage.type === 'image/gif') {
+    //     ext = 'gif'
+    //   } else {
+    //     return false
+    //   }
+    //
+    //   let filename = `${filenameWithoutExt}-${randomId}.${ext}`
+    //
+    //   console.log('uploadImage', uploadImage)
+    //
+    //   this.$store.dispatch('uploadFile', {
+    //     projectId: this.projectId,
+    //     path: this.$route.params.path,
+    //     file: uploadImage,
+    //     filename: filename,
+    //     blobUrl: URL.createObjectURL(selectedImage),
+    //   })
+    //
+    // },
 
-  mounted () {
-
-    // Dropzone.autoDiscover = false
-    // new Dropzone("#dropzone", {url: '/upload'})
+    // uploadImages (scaledImage, orginalImage, tries = 0) {
+    //   if (!scaledImage || !orginalImage) return false
+    //
+    //   let orginalExt = orginalImage.name.split('.').pop()
+    //   let basename = slugg(orginalImage.name.substring(0, orginalImage.name.length - orginalExt.length - 1))
+    //   let randomId = Math.random().toString(36).slice(-5)
+    //   let ext = ''
+    //
+    //   if (scaledImage.type === 'image/jpeg') {
+    //     ext = 'jpg'
+    //   } else if (scaledImage.type === 'image/png') {
+    //     ext = 'png'
+    //   } else if (scaledImage.type === 'image/gif') {
+    //     ext = 'gif'
+    //   } else {
+    //     console.error('Not supported file type.', scaledImage.type)
+    //     return false
+    //   }
+    //
+    //   let filename = `${basename}-${randomId}.${ext}`
+    //
+    //   let uploadImage = scaledImage
+    //   let savedSize = 100 - (scaledImage.size / orginalImage.size * 100)
+    //
+    //   if (savedSize < 10) {
+    //     uploadImage = orginalImage
+    //   }
+    //
+    //   firebase.storage.ref()
+    //     .child(`${this.projectId}/${filename}`)
+    //     .put(uploadImage)
+    //     .then(() => {
+    //       this.content = `${this.$store.state.storageUrlPrefix}${this.projectId}/${filename}`
+    //       this.uploading.url = null
+    //       this.uploading.filename = null
+    //     })
+    //     .catch((error) => console.error('Image upload failed', error))
+    //
+    // },
 
   },
 
@@ -185,7 +204,7 @@ export default {
     <button
       @click="$refs['file-input'].click()"
       class="button"
-      :disabled="uploading.url"
+      :disabled="uploadProcess && uploadProcess.status !== 'uploaded' && uploadProcess.status !== 'done'"
     >
       Change Image
     </button>
@@ -209,7 +228,7 @@ export default {
     class="file-input"
     type="file"
     ref="file-input"
-    @change="optimizeImage($event)"
+    @change="uploadImage($event)"
     accept="image/png, image/jpeg, image/gif, image/svg+xml"
   >
 
@@ -221,10 +240,6 @@ export default {
 
 // You can use variables, mixins and functions of Page Core
 @import '../sass/features'
-
-#dropzone
-  background-color: pink
-  height: 10rem
 
 .editor
   +margin-to-childs(.75rem)

@@ -20,39 +20,39 @@ export default {
     //   return this.$store.getters.schema
     // },
 
-    activeFile () {
-      return this.$store.getters.activeFile
+    activeProject () {
+      return this.$store.getters.activeProject
     },
 
     // jsonStorage () {
-    //   if (!this.activeFile) return false
-    //   return `https://editlayer.storage.googleapis.com/${this.$route.params.id}/${this.activeFile.filename}`
+    //   if (!this.activeProject) return false
+    //   return `https://editlayer.storage.googleapis.com/${this.$route.params.id}/${this.activeProject.filename}`
     // },
 
     jsonUrl () {
-      if (!this.activeFile) return false
-      return `${this.$store.state.storageUrlPrefix}${this.$route.params.id}/${this.activeFile.filename}.json`
+      if (!this.activeProject) return false
+      return `${this.$store.state.storageUrlPrefix}${this.$route.params.id}/${this.activeProject.filename}.json`
     },
 
     // jsonImgix () {
-    //   if (!this.activeFile) return false
-    //   return `https://editlayer.imgix.net/${this.$route.params.id}/${this.activeFile.filename}.json`
+    //   if (!this.activeProject) return false
+    //   return `https://editlayer.imgix.net/${this.$route.params.id}/${this.activeProject.filename}.json`
     // },
 
     jsonTarget () {
-      if (!this.activeFile) return false
-      return this.activeFile.fileId
+      if (!this.activeProject) return false
+      return this.activeProject.projectId
     },
 
     // isDraft () {
-    //   if (!this.activeFile) return false
-    //   if (!this.activeFile.published) return true
-    //   return !_.isEqual(this.activeFile.draft, this.activeFile.published.draft) || this.activeFile.schema !== this.activeFile.published.schema
+    //   if (!this.activeProject) return false
+    //   if (!this.activeProject.published) return true
+    //   return !_.isEqual(this.activeProject.draft, this.activeProject.published.draft) || this.activeProject.schema !== this.activeProject.published.schema
     // },
 
     neverPublished () {
-      if (!this.activeFile) return false
-      return this.activeFile.published === null
+      if (!this.activeProject) return false
+      return this.activeProject.published === null
     },
 
     // publishStatus () {
@@ -70,7 +70,7 @@ export default {
   methods: {
 
     logout () {
-      this.$store.dispatch('authLogout')
+      firebase.auth.signOut()
       this.$router.replace({ name: 'home' })
     },
 

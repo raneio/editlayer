@@ -4,7 +4,7 @@ import anime from 'animejs'
 import Item from '@/components/Item'
 
 export default {
-  name: 'ItemsFromFiles',
+  name: 'ItemsFromProjects',
 
   props: {
     selectItem: Function,
@@ -16,15 +16,15 @@ export default {
 
   computed: {
 
-    files () {
-      return this.$store.getters.files
+    projects () {
+      return this.$store.getters.projects
     },
 
     items () {
-      return _.map(this.files, (file) => {
+      return _.map(this.projects, (file) => {
         return {
           NAME: file.name,
-          FILE_ID: file.fileId,
+          FILE_ID: file.projectId,
           TYPE: 'file',
           STATUS: (file.published && _.isEqual(file.draft, file.published.draft) && file.schema === file.published.schema) ? 'published' : 'draft',
         }
@@ -39,11 +39,11 @@ export default {
     //   this.$router.push({ name: this.$route.name, params: { id: item.FILE_ID }})
     // },
 
-    newFile () {
+    newProject () {
       let name = prompt('Name', 'Project');
 
       if (name != null && name != '') {
-          this.$store.dispatch('newFile', {
+          this.$store.dispatch('newProject', {
             name: name,
           })
       }
@@ -56,24 +56,24 @@ export default {
 
 
 <template>
-<section class="items-from-files">
+<section class="projects items">
 
   <header class='header'>
     <a href="/">
       <h1 class="heading -logo">Editlayer</h1>
     </a>
 
-    <button class="button -link -new" @click="newFile()">
+    <button class="button -link -new" @click="newProject()">
       + New Project
     </button>
   </header>
 
-  <div class="no-items" v-if="files !== null && files.length === 0">
-    <div>No files - create first JOSN file</div>
+  <div class="no-items" v-if="projects !== null && projects.length === 0">
+    <div>No projects - create first project</div>
   </div>
 
-  <div class="no-items" v-if="files === null">
-    <div>Loading files...</div>
+  <div class="no-items" v-if="projects === null">
+    <div>Loading projects...</div>
   </div>
 
   <div class="items">
@@ -93,7 +93,7 @@ export default {
 <style lang="sass" scoped>
 @import '../sass/features'
 
-.items-from-files
+.items-from-projects
   +margin-to-childs(2rem)
 
 .tools

@@ -4,10 +4,11 @@ import CodeMirror from 'codemirror'
 import { codemirror } from 'vue-codemirror'
 import 'codemirror/mode/javascript/javascript.js'
 import 'codemirror/lib/codemirror.css'
-import 'codemirror/theme/material.css'
-import 'codemirror/theme/icecoder.css'
-import 'codemirror/theme/dracula.css'
-import 'codemirror/theme/base16-dark.css'
+// import 'codemirror/theme/material.css'
+// import 'codemirror/theme/icecoder.css'
+// import 'codemirror/theme/dracula.css'
+// import 'codemirror/theme/base16-dark.css'
+import firebase from '@/firebase'
 
 export default {
   name: 'Schema',
@@ -25,19 +26,19 @@ export default {
 
   computed: {
 
-    files () {
-      return this.$store.getters.files
-    },
+    // files () {
+    //   return this.$store.getters.projects
+    // },
 
-    activeFile () {
-      return this.$store.getters.activeFile
+    activeProject () {
+      return this.$store.getters.activeProject
     },
 
   },
 
   watch: {
 
-    'activeFile.schema' (value) {
+    'activeProject.schema' (value) {
       this.setSchema()
     },
 
@@ -61,15 +62,24 @@ export default {
         return false
       }
 
-      this.$store.dispatch('saveSchema', {
-        fileId: this.activeFile.fileId,
+      firebase.firestore.collection('projects').doc(this.activeProject.projectId).update({
         schema: this.schema,
       })
+      .then(() => console.log('Schema successfully written!'))
+      .catch((error) => console.error('Error writing schema:', error))
+
+      // this.$store.dispatch('saveSchema', {
+      //   projectId: this.activeProject.projectId,
+      //   schema: this.schema,
+      // })
+
+      // console.log('saveSchema', payload)
+
     },
 
     setSchema () {
-      if (_.has(this.activeFile, 'schema')) {
-        this.schema = this.activeFile.schema
+      if (_.has(this.activeProject, 'schema')) {
+        this.schema = this.activeProject.schema
       }
     }
 

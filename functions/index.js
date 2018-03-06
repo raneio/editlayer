@@ -19,16 +19,16 @@ const b2 = new B2({
 //  response.send("Hello from Firebase!");
 // });
 
-exports.publishJson = functions.firestore.document('files/{fileId}/versions/{versionId}').onCreate((event) => {
+exports.publishJson = functions.firestore.document('projects/{projectId}/versions/{versionId}').onCreate((event) => {
   const tempFilePath = '/tmp/tempfile.json'
   const bucket = admin.storage().bucket('editlayer')
   const versionData = event.data.data()
-  const destinationFilePath = `${event.params.fileId}/${versionData.filename}.json`
+  const destinationFilePath = `${event.params.projectId}/${versionData.filename}.json`
 
   console.log('versionId', event.params.versionId)
 
   const jsonFileContent = _.merge(versionData.content, {
-    // ASSETS_FOLDER: `https://cdn.editlayer.com/${event.params.fileId}/`,
+    // ASSETS_FOLDER: `https://cdn.editlayer.com/${event.params.projectId}/`,
     PUBLISHED_AT: versionData.publishedAt,
     VERSION_ID: event.params.versionId,
   })
