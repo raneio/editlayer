@@ -17,7 +17,6 @@ export default {
       <div class="subheading">JSON Based CMS</div>
       <!-- <div class="subheading">Edit Content in JSON</div> -->
       <!-- <div class="subheading">Create &amp; Edit JSON Content</div> -->
-      <!-- <div class="subheading">Edit Content and Publish JSON</div> -->
       <!-- <div class="subheading">Let your customers edit content in JSON</div> -->
     </div>
 
@@ -29,7 +28,7 @@ export default {
     </form>
 
     <div class="version">
-      Current Version: <strong>Alpha 3</strong>
+      Current Version: <strong>Alpha 5</strong>
     </div>
 
   </div>

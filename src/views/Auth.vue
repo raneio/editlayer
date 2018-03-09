@@ -71,7 +71,7 @@ export default {
             redirect: false,
             schema: {
               title: 'text',
-              descrption: 'textarea',
+              description: 'textarea',
               image: 'image',
             },
           })

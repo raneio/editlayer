@@ -14,7 +14,7 @@ Vue.use(firebase)
 export default new Vuex.Store({
 
   state: {
-    storageUrlPrefix: 'https://cdn.editlayer.com/',
+    // storageUrlPrefix: 'https://cdn.editlayer.com/',
     projects: null,
     user: {
       isLoggedIn: null,
@@ -43,7 +43,7 @@ export default new Vuex.Store({
         router.push({ name: state.route.name })
       }
 
-      return activeProject
+      return (activeProject) ? activeProject : null
     },
 
     schema (state) {
@@ -74,6 +74,17 @@ export default new Vuex.Store({
 
   mutations: {
 
+    resetAll (state) {
+      state.project = null
+      state.user = {
+        isLoggedIn: false,
+        id: null,
+        email: null,
+      }
+      state.publishProcesses = {}
+      state.uploadProcesses = {}
+    },
+
     setUser (state, user) {
       state.user = user
     },
@@ -91,6 +102,7 @@ export default new Vuex.Store({
     },
 
     setUploadProcess (state, payload) {
+      console.log('setUploadProcess', state.uploadProcesses, payload.projectId, payload.path)
       Vue.set(state.uploadProcesses, `${payload.projectId}>${payload.path}`, {
         projectId: payload.projectId,
         path: payload.path,
@@ -98,6 +110,7 @@ export default new Vuex.Store({
         blobUrl: payload.blobUrl,
         percent: 0,
         status: 'started',
+        message: null,
       })
     },
 
@@ -106,6 +119,7 @@ export default new Vuex.Store({
       let updatedUploadProcess = _.merge(currentUploadProcess, {
         percent: payload.percent,
         status: payload.status,
+        message: payload.message,
       })
 
       Vue.set(state.uploadProcesses, `${payload.projectId}>${payload.path}`, updatedUploadProcess)
@@ -114,6 +128,7 @@ export default new Vuex.Store({
     setPublishProcess (state, payload) {
       Vue.set(state.publishProcesses, payload.projectId, {
         status: 'publishing',
+        message: null,
       })
     },
 
@@ -122,6 +137,7 @@ export default new Vuex.Store({
       let updatedPublishProcess = _.merge(currentPublishProcess, {
         versionId: payload.versionId,
         status: payload.status,
+        message: payload.message,
       })
 
       Vue.set(state.publishProcesses, payload.projectId, updatedPublishProcess)
@@ -142,11 +158,7 @@ export default new Vuex.Store({
 
           dispatch('getProjectsFromDatabase')
         } else {
-          commit('setUser', {
-            id: null,
-            email: null,
-            isLoggedIn: false,
-          })
+          commit('resetAll')
         }
       })
     },
@@ -234,6 +246,16 @@ export default new Vuex.Store({
     },
 
     publishJson ({state, commit, dispatch}, payload) {
+      payload.publishTries = (payload.publishTries) ? payload.publishTries : 0
+      payload.versionCheck = 0
+
+      if (payload.publishTries > 3) {
+        console.error('Publishing failed, try again.')
+        commit('updatePublishProcess', {
+          projectId: payload.projectId,
+          status: 'error',
+        })
+      }
 
       commit('setPublishProcess', {
         projectId: payload.projectId,
@@ -257,40 +279,42 @@ export default new Vuex.Store({
           commit('updatePublishProcess', {
             projectId: payload.projectId,
             versionId: versionId,
+            // status: 'done',
           })
 
-          dispatch('isPublishReady', _.merge(payload, {
-            versionId: versionId,
-          }))
+          // _.delay(() => {
+            dispatch('isPublishReady', _.merge(payload, {
+              versionId: versionId,
+            }))
+          // }, 10000)
         })
         .catch((error) => console.error('Error adding version:', error))
 
     },
 
     isPublishReady ({state, commit, dispatch}, payload)  {
-      payload.publishTries = (!payload.publishTries) ? 1 : payload.publishTries + 1
+      payload.versionCheck = payload.versionCheck + 1
 
-      if (payload.publishTries > 30) {
-        console.error('Publishing failed, try again.')
-        commit('updatePublishProcess', {
-          projectId: payload.projectId,
-          status: 'error',
-        })
+      if (payload.versionCheck > 15) {
+        console.log('Purge faild.', payload.publishTries)
+        payload.publishTries = payload.publishTries + 1
+        dispatch('publishJson', payload)
         return false
       }
 
       let random = Math.random().toString(36).slice(-4)
 
       axios({
-        url: `${state.storageUrlPrefix}${payload.projectId}/${payload.filename}.json?${random}`,
+        method: 'GET',
+        url: `https://cdn.editlayer.com/${payload.projectId}/${payload.filename}.json`,
         responseType: 'json',
       })
       .then((response) => {
 
-        console.log('version', payload.versionId, response.data.VERSION_ID)
+        // console.log('version', payload.versionId, response.data.VERSION_ID)
 
         if (payload.versionId !== response.data.VERSION_ID) {
-          console.log('Try again', payload.publishTries)
+          console.log('Try again', payload.versionCheck)
           _.delay(() => {
             dispatch('isPublishReady', payload)
           }, 1000)
@@ -329,16 +353,36 @@ export default new Vuex.Store({
     async uploadImage ({state, commit, dispatch}, payload) {
       if (!_.startsWith(payload.image.type, 'image/')) return false
 
+      console.log('payload', payload)
+
+      let maxWidth = (_.has(payload, 'config.width')) ? payload.config.width : 800
+      let maxHeight = (_.has(payload, 'config.height')) ? payload.config.height : 800
       let filenameWithoutExt = slugg(payload.image.name.replace(/\.[^/.]+$/, ''))
       let randomId = Math.random().toString(36).slice(-5)
+      let blobUrl = URL.createObjectURL(payload.image)
 
       commit('setUploadProcess', {
         projectId: payload.projectId,
         path: payload.path,
         filename: filenameWithoutExt,
-        blobUrl: URL.createObjectURL(payload.image),
+        blobUrl: blobUrl,
         percent: 0,
       })
+
+      // let dimensions = await new Promise(function(resolve, reject) {
+      //
+      //   let img = new Image()
+      //
+      //   img.onload = function () {
+      //     resolve({
+      //       width: this.width,
+      //       height: this.height
+      //     })
+      //   };
+      //
+      //   img.src = blobUrl
+      //
+      // })
 
       let uploadImage = payload.image
 
@@ -346,10 +390,10 @@ export default new Vuex.Store({
 
         const imageCompressor = new ImageCompressor()
         let optimizedImage = await imageCompressor.compress(payload.image, {
-          quality: .6,
+          quality: .8,
           convertSize: 1000000,
-          maxWidth: 1000,
-          maxHeight: 1000,
+          maxWidth: maxWidth,
+          maxHeight: maxHeight,
         })
         .then((result) => {
           console.log('Image optimized')
@@ -357,14 +401,22 @@ export default new Vuex.Store({
         })
         .catch((error) => console.error('Image optimize failed', error.message))
 
-        let savedSize = 100 - (optimizedImage.size / payload.image.size * 100)
-        if (savedSize > 10) {
-          uploadImage = optimizedImage
-        }
+        // let savedSize = 100 - (optimizedImage.size / payload.image.size * 100)
+        // if (savedSize > 10) {
+        //   uploadImage = optimizedImage
+        // }
+
+        uploadImage = optimizedImage
 
       }
 
       if (uploadImage.size > 1 * 1024 * 1024) {
+        commit('updateUploadProcess', {
+          projectId: payload.projectId,
+          path: payload.path,
+          status: 'error',
+          message: 'Max image size 1 MB, try another image.'
+        })
         console.error('Max image size 1 MB, try another image.')
         return false
       }
@@ -379,6 +431,12 @@ export default new Vuex.Store({
       } else if (uploadImage.type === 'image/svg+xml') {
         filename = `${filenameWithoutExt}-${randomId}.svg`
       } else {
+        commit('updateUploadProcess', {
+          projectId: payload.projectId,
+          path: payload.path,
+          status: 'error',
+          message: `Unsupported file type. Send jpg, png, gif or svg.`
+        })
         console.error('Unsupported file type', uploadImage.type)
         return false
       }
@@ -397,6 +455,12 @@ export default new Vuex.Store({
 
         console.log('Upload is ' + percent + '% done')
       }, (error) => {
+        commit('updateUploadProcess', {
+          projectId: payload.projectId,
+          path: payload.path,
+          status: 'error',
+          message: 'Upload failer, try again later.'
+        })
         console.error('Upload failed', error)
       }, () => {
         console.log('Uploade done')
@@ -418,7 +482,7 @@ export default new Vuex.Store({
         dispatch('updateContent', {
           projectId: payload.projectId,
           path: _.replace(payload.path, />/g, '.'),
-          content: `${state.storageUrlPrefix}${payload.projectId}/${filename}`,
+          content: `https://cdn.editlayer.com/${payload.projectId}/${filename}`,
         })
 
       })

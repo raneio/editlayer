@@ -13,6 +13,18 @@ export default {
 
   },
 
+  methods: {
+
+    close (uploadProcess) {
+      this.$store.commit('updateUploadProcess', {
+        projectId: uploadProcess.projectId,
+        path: uploadProcess.path,
+        status: 'done',
+      })
+    },
+
+  },
+
 }
 </script>
 
@@ -22,16 +34,24 @@ export default {
 
   <div v-for="uploadProcess in uploadProcesses">
     <transition name="fade">
-    <div class="upload-process" v-if="uploadProcess.status !== 'done'">
+    <div
+      class="upload-process"
+      :class="{ '-error': uploadProcess.status === 'error'}"
+      v-if="uploadProcess.status !== 'done'"
+      @click="close(uploadProcess)"
+    >
 
       <img class="image" :src="uploadProcess.blobUrl" alt="" v-if="uploadProcess.blobUrl">
 
-      <div class="content">
+      <div class="content" v-if="uploadProcess.status !== 'error'">
         <div class="filename" v-text="uploadProcess.filename"></div>
-        <div class="progress-bar" :style="{ width: uploadProcess.percent + '%'}">
+        <div class="progress-bar" :style="{ width: uploadProcess.percent + '%'}"></div>
       </div>
 
+      <div class="error" v-if="uploadProcess.status === 'error'">
+        {{ uploadProcess.message }}
       </div>
+
     </div>
     </transition>
   </div>
@@ -57,6 +77,11 @@ export default {
   border-top-left-radius: $button-border-radius
   border-bottom-left-radius: $button-border-radius
   box-shadow: 0 5px 12px 0 mix(transparent, $color-content, 90%), 0 2px 5px 0 mix(transparent, black, 93%)
+  font-size: .8rem
+  cursor: pointer
+
+  &.-error
+    align-items: center
 
 .image
   height: 3rem
@@ -64,6 +89,12 @@ export default {
   border-top-left-radius: $button-border-radius
   border-bottom-left-radius: $button-border-radius
   object-fit: cover
+  background-image: url('../assets/image-background.png')
+
+.error
+  padding: .25rem
+  color: $color-danger
+  font-weight: 600
 
 .content
   flex-grow: 1
@@ -73,7 +104,6 @@ export default {
 
   .filename
     padding: .25rem
-    font-size: .8rem
     white-space: nowrap
     text-overflow: ellipsis
     overflow: hidden

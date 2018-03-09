@@ -4,13 +4,15 @@ admin.initializeApp(functions.config().firebase)
 const fs = require('fs')
 const _ = require('lodash')
 const axios = require('axios')
-const B2 = require('backblaze-b2')
+// const B2 = require('backblaze-b2')
 // const path = require('path')
+// const cors = require('cors')({origin: true})
+const bucketName = 'editlayerapp.appspot.com'
 
-const b2 = new B2({
-  accountId: '83a484a0ac5e',
-  applicationKey: '00163b960dd3c1105cdb01d9d1892f0a1d65885d5a'
-})
+// const b2 = new B2({
+//   accountId: '83a484a0ac5e',
+//   applicationKey: '00163b960dd3c1105cdb01d9d1892f0a1d65885d5a'
+// })
 
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
@@ -19,56 +21,166 @@ const b2 = new B2({
 //  response.send("Hello from Firebase!");
 // });
 
-exports.publishJson = functions.firestore.document('projects/{projectId}/versions/{versionId}').onCreate((event) => {
-  const tempFilePath = '/tmp/tempfile.json'
-  const bucket = admin.storage().bucket('editlayer')
-  const versionData = event.data.data()
-  const destinationFilePath = `${event.params.projectId}/${versionData.filename}.json`
+// const purgeJson = (versionId, url, tries = 0) => {
+//   const uncodedUrl = encodeURI(url)
+//
+//   console.log('try', tries)
+//
+//   if (tries > 10) {
+//     return false
+//   }
+//
+//   return axios({
+//     method: 'POST',
+//     url: `https://bunnycdn.com/api/purge?url=${uncodedUrl}`,
+//     headers: {
+//       'Content-Type': 'application/json',
+//       Accept: 'application/json',
+//       AccessKey: '3af506e7-573c-4563-9b62-a3ec872ba87ca6225606-efa0-427a-baf8-45b53319d0d5',
+//     }
+//   })
+//   .then(() => {
+//     console.log('Json purge done', url)
+//     return axios({
+//       method: 'GET',
+//       url: url,
+//       responseType: 'json',
+//     })
+//   })
+//   .then((response) => {
+//     console.log('Json get done', response.data)
+//
+//     if (response.data.VERSION_ID !== versionId) {
+//       console.log('versions', response.data.versionId, versionId)
+//       return _.delay(() => {
+//         return purgeJson(versionId, url, tries + 1)
+//       }, 3000)
+//     }
+//
+//     return true
+//
+//   })
+//   .catch((error) => console.error('Json purge failed', error))
+//
+// }
 
-  console.log('versionId', event.params.versionId)
+exports.uploadJson = functions.firestore.document('projects/{projectId}/versions/{versionId}').onCreate((event) => {
+  const tempFilePath = '/tmp/tempfile.json'
+  const bucket = admin.storage().bucket(bucketName)
+  const versionData = event.data.data()
+  const destinationPath = `${event.params.projectId}/${versionData.filename}.json`
+
+  console.log('Upload JSON with versionId', event.params.versionId)
 
   const jsonFileContent = _.merge(versionData.content, {
-    // ASSETS_FOLDER: `https://cdn.editlayer.com/${event.params.projectId}/`,
     PUBLISHED_AT: versionData.publishedAt,
     VERSION_ID: event.params.versionId,
   })
 
   fs.writeFileSync(tempFilePath, JSON.stringify(jsonFileContent, null, 2))
 
-  return bucket.upload(tempFilePath, {
-    destination: destinationFilePath,
-  })
-  .then(() => {
-    console.log('Json file publishing done')
-    return true
-  })
-  .catch((error) => console.error('Json file publishing faild', error))
+  return bucket
+    .upload(tempFilePath, { destination: destinationPath })
+    .then(() => {
+      console.log('JSON upload done')
+      const cdnUrl = encodeURI(`https://cdn.editlayer.com/${destinationPath}`)
+      const purgeSettings = {
+        method: 'POST',
+        url: `https://bunnycdn.com/api/purge?url=${cdnUrl}`,
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          AccessKey: '3af506e7-573c-4563-9b62-a3ec872ba87ca6225606-efa0-427a-baf8-45b53319d0d5',
+        }
+      }
+
+      axios(purgeSettings)
+
+      _.delay(() => {
+        axios(purgeSettings)
+      }, 4000)
+
+      axios(purgeSettings)
+      _.delay(() => {
+        axios(purgeSettings)
+      }, 8000)
+
+      return true
+    })
+    .then(() => {
+      console.log('JSON publishing done')
+      return true
+    })
+    .catch((error) => console.error('JSON upload failed', error))
 
 })
 
-exports.purgeJson = functions.storage.bucket('editlayer').object().onChange((event) => {
-  const object = event.data
+// exports.purge = functions.https.onRequest((request, response) => {
+//
+//   if (!_.has(request.query, 'file')) {
+//     response.send('Purge need "file" attribute.')
+//     return false
+//   }
+//
+//   if (!_.endsWith(request.query.file, '.json')) {
+//     response.send(`You can purge only JSON files, not "${request.query.file}".`)
+//     return false
+//   }
+//
+//   const cdnUrl = encodeURI(`https://cdn.editlayer.com/${request.query.file}`)
+//
+//   axios({
+//     method: 'POST',
+//     url: `https://bunnycdn.com/api/purge?url=${cdnUrl}`,
+//     headers: {
+//       'Content-Type': 'application/json',
+//       Accept: 'application/json',
+//       AccessKey: '3af506e7-573c-4563-9b62-a3ec872ba87ca6225606-efa0-427a-baf8-45b53319d0d5',
+//     }
+//   })
+//   .then((res) => {
+//     console.log('Json purge done')
+//     response.send('OK')
+//     return true
+//   })
+//   .catch((error) => console.error('Json purge failed', error))
+//
+//   return true
+//
+// })
 
-  if (!_.startsWith(object.contentType, 'application/json')) return false
 
-  const url = encodeURI(`https://cdn.editlayer.com/${object.name}`)
-
-  return axios({
-    method: 'POST',
-    url: `https://bunnycdn.com/api/purge?url=${url}`,
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-      AccessKey: '3af506e7-573c-4563-9b62-a3ec872ba87ca6225606-efa0-427a-baf8-45b53319d0d5',
-    }
-  })
-  .then(() => {
-    console.log('Json purge done')
-    return true
-  })
-  .catch((error) => console.error('Json purge faild', error))
-
-})
+// exports.purgeJson = functions.storage.bucket(bucketName).object().onChange((event) => {
+//   const bucket = admin.storage().bucket(bucketName)
+//   const object = event.data
+//   if (!_.startsWith(object.contentType, 'application/json')) return false
+//
+//   console.log('purgeJson started')
+//
+//   const cdnUrl = encodeURI(`https://cdn.editlayer.com/${object.name}`)
+//
+//   return bucket.file(object.name).download()
+//     .then((response) => {
+//       let file = response[0]
+//       console.log('file', file.toString('utf8'))
+//
+//       return axios({
+//         method: 'POST',
+//         url: `https://bunnycdn.com/api/purge?url=${cdnUrl}`,
+//         headers: {
+//           'Content-Type': 'application/json',
+//           Accept: 'application/json',
+//           AccessKey: '3af506e7-573c-4563-9b62-a3ec872ba87ca6225606-efa0-427a-baf8-45b53319d0d5',
+//         }
+//       })
+//     })
+//     .then(() => {
+//       console.log('Json purge done')
+//       return true
+//     })
+//     .catch((error) => console.error('Json purge failed', error))
+//
+// })
 
 // exports.purgeImgix = functions.storage.bucket('editlayer').object().onChange((event) => {
 //   const object = event.data

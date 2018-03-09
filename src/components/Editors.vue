@@ -28,6 +28,7 @@ export default {
         projectId: this.$route.params.id,
         path: this.activeSchema.PATH,
         content: this.activeSchema.CONTENT,
+        config: (this.activeSchema.CONFIG) ? this.activeSchema.CONFIG : null,
       }
     },
 

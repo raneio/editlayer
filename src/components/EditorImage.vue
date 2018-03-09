@@ -72,6 +72,7 @@ export default {
         projectId: this.projectId,
         path: this.$route.params.path,
         image: image,
+        config: this.editorData.config,
       })
     },
 
@@ -212,14 +213,7 @@ export default {
   </div>
 
   <div class="preview">
-
     <img class="image" :src="previewImage" alt="" v-if="!uploading.url && previewImage !== false">
-
-    <div class="uploading" v-if="uploading.url">
-      <img class="image" :src="uploading.url" alt="">
-      <div class="progress" :style="{ height: uploading.progress + '%'}"/>
-    </div>
-
   </div>
 
   <div class="filename">{{ filename }}</div>
@@ -269,19 +263,6 @@ export default {
 
   .image
     max-height: 30rem
-
-  .uploading
-    position: relative
-    max-height: 600px
-    max-width: 900px
-
-    .progress
-      position: absolute
-      top: 0
-      left: 0
-      width: 100%
-      transition: height .2s
-      background-color: mix(transparent, $color-background, 10%)
 
 
 

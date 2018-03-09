@@ -2,7 +2,7 @@ import titleCase from 'title-case'
 
 const simpleToAdvance = (schema) => {
   _.each(schema, (value, key) => {
-    if (!_.includes(['EDITOR', 'CONTENT', 'PATH', 'NAME', 'DEFAULT', 'TYPE', 'INFO'], key)) {
+    if (!_.includes(['EDITOR', 'CONTENT', 'PATH', 'NAME', 'DEFAULT', 'TYPE', 'INFO', 'CONFIG'], key)) {
 
       if (_.isArray(value)) {
         schema[key] = {
@@ -48,7 +48,7 @@ const addArraysAndPaths = (schema, draft, parentPath = false) => {
       })
     }
 
-    if (_.isPlainObject(value) && key !== 'ARRAY') {
+    if (_.isPlainObject(value) && !_.includes(['ARRAY', 'CONFIG'], key)) {
       value.PATH = path
       value = addArraysAndPaths(value, draft, path)
     }
@@ -59,7 +59,7 @@ const addArraysAndPaths = (schema, draft, parentPath = false) => {
 
 const addData = (schema, draft) => {
   _.each(schema, (value, key) => {
-    if (_.isPlainObject(value) && key !== 'ARRAY') {
+    if (_.isPlainObject(value) && !_.includes(['ARRAY', 'CONFIG'], key)) {
 
       if (!_.has(value, 'NAME')) {
         value.NAME = titleCase(key)

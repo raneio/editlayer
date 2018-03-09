@@ -31,7 +31,7 @@ export default {
 
     jsonUrl () {
       if (!this.activeProject) return false
-      return `${this.$store.state.storageUrlPrefix}${this.$route.params.id}/${this.activeProject.filename}.json`
+      return `https://cdn.editlayer.com/${this.$route.params.id}/${this.activeProject.filename}.json`
     },
 
     // jsonImgix () {
