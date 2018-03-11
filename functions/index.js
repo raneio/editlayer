@@ -4,6 +4,8 @@ admin.initializeApp(functions.config().firebase)
 const fs = require('fs')
 const _ = require('lodash')
 const axios = require('axios')
+const uuid = require('uuid/v4')
+const sha1 = require('node-sha1')
 // const B2 = require('backblaze-b2')
 // const path = require('path')
 // const cors = require('cors')({origin: true})
@@ -16,7 +18,7 @@ const bucketName = 'editlayerapp.appspot.com'
 
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
-//
+
 // exports.helloWorld = functions.https.onRequest((request, response) => {
 //  response.send("Hello from Firebase!");
 // });
@@ -114,6 +116,118 @@ exports.uploadJson = functions.firestore.document('projects/{projectId}/versions
     .catch((error) => console.error('JSON upload failed', error))
 
 })
+
+exports.attachRole = functions.firestore.document('projects/{projectId}/permissionJobs/{permissionId}').onCreate((event) => {
+  const firestore = admin.firestore()
+  const storeData = event.data.data()
+
+  return firestore
+    .collection('users')
+    .where('email', '==', storeData.email)
+    .get()
+    .then(querySnapshot => {
+      let userExist = (querySnapshot.size === 1) ? true : false
+      let updateData = {}
+
+      if (userExist) {
+        let doc = querySnapshot.docs[0]
+        let userId = doc.id
+        // let userData = doc.data()
+
+        if (storeData.role === false) {
+          updateData[`roles.${userId}`] = admin.firestore.FieldValue.delete()
+        } else {
+          updateData[`roles.${userId}`] = {
+            role: storeData.role,
+            email: storeData.email,
+            userExist: true,
+          }
+        }
+
+      }
+      else if (!userExist) {
+        const emailSha1 = sha1(storeData.email)
+
+        updateData[`roles.${emailSha1}`] = {
+          role: storeData.role,
+          email: storeData.email,
+          userExist: false,
+        }
+
+      }
+
+      return firestore
+        .collection('projects')
+        .doc(event.params.projectId)
+        .update(updateData)
+
+    })
+    .catch(error => {
+      console.log('Role attach failed', error)
+      return false
+    })
+})
+
+// exports.attachRolesWhenRegister = functions.https.onRequest((request, response) => {
+exports.attachRolesAfterRegister = functions.auth.user().onCreate((event) => {
+  const firestore = admin.firestore()
+
+  console.log('userEventId', event.data.uid)
+  console.log('userEventData', event.data)
+
+  const user = event.data
+  // const user = {
+  //   id: 'foobar',
+  //   email: 'boo@example.com',
+  // }
+
+
+  const emailSha1 = sha1(user.email)
+
+  return firestore
+    .collection('projects')
+    .get()
+    .then(querySnapshot => {
+      querySnapshot.forEach((doc) => {
+
+        if (_.has(doc.data().roles, emailSha1)) {
+          console.log('email', doc.data().roles[emailSha1])
+          let permissionData = doc.data().roles[emailSha1]
+
+          let updateData = {}
+
+          updateData[`roles.${user.uid}`] = {
+            role: permissionData.role,
+            email: user.email,
+            userExist: true,
+          }
+
+          updateData[`roles.${emailSha1}`] = admin.firestore.FieldValue.delete()
+
+          firestore
+            .collection('projects')
+            .doc(doc.id)
+            .update(updateData)
+
+        } else {
+          console.log('no email', doc.id, emailSha1)
+        }
+
+        return true
+      })
+      console.log('Role attach when register SUCCESS')
+      // response.send('Role attach when register SUCCESS')
+      return true
+    })
+    .catch(error => {
+      console.log('Role attach when register failed', error)
+      // response.send('Role attach when register failed')
+      return false
+    })
+
+})
+
+// exports.attachRoleWhenLogin
 
 // exports.purge = functions.https.onRequest((request, response) => {
 //

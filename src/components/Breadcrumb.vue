@@ -51,24 +51,24 @@ export default {
           breadcrumb.unshift({
             name: this.stringToTitle(item.NAME),
             path: path,
-            projectId: this.$route.params.id,
+            projectId: this.$route.params.projectId,
           })
         }
 
         breadcrumbItems = _.dropRight(breadcrumbItems)
       }
 
-      if (this.$route.params.id && this.activeProject) {
+      if (this.$route.params.projectId && this.activeProject) {
         breadcrumb.unshift({
           name: this.activeProject.name,
-          projectId: this.$route.params.id,
+          projectId: this.$route.params.projectId,
         })
       }
 
       if (this.$route.name === 'settings') {
         breadcrumb.push({
           name: 'Settings',
-          projectId: this.$route.params.id,
+          projectId: this.$route.params.projectId,
         })
       }
 
@@ -133,9 +133,9 @@ export default {
         duration: 0,
         complete: (anim) => {
           if (item.projectId && path) {
-            this.$router.push({ name: routeName, params: { id: item.projectId, path: path }})
+            this.$router.push({ name: routeName, params: { projectId: item.projectId, path: path }})
           } else if (item.projectId) {
-            this.$router.push({ name: routeName, params: { id: item.projectId }})
+            this.$router.push({ name: routeName, params: { projectId: item.projectId }})
           } else {
             this.$router.push({ name: routeName })
           }
@@ -159,12 +159,12 @@ export default {
 <template>
 <section class="breadcrumb">
 
-  <div class="crumb" v-if="!$route.params.id">
+  <div class="crumb" v-if="!$route.params.projectId">
     <img src="../assets/icon-home-disabled.svg" alt="">
     <!-- <div>DASHBOARD</div> -->
   </div>
 
-  <a @click="selectItem({})" class="crumb button -link" v-if="$route.params.id">
+  <a @click="selectItem({})" class="crumb button -link" v-if="$route.params.projectId">
     <img src="../assets/icon-home.svg" alt="">
     <!-- <div>DASHBOARD</div> -->
   </a>

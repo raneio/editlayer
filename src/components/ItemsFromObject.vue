@@ -82,7 +82,7 @@ export default {
 
       if (firstItem && this.activeSchema.TYPE !== 'value') {
         let firstItemPath = _.replace(firstItem.PATH, /\./g, '>')
-        this.$router.replace({ name: 'edit', params: { id: this.$route.params.id, path: firstItemPath }})
+        this.$router.replace({ name: 'edit', params: { projectId: this.$route.params.projectId, path: firstItemPath }})
       }
     },
 
@@ -94,7 +94,7 @@ export default {
     //   }
     //
     //   let path = _.replace(value.PATH, /\./g, '>')
-    //   this.$router.push({ name: routeName, params: { id: this.$route.params.id, path: path }})
+    //   this.$router.push({ name: routeName, params: { projectId: this.$route.params.projectId, path: path }})
     // },
 
     isActive (path) {

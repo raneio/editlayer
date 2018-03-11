@@ -22,7 +22,7 @@ export default {
 <main class="main-content">
   <Breadcrumb/>
   <Editors v-if="$route.name === 'edit' || $route.name === 'users'"/>
-  <Schema v-if="$route.name === 'schema' && $route.params.id"/>
+  <Schema v-if="$route.name === 'schema' && $route.params.projectId"/>
 </main>
 </template>
 

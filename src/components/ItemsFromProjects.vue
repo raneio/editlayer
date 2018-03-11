@@ -36,7 +36,7 @@ export default {
   methods: {
 
     // selectItem (item) {
-    //   this.$router.push({ name: this.$route.name, params: { id: item.FILE_ID }})
+    //   this.$router.push({ name: this.$route.name, params: { projectId: item.FILE_ID }})
     // },
 
     newProject () {

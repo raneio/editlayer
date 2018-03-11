@@ -51,17 +51,17 @@ export default {
           breadcrumb.unshift({
             name: this.stringToTitle(item.NAME),
             path: path,
-            projectId: this.$route.params.id,
+            projectId: this.$route.params.projectId,
           })
         }
 
         breadcrumbItems = _.dropRight(breadcrumbItems)
       }
 
-      if (this.$route.params.id && this.activeProject) {
+      if (this.$route.params.projectId && this.activeProject) {
         breadcrumb.unshift({
           name: this.activeProject.name,
-          projectId: this.$route.params.id,
+          projectId: this.$route.params.projectId,
         })
       }
 
@@ -113,9 +113,9 @@ export default {
         duration: 0,
         complete: (anim) => {
           if (item.projectId && path) {
-            this.$router.push({ name: this.$route.name, params: { id: item.projectId, path: path }})
+            this.$router.push({ name: this.$route.name, params: { projectId: item.projectId, path: path }})
           } else if (item.projectId) {
-            this.$router.push({ name: this.$route.name, params: { id: item.projectId }})
+            this.$router.push({ name: this.$route.name, params: { projectId: item.projectId }})
           } else {
             this.$router.push({ name: this.$route.name })
           }

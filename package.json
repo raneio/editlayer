@@ -26,6 +26,7 @@
     "slugg": "^1.2.1",
     "slugify": "^1.2.9",
     "uuid": "^3.2.1",
+    "validator": "^9.4.1",
     "vue": "^2.5.13",
     "vue-codemirror": "^4.0.3",
     "vue-router": "^3.0.1",

@@ -20,6 +20,44 @@ export default {
     UploadNotifications,
   },
 
+  computed: {
+
+    activeRole () {
+      return this.$store.getters.activeRole
+    },
+
+  },
+
+  watch: {
+
+    activeRole () {
+      this.selectRouteName()
+    },
+
+    '$route.name': function() {
+      this.selectRouteName()
+    },
+
+    '$route.params.projectId': function() {
+      this.selectRouteName()
+    },
+
+  },
+
+  methods: {
+
+    selectRouteName () {
+      if (this.activeRole === 'editor' && (this.$route.name === 'schema' || this.$route.name === 'settings')) {
+        this.$router.replace({ name: 'edit', params: { projectId: this.$route.params.projectId, path: this.$route.params.path } })
+      }
+    },
+
+  },
+
+  mounted () {
+    this.selectRouteName()
+  },
+
 }
 </script>
 

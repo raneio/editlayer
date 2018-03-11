@@ -17,12 +17,12 @@ export default {
   methods: {
 
     selectItem (item) {
-      let projectId = (item.FILE_ID) ? item.FILE_ID : this.$route.params.id
+      let projectId = (item.FILE_ID) ? item.FILE_ID : this.$route.params.projectId
       let routeName = (item.TYPE === 'value') ? 'edit' : this.$route.name
       let path = _.replace(item.PATH, /\./g, '>')
 
       if (item.TYPE === 'value') {
-        this.$router.push({ name: routeName, params: { id: projectId, path: path }})
+        this.$router.push({ name: routeName, params: { projectId: projectId, path: path }})
         return false
       }
 
@@ -40,9 +40,9 @@ export default {
         duration: 0,
         complete: (anim) => {
           if (path) {
-            this.$router.push({ name: routeName, params: { id: projectId, path: path }})
+            this.$router.push({ name: routeName, params: { projectId: projectId, path: path }})
           } else {
-            this.$router.push({ name: routeName, params: { id: projectId }})
+            this.$router.push({ name: routeName, params: { projectId: projectId }})
           }
         },
       })
@@ -60,7 +60,7 @@ export default {
       //
       //   complete: (anim) => {
       //     console.log(anim.completed);
-      //     this.$router.push({ name: routeName, params: { id: this.$route.params.id, path: path }})
+      //     this.$router.push({ name: routeName, params: { projectId: this.$route.params.projectId, path: path }})
       //   },
       //   // translateX: [
       //   //   { value: 100, duration: 1200 },
@@ -73,7 +73,7 @@ export default {
       // })
 
 
-      // this.$router.push({ name: routeName, params: { id: this.$route.params.id, path: path }})
+      // this.$router.push({ name: routeName, params: { projectId: this.$route.params.projectId, path: path }})
     },
 
   },
@@ -99,7 +99,7 @@ export default {
       let activeItem = _.get(this.schema, path)
       let grandparent = _.get(this.schema, _.chain(path).split('.').dropRight(2).join('.').value())
 
-      if (!this.$route.params.id) {
+      if (!this.$route.params.projectId) {
         return 'project'
       } else if (this.activeSchema && this.activeSchema.TYPE === 'array') {
         return 'array'

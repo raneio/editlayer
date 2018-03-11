@@ -37,27 +37,32 @@ export default new Vuex.Store({
     },
 
     activeProject (state, getters) {
-      let activeProject = _.find(getters.projects, { projectId: state.route.params.id })
+      let activeProject = _.find(getters.projects, { projectId: state.route.params.projectId })
 
-      if (getters.projects !== null && state.route.params.id && !activeProject) {
+      if (getters.projects !== null && state.route.params.projectId && !activeProject) {
         router.push({ name: state.route.name })
       }
 
       return (activeProject) ? activeProject : null
     },
 
+    activeRole (state, getters) {
+      if (!getters.activeProject) return null
+      return getters.activeProject.roles[state.user.id].role
+    },
+
     schema (state) {
-      if (!state.route.params.id || !state.projects || !state.projects[state.route.params.id]) return {}
+      if (!state.route.params.projectId || !state.projects || !state.projects[state.route.params.projectId]) return {}
 
       let schema = {}
 
       try {
-      	schema = JSON.parse(state.projects[state.route.params.id].schema)
+      	schema = JSON.parse(state.projects[state.route.params.projectId].schema)
       } catch (err) {
         return schema
       }
 
-      return buildSchema(schema, state.projects[state.route.params.id].draft)
+      return buildSchema(schema, state.projects[state.route.params.projectId].draft)
     },
 
     activeSchema (state, getters) {
@@ -89,8 +94,23 @@ export default new Vuex.Store({
       state.user = user
     },
 
-    setProjects (state, projects) {
-      state.projects = projects
+    setProjects (state, querySnapshot) {
+      let currenProjects = _.cloneDeep(state.projects)
+      let newProjects = {}
+
+      querySnapshot.forEach((doc) => {
+        newProjects[doc.id] = {
+          projectId: doc.id,
+          roles: doc.data().roles,
+          filename: doc.data().filename,
+          name: (doc.data().name) ? doc.data().name : doc.data().filename,
+          schema: (doc.data().schema) ? doc.data().schema : null,
+          draft: (doc.data().draft) ? doc.data().draft : null,
+          published: (doc.data().published) ? doc.data().published : null,
+        }
+      })
+
+      state.projects = _.merge(currenProjects, newProjects)
     },
 
     setContent (state, payload) {
@@ -166,21 +186,29 @@ export default new Vuex.Store({
     getProjectsFromDatabase ({state, commit, dispatch}) {
       firebase.firestore
         .collection('projects')
-        .where(`roles.${state.user.id}`, '==', 'admin')
+        .where(`roles.${state.user.id}.role`, '==', 'admin')
         .onSnapshot((querySnapshot) => {
-          let projects = {}
-          querySnapshot.forEach((doc) => {
-            projects[doc.id] = {
-              projectId: doc.id,
-              role: 'admin',
-              filename: doc.data().filename,
-              name: (doc.data().name) ? doc.data().name : doc.data().filename,
-              schema: (doc.data().schema) ? doc.data().schema : null,
-              draft: (doc.data().draft) ? doc.data().draft : null,
-              published: (doc.data().published) ? doc.data().published : null,
-            }
-          })
-          commit('setProjects', projects)
+          commit('setProjects', querySnapshot)
+        })
+
+      firebase.firestore
+        .collection('projects')
+        .where(`roles.${state.user.id}.role`, '==', 'editor')
+        .onSnapshot((querySnapshot) => {
+          commit('setProjects', querySnapshot)
+          // let projects = {}
+          // querySnapshot.forEach((doc) => {
+          //   projects[doc.id] = {
+          //     projectId: doc.id,
+          //     roles: doc.data().roles,
+          //     filename: doc.data().filename,
+          //     name: (doc.data().name) ? doc.data().name : doc.data().filename,
+          //     schema: (doc.data().schema) ? doc.data().schema : null,
+          //     draft: (doc.data().draft) ? doc.data().draft : null,
+          //     published: (doc.data().published) ? doc.data().published : null,
+          //   }
+          // })
+          // commit('setProjects', projects)
         })
     },
 
@@ -206,7 +234,11 @@ export default new Vuex.Store({
         roles: {},
       }
 
-      newProject.roles[state.user.id] = 'admin'
+      newProject.roles[state.user.id] = {
+        role: 'admin',
+        email: state.user.email,
+        userExist: true,
+      }
 
       firebase.firestore
         .collection('projects')
@@ -216,7 +248,7 @@ export default new Vuex.Store({
           console.log('File added:', projectId)
 
           if (payload.redirect !== false) {
-            router.push({ name: 'schema', params: { id: projectId }})
+            router.push({ name: 'schema', params: { projectId: projectId }})
           }
         })
         .catch(error => {

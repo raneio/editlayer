@@ -34,12 +34,12 @@ export default {
     },
 
     projectId () {
-      return this.$route.params.id
+      return this.$route.params.projectId
     },
 
     jsonUrl () {
       if (!this.activeProject) return false
-      return `https://cdn.editlayer.com/${this.$route.params.id}/${this.activeProject.filename}.json`
+      return `https://cdn.editlayer.com/${this.$route.params.projectId}/${this.activeProject.filename}.json`
     },
 
     jsonTarget () {
@@ -169,7 +169,7 @@ export default {
 <section class="publish-button">
 
   <div
-    v-if="$route.params.id && publishStatus === 'published'"
+    v-if="$route.params.projectId && publishStatus === 'published'"
     class="item -published -disabled"
   >
       <img class="icon" src="../assets/icon-published.svg" alt="">
@@ -177,7 +177,7 @@ export default {
   </div>
 
   <div
-    v-if="$route.params.id && publishStatus === 'publish'"
+    v-if="$route.params.projectId && publishStatus === 'publish'"
     class="item -publish"
     @click="publishJson()"
   >
@@ -186,7 +186,7 @@ export default {
   </div>
 
   <div
-    v-if="$route.params.id && publishStatus === 'publishing'"
+    v-if="$route.params.projectId && publishStatus === 'publishing'"
     class="item -publishing -disabled"
   >
       <img class="icon" src="../assets/icon-publishing.svg" alt="">

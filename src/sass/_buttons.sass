@@ -24,7 +24,8 @@ button,
   &.-danger
     background-color: $color-danger
 
-  &.-link
+  &.-link,
+  &.-pill
     background-color: transparent
     border: none
     box-shadow: none
@@ -35,6 +36,19 @@ button,
 
     &.-new
       color: $color-new
+
+    &.-danger
+      color: $color-danger
+
+  &.-pill
+    padding: .1em .75em
+    border-radius: 1em
+
+    &.-active
+      color: $color-background
+      background-color: $color-content
+      pointer-events: none
+
 
   &[disabled]
     opacity: .5

@@ -25,7 +25,7 @@ export default {
 
     editorData () {
       return {
-        projectId: this.$route.params.id,
+        projectId: this.$route.params.projectId,
         path: this.activeSchema.PATH,
         content: this.activeSchema.CONTENT,
         config: (this.activeSchema.CONFIG) ? this.activeSchema.CONFIG : null,

@@ -17,17 +17,17 @@ export default new Router({
     },
     {
       name: 'edit',
-      path: '/edit/:id?/:path?',
+      path: '/edit/:projectId?/:path?',
       component: Editlayer,
     },
     {
       name: 'schema',
-      path: '/schema/:id?/:path?',
+      path: '/schema/:projectId?/:path?',
       component: Editlayer,
     },
     {
       name: 'settings',
-      path: '/settings/:id?/:path?',
+      path: '/settings/:projectId?/:path?',
       component: Editlayer,
     },
     {

@@ -24,19 +24,23 @@ export default {
       return this.$store.getters.activeProject
     },
 
+    activeRole () {
+      return this.$store.getters.activeRole
+    },
+
     // jsonStorage () {
     //   if (!this.activeProject) return false
-    //   return `https://editlayer.storage.googleapis.com/${this.$route.params.id}/${this.activeProject.filename}`
+    //   return `https://editlayer.storage.googleapis.com/${this.$route.params.projectId}/${this.activeProject.filename}`
     // },
 
     jsonUrl () {
       if (!this.activeProject) return false
-      return `https://cdn.editlayer.com/${this.$route.params.id}/${this.activeProject.filename}.json`
+      return `https://cdn.editlayer.com/${this.$route.params.projectId}/${this.activeProject.filename}.json`
     },
 
     // jsonImgix () {
     //   if (!this.activeProject) return false
-    //   return `https://editlayer.imgix.net/${this.$route.params.id}/${this.activeProject.filename}.json`
+    //   return `https://editlayer.imgix.net/${this.$route.params.projectId}/${this.activeProject.filename}.json`
     // },
 
     jsonTarget () {
@@ -86,37 +90,37 @@ export default {
   <PublishButton/>
 
   <router-link
-    v-if="$route.params.id"
+    v-if="$route.params.projectId"
     class="item"
     :class="{ '-active': $route.name === 'edit' }"
-    :to="{ name: 'edit', params: { id: $route.params.id, path: $route.params.path }}"
+    :to="{ name: 'edit', params: { projectId: $route.params.projectId, path: $route.params.path }}"
   >
     <img class="icon" src="../assets/icon-edit.svg" alt="">
     Edit
   </router-link>
 
   <router-link
-    v-if="$route.params.id"
+    v-if="$route.params.projectId && activeRole === 'admin'"
     class="item"
     :class="{ '-active': $route.name === 'schema' }"
-    :to="{ name: 'schema', params: { id: $route.params.id, path: $route.params.path }}"
+    :to="{ name: 'schema', params: { projectId: $route.params.projectId, path: $route.params.path }}"
   >
     <img class="icon" src="../assets/icon-schema.svg" alt="">
     Schema
   </router-link>
 
   <router-link
-    v-if="$route.params.id"
+    v-if="$route.params.projectId && activeRole === 'admin'"
     class="item"
     :class="{ '-active': $route.name === 'settings' }"
-    :to="{ name: 'settings', params: { id: this.$route.params.id, path: this.$route.params.path }}"
+    :to="{ name: 'settings', params: { projectId: this.$route.params.projectId, path: this.$route.params.path }}"
   >
     <img class="icon" src="../assets/icon-settings.svg" alt="">
     Settings
   </router-link>
 
   <a
-    v-if="$route.params.id"
+    v-if="$route.params.projectId && activeRole === 'admin'"
     class="item"
     :class="{ '-disabled': neverPublished }"
     :href="jsonUrl"

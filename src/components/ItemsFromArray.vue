@@ -44,7 +44,7 @@ export default {
     },
 
     projectId () {
-      return this.$route.params.id
+      return this.$route.params.projectId
     },
 
     projects () {
@@ -125,7 +125,7 @@ export default {
       .catch((error) => console.error('Error new item:', error))
 
       let pathUrl = _.replace(`${itemPath}.${randomKey}`, /\./g, '>')
-      this.$router.push({ name: 'edit', params: { id: this.projectId, path: pathUrl }})
+      this.$router.push({ name: 'edit', params: { projectId: this.projectId, path: pathUrl }})
 
       // this.$store.dispatch('newArrayItem', {
       //   projectId: this.projectId,
@@ -148,7 +148,7 @@ export default {
 
       if (firstItem && this.activeSchema.TYPE === 'array') {
         let firstItemPath = _.replace(firstItem.PATH, /\./g, '>')
-        this.$router.replace({ name: 'edit', params: { id: this.projectId, path: firstItemPath }})
+        this.$router.replace({ name: 'edit', params: { projectId: this.projectId, path: firstItemPath }})
       }
     },
 
@@ -160,7 +160,7 @@ export default {
     //   }
     //
     //   let path = _.replace(value.PATH, /\./g, '>')
-    //   this.$router.push({ name: routeName, params: { id: this.projectId, path: path }})
+    //   this.$router.push({ name: routeName, params: { projectId: this.projectId, path: path }})
     // },
 
     isActive (path) {

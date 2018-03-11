@@ -35,7 +35,7 @@ export default {
         // let content = null
         //
         // if (this.item.CONTENT !== null) {
-        //   content = `${this.$store.state.storageUrlPrefix}${this.$route.params.id}/${this.item.CONTENT}`
+        //   content = `${this.$store.state.storageUrlPrefix}${this.$route.params.projectId}/${this.item.CONTENT}`
         // }
 
         return {

@@ -9,7 +9,7 @@ service cloud.firestore {
 
     match /projects/{projectId} {
     	function isRole(roles) {
-      	return resource.data.roles[request.auth.uid] in roles;
+      	return resource.data.roles[request.auth.uid].role in roles;
       }
 
       function allowDraft () {
@@ -22,7 +22,7 @@ service cloud.firestore {
       	return isRole(['admin', 'editor'])
         		&& request.writeFields.size() == 2
         		&& request.writeFields[0] == 'published.schema' || request.writeFields[1] == 'published.schema'
-        		&& request.writeFields[0] == 'published.draft' || request.writeFields[1] == 'published.draft'
+        		&& request.writeFields[0] == 'published.draft' || request.writeFields[1] == 'published.draft';
       }
 
       function allowSchema () {
@@ -31,23 +31,38 @@ service cloud.firestore {
         		&& request.writeFields[0] == 'schema';
       }
 
+      function allowRoles () {
+      	return isRole(['admin'])
+        		&& request.writeFields.size() == 1
+        		&& request.writeFields[0].matches('^roles\\..*');
+      }
+
     	allow list: if isRole(['admin', 'editor']);
 
       allow create: if request.auth != null
-      							&& request.resource.data.roles[request.auth.uid] == 'admin';
+      							&& request.resource.data.roles[request.auth.uid].role == 'admin'
+      							&& request.resource.data.roles[request.auth.uid].email == request.auth.token.email;
 
       allow update: if allowDraft()
       							|| allowPublished()
+                    || allowRoles()
                     || allowSchema();
-
     }
 
     match /projects/{projectId}/versions/{versionId} {
       function isRole(roles) {
-        return get(/databases/$(database)/documents/projects/$(projectId)).data.roles[request.auth.uid] in roles;
+        return get(/databases/$(database)/documents/projects/$(projectId)).data.roles[request.auth.uid].role in roles;
       }
 
       allow create: if isRole(['admin', 'editor']);
+    }
+
+    match /projects/{projectId}/permissionJobs/{permissionId} {
+      function isRole(roles) {
+        return get(/databases/$(database)/documents/projects/$(projectId)).data.roles[request.auth.uid].role in roles;
+      }
+
+      allow create: if isRole(['admin']);
     }
 
   }

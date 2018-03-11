@@ -26,7 +26,7 @@ export default {
   computed: {
 
     projectId () {
-      return this.$route.params.id
+      return this.$route.params.projectId
     },
 
     filename () {
@@ -36,7 +36,7 @@ export default {
     previewImage () {
       return this.content
       // if (this.content === null) return false
-      // return `${this.$store.state.storageUrlPrefix}${this.$route.params.id}/${this.content}`
+      // return `${this.$store.state.storageUrlPrefix}${this.$route.params.projectId}/${this.content}`
     },
 
     uploadProcess () {
