@@ -26,7 +26,7 @@ export default {
 
     newPermission () {
 
-      let email = prompt('email', 'name@example.com');
+      let email = prompt('Email address', 'name@example.com');
 
       if (email !== null && !validator.isEmail(email)) {
         console.error('Email is invalid', email)
@@ -66,13 +66,13 @@ export default {
 
     },
 
-    deletePermission (roleId) {
-      let deleteConfirm = confirm('Are you sure?');
+    removePermission (payload) {
+      let deleteConfirm = confirm(`You want to remove "${payload.email}". Are you sure?`);
 
       if (deleteConfirm === true) {
 
         let updateData = {}
-        updateData[`roles.${roleId}`] = firebase.firestoreDelete
+        updateData[`roles.${payload.roleId}`] = firebase.firestoreDelete
 
         firebase.firestore
           .collection('projects')
@@ -83,6 +83,10 @@ export default {
 
       }
 
+    },
+
+    deleteProject () {
+      alert('Project deleting is not possible in the Alpha version, sorry.')
     },
 
   },
@@ -141,7 +145,10 @@ export default {
 
         <button
           class="button -pill -danger -delete"
-          @click="deletePermission(roleId)"
+          @click="removePermission({
+            roleId: roleId,
+            email: role.email,
+          })"
           >
             <img src="../assets/icon-delete.svg" alt="">
         </button>
@@ -156,12 +163,12 @@ export default {
     </button>
   </section>
 
-  <section class="group">
+  <!-- <section class="group">
     <h1 class="heading">
       Trigger request after publish
     </h1>
     <input type="text" name="" value="" placeholder="https://example.com/folder/?foo=bar">
-  </section>
+  </section> -->
 
   <section class="group">
     <h1 class="heading">
@@ -170,7 +177,7 @@ export default {
     <div class="danger">
       <strong>Caution!</strong> Your project will be deleted permanently and you can’t undo this.
     </div>
-    <button class="button -danger">
+    <button class="button -danger" @click="deleteProject()">
       Delete Project Permamently
     </button>
   </section>
