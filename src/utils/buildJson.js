@@ -1,5 +1,5 @@
-const basicToJson = (schema, result = {}) => {
-  _.each(schema, (value, key) => {
+const basicToJson = (structure, result = {}) => {
+  _.each(structure, (value, key) => {
     if (_.has(value, 'CONTENT') && _.has(value, 'PATH')) {
       _.set(result, value.PATH, value.CONTENT)
     }
@@ -20,12 +20,12 @@ const basicToJson = (schema, result = {}) => {
   return result
 }
 
-const arrayToJson = (schema, result = {}, path = false) => {
-  if (_.isPlainObject(schema) && _.startsWith(_.findKey(schema), '-')) {
+const arrayToJson = (structure, result = {}, path = false) => {
+  if (_.isPlainObject(structure) && _.startsWith(_.findKey(structure), '-')) {
     let array = []
-    schema = _.sortBy(schema, 'ORDER')
+    structure = _.sortBy(structure, 'ORDER')
 
-    _.each(schema, (value, key) => {
+    _.each(structure, (value, key) => {
       value = _.omit(value, ['ORDER'])
       array.push(value)
     })
@@ -33,7 +33,7 @@ const arrayToJson = (schema, result = {}, path = false) => {
     _.set(result, path, array)
   }
 
-  _.each(schema, (value, key) => {
+  _.each(structure, (value, key) => {
     if (_.isPlainObject(value)) {
       let newPath = (!path) ? key : `${path}.${key}`
       arrayToJson(value, result, newPath)

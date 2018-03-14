@@ -1,23 +1,23 @@
 import titleCase from 'title-case'
 
-const simpleToAdvance = (schema) => {
-  _.each(schema, (value, key) => {
+const simpleToAdvance = (structure) => {
+  _.each(structure, (value, key) => {
     if (!_.includes(['EDITOR', 'CONTENT', 'PATH', 'NAME', 'DEFAULT', 'TYPE', 'INFO', 'CONFIG'], key)) {
 
       if (_.isArray(value)) {
-        schema[key] = {
+        structure[key] = {
           ARRAY: value[0],
         }
 
         if (_.has(value[0], 'NAME')) {
-          schema[key].NAME = value[0].NAME
+          structure[key].NAME = value[0].NAME
         }
 
         value = simpleToAdvance(value)
       }
 
       if (_.isString(value)) {
-        schema[key] = {
+        structure[key] = {
           EDITOR: value,
         }
       }
@@ -28,11 +28,11 @@ const simpleToAdvance = (schema) => {
     }
   })
 
-  return schema
+  return structure
 }
 
-const addArraysAndPaths = (schema, draft, parentPath = false) => {
-  _.each(schema, (value, key) => {
+const addArraysAndPaths = (structure, draft, parentPath = false) => {
+  _.each(structure, (value, key) => {
     let path = (!parentPath) ? key : `${parentPath}.${key}`
 
     if (_.has(value, 'ARRAY')) {
@@ -54,11 +54,11 @@ const addArraysAndPaths = (schema, draft, parentPath = false) => {
     }
   })
 
-  return schema
+  return structure
 }
 
-const addData = (schema, draft) => {
-  _.each(schema, (value, key) => {
+const addData = (structure, draft) => {
+  _.each(structure, (value, key) => {
     if (_.isPlainObject(value) && !_.includes(['ARRAY', 'CONFIG'], key)) {
 
       if (!_.has(value, 'NAME')) {
@@ -89,15 +89,15 @@ const addData = (schema, draft) => {
     }
   })
 
-  return schema
+  return structure
 }
 
-export default (schema, draft) => {
+export default (structure, draft) => {
 
-  schema = simpleToAdvance(schema)
-  schema = addArraysAndPaths(schema, draft)
-  schema = addData(schema, draft)
+  structure = simpleToAdvance(structure)
+  structure = addArraysAndPaths(structure, draft)
+  structure = addData(structure, draft)
 
-  return schema
+  return structure
 
 }

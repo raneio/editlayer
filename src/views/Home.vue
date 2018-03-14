@@ -1,5 +1,5 @@
 <script>
-import anime from 'animejs'
+// import anime from 'animejs'
 
 export default {
   name: 'home',
@@ -40,9 +40,9 @@ export default {
     <div class="content">
 
       <div class="text-area">
-        <h1 class="heading">Edit any content<br>with simple UI</h1>
+        <h1 class="heading">Edit content<br> with a simple UI</h1>
         <div class="subheading">
-          Create any kind of content structure aka schema
+          Create any kind of <br>JSON data structure
         </div>
 
       </div>
@@ -141,6 +141,7 @@ export default {
         align-self: center
         padding-top: 2rem
         padding-bottom: 4rem
+        +margin-to-childs()
 
         +for-tablet-portrait
           padding-top: 0
@@ -148,16 +149,18 @@ export default {
           width: 50%
 
         .heading
-          font-size: 4rem
-          font-style: italic
+          font-size: 3.5rem
+          // font-style: italic
           font-weight: 700
-          letter-spacing: -.1em
+          letter-spacing: -.075em
           line-height: 1
+          // text-transform: uppercase
 
         .subheading
           font-size: 1.6rem
           margin-bottom: 1rem
           line-height: 1
+          font-style: italic
 
       .video-area
         align-self: flex-end

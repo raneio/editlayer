@@ -6,7 +6,7 @@ import axios from 'axios'
 import ImageCompressor from 'image-compressor.js'
 import firebase from '@/firebase'
 import router from '@/router'
-import buildSchema from '@/utils/buildSchema'
+import buildStructure from '@/utils/buildStructure'
 
 Vue.use(Vuex)
 Vue.use(firebase)
@@ -51,25 +51,25 @@ export default new Vuex.Store({
       return getters.activeProject.roles[state.user.id].role
     },
 
-    schema (state) {
+    structure (state) {
       if (!state.route.params.projectId || !state.projects || !state.projects[state.route.params.projectId]) return {}
 
-      let schema = {}
+      let structure = {}
 
       try {
-      	schema = JSON.parse(state.projects[state.route.params.projectId].schema)
+      	structure = JSON.parse(state.projects[state.route.params.projectId].structure)
       } catch (err) {
-        return schema
+        return structure
       }
 
-      return buildSchema(schema, state.projects[state.route.params.projectId].draft)
+      return buildStructure(structure, state.projects[state.route.params.projectId].draft)
     },
 
-    activeSchema (state, getters) {
+    activeStructure (state, getters) {
       let path = _.replace(state.route.params.path, />/g, '.')
 
-      if (_.has(getters.schema, path)) {
-        return _.get(getters.schema, path)
+      if (_.has(getters.structure, path)) {
+        return _.get(getters.structure, path)
       } else {
         return {}
       }
@@ -104,7 +104,7 @@ export default new Vuex.Store({
           roles: doc.data().roles,
           filename: doc.data().filename,
           name: (doc.data().name) ? doc.data().name : doc.data().filename,
-          schema: (doc.data().schema) ? doc.data().schema : null,
+          structure: (doc.data().structure) ? doc.data().structure : null,
           draft: (doc.data().draft) ? doc.data().draft : null,
           published: (doc.data().published) ? doc.data().published : null,
         }
@@ -203,7 +203,7 @@ export default new Vuex.Store({
           //     roles: doc.data().roles,
           //     filename: doc.data().filename,
           //     name: (doc.data().name) ? doc.data().name : doc.data().filename,
-          //     schema: (doc.data().schema) ? doc.data().schema : null,
+          //     structure: (doc.data().structure) ? doc.data().structure : null,
           //     draft: (doc.data().draft) ? doc.data().draft : null,
           //     published: (doc.data().published) ? doc.data().published : null,
           //   }
@@ -219,18 +219,18 @@ export default new Vuex.Store({
         projectId = `${projectId}-${Math.random().toString(36).slice(-3)}`
       }
 
-      let defaultSchema = {
+      let defaultStructure = {
         title: "text",
         description: "textarea",
         photo: "image",
       }
 
-      let schema = (payload.schema) ? payload.schema : defaultSchema
+      let structure = (payload.structure) ? payload.structure : defaultStructure
 
       let newProject = {
         filename: 'content',
         name: payload.name,
-        schema: JSON.stringify(schema, '', '\t'),
+        structure: JSON.stringify(structure, '', '\t'),
         roles: {},
       }
 
@@ -248,7 +248,7 @@ export default new Vuex.Store({
           console.log('File added:', projectId)
 
           if (payload.redirect !== false) {
-            router.push({ name: 'schema', params: { projectId: projectId }})
+            router.push({ name: 'Structure', params: { projectId: projectId }})
           }
         })
         .catch(error => {
@@ -354,7 +354,7 @@ export default new Vuex.Store({
 
           let publishedData = {
             'published.draft': payload.draft,
-            'published.schema': payload.schema,
+            'published.structure': payload.structure,
           }
 
           firebase.firestore

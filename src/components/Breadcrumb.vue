@@ -17,15 +17,15 @@ export default {
       return this.$store.getters.activeProject
     },
 
-    schema () {
-      return this.$store.getters.schema
+    structure () {
+      return this.$store.getters.structure
     },
 
-    activeSchema (state, getters) {
+    activeStructure (state, getters) {
       let path = _.replace(this.$route.params.path, />/g, '.')
 
-      if (_.has(this.schema, path)) {
-        return _.get(this.schema, path)
+      if (_.has(this.structure, path)) {
+        return _.get(this.structure, path)
       } else {
         return {}
       }
@@ -39,13 +39,13 @@ export default {
         breadcrumbItems = _.split(this.$route.params.path, '>')
       }
 
-      if (_.has(this.activeSchema, 'EDITOR')) {
+      if (_.has(this.activeStructure, 'EDITOR')) {
         breadcrumbItems = _.dropRight(breadcrumbItems)
       }
 
       while (breadcrumbItems.length > 0) {
         let path = _.join(breadcrumbItems, '.')
-        let item = _.get(this.schema, path)
+        let item = _.get(this.structure, path)
 
         if (item && !_.has(item, 'ORDER')) {
           breadcrumb.unshift({
@@ -65,11 +65,18 @@ export default {
         })
       }
 
-      if (this.$route.name === 'settings') {
-        breadcrumb.push({
-          name: 'Settings',
-          projectId: this.$route.params.projectId,
-        })
+      if (this.$route.name === 'Settings') {
+        breadcrumb = [
+          {
+            name: this.activeProject.name,
+            projectId: this.$route.params.projectId,
+          },
+
+          {
+            name: 'Settings',
+            projectId: this.$route.params.projectId,
+          },
+        ]
       }
 
       // if (this.projects.length > 1) {
@@ -115,8 +122,8 @@ export default {
 
       let routeName = this.$route.name
 
-      if (routeName === 'settings') {
-        routeName = 'edit'
+      if (routeName === 'Settings') {
+        routeName = 'Content'
       }
 
       anime.timeline()
@@ -132,6 +139,7 @@ export default {
         translateX: '-100%',
         duration: 0,
         complete: (anim) => {
+          console.log('selectItem', routeName)
           if (item.projectId && path) {
             this.$router.push({ name: routeName, params: { projectId: item.projectId, path: path }})
           } else if (item.projectId) {

@@ -69,7 +69,7 @@ export default {
           this.$store.dispatch('newProject', {
             name: '1. Simple Example',
             redirect: false,
-            schema: {
+            structure: {
               title: 'text',
               description: 'textarea',
               image: 'image',
@@ -79,7 +79,7 @@ export default {
           this.$store.dispatch('newProject', {
             name: '2. Advanced Example',
             redirect: false,
-            schema: {
+            structure: {
               simpleField: 'text',
               advancedField: {
                 EDITOR: 'text',

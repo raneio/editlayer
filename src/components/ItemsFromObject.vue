@@ -18,28 +18,28 @@ export default {
 
   computed: {
 
-    schema () {
-      return this.$store.getters.schema
+    structure () {
+      return this.$store.getters.structure
     },
 
-    activeSchema () {
+    activeStructure () {
       let path = _.replace(this.$route.params.path, />/g, '.')
       let parentPath = _.chain(path).split('.').dropRight().join('.').value()
-      let activeItem = _.get(this.schema, path)
+      let activeItem = _.get(this.structure, path)
 
       // console.log('path', path)
       // console.log('parentPath', parentPath)
       // console.log('activeItem', activeItem)
 
       if (_.get(activeItem, 'TYPE') === 'object') {
-        // console.log('activeSchema = active')
+        // console.log('activeStructure = active')
         return activeItem
       } else if (!path || !parentPath) {
-        // console.log('activeSchema = root')
-        return this.schema
+        // console.log('activeStructure = root')
+        return this.structure
       } else {
-        // console.log('activeSchema = parent')
-        return _.get(this.schema, parentPath)
+        // console.log('activeStructure = parent')
+        return _.get(this.structure, parentPath)
       }
     },
 
@@ -48,7 +48,7 @@ export default {
     // },
 
     items () {
-      return _.filter(this.activeSchema, (value) => {
+      return _.filter(this.activeStructure, (value) => {
         if (_.isPlainObject(value)) {
           return value
         }
@@ -59,7 +59,7 @@ export default {
 
   watch: {
 
-    activeSchema (value) {
+    activeStructure (value) {
       this.findFirstItem()
     },
 
@@ -68,21 +68,21 @@ export default {
   methods: {
 
     findFirstItem () {
-      if (!this.activeSchema) return false
-      if (this.$route.name !== 'edit') return false
+      if (!this.activeStructure) return false
+      if (this.$route.name !== 'Content') return false
 
       let path = _.replace(this.$route.params.path, />/g, '.')
-      if (path !== '' && path !== this.activeSchema.PATH) return false
+      if (path !== '' && path !== this.activeStructure.PATH) return false
 
-      let firstItem = _.find(this.activeSchema, { TYPE: 'value' })
+      let firstItem = _.find(this.activeStructure, { TYPE: 'value' })
 
-      // if (!firstItem && _.size(this.activeSchema) === 1) {
-      //   firstItem = _.find(this.activeSchema)
+      // if (!firstItem && _.size(this.activeStructure) === 1) {
+      //   firstItem = _.find(this.activeStructure)
       // }
 
-      if (firstItem && this.activeSchema.TYPE !== 'value') {
+      if (firstItem && this.activeStructure.TYPE !== 'value') {
         let firstItemPath = _.replace(firstItem.PATH, /\./g, '>')
-        this.$router.replace({ name: 'edit', params: { projectId: this.$route.params.projectId, path: firstItemPath }})
+        this.$router.replace({ name: 'Content', params: { projectId: this.$route.params.projectId, path: firstItemPath }})
       }
     },
 
@@ -90,7 +90,7 @@ export default {
     //   let routeName = this.$route.name
     //
     //   if (value.TYPE === 'value') {
-    //     routeName = 'edit'
+    //     routeName = 'Content'
     //   }
     //
     //   let path = _.replace(value.PATH, /\./g, '>')

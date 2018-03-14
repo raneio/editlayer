@@ -11,7 +11,7 @@ import 'codemirror/lib/codemirror.css'
 import firebase from '@/firebase'
 
 export default {
-  name: 'Schema',
+  name: 'Structure',
 
   components: {
     codemirror,
@@ -19,7 +19,7 @@ export default {
 
   data () {
     return {
-      schema: '',
+      structure: '',
       syntaxError: false,
     }
   },
@@ -38,24 +38,24 @@ export default {
 
   watch: {
 
-    'activeProject.schema' (value) {
-      this.setSchema()
+    'activeProject.structure' (value) {
+      this.setStructure()
     },
 
-    schema: _.debounce(function () {
-      this.saveSchema()
+    structure: _.debounce(function () {
+      this.saveStructure()
     }, 500)
 
   },
 
   methods: {
 
-    saveSchema () {
-      // console.log('saveSchema')
+    saveStructure () {
+      // console.log('saveStructure')
       this.syntaxError = false
 
       try {
-      	JSON.parse(this.schema)
+      	JSON.parse(this.structure)
       } catch (err) {
         console.warn('Syntax Error')
         this.syntaxError = true
@@ -63,30 +63,30 @@ export default {
       }
 
       firebase.firestore.collection('projects').doc(this.activeProject.projectId).update({
-        schema: this.schema,
+        structure: this.structure,
       })
-      .then(() => console.log('Schema successfully written!'))
-      .catch((error) => console.error('Error writing schema:', error))
+      .then(() => console.log('Structure successfully written!'))
+      .catch((error) => console.error('Error writing structure:', error))
 
-      // this.$store.dispatch('saveSchema', {
+      // this.$store.dispatch('saveStructure', {
       //   projectId: this.activeProject.projectId,
-      //   schema: this.schema,
+      //   structure: this.structure,
       // })
 
-      // console.log('saveSchema', payload)
+      // console.log('saveStructure', payload)
 
     },
 
-    setSchema () {
-      if (_.has(this.activeProject, 'schema')) {
-        this.schema = this.activeProject.schema
+    setStructure () {
+      if (_.has(this.activeProject, 'structure')) {
+        this.structure = this.activeProject.structure
       }
     }
 
   },
 
   created () {
-    this.setSchema()
+    this.setStructure()
   },
 
 }
@@ -94,10 +94,10 @@ export default {
 
 
 <template>
-<section class="schema" :class="{'-syntax-error': syntaxError}">
+<section class="structure" :class="{'-syntax-error': syntaxError}">
 
   <h1 class="heading">
-    File Schema
+    Structure of JSON
   </h1>
 
   <div class="error-message">
@@ -105,7 +105,7 @@ export default {
   </div>
 
   <codemirror
-    v-model="schema"
+    v-model="structure"
     :options="{
       tabSize: 2,
       mode: 'application/ld+json',
@@ -124,7 +124,7 @@ export default {
 // You can use variables, mixins and functions of Page Core
 @import '../sass/features'
 
-.schema
+.structure
   padding: 2rem .5rem
 
   .error-message
@@ -140,7 +140,7 @@ export default {
   &.-syntax-error .error-message
     opacity: 1
 
-.schema /deep/
+.structure /deep/
 
   .CodeMirror
     margin-left: -.5rem

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "animejs": "^2.2.0",
+    "autosize": "^4.0.0",
     "axios": "^0.18.0",
     "backblaze-b2": "^1.0.4",
     "blueimp-load-image": "^2.18.0",

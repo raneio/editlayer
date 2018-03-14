@@ -1,5 +1,6 @@
 <script>
 import _ from 'lodash'
+import autosize from 'autosize'
 // import * as monaco from '@timkendrick/monaco-editor'
 
 export default {
@@ -31,7 +32,7 @@ export default {
 
   mounted () {
     this.$refs['textarea'].focus()
-    // monaco.editor.create(document.getElementById('elementId'), {})
+    autosize(this.$refs['textarea'])
   },
 
 }
@@ -41,7 +42,7 @@ export default {
 <template>
 <section class="editor -textarea">
 
-  <textarea ref="textarea" rows="8" cols="80" v-model="content"/>
+  <textarea class="textarea" ref="textarea" rows="8" cols="80" v-model="content"/>
 
   <!-- <div id="elementId">
     Foobar
@@ -52,12 +53,11 @@ export default {
 
 
 <style lang="sass" scoped>
-
-// You can use variables, mixins and functions of Page Core
 @import '../sass/features'
 
-// Under /deep/ you can also change style of child components
-.editor /deep/
+.textarea
+  resize: none
+  overflow: hidden
 
 
 </style>

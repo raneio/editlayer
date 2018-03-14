@@ -17,8 +17,8 @@ export default {
 
   computed: {
 
-    // activeSchema () {
-    //   return this.$store.getters.activeSchema
+    // activeStructure () {
+    //   return this.$store.getters.activeStructure
     // },
 
   },

@@ -13,7 +13,7 @@ export default {
   computed: {
 
     isActive () {
-      if (this.$route.name !== 'edit') return false
+      if (this.$route.name !== 'Content') return false
       return !!(this.item.PATH === _.replace(this.$route.params.path, />/g, '.'))
     },
 

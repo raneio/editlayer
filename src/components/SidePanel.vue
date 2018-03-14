@@ -18,7 +18,7 @@ export default {
 
     selectItem (item) {
       let projectId = (item.FILE_ID) ? item.FILE_ID : this.$route.params.projectId
-      let routeName = (item.TYPE === 'value') ? 'edit' : this.$route.name
+      let routeName = (item.TYPE === 'value') ? 'Content' : this.$route.name
       let path = _.replace(item.PATH, /\./g, '>')
 
       if (item.TYPE === 'value') {
@@ -80,15 +80,15 @@ export default {
 
   computed: {
 
-    schema () {
-      return this.$store.getters.schema
+    structure () {
+      return this.$store.getters.structure
     },
 
-    activeSchema () {
+    activeStructure () {
       let path = _.replace(this.$route.params.path, />/g, '.')
 
-      if (_.has(this.schema, path)) {
-        return _.get(this.schema, path)
+      if (_.has(this.structure, path)) {
+        return _.get(this.structure, path)
       } else {
         return {}
       }
@@ -96,14 +96,14 @@ export default {
 
     activeType () {
       let path = _.replace(this.$route.params.path, />/g, '.')
-      let activeItem = _.get(this.schema, path)
-      let grandparent = _.get(this.schema, _.chain(path).split('.').dropRight(2).join('.').value())
+      let activeItem = _.get(this.structure, path)
+      let grandparent = _.get(this.structure, _.chain(path).split('.').dropRight(2).join('.').value())
 
       if (!this.$route.params.projectId) {
         return 'project'
-      } else if (this.activeSchema && this.activeSchema.TYPE === 'array') {
+      } else if (this.activeStructure && this.activeStructure.TYPE === 'array') {
         return 'array'
-      } else if (grandparent && this.activeSchema && grandparent.TYPE === 'array' && this.activeSchema.TYPE === 'value') {
+      } else if (grandparent && this.activeStructure && grandparent.TYPE === 'array' && this.activeStructure.TYPE === 'value') {
         return 'array'
       } else {
         return 'object'

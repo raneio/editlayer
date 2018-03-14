@@ -13,7 +13,7 @@ export default {
   //     publish: {
   //       running: false,
   //       versionId: null,
-  //       schema: null,
+  //       structure: null,
   //       draft: null,
   //     },
   //   }
@@ -25,8 +25,8 @@ export default {
 
   computed: {
 
-    schema () {
-      return this.$store.getters.schema
+    structure () {
+      return this.$store.getters.structure
     },
 
     activeProject () {
@@ -50,7 +50,7 @@ export default {
     isDraft () {
       if (!this.activeProject) return false
       if (!this.activeProject.published) return true
-      return !_.isEqual(this.activeProject.draft, this.activeProject.published.draft) || this.activeProject.schema !== this.activeProject.published.schema
+      return !_.isEqual(this.activeProject.draft, this.activeProject.published.draft) || this.activeProject.structure !== this.activeProject.published.structure
     },
 
     neverPublished () {
@@ -81,7 +81,7 @@ export default {
   methods: {
 
     publishJson () {
-      let content = buildJson(this.schema)
+      let content = buildJson(this.structure)
 
       this.$store.dispatch('publishJson', {
         projectId: this.projectId,
@@ -89,12 +89,12 @@ export default {
         content: content,
         filename: this.activeProject.filename,
         draft: this.activeProject.draft,
-        schema: this.activeProject.schema,
+        structure: this.activeProject.structure,
       })
 
       // this.publish.running = true
       // this.publish.draft = this.activeProject.draft
-      // this.publish.schema = this.activeProject.schema
+      // this.publish.structure = this.activeProject.structure
 
       // firebase.firestore.collection('projects').doc(this.projectId).collection('versions').add({
       //   publishedBy: this.$store.state.user.id,
@@ -138,7 +138,7 @@ export default {
     //     } else {
     //       let publishedData = {
     //         'published.draft': this.publish.draft,
-    //         'published.schema': this.publish.schema,
+    //         'published.structure': this.publish.structure,
     //       }
     //
     //       firebase.firestore.collection('projects').doc(this.projectId).update(publishedData)

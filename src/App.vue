@@ -1,6 +1,12 @@
 <script>
+import Auth from '@/views/Auth'
+
 export default {
   name: 'app',
+
+  components: {
+    Auth,
+  },
 
   created () {
     this.$store.dispatch('authState')
@@ -11,6 +17,7 @@ export default {
 
 <template>
 <div id="app">
-  <router-view/>
+  <Auth v-if="$store.state.user.isLoggedIn === false"/>
+  <router-view v-if="$store.state.user.isLoggedIn === true"/>
 </div>
 </template>

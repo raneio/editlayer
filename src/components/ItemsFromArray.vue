@@ -28,18 +28,18 @@ export default {
 
   computed: {
 
-    schema () {
-      return this.$store.getters.schema
+    structure () {
+      return this.$store.getters.structure
     },
 
-    activeSchema () {
+    activeStructure () {
       let path = _.replace(this.$route.params.path, />/g, '.')
       let parentPath = _.chain(path).split('.').dropRight().dropRight().join('.').value()
-      let activeItem = _.get(this.schema, path)
+      let activeItem = _.get(this.structure, path)
       if (_.get(activeItem, 'TYPE') === 'array') {
         return activeItem
       } else {
-        return _.get(this.schema, parentPath)
+        return _.get(this.structure, parentPath)
       }
     },
 
@@ -56,7 +56,7 @@ export default {
       let source = []
       let lastItem = null
 
-      _.each(this.activeSchema, (value, key) => {
+      _.each(this.activeStructure, (value, key) => {
         if (_.startsWith(key, '-')) {
           source.push(value)
         }
@@ -83,7 +83,7 @@ export default {
 
   watch: {
 
-    activeSchema (value) {
+    activeStructure (value) {
       this.findFirstItem()
     },
 
@@ -94,7 +94,7 @@ export default {
     newItem () {
       let itemPath = _.replace(this.$route.params.path, />/g, '.')
 
-      if (itemPath !== this.activeSchema.PATH && _.includes(itemPath, '.-')) {
+      if (itemPath !== this.activeStructure.PATH && _.includes(itemPath, '.-')) {
         itemPath = _.chain(itemPath).split('.-').slice(0, -1).join('.-').value()
       }
 
@@ -125,7 +125,7 @@ export default {
       .catch((error) => console.error('Error new item:', error))
 
       let pathUrl = _.replace(`${itemPath}.${randomKey}`, /\./g, '>')
-      this.$router.push({ name: 'edit', params: { projectId: this.projectId, path: pathUrl }})
+      this.$router.push({ name: 'Content', params: { projectId: this.projectId, path: pathUrl }})
 
       // this.$store.dispatch('newArrayItem', {
       //   projectId: this.projectId,
@@ -136,19 +136,19 @@ export default {
     findFirstItem () {
       let path = _.replace(this.$route.params.path, />/g, '.')
 
-      if (path !== this.activeSchema.PATH) {
+      if (path !== this.activeStructure.PATH) {
         return false
       }
 
-      if (this.$route.name !== 'edit') {
+      if (this.$route.name !== 'Content') {
         return false
       }
 
       let firstItem = _.find(this.arrayItems[0], { TYPE: 'value' })
 
-      if (firstItem && this.activeSchema.TYPE === 'array') {
+      if (firstItem && this.activeStructure.TYPE === 'array') {
         let firstItemPath = _.replace(firstItem.PATH, /\./g, '>')
-        this.$router.replace({ name: 'edit', params: { projectId: this.projectId, path: firstItemPath }})
+        this.$router.replace({ name: 'Content', params: { projectId: this.projectId, path: firstItemPath }})
       }
     },
 
@@ -156,7 +156,7 @@ export default {
     //   let routeName = this.$route.name
     //
     //   if (value.TYPE === 'value') {
-    //     routeName = 'edit'
+    //     routeName = 'Content'
     //   }
     //
     //   let path = _.replace(value.PATH, /\./g, '>')

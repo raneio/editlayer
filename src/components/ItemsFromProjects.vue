@@ -26,7 +26,7 @@ export default {
           NAME: file.name,
           FILE_ID: file.projectId,
           TYPE: 'file',
-          STATUS: (file.published && _.isEqual(file.draft, file.published.draft) && file.schema === file.published.schema) ? 'published' : 'draft',
+          STATUS: (file.published && _.isEqual(file.draft, file.published.draft) && file.structure === file.published.structure) ? 'published' : 'draft',
         }
       })
     },

@@ -16,8 +16,8 @@ export default {
 
   computed: {
 
-    // schema () {
-    //   return this.$store.getters.schema
+    // structure () {
+    //   return this.$store.getters.structure
     // },
 
     activeProject () {
@@ -51,7 +51,7 @@ export default {
     // isDraft () {
     //   if (!this.activeProject) return false
     //   if (!this.activeProject.published) return true
-    //   return !_.isEqual(this.activeProject.draft, this.activeProject.published.draft) || this.activeProject.schema !== this.activeProject.published.schema
+    //   return !_.isEqual(this.activeProject.draft, this.activeProject.published.draft) || this.activeProject.structure !== this.activeProject.published.structure
     // },
 
     neverPublished () {
@@ -92,28 +92,28 @@ export default {
   <router-link
     v-if="$route.params.projectId"
     class="item"
-    :class="{ '-active': $route.name === 'edit' }"
-    :to="{ name: 'edit', params: { projectId: $route.params.projectId, path: $route.params.path }}"
+    :class="{ '-active': $route.name === 'Content' }"
+    :to="{ name: 'Content', params: { projectId: $route.params.projectId, path: $route.params.path }}"
   >
     <img class="icon" src="../assets/icon-edit.svg" alt="">
-    Edit
+    Content
   </router-link>
 
   <router-link
     v-if="$route.params.projectId && activeRole === 'admin'"
     class="item"
-    :class="{ '-active': $route.name === 'schema' }"
-    :to="{ name: 'schema', params: { projectId: $route.params.projectId, path: $route.params.path }}"
+    :class="{ '-active': $route.name === 'Structure' }"
+    :to="{ name: 'Structure', params: { projectId: $route.params.projectId, path: $route.params.path }}"
   >
-    <img class="icon" src="../assets/icon-schema.svg" alt="">
-    Schema
+    <img class="icon" src="../assets/icon-structure.svg" alt="">
+    Structure
   </router-link>
 
   <router-link
     v-if="$route.params.projectId && activeRole === 'admin'"
     class="item"
-    :class="{ '-active': $route.name === 'settings' }"
-    :to="{ name: 'settings', params: { projectId: this.$route.params.projectId, path: this.$route.params.path }}"
+    :class="{ '-active': $route.name === 'Settings' }"
+    :to="{ name: 'Settings', params: { projectId: this.$route.params.projectId, path: this.$route.params.path }}"
   >
     <img class="icon" src="../assets/icon-settings.svg" alt="">
     Settings

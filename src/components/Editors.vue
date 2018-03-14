@@ -15,20 +15,20 @@ export default {
 
   computed: {
 
-    schema () {
-      return this.$store.getters.schema
+    structure () {
+      return this.$store.getters.structure
     },
 
-    activeSchema () {
-      return this.$store.getters.activeSchema
+    activeStructure () {
+      return this.$store.getters.activeStructure
     },
 
     editorData () {
       return {
         projectId: this.$route.params.projectId,
-        path: this.activeSchema.PATH,
-        content: this.activeSchema.CONTENT,
-        config: (this.activeSchema.CONFIG) ? this.activeSchema.CONFIG : null,
+        path: this.activeStructure.PATH,
+        content: this.activeStructure.CONTENT,
+        config: (this.activeStructure.CONFIG) ? this.activeStructure.CONFIG : null,
       }
     },
 
@@ -54,28 +54,28 @@ export default {
 <section class="editors">
 
   <h1 class="heading">
-    {{ activeSchema.NAME }}
+    {{ activeStructure.NAME }}
   </h1>
 
-  <div class="info" v-if="activeSchema.INFO">
+  <div class="info" v-if="activeStructure.INFO">
     <img src="../assets/icon-info.svg" alt="" class="icon">
-    <div v-text="activeSchema.INFO"></div>
+    <div v-text="activeStructure.INFO"></div>
   </div>
 
   <EditorText
-    v-if="activeSchema.EDITOR === 'text'"
+    v-if="activeStructure.EDITOR === 'text'"
     :editorData="editorData"
     :saveFunction="saveContent"
   />
 
   <EditorTextarea
-    v-if="activeSchema.EDITOR === 'textarea'"
+    v-if="activeStructure.EDITOR === 'textarea'"
     :editorData="editorData"
     :saveFunction="saveContent"
   />
 
   <EditorImage
-    v-if="activeSchema.EDITOR === 'image'"
+    v-if="activeStructure.EDITOR === 'image'"
     :editorData="editorData"
     :saveFunction="saveContent"
   />
@@ -97,65 +97,15 @@ export default {
     background-color: $color-light
     border: 1px solid $color-hr
     padding: .5rem .75rem
-    // margin-left: -.5rem
-    // margin-right: -.5rem
     border-radius: $button-border-radius
 
     .icon
       width: 1rem
       align-self: flex-start
 
-  // .header
-  //   background-color: $color-background--light
-  //   border-radius: $button-border-radius
-  //   padding: 1rem 1.5rem
-  //   display: flex
-  //   justify-content: space-between
-  //
-  //   .heading
-  //
-  //
-  //   .description
-  //     font-size: .9rem
-  //     color: $color-content--light
-  //
-  //
-  //   .nav
-  //     +grid('compact', 2rem)
-  //     align-items: stretch
-  //     text-transform: uppercase
-  //
-  //     .item
-  //       position: relative
-  //       display: flex
-  //       align-items: center
-  //
-  //       &.-active::after
-  //         content: ''
-  //         display: block
-  //         position: absolute
-  //         left: 1.5rem
-  //         right: -.5rem
-  //         bottom: -1rem
-  //         height: 10px
-  //         background-color: $color-primary
-  //         transition: width .2s
-  //
-  //
-  //       a
-  //         color: $color-content
-  //         padding-top: 1rem
-  //         padding-bottom: 1rem
-  //         margin-top: -1rem
-  //         margin-bottom: -1rem
-
   .CodeMirror
     border-radius: $button-border-radius
     height: auto
-
-
-// Under /deep/ you can also change style of child components
-.main-content /deep/
 
 
 </style>

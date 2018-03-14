@@ -2,12 +2,14 @@
 import validator from 'validator'
 import firebase from '@/firebase'
 import Breadcrumb from '@/components/Breadcrumb'
+import Navigation from '@/components/Navigation'
 
 export default {
   name: 'Settings',
 
   components: {
     Breadcrumb,
+    Navigation,
   },
 
   computed: {
@@ -96,93 +98,98 @@ export default {
 
 
 <template>
-<main class="settings" v-if="activeProject">
-  <Breadcrumb/>
+<section class="layout">
+  <Navigation/>
+  
+  <main class="settings" v-if="activeProject">
 
-  <section class="group">
-    <h1 class="heading">
-      User permissions
-    </h1>
+    <Breadcrumb/>
 
-    <ul class="roles">
-      <li class="role -me">
-        <div class="email" :title="user.email" v-text="user.email"></div>
-        <div class="spacer"></div>
-        <button class="button -pill -active">Admin</button>
-      </li>
-      <li
-        v-for="(role, roleId) in activeProject.roles"
-        v-if="roleId !== user.id"
-        class="role"
+    <section class="group">
+      <h1 class="heading">
+        User permissions
+      </h1>
+
+      <ul class="roles">
+        <li class="role -me">
+          <div class="email" :title="user.email" v-text="user.email"></div>
+          <div class="spacer"></div>
+          <button class="button -pill -active">Admin</button>
+        </li>
+        <li
+          v-for="(role, roleId) in activeProject.roles"
+          v-if="roleId !== user.id"
+          class="role"
+        >
+          <div class="email" :title="role.email" v-text="role.email"></div>
+
+          <div class="spacer"></div>
+
+          <button
+            class="button -pill"
+            :class="{ '-active': role.role === 'editor'}"
+            @click="updatePermission({
+              roleId, roleId,
+              role: 'editor',
+              email: role.email,
+            })"
+            >
+            Editor
+          </button>
+
+          <button
+            class="button -pill"
+            :class="{ '-active': role.role === 'admin'}"
+            @click="updatePermission({
+              roleId: roleId,
+              role: 'admin',
+              email: role.email,
+            })"
+            >
+            Admin
+          </button>
+
+          <button
+            class="button -pill -danger -delete"
+            @click="removePermission({
+              roleId: roleId,
+              email: role.email,
+            })"
+            >
+              <img src="../assets/icon-delete.svg" alt="">
+          </button>
+        </li>
+      </ul>
+
+      <button
+        class="button -link -new"
+        @click="newPermission()"
       >
-        <div class="email" :title="role.email" v-text="role.email"></div>
+        + New User
+      </button>
+    </section>
 
-        <div class="spacer"></div>
+    <!-- <section class="group">
+      <h1 class="heading">
+        Trigger request after publish
+      </h1>
+      <input type="text" name="" value="" placeholder="https://example.com/folder/?foo=bar">
+    </section> -->
 
-        <button
-          class="button -pill"
-          :class="{ '-active': role.role === 'editor'}"
-          @click="updatePermission({
-            roleId, roleId,
-            role: 'editor',
-            email: role.email,
-          })"
-          >
-          Editor
-        </button>
+    <section class="group">
+      <h1 class="heading">
+        Delete project
+      </h1>
+      <div class="danger">
+        <strong>Caution!</strong> Your project will be deleted permanently and you can’t undo this.
+      </div>
+      <button class="button -danger" @click="deleteProject()">
+        Delete Project Permamently
+      </button>
+    </section>
 
-        <button
-          class="button -pill"
-          :class="{ '-active': role.role === 'admin'}"
-          @click="updatePermission({
-            roleId: roleId,
-            role: 'admin',
-            email: role.email,
-          })"
-          >
-          Admin
-        </button>
-
-        <button
-          class="button -pill -danger -delete"
-          @click="removePermission({
-            roleId: roleId,
-            email: role.email,
-          })"
-          >
-            <img src="../assets/icon-delete.svg" alt="">
-        </button>
-      </li>
-    </ul>
-
-    <button
-      class="button -link -new"
-      @click="newPermission()"
-    >
-      + New User
-    </button>
-  </section>
-
-  <!-- <section class="group">
-    <h1 class="heading">
-      Trigger request after publish
-    </h1>
-    <input type="text" name="" value="" placeholder="https://example.com/folder/?foo=bar">
-  </section> -->
-
-  <section class="group">
-    <h1 class="heading">
-      Delete project
-    </h1>
-    <div class="danger">
-      <strong>Caution!</strong> Your project will be deleted permanently and you can’t undo this.
-    </div>
-    <button class="button -danger" @click="deleteProject()">
-      Delete Project Permamently
-    </button>
-  </section>
-
-</main>
+  </main>
+</section>
 </template>
 
 

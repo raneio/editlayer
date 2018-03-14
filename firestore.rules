@@ -21,14 +21,14 @@ service cloud.firestore {
       function allowPublished () {
       	return isRole(['admin', 'editor'])
         		&& request.writeFields.size() == 2
-        		&& request.writeFields[0] == 'published.schema' || request.writeFields[1] == 'published.schema'
+        		&& request.writeFields[0] == 'published.structure' || request.writeFields[1] == 'published.structure'
         		&& request.writeFields[0] == 'published.draft' || request.writeFields[1] == 'published.draft';
       }
 
-      function allowSchema () {
+      function allowStructure () {
       	return isRole(['admin'])
         		&& request.writeFields.size() == 1
-        		&& request.writeFields[0] == 'schema';
+        		&& request.writeFields[0] == 'structure';
       }
 
       function allowRoles () {
@@ -46,7 +46,7 @@ service cloud.firestore {
       allow update: if allowDraft()
       							|| allowPublished()
                     || allowRoles()
-                    || allowSchema();
+                    || allowStructure();
     }
 
     match /projects/{projectId}/versions/{versionId} {
