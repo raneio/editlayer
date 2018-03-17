@@ -101,7 +101,6 @@ export default {
       let randomKey = `-${Math.random().toString(36).slice(-4)}`
       let path = `draft.${itemPath}`
       let newPath = `${path}.${randomKey}`
-      let items = _.get(this.projects[this.projectId], path)
       let order = 0
 
       if (_.has(this.projects[this.projectId], newPath)) {
@@ -109,28 +108,30 @@ export default {
         return false
       }
 
-      _.each(items, (item, key) => {
+      _.each(this.arrayItems, (item, key) => {
         if (order >= item.ORDER) {
           order = item.ORDER - 1
         }
       })
+
+      console.log('order', order)
 
       let updateData = {}
       updateData[newPath] = {
         ORDER: order,
       }
 
-      firebase.firestore.collection('projects').doc(this.projectId).update(updateData)
-      .then(() => console.log('New item added!'))
-      .catch((error) => console.error('Error new item:', error))
+      firebase.firestore
+        .collection('projects')
+        .doc(this.projectId)
+        .update(updateData)
+        .then(() => {
+          console.log('New item added!')
+          let pathUrl = _.replace(`${itemPath}.${randomKey}`, /\./g, '>')
+          this.$router.push({ name: 'Content', params: { projectId: this.projectId, path: pathUrl }})
+        })
+        .catch((error) => console.error('Error new item:', error))
 
-      let pathUrl = _.replace(`${itemPath}.${randomKey}`, /\./g, '>')
-      this.$router.push({ name: 'Content', params: { projectId: this.projectId, path: pathUrl }})
-
-      // this.$store.dispatch('newArrayItem', {
-      //   projectId: this.projectId,
-      //   path: path,
-      // })
     },
 
     findFirstItem () {
@@ -151,17 +152,6 @@ export default {
         this.$router.replace({ name: 'Content', params: { projectId: this.projectId, path: firstItemPath }})
       }
     },
-
-    // selectItem (value) {
-    //   let routeName = this.$route.name
-    //
-    //   if (value.TYPE === 'value') {
-    //     routeName = 'Content'
-    //   }
-    //
-    //   let path = _.replace(value.PATH, /\./g, '>')
-    //   this.$router.push({ name: routeName, params: { projectId: this.projectId, path: path }})
-    // },
 
     isActive (path) {
       return !!(path === _.replace(this.$route.params.path, />/g, '.'))
@@ -211,13 +201,35 @@ export default {
       }
     },
 
-    deleteArrayItem (arrayItem) {
+    deleteArrayItem (arrayItem, arrayIdx) {
       let updateData = {}
       updateData[`draft.${arrayItem.PATH}`] = firebase.firestoreDelete
 
-      firebase.firestore.collection('projects').doc(this.projectId).update(updateData)
-      .then(() => console.log('Item successfully deleted!'))
-      .catch((error) => console.error('Error deleting item', error))
+      // console.log('arrayItem', arrayItem, arrayIdx)
+
+      let redirectIdx = (arrayIdx > 0) ? arrayIdx - 1 : 1
+      let redirectPath = _.get(this.arrayItems, `${redirectIdx}.PATH`)
+      // let redirectPathAfterLastItem = null
+      let parentPath = _.chain(this.$route.params.path).split('>').slice(0, -1).join('.').value()
+
+      if (redirectPath && arrayItem.PATH === parentPath) {
+        this.$router.replace({ name: this.$route.name, params: { projectId: this.projectId, path: redirectPath }})
+      }
+      // else {
+      //   redirectPathAfterLastItem = this.activeStructure.PATH
+      // }
+
+      firebase.firestore
+        .collection('projects')
+        .doc(this.projectId)
+        .update(updateData)
+        .then(() => {
+          console.log('Item successfully deleted!')
+          // if (redirectPathAfterLastItem) {
+          //   this.$router.replace({ name: this.$route.name, params: { projectId: this.projectId, path: redirectPathAfterLastItem }})
+          // }
+        })
+        .catch((error) => console.error('Error deleting item', error))
     },
 
   },
@@ -256,7 +268,7 @@ export default {
 
     <div class="tools">
       <button @click="moveArrayItem(arrayItem, arrayIdx)" class="button -link -primary">Move</button>
-      <button @click="deleteArrayItem(arrayItem)" class="button -link -primary -delete">Delete</button>
+      <button @click="deleteArrayItem(arrayItem, arrayIdx)" class="button -link -primary -delete">Delete</button>
     </div>
 
     <div

@@ -246,9 +246,9 @@ export default new Vuex.Store({
         .then((docRef) => {
           console.log('File added:', projectId)
 
-          if (payload.redirect !== false) {
-            router.push({ name: 'Structure', params: { projectId: projectId }})
-          }
+          // if (payload.redirect !== false) {
+            // router.push({ name: 'Structure', params: { projectId: projectId }})
+          // }
         })
         .catch(error => {
           payload.tries = (!payload.tries) ? 1 : payload.tries + 1

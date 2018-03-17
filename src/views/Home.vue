@@ -77,10 +77,6 @@ export default {
       <input type="hidden" value="1" name="embed">
       <input class="button" type="submit" value="Ask Invite">
     </form>
-    <!-- <form class="subscribe-form" action="https://www.getrevue.co/profile/editlayer/add_subscriber" method="post" target="_blank">
-      <input class="email" placeholder="Your email address..." type="email" name="member[email]" ref="inviteInput">
-      <input class="button" type="submit" value="Ask invite" name="member[subscribe]" id="member_submit">
-    </form> -->
   </div>
 
 </section>
@@ -88,15 +84,16 @@ export default {
 
 
 <style lang="sass" scoped>
-// You can use variables, mixins and functions of Page Core
 @import '../sass/features'
 
 .home
 
   > .header
     +invert-colors()
+    background-color: mix($color-link, $color-active, 50%)
     background-image: url('../assets/home/header-background.jpg')
     background-size: cover
+    background-image: linear-gradient(90deg, darken($color-light, 20%) 0%, darken($color-light, 10%) 100%)
     position: relative
     display: flex
     flex-direction: column
@@ -110,6 +107,7 @@ export default {
 
       +for-tablet-portrait
         +chain(1rem)
+        padding-bottom: 3rem
 
       .logo
         text-transform: uppercase

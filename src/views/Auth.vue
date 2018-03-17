@@ -68,7 +68,7 @@ export default {
 
           this.$store.dispatch('newProject', {
             name: '1. Simple Example',
-            redirect: false,
+            // redirect: false,
             structure: {
               title: 'text',
               description: 'textarea',
@@ -78,7 +78,7 @@ export default {
 
           this.$store.dispatch('newProject', {
             name: '2. Advanced Example',
-            redirect: false,
+            // redirect: false,
             structure: {
               simpleField: 'text',
               advancedField: {

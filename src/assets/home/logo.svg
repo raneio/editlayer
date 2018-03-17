@@ -1,1 +1,25 @@
-<svg width="60" height="42" viewBox="0 0 60 42" xmlns="http://www.w3.org/2000/svg"><title>logo</title><defs><linearGradient x1="0%" y1="15.109%" y2="15.109%" id="a"><stop stop-opacity=".304" offset="0%"/><stop stop-opacity=".296" offset="49.314%"/><stop stop-opacity=".197" offset="50.514%"/><stop stop-opacity=".197" offset="52.639%"/><stop stop-opacity=".198" offset="100%"/></linearGradient></defs><g fill="none" fill-rule="evenodd"><path fill="#CCC" d="M30 11.0204082L60 25.4213411 60 27.8581802 30 41.6326531 0 27.8581802 6.24500451e-16 25.4213411z"/><path fill="url(#a)" d="M30 38.9245918L60 25.1020408 60 27.5868762 30 41.6326531 0 27.5868762 6.24500451e-16 25.1020408z"/><path fill="#FFF" d="M30 0L60 14.400933 60 16.837772 30 30.6122449 0 16.837772 6.24500451e-16 14.400933z"/><path fill="url(#a)" d="M30 28.5164286L60 14.6938776 60 17.1787129 30 31.2244898 0 17.1787129 6.24500451e-16 14.6938776z"/></g></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="34px" viewBox="0 0 48 34" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 46.2 (44496) - http://www.bohemiancoding.com/sketch -->
+    <title>logo</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="0%" y1="15.1089619%" x2="100%" y2="15.1089624%" id="linearGradient-1">
+            <stop stop-color="#000000" stop-opacity="0.303725091" offset="0%"></stop>
+            <stop stop-color="#000000" stop-opacity="0.295601223" offset="49.3144133%"></stop>
+            <stop stop-color="#000000" stop-opacity="0.197180707" offset="50.5141901%"></stop>
+            <stop stop-color="#000000" stop-opacity="0.19721016" offset="52.6387117%"></stop>
+            <stop stop-color="#000000" stop-opacity="0.197860054" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="marketing-site" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Desktop-HD" transform="translate(-100.000000, -29.000000)">
+            <g id="logo" transform="translate(100.000000, 29.000000)">
+                <polygon id="Rectangle" fill="#E5E5E5" points="24 8.81632653 48 20.3370729 48 22.2865441 24 33.3061224 0 22.2865441 4.99600361e-16 20.3370729"></polygon>
+                <polygon id="Rectangle-Copy" fill="url(#linearGradient-1)" points="24 31.1396735 48 20.0816327 48 22.0695009 24 33.3061224 0 22.0695009 4.99600361e-16 20.0816327"></polygon>
+                <polygon id="Rectangle" fill="#FFFFFF" points="24 0 48 11.5207464 48 13.4702176 24 24.4897959 0 13.4702176 4.99600361e-16 11.5207464"></polygon>
+                <polygon id="Rectangle-Copy" fill="url(#linearGradient-1)" points="24 22.8131429 48 11.755102 48 13.7429703 24 24.9795918 0 13.7429703 4.99600361e-16 11.755102"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -14,10 +14,56 @@ export default {
     ItemsFromArray,
   },
 
+  computed: {
+
+    projectId () {
+      return this.$route.params.projectId
+    },
+
+    structure () {
+      return this.$store.getters.structure
+    },
+
+    activeStructure () {
+      let path = _.replace(this.$route.params.path, />/g, '.')
+
+      if (_.has(this.structure, path)) {
+        return _.get(this.structure, path)
+      } else {
+        return {}
+      }
+    },
+
+    activeType () {
+      let path = _.replace(this.$route.params.path, />/g, '.')
+      let activeItem = _.get(this.structure, path)
+      let grandparent = _.get(this.structure, _.chain(path).split('.').dropRight(2).join('.').value())
+
+      if (!this.projectId) {
+        return 'project'
+      } else if (this.activeStructure && this.activeStructure.TYPE === 'array') {
+        return 'array'
+      } else if (grandparent && this.activeStructure && grandparent.TYPE === 'array' && this.activeStructure.TYPE === 'value') {
+        return 'array'
+      } else {
+        return 'object'
+      }
+    },
+
+  },
+
+  watch: {
+
+    activeStructure (value) {
+      this.redirectToParentIfInvalidPath()
+    },
+
+  },
+
   methods: {
 
     selectItem (item) {
-      let projectId = (item.FILE_ID) ? item.FILE_ID : this.$route.params.projectId
+      let projectId = (item.FILE_ID) ? item.FILE_ID : this.projectId
       let routeName = (item.TYPE === 'value') ? 'Content' : this.$route.name
       let path = _.replace(item.PATH, /\./g, '>')
 
@@ -76,41 +122,30 @@ export default {
       // this.$router.push({ name: routeName, params: { projectId: this.$route.params.projectId, path: path }})
     },
 
-  },
-
-  computed: {
-
-    structure () {
-      return this.$store.getters.structure
-    },
-
-    activeStructure () {
+    redirectToParentIfInvalidPath () {
       let path = _.replace(this.$route.params.path, />/g, '.')
+      let pathExist = _.has(this.structure, path)
 
-      if (_.has(this.structure, path)) {
-        return _.get(this.structure, path)
-      } else {
-        return {}
+      if (_.isEmpty(this.structure) || pathExist === true) return false
+
+      let parentPath = _.chain(this.$route.params.path).split('>').slice(0, -1).join('>').value()
+
+      console.log('parentPath', parentPath)
+
+      if (parentPath) {
+        this.$router.replace({ name: this.$route.name, params: { projectId: this.projectId, path: parentPath }})
       }
-    },
-
-    activeType () {
-      let path = _.replace(this.$route.params.path, />/g, '.')
-      let activeItem = _.get(this.structure, path)
-      let grandparent = _.get(this.structure, _.chain(path).split('.').dropRight(2).join('.').value())
-
-      if (!this.$route.params.projectId) {
-        return 'project'
-      } else if (this.activeStructure && this.activeStructure.TYPE === 'array') {
-        return 'array'
-      } else if (grandparent && this.activeStructure && grandparent.TYPE === 'array' && this.activeStructure.TYPE === 'value') {
-        return 'array'
-      } else {
-        return 'object'
+      else {
+        this.$router.replace({ name: this.$route.name, params: { projectId: this.projectId }})
       }
+
     },
 
   },
+
+  // mounted () {
+  //   this.redirectToParentIfInvalidPath()
+  // },
 
 }
 </script>
