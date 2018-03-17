@@ -73,32 +73,32 @@ export default {
       }
 
       anime.timeline()
-      .add({
-        targets: '.side-panel > .content',
-        translateX: '-100%',
-        opacity: 0,
-        easing: 'linear',
-        duration: 100,
-      })
-      .add({
-        targets: '.side-panel > .content',
-        translateX: '100%',
-        duration: 0,
-        complete: (anim) => {
-          if (path) {
-            this.$router.push({ name: routeName, params: { projectId: projectId, path: path }})
-          } else {
-            this.$router.push({ name: routeName, params: { projectId: projectId }})
-          }
-        },
-      })
-      .add({
-        targets: '.side-panel > .content',
-        translateX: 0,
-        opacity: 1,
-        easing: 'linear',
-        duration: 100,
-      })
+        .add({
+          targets: '.side-panel > .content',
+          translateX: '-100%',
+          opacity: 0,
+          easing: 'linear',
+          duration: 100,
+        })
+        .add({
+          targets: '.side-panel > .content',
+          translateX: '100%',
+          duration: 0,
+          complete: (anim) => {
+            if (path) {
+              this.$router.push({ name: routeName, params: { projectId: projectId, path: path }})
+            } else {
+              this.$router.push({ name: routeName, params: { projectId: projectId }})
+            }
+          },
+        })
+        .add({
+          targets: '.side-panel > .content',
+          translateX: 0,
+          opacity: 1,
+          easing: 'linear',
+          duration: 100,
+        })
 
       // anime({
       //   targets: '.side-panel > .content',

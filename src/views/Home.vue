@@ -11,8 +11,19 @@ export default {
 <section class="home">
 
   <header class="header">
-    <div class="header-bottom">
+    <!-- <div class="header-bottom">
       <img src="../assets/home/header-bottom.svg" alt="">
+    </div> -->
+
+    <!-- <div class="wave -blue"></div> -->
+    <div class="waves -blue">
+      <img class="wave" src="../assets/home/wave-blue.png" alt="">
+      <img class="wave" src="../assets/home/wave-blue.png" alt="">
+    </div>
+
+    <div class="waves -white">
+      <img class="wave" src="../assets/home/wave-white.png" alt="">
+      <img class="wave" src="../assets/home/wave-white.png" alt="">
     </div>
 
     <nav class="top-nav">
@@ -37,7 +48,7 @@ export default {
       <div class="text-area">
         <h1 class="heading">Edit content<br> with a simple UI</h1>
         <div class="subheading">
-          Create any kind of <br>JSON data structure
+          You can use any kind of<br>JSON data structure
         </div>
 
       </div>
@@ -97,6 +108,7 @@ export default {
     position: relative
     display: flex
     flex-direction: column
+    text-shadow: 0 0 10em mix(transparent, $color-content, 95%), 0 .1em .1em mix(transparent, $color-content, 90%)
 
     .top-nav
       +container('default', 0)
@@ -156,10 +168,13 @@ export default {
         .heading
           font-size: 3.5rem
           // font-style: italic
-          font-weight: 700
+          font-weight: 900
           letter-spacing: -.075em
           line-height: 1
           // text-transform: uppercase
+          // background: linear-gradient(to right, $color-active 0%, $color-link 100%)
+          // -webkit-background-clip: text
+          // -webkit-text-fill-color: transparent
 
         .subheading
           font-size: 1.3rem
@@ -219,6 +234,30 @@ export default {
           .play
             transform: translate(-50%, -50%) scale(1.05)
             background-color: mix(transparent, $color-link, 10%)
+
+    .waves
+      position: absolute
+      bottom: 0
+      width: 100%
+      overflow: hidden
+      +chain()
+
+      .wave
+        width: 100%
+
+      &.-white .wave
+          height: 3rem
+          animation: wave 16s linear infinite
+
+      &.-blue .wave
+          height: 4rem
+          animation: wave 19s linear infinite
+
+    @keyframes wave
+      0%
+        transform: translateX(0)
+      100%
+        transform: translateX(-100%)
 
     .header-bottom
       position: absolute

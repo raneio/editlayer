@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="2800px" height="85px" viewBox="0 0 2800 85" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 46.2 (44496) - http://www.bohemiancoding.com/sketch -->
+    <title>wave-blue</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="marketing-site" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="wave" transform="translate(0.000000, -216.000000)" fill="#AAC6E1">
+            <g transform="translate(0.000000, 216.000000)" id="wave-blue">
+                <path d="M0,32.1185313 C198.078125,32.1185313 386.525174,1.76449486 663.78125,0.0398463549 C941.037326,-1.68480215 1192.73438,53.1492214 1443.72656,53.1492214 C1694.71875,53.1492214 1972.89917,18.921345 2199.10938,18.4114829 C2425.31958,17.9016209 2584.39844,32.1185313 2800,32.1185313 C2800,33.4937537 2800,51.0039837 2800,84.6492214 L4.54747351e-12,84.6492214 C4.54747351e-12,49.6287613 3.03164901e-12,32.1185313 0,32.1185313 Z"></path>
+            </g>
+        </g>
+    </g>
+</svg>
