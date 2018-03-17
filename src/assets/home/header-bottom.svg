@@ -1,1 +1,20 @@
-<svg width="1440" height="62" viewBox="0 0 1440 62" xmlns="http://www.w3.org/2000/svg"><title>header-bottom</title><path d="M0 48.14c86.122-16.064 225.398-26.382 417.828-30.954 288.645-6.858 377.843 30.332 607.863 30.954 153.348.414 291.45-15.556 414.309-47.91v61.317H0V48.14z" fill="#FFF" fill-rule="evenodd"/></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1440px" height="94px" viewBox="0 0 1440 94" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 46.2 (44496) - http://www.bohemiancoding.com/sketch -->
+    <title>header-bottom</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="3.52359694%" y1="0%" x2="100%" y2="0%" id="linearGradient-1">
+            <stop stop-color="#ACEAB6" offset="0%"></stop>
+            <stop stop-color="#84E0E5" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="marketing-site" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Desktop-HD" transform="translate(0.000000, -471.000000)">
+            <g id="header-bottom" transform="translate(0.000000, 471.000000)">
+                <path d="M0,67.1395247 C86.1223958,51.0762107 225.398438,40.7584822 417.828125,36.1863393 C706.472656,29.328125 798.690195,60.5701063 1028.71094,61.1914062 C1182.0581,61.6056062 1319.15445,41.4168042 1440,0.625 L1440,80.546875 L0,80.546875 L0,67.1395247 Z" id="Rectangle-2-Copy" fill="url(#linearGradient-1)"></path>
+                <path d="M0,80.1395247 C86.1223958,64.0762107 225.398438,53.7584822 417.828125,49.1863393 C706.472656,42.328125 795.670664,79.5182247 1025.69141,80.1395247 C1179.03857,80.5537247 1317.14143,64.5840394 1440,32.2304688 L1440,93.546875 L0,93.546875 L0,80.1395247 Z" id="Rectangle-2" fill="#FFFFFF"></path>
+            </g>
+        </g>
+    </g>
+</svg>

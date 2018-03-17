@@ -74,7 +74,10 @@ export default {
 
   <main class="main-content">
     <Breadcrumb/>
-    <Editors/>
+    <Editors v-if="$route.params.projectId"/>
+    <div class="no-project-selected" v-if="!$route.params.projectId">
+      <img src="../assets/logo.png" alt="">
+    </div>
   </main>
 
   <!-- <MainContent/> -->
@@ -89,5 +92,13 @@ export default {
 .main-content
   overflow-y: auto
   padding: .25rem 2.5rem 2.5rem
+
+.no-project-selected
+  text-align: center
+  margin-top: 6em
+  opacity: .1
+
+  img
+    width: 20rem
 
 </style>

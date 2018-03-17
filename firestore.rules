@@ -65,5 +65,13 @@ service cloud.firestore {
       allow create: if isRole(['admin']);
     }
 
+    match /projects/{projectId}/deleteJobs/{permissionId} {
+      function isRole(roles) {
+        return get(/databases/$(database)/documents/projects/$(projectId)).data.roles[request.auth.uid].role in roles;
+      }
+
+      allow create: if isRole(['admin']);
+    }
+
   }
 }

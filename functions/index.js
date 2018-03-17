@@ -9,7 +9,15 @@ const sha1 = require('node-sha1')
 // const B2 = require('backblaze-b2')
 // const path = require('path')
 // const cors = require('cors')({origin: true})
-const bucketName = 'editlayerapp.appspot.com'
+// const bucketName = 'editlayerapp.appspot.com'
+
+const firestore = admin.firestore()
+const bucket = admin.storage().bucket('editlayerapp.appspot.com')
+const bunnyCdnHeaders = {
+  'Content-Type': 'application/json',
+  Accept: 'application/json',
+  AccessKey: '3af506e7-573c-4563-9b62-a3ec872ba87ca6225606-efa0-427a-baf8-45b53319d0d5',
+}
 
 // const b2 = new B2({
 //   accountId: '83a484a0ac5e',
@@ -68,7 +76,7 @@ const bucketName = 'editlayerapp.appspot.com'
 
 exports.uploadJson = functions.firestore.document('projects/{projectId}/versions/{versionId}').onCreate((event) => {
   const tempFilePath = '/tmp/tempfile.json'
-  const bucket = admin.storage().bucket(bucketName)
+  // const bucket = admin.storage().bucket(bucketName)
   const versionData = event.data.data()
   const destinationPath = `${event.params.projectId}/${versionData.filename}.json`
 
@@ -89,11 +97,7 @@ exports.uploadJson = functions.firestore.document('projects/{projectId}/versions
       const purgeSettings = {
         method: 'POST',
         url: `https://bunnycdn.com/api/purge?url=${cdnUrl}`,
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-          AccessKey: '3af506e7-573c-4563-9b62-a3ec872ba87ca6225606-efa0-427a-baf8-45b53319d0d5',
-        }
+        headers: bunnyCdnHeaders,
       }
 
       axios(purgeSettings)
@@ -118,7 +122,7 @@ exports.uploadJson = functions.firestore.document('projects/{projectId}/versions
 })
 
 exports.attachRole = functions.firestore.document('projects/{projectId}/permissionJobs/{permissionId}').onCreate((event) => {
-  const firestore = admin.firestore()
+  // const firestore = admin.firestore()
   const storeData = event.data.data()
 
   return firestore
@@ -170,7 +174,7 @@ exports.attachRole = functions.firestore.document('projects/{projectId}/permissi
 
 // exports.attachRolesWhenRegister = functions.https.onRequest((request, response) => {
 exports.attachRolesAfterRegister = functions.auth.user().onCreate((event) => {
-  const firestore = admin.firestore()
+  // const firestore = admin.firestore()
 
   console.log('userEventId', event.data.uid)
   console.log('userEventData', event.data)
@@ -222,6 +226,94 @@ exports.attachRolesAfterRegister = functions.auth.user().onCreate((event) => {
     .catch(error => {
       console.log('Role attach when register failed', error)
       // response.send('Role attach when register failed')
+      return false
+    })
+
+})
+
+
+exports.deleteProject = functions.firestore.document('projects/{projectId}/deleteJobs/{permissionId}').onCreate((event) => {
+  const storeData = event.data.data()
+
+  if (storeData.deleteProjectId !== event.params.projectId) return false
+
+  return bucket
+    .getFiles({ prefix: event.params.projectId })
+    .then((result) => {
+      let files = result[0]
+
+      files.forEach((file) => {
+        console.log('file', file.name)
+
+        bucket.file(file.name).delete()
+
+        let cdnUrl = encodeURI(`https://cdn.editlayer.com/${file.name}`)
+        axios({
+          method: 'POST',
+          url: `https://bunnycdn.com/api/purge?url=${cdnUrl}`,
+          headers: bunnyCdnHeaders
+        })
+
+      })
+
+      return true
+    })
+    .then(() => {
+      return firestore
+        .collection('projects')
+        .doc(event.params.projectId)
+        .collection('versions')
+        .get()
+    })
+    .then((versions) => {
+      versions.forEach(doc => {
+        firestore
+          .collection('projects')
+          .doc(event.params.projectId)
+          .collection('versions')
+          .doc(doc.id)
+          .delete()
+      })
+
+      return firestore
+        .collection('projects')
+        .doc(event.params.projectId)
+        .collection('permissionJobs')
+        .get()
+    })
+    .then((permissionJobs) => {
+      permissionJobs.forEach(doc => {
+        firestore
+          .collection('projects')
+          .doc(event.params.projectId)
+          .collection('permissionJobs')
+          .doc(doc.id)
+          .delete()
+      })
+
+      return firestore
+        .collection('projects')
+        .doc(event.params.projectId)
+        .collection('deleteJobs')
+        .get()
+    })
+    .then((deleteJobs) => {
+      deleteJobs.forEach(doc => {
+        firestore
+          .collection('projects')
+          .doc(event.params.projectId)
+          .collection('deleteJobs')
+          .doc(doc.id)
+          .delete()
+      })
+
+      return firestore
+        .collection('projects')
+        .doc(event.params.projectId)
+        .delete()
+    })
+    .catch(error => {
+      console.log('Project deleting failed', error)
       return false
     })
 

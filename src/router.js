@@ -29,6 +29,10 @@ export default new Router({
       component: Structure,
     },
     {
+      path: '/edit/settings',
+      redirect: { name: 'Content' }
+    },
+    {
       name: 'Settings',
       path: '/edit/settings/:projectId?/:path?',
       component: Settings,

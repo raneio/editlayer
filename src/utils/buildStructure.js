@@ -76,9 +76,13 @@ const addData = (structure, draft) => {
       if (_.has(value, 'EDITOR')) {
         let content = _.get(draft, value.PATH)
 
-        if (content) {
+
+        // console.log('content', value.NAME, content !== null, content !== undefined)
+
+        if (content !== null && content !== undefined) {
           value.CONTENT = content
         } else if (_.has(value, 'DEFAULT')) {
+
           value.CONTENT = value.DEFAULT
         } else {
           value.CONTENT = null

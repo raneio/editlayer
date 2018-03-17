@@ -3,11 +3,6 @@
 
 export default {
   name: 'home',
-
-  // mounted () {
-  //   this.$refs.inviteInput.focus()
-  // },
-
 }
 </script>
 
@@ -23,7 +18,7 @@ export default {
     <nav class="top-nav">
 
       <div class="logo">
-        <img src="../assets/home/logo.svg" alt="">
+        <img class="image" src="../assets/home/logo.svg" alt="">
         <div>Editlayer</div>
       </div>
 
@@ -48,12 +43,12 @@ export default {
       </div>
 
       <div class="video-area">
-        <div class="video">
+        <a class="video" href="https://www.youtube.com/watch?v=qeML3xBUDPc" target="editlayerVideo">
           <div class="play">
             <img src="../assets/home/icon-play.svg" alt="" class="icon">
           </div>
           <img src="../assets/home/video-placeholder.png" alt="">
-        </div>
+        </a>
       </div>
 
     </div>
@@ -62,7 +57,7 @@ export default {
   <div class="content">
 
     <div class="text">
-      <h1 class="heading -logo">We are now in version Alpha 7</h1>
+      <h1 class="heading -logo">We are now in version Alpha 9</h1>
 
       <p>Editlayer is not yet ready for the public. If you want to test it, request an invitation to your email. All functions are not complete yet, but most work just fine.</p>
       <p>It is not a good idea to start the production work with Alpha phase because things may still be altered. I may still need to remove the projects that you have started.</p>
@@ -77,10 +72,15 @@ export default {
   </div>
 
   <div class="subscribe">
-    <form class="subscribe-form" action="https://www.getrevue.co/profile/editlayer/add_subscriber" method="post" target="_blank">
+    <form class="subscribe-form" action="https://tinyletter.com/editlayer" method="post" target="_blank">
+      <input class="email" type="text" name="email" placeholder="Your email address">
+      <input type="hidden" value="1" name="embed">
+      <input class="button" type="submit" value="Ask Invite">
+    </form>
+    <!-- <form class="subscribe-form" action="https://www.getrevue.co/profile/editlayer/add_subscriber" method="post" target="_blank">
       <input class="email" placeholder="Your email address..." type="email" name="member[email]" ref="inviteInput">
       <input class="button" type="submit" value="Ask invite" name="member[subscribe]" id="member_submit">
-    </form>
+    </form> -->
   </div>
 
 </section>
@@ -113,12 +113,15 @@ export default {
 
       .logo
         text-transform: uppercase
-        font-size: 2rem
+        font-size: 1.5rem
         font-weight: 900
         letter-spacing: -.05em
+        +chain(1rem)
+        display: inline-flex
+        align-items: center
 
-        +for-tablet-portrait
-          +chain(1rem)
+        .image
+          width: 2.5rem
 
       .spacer
         flex-grow: 1
@@ -127,6 +130,10 @@ export default {
       .link
         text-transform: uppercase
         font-weight: 600
+        display: none
+
+        +for-tablet-portrait
+          display: block
 
     .content
       flex-grow: 1
@@ -140,13 +147,13 @@ export default {
         text-align: center
         align-self: center
         padding-top: 2rem
-        padding-bottom: 4rem
         +margin-to-childs()
 
         +for-tablet-portrait
           padding-top: 0
           padding-bottom: 2rem
           width: 50%
+          padding-bottom: 4rem
 
         .heading
           font-size: 3.5rem
@@ -157,24 +164,26 @@ export default {
           // text-transform: uppercase
 
         .subheading
-          font-size: 1.6rem
+          font-size: 1.3rem
           margin-bottom: 1rem
           line-height: 1
           font-style: italic
+          color: $color-content
 
       .video-area
         align-self: flex-end
-        perspective: 50rem
+        perspective: 40rem
         position: relative
         cursor: not-allowed
-        display: none
+        margin-top: 2rem
+        margin-bottom: -1rem
 
         +for-tablet-portrait
-          display: block
           width: 50%
 
         .video
-          transform: rotateY(-20deg)
+          display: block
+          transform: rotateY(-5deg)
           border-top: 1rem solid $color-background--invert
           border-bottom: 1rem solid $color-background--invert
           border-radius: $button-border-radius
@@ -183,17 +192,20 @@ export default {
           background-color: $color-background
           min-height: 15rem
 
+          +for-tablet-portrait
+            transform: rotateY(-20deg)
+
         .play
           height: 8rem
           width: 8rem
           border-radius: 50%
-          background-color: mix(transparent, black, 50%)
+          background-color: mix(transparent, $color-link, 50%)
           position: absolute
           top: 50%
           left: 52.5%
           transform: translate(-50%, -50%)
           box-shadow: 0 5px 12px 0 mix(transparent, $color-content, 90%), 0 2px 5px 0 mix(transparent, black, 93%)
-          transition: transform .2s
+          transition: transform .2s, background-color .2s
 
           .icon
             position: absolute
@@ -202,13 +214,13 @@ export default {
             transform: translate(-50%, -50%)
 
         &:hover
-          // border: 10px solid red
 
           .video
-            transform: rotateY(-10deg)
+            transform: rotateY(-5deg)
 
           .play
             transform: translate(-50%, -50%) scale(1.05)
+            background-color: mix(transparent, $color-link, 10%)
 
     .header-bottom
       position: absolute
@@ -254,6 +266,7 @@ export default {
       background-color: $color-light
       border-radius: $button-border-radius
       padding: 2rem
+      border: 1px solid $color-hr
 
       .email
         border-top-right-radius: 0

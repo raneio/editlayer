@@ -22,12 +22,15 @@ export default {
       return this.$store.state.user
     },
 
+    roles () {
+      return this.activeProject.roles
+    },
+
   },
 
   methods: {
 
     newPermission () {
-
       let email = prompt('Email address', 'name@example.com');
 
       if (email !== null && !validator.isEmail(email)) {
@@ -88,7 +91,27 @@ export default {
     },
 
     deleteProject () {
-      alert('Project deleting is not possible in the Alpha version, sorry.')
+      let deleteConfirm = prompt(`Write "${this.activeProject.projectId}" if you really want to delete project permanently.`, '');
+
+      if (deleteConfirm !== null && deleteConfirm !== this.activeProject.projectId) {
+        console.error('Project Id is invalid', deleteConfirm)
+      }
+      else if (deleteConfirm !== null) {
+
+        firebase.firestore
+          .collection('projects')
+          .doc(this.activeProject.projectId)
+          .collection('deleteJobs')
+          .add({
+            deleteProjectId: this.activeProject.projectId,
+          })
+          .then(() => {
+            this.$router.push({ name: 'Content' })
+            console.log('Project Deleted')
+          })
+          .catch((error) => console.error('Project deleting failed', error))
+
+      }
     },
 
   },
@@ -100,7 +123,7 @@ export default {
 <template>
 <section class="layout">
   <Navigation/>
-  
+
   <main class="settings" v-if="activeProject">
 
     <Breadcrumb/>
@@ -117,7 +140,7 @@ export default {
           <button class="button -pill -active">Admin</button>
         </li>
         <li
-          v-for="(role, roleId) in activeProject.roles"
+          v-for="(role, roleId) in roles"
           v-if="roleId !== user.id"
           class="role"
         >

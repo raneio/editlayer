@@ -4,7 +4,7 @@ import _ from 'lodash'
 import Navigation from '@/components/Navigation'
 import SidePanel from '@/components/SidePanel'
 import Breadcrumb from '@/components/Breadcrumb'
-import StructureEditor from '@/components/Structure'
+import StructureEditor from '@/components/StructureEditor'
 // import MainContent from '@/components/MainContent'
 // import Settings from '@/components/Settings'
 // import UploadNotifications from '@/components/UploadNotifications'
@@ -73,7 +73,7 @@ export default {
 
   <main class="main-content">
     <Breadcrumb/>
-    <StructureEditor/>
+    <StructureEditor v-if="$route.params.projectId"/>
   </main>
 
   <!-- <MainContent v-if="$route.name === 'Content' || $route.name === 'Structure'"/> -->

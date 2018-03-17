@@ -17,7 +17,7 @@ export default {
 
 <template>
 <div id="app">
-  <Auth v-if="$store.state.user.isLoggedIn === false"/>
-  <router-view v-if="$store.state.user.isLoggedIn === true"/>
+  <Auth v-if="$store.state.user.isLoggedIn === false && $route.name !== 'home'"/>
+  <router-view v-else/>
 </div>
 </template>

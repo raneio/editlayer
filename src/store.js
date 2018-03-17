@@ -15,7 +15,10 @@ export default new Vuex.Store({
 
   state: {
     // storageUrlPrefix: 'https://cdn.editlayer.com/',
-    projects: null,
+    projects: {
+      admin: null,
+      editor: null,
+    },
     user: {
       isLoggedIn: null,
       id: null,
@@ -28,9 +31,13 @@ export default new Vuex.Store({
   getters: {
 
     projects (state) {
-      if (state.projects === null) return null
+      if (state.projects.admin === null && state.projects.editor === null) return null
+      let projectsEditor = _.cloneDeep(state.projects.editor)
+      let projectsAdmin = _.cloneDeep(state.projects.admin)
 
-      return _.chain(state.projects).map((value, key) => {
+      let project = _.merge(projectsEditor, projectsAdmin)
+
+      return _.chain(project).map((value, key) => {
         value.projectId = key
         return value
       }).orderBy(['filename']).value()
@@ -47,22 +54,22 @@ export default new Vuex.Store({
     },
 
     activeRole (state, getters) {
-      if (!getters.activeProject) return null
+      if (!_.has(getters, `activeProject.roles[${state.user.id}].role`)) return null
       return getters.activeProject.roles[state.user.id].role
     },
 
-    structure (state) {
-      if (!state.route.params.projectId || !state.projects || !state.projects[state.route.params.projectId]) return {}
+    structure (state, getters) {
+      if (!state.route.params.projectId || !getters.activeProject) return {}
 
       let structure = {}
 
       try {
-      	structure = JSON.parse(state.projects[state.route.params.projectId].structure)
+      	structure = JSON.parse(getters.activeProject.structure)
       } catch (err) {
         return structure
       }
 
-      return buildStructure(structure, state.projects[state.route.params.projectId].draft)
+      return buildStructure(structure, getters.activeProject.draft)
     },
 
     activeStructure (state, getters) {
@@ -94,12 +101,11 @@ export default new Vuex.Store({
       state.user = user
     },
 
-    setProjects (state, querySnapshot) {
-      let currenProjects = _.cloneDeep(state.projects)
-      let newProjects = {}
+    setProjects (state, payload) {
+      let projects = {}
 
-      querySnapshot.forEach((doc) => {
-        newProjects[doc.id] = {
+      payload.querySnapshot.forEach((doc) => {
+        projects[doc.id] = {
           projectId: doc.id,
           roles: doc.data().roles,
           filename: doc.data().filename,
@@ -110,7 +116,7 @@ export default new Vuex.Store({
         }
       })
 
-      state.projects = _.merge(currenProjects, newProjects)
+      state.projects[payload.myRole] = projects
     },
 
     setContent (state, payload) {
@@ -188,27 +194,20 @@ export default new Vuex.Store({
         .collection('projects')
         .where(`roles.${state.user.id}.role`, '==', 'admin')
         .onSnapshot((querySnapshot) => {
-          commit('setProjects', querySnapshot)
+          commit('setProjects', {
+            myRole: 'admin',
+            querySnapshot: querySnapshot,
+          })
         })
 
       firebase.firestore
         .collection('projects')
         .where(`roles.${state.user.id}.role`, '==', 'editor')
         .onSnapshot((querySnapshot) => {
-          commit('setProjects', querySnapshot)
-          // let projects = {}
-          // querySnapshot.forEach((doc) => {
-          //   projects[doc.id] = {
-          //     projectId: doc.id,
-          //     roles: doc.data().roles,
-          //     filename: doc.data().filename,
-          //     name: (doc.data().name) ? doc.data().name : doc.data().filename,
-          //     structure: (doc.data().structure) ? doc.data().structure : null,
-          //     draft: (doc.data().draft) ? doc.data().draft : null,
-          //     published: (doc.data().published) ? doc.data().published : null,
-          //   }
-          // })
-          // commit('setProjects', projects)
+          commit('setProjects', {
+            myRole: 'editor',
+            querySnapshot: querySnapshot,
+          })
         })
     },
 

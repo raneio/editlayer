@@ -38,9 +38,15 @@ export default {
         //   content = `${this.$store.state.storageUrlPrefix}${this.$route.params.projectId}/${this.item.CONTENT}`
         // }
 
+        let imageUrl = this.item.CONTENT
+
+        if (_.startsWith(imageUrl, 'https://cdn.editlayer.com/')) {
+          imageUrl = _.replace(imageUrl, 'cdn', 'img') + '?w=360&h=110&fit=crop&crop=faces'
+        }
+
         return {
           type: 'image',
-          content: this.item.CONTENT,
+          content: imageUrl,
         }
 
       } else if (this.item.CONTENT) {
