@@ -10,6 +10,7 @@ export default {
       email: '',
       password: '',
       error: null,
+      progress: false,
     }
   },
 
@@ -29,6 +30,7 @@ export default {
 
     submit () {
       this.error = null
+      this.progress = true
 
       if (this.state === 'login') {
         this.login()
@@ -44,13 +46,18 @@ export default {
       .then(user => console.log('Logged in', user.email))
       .catch((error) => {
         console.error('Logged in faild', error)
+        this.progress = false
+
+        this.$store.commit('setNotification', {
+          id: Math.random().toString(36).slice(-8),
+          status: 'error',
+          message: error.message,
+        })
 
         if (_.includes(['auth/invalid-email', 'auth/user-not-found'], error.code)) {
           this.error = 'email'
         } else if (_.includes(['auth/wrong-password'], error.code)) {
           this.error = 'password'
-        } else {
-          alert('Unknown error! Try again later or contact us help@editlayer.com')
         }
 
       })
@@ -101,11 +108,15 @@ export default {
           })
 
         })
-        .catch(error => console.error('Adding user error', error))
+        .catch(error => {
+          console.error('Adding user error', error)
+          this.progress = false
+        })
 
       })
       .catch(error => {
         console.error('register error', error)
+        this.progress = false
 
         if (_.includes(['auth/invalid-email', 'auth/email-already-in-use'], error.code)) {
           this.error = 'email'
@@ -125,6 +136,7 @@ export default {
       }).catch((error) => {
         this.error = 'email'
         console.error('Reseting faild', error)
+        this.progress = false
       })
 
     },
@@ -151,7 +163,7 @@ export default {
 
 
 <template>
-<section class="auth">
+<section class="auth" :class="{ '-progress': progress}">
 
   <div class="content">
 
@@ -184,7 +196,7 @@ export default {
         </div>
       </label>
 
-      <button class="button" type="submit">
+      <button class="button" :disabled="progress" type="submit">
         <span v-if="state === 'login'">Login</span>
         <span v-if="state === 'register'">Register</span>
         <span v-if="state === 'forget'">Send reset link</span>
@@ -223,6 +235,9 @@ export default {
   justify-content: center
   align-items: center
 
+  &.-progress
+    cursor: progress
+
   .content
     +margin-to-childs()
     text-align: center
@@ -248,6 +263,9 @@ export default {
   .button
     min-width: 50%
     margin-top: 2rem
+
+    &[disabled]
+      cursor: progress
 
   .forget
     font-size: .8rem

@@ -25,6 +25,13 @@ service cloud.firestore {
         		&& request.writeFields[0] == 'published.draft' || request.writeFields[1] == 'published.draft';
       }
 
+      function allowTriggers () {
+      	return isRole(['admin'])
+        		&& request.writeFields.size() == 2
+        		&& request.writeFields[0] == 'trigger.method' || request.writeFields[1] == 'trigger.method'
+        		&& request.writeFields[0] == 'trigger.url' || request.writeFields[1] == 'trigger.url';
+      }
+
       function allowStructure () {
       	return isRole(['admin'])
         		&& request.writeFields.size() == 1
@@ -45,6 +52,7 @@ service cloud.firestore {
 
       allow update: if allowDraft()
       							|| allowPublished()
+      							|| allowTriggers()
                     || allowRoles()
                     || allowStructure();
     }

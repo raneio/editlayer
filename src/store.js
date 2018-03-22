@@ -14,7 +14,6 @@ Vue.use(firebase)
 export default new Vuex.Store({
 
   state: {
-    // storageUrlPrefix: 'https://cdn.editlayer.com/',
     projects: {
       admin: null,
       editor: null,
@@ -24,8 +23,8 @@ export default new Vuex.Store({
       id: null,
       email: null,
     },
+    notifications: {},
     publishProcesses: {},
-    uploadProcesses: {},
   },
 
   getters: {
@@ -94,7 +93,8 @@ export default new Vuex.Store({
         email: null,
       }
       state.publishProcesses = {}
-      state.uploadProcesses = {}
+      // state.uploadProcesses = {}
+      state.notifications = {}
     },
 
     setUser (state, user) {
@@ -113,6 +113,7 @@ export default new Vuex.Store({
           structure: (doc.data().structure) ? doc.data().structure : null,
           draft: (doc.data().draft) ? doc.data().draft : null,
           published: (doc.data().published) ? doc.data().published : null,
+          trigger: (doc.data().trigger) ? doc.data().trigger : null,
         }
       })
 
@@ -127,28 +128,23 @@ export default new Vuex.Store({
       })
     },
 
-    setUploadProcess (state, payload) {
-      console.log('setUploadProcess', state.uploadProcesses, payload.projectId, payload.path)
-      Vue.set(state.uploadProcesses, `${payload.projectId}>${payload.path}`, {
-        projectId: payload.projectId,
-        path: payload.path,
-        filename: payload.filename,
-        blobUrl: payload.blobUrl,
-        percent: 0,
-        status: 'started',
-        message: null,
-      })
-    },
+    setNotification (state, payload) {
+      let currentNotification = {}
 
-    updateUploadProcess (state, payload) {
-      let currentUploadProcess = _.get(state.uploadProcesses, `${payload.projectId}>${payload.path}`)
-      let updatedUploadProcess = _.merge(currentUploadProcess, {
-        percent: payload.percent,
+      if (_.has(state.notifications, payload.id)) {
+        currentNotification = _.get(state.notifications, payload.id)
+      }
+
+      let notification = _.merge(currentNotification, {
         status: payload.status,
         message: payload.message,
+        progress: payload.progress,
+        image: payload.image
       })
 
-      Vue.set(state.uploadProcesses, `${payload.projectId}>${payload.path}`, updatedUploadProcess)
+      console.log('setNotification', notification)
+
+      Vue.set(state.notifications, payload.id, notification)
     },
 
     setPublishProcess (state, payload) {
@@ -167,6 +163,11 @@ export default new Vuex.Store({
       })
 
       Vue.set(state.publishProcesses, payload.projectId, updatedPublishProcess)
+    },
+
+    deleteNotification (state, id) {
+      console.log('deleteNotification', id)
+      Vue.delete(state.notifications, id)
     },
 
   },
@@ -245,10 +246,6 @@ export default new Vuex.Store({
         .set(newProject)
         .then((docRef) => {
           console.log('File added:', projectId)
-
-          // if (payload.redirect !== false) {
-            // router.push({ name: 'Structure', params: { projectId: projectId }})
-          // }
         })
         .catch(error => {
           payload.tries = (!payload.tries) ? 1 : payload.tries + 1
@@ -301,23 +298,19 @@ export default new Vuex.Store({
           publishedAt: firebase.firestoreTimestamp,
           content: payload.content,
           filename: payload.filename,
+          trigger: payload.trigger,
         })
         .then((docRef) => {
           let versionId = docRef.id
-          // this.publish.versionId = versionId
-          console.log('Added version:', versionId)
 
           commit('updatePublishProcess', {
             projectId: payload.projectId,
             versionId: versionId,
-            // status: 'done',
           })
 
-          // _.delay(() => {
-            dispatch('isPublishReady', _.merge(payload, {
-              versionId: versionId,
-            }))
-          // }, 10000)
+          dispatch('isPublishReady', _.merge(payload, {
+            versionId: versionId,
+          }))
         })
         .catch((error) => console.error('Error adding version:', error))
 
@@ -333,52 +326,38 @@ export default new Vuex.Store({
         return false
       }
 
-      let random = Math.random().toString(36).slice(-4)
-
       axios({
         method: 'GET',
         url: `https://cdn.editlayer.com/${payload.projectId}/${payload.filename}.json`,
         responseType: 'json',
       })
       .then((response) => {
+        if (payload.versionId !== response.data.VERSION_ID) throw 'Publishing not ready'
 
-        // console.log('version', payload.versionId, response.data.VERSION_ID)
-
-        if (payload.versionId !== response.data.VERSION_ID) {
-          console.log('Try again', payload.versionCheck)
-          _.delay(() => {
-            dispatch('isPublishReady', payload)
-          }, 1000)
-        } else {
-
-          let publishedData = {
+        return firebase.firestore
+          .collection('projects')
+          .doc(payload.projectId)
+          .update({
             'published.draft': payload.draft,
             'published.structure': payload.structure,
-          }
-
-          firebase.firestore
-            .collection('projects')
-            .doc(payload.projectId)
-            .update(publishedData)
-            .then(() => {
-              // this.publish.running = false
-              commit('updatePublishProcess', {
-                projectId: payload.projectId,
-                status: 'done',
-              })
-              console.log('Published successfully updated!')
-            })
-            .catch((error) => console.error('Publishing failed', error))
-        }
+          })
 
       })
+      .then(() => {
+        console.log('Published successfully updated!')
+
+        commit('updatePublishProcess', {
+          projectId: payload.projectId,
+          status: 'done',
+        })
+      })
       .catch((error) => {
-        // console.error('Getting published JSON failed try again', error.response)
+        console.log('Try again', payload.versionCheck)
+
         _.delay(() => {
           dispatch('isPublishReady', payload)
         }, 1000)
       })
-
     },
 
     async uploadImage ({state, commit, dispatch}, payload) {
@@ -392,12 +371,12 @@ export default new Vuex.Store({
       let randomId = Math.random().toString(36).slice(-5)
       let blobUrl = URL.createObjectURL(payload.image)
 
-      commit('setUploadProcess', {
-        projectId: payload.projectId,
-        path: payload.path,
-        filename: filenameWithoutExt,
-        blobUrl: blobUrl,
-        percent: 0,
+      commit('setNotification', {
+        id: `${payload.projectId}>${payload.path}>upload`,
+        status: 'info',
+        message: filenameWithoutExt,
+        image: blobUrl,
+        progress: 0,
       })
 
       // let dimensions = await new Promise(function(resolve, reject) {
@@ -442,31 +421,33 @@ export default new Vuex.Store({
       }
 
       if (uploadImage.size > 1 * 1024 * 1024) {
-        commit('updateUploadProcess', {
-          projectId: payload.projectId,
-          path: payload.path,
+
+        commit('setNotification', {
+          id: `${payload.projectId}>${payload.path}>upload`,
           status: 'error',
-          message: 'Max image size 1 MB, try another image.'
+          message: 'Max image size 1 MB, try another image.',
+          image: blobUrl,
         })
+
         console.error('Max image size 1 MB, try another image.')
         return false
       }
 
-      let filename = null
+      let filename = `${filenameWithoutExt}-${randomId}`
+
       if (uploadImage.type === 'image/jpeg') {
-        filename = `${filenameWithoutExt}-${randomId}.jpg`
+        filename = `${filename}.jpg`
       } else if (uploadImage.type === 'image/png') {
-        filename = `${filenameWithoutExt}-${randomId}.png`
+        filename = `${filename}.png`
       } else if (uploadImage.type === 'image/gif') {
-        filename = `${filenameWithoutExt}-${randomId}.gif`
+        filename = `${filename}.gif`
       } else if (uploadImage.type === 'image/svg+xml') {
-        filename = `${filenameWithoutExt}-${randomId}.svg`
+        filename = `${filename}.svg`
       } else {
-        commit('updateUploadProcess', {
-          projectId: payload.projectId,
-          path: payload.path,
+        commit('setNotification', {
+          id: `${payload.projectId}>${payload.path}>upload`,
           status: 'error',
-          message: `Unsupported file type. Send jpg, png, gif or svg.`
+          message: `Unsupported file type. Send jpg, png, gif or svg.`,
         })
         console.error('Unsupported file type', uploadImage.type)
         return false
@@ -477,18 +458,15 @@ export default new Vuex.Store({
       uploadTask.on('state_changed', (snapshot) => {
         let percent = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
 
-        commit('updateUploadProcess', {
-          projectId: payload.projectId,
-          path: payload.path,
-          percent: percent,
-          status: 'updating',
+        commit('setNotification', {
+          id: `${payload.projectId}>${payload.path}>upload`,
+          progress: percent,
         })
 
         console.log('Upload is ' + percent + '% done')
       }, (error) => {
-        commit('updateUploadProcess', {
-          projectId: payload.projectId,
-          path: payload.path,
+        commit('setNotification', {
+          id: `${payload.projectId}>${payload.path}>upload`,
           status: 'error',
           message: 'Upload failer, try again later.'
         })
@@ -496,18 +474,8 @@ export default new Vuex.Store({
       }, () => {
         console.log('Uploade done')
 
-        commit('updateUploadProcess', {
-          projectId: payload.projectId,
-          path: payload.path,
-          status: 'uploaded',
-        })
-
         _.delay(() => {
-          commit('updateUploadProcess', {
-            projectId: payload.projectId,
-            path: payload.path,
-            status: 'done',
-          })
+          commit('deleteNotification', `${payload.projectId}>${payload.path}>upload`)
         }, 1000)
 
         dispatch('updateContent', {

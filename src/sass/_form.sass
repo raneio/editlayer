@@ -1,0 +1,38 @@
+.input-group
+  +chain(0)
+
+  > input,
+  > select,
+  > button
+    border-radius: 0
+    border-right: 0
+    width: auto
+
+    &:hover
+      // z-index: 1
+
+      &:last-child
+        border-right: $input-border--hover
+
+      + *
+        border-left: $input-border--hover
+
+    &:focus
+
+      &:last-child
+        border-right: $input-border--focus
+
+      + *
+        border-left: $input-border--focus
+
+    &:first-child
+      border-top-left-radius: $button-border-radius
+      border-bottom-left-radius: $button-border-radius
+
+    &:last-child
+      border-right: $input-border--basic
+      border-top-right-radius: $button-border-radius
+      border-bottom-right-radius: $button-border-radius
+
+  .grow
+    flex-grow: 1

@@ -12,12 +12,14 @@
   "dependencies": {
     "axios": "^0.18.0",
     "backblaze-b2": "^1.0.4",
+    "cors": "^2.8.4",
     "firebase-admin": "~5.8.1",
     "firebase-functions": "^0.8.1",
     "lodash": "^4.17.5",
     "node-sha1": "^1.0.1",
     "request": "^2.83.0",
-    "uuid": "^3.2.1"
+    "uuid": "^3.2.1",
+    "validator": "^9.4.1"
   },
   "devDependencies": {
     "eslint": "^4.12.0",

@@ -237,21 +237,23 @@ export default {
 
     .waves
       position: absolute
+      top: 0
       bottom: 0
       width: 100%
       overflow: hidden
       +chain()
+      align-items: flex-end
 
       .wave
         width: 100%
 
       &.-white .wave
-          height: 3rem
-          animation: wave 16s linear infinite
+          height: 2.5rem
+          animation: wave 27s linear infinite
 
       &.-blue .wave
-          height: 4rem
-          animation: wave 19s linear infinite
+          height: 3.5rem
+          animation: wave 13s linear infinite
 
     @keyframes wave
       0%

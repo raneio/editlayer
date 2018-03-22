@@ -6,6 +6,10 @@ const _ = require('lodash')
 const axios = require('axios')
 const uuid = require('uuid/v4')
 const sha1 = require('node-sha1')
+const cors = require('cors')({origin: true})
+const url = require('url')
+const validator = require('validator')
+
 // const B2 = require('backblaze-b2')
 // const path = require('path')
 // const cors = require('cors')({origin: true})
@@ -24,12 +28,21 @@ const bunnyCdnHeaders = {
 //   applicationKey: '00163b960dd3c1105cdb01d9d1892f0a1d65885d5a'
 // })
 
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
+// Create and Deploy Your First Cloud Functions
+// https://firebase.google.com/docs/functions/write-firebase-functions
 
 // exports.helloWorld = functions.https.onRequest((request, response) => {
-//  response.send("Hello from Firebase!");
-// });
+//   if (request.method !== 'GET' && request.method !== 'POST') {
+//     return response.status(403).send('Forbidden!');
+//   }
+//
+//   return cors(request, response, () => {
+//     response.send({
+//       status: 'OK',
+//       message: 'Test Done',
+//     })
+//   })
+// })
 
 // const purgeJson = (versionId, url, tries = 0) => {
 //   const uncodedUrl = encodeURI(url)
@@ -74,7 +87,7 @@ const bunnyCdnHeaders = {
 //
 // }
 
-exports.uploadJson = functions.firestore.document('projects/{projectId}/versions/{versionId}').onCreate((event) => {
+exports.publishJson = functions.firestore.document('projects/{projectId}/versions/{versionId}').onCreate((event) => {
   const tempFilePath = '/tmp/tempfile.json'
   // const bucket = admin.storage().bucket(bucketName)
   const versionData = event.data.data()
@@ -92,7 +105,6 @@ exports.uploadJson = functions.firestore.document('projects/{projectId}/versions
   return bucket
     .upload(tempFilePath, { destination: destinationPath })
     .then(() => {
-      console.log('JSON upload done')
       const cdnUrl = encodeURI(`https://cdn.editlayer.com/${destinationPath}`)
       const purgeSettings = {
         method: 'POST',
@@ -100,24 +112,41 @@ exports.uploadJson = functions.firestore.document('projects/{projectId}/versions
         headers: bunnyCdnHeaders,
       }
 
-      axios(purgeSettings)
+      return axios(purgeSettings)
 
-      _.delay(() => {
-        axios(purgeSettings)
-      }, 4000)
+      // _.delay(() => {
+      //   axios(purgeSettings)
+      // }, 4000)
 
-      axios(purgeSettings)
-      _.delay(() => {
-        axios(purgeSettings)
-      }, 8000)
+      // _.delay(() => {
+      //   axios(purgeSettings)
+      // }, 8000)
 
-      return true
     })
     .then(() => {
       console.log('JSON publishing done')
+      if (!_.has(versionData, 'trigger.method') || !_.has(versionData, 'trigger.url')) return false
+      if (!validator.isURL(versionData.trigger.url)) return false
+
+      let urlWithoutParams = versionData.trigger.url.split('?').shift()
+      let urlParts = url.parse(versionData.trigger.url, true)
+      let params = urlParts.query
+
+      console.log('Trigger', versionData.trigger.method, urlWithoutParams, params)
+
+      return axios({
+        method: versionData.trigger.method,
+        url: urlWithoutParams,
+        params: params,
+      })
+    })
+    .then((response) => {
+      if (response === false) return true
+
+      console.log('Triggered done', response.data)
       return true
     })
-    .catch((error) => console.error('JSON upload failed', error))
+    .catch((error) => console.error('JSON publishing failed', error.message))
 
 })
 

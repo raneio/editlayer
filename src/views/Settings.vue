@@ -12,6 +12,15 @@ export default {
     Navigation,
   },
 
+  data () {
+    return {
+      trigger: {
+        method: null,
+        url: null,
+      }
+    }
+  },
+
   computed: {
 
     activeProject () {
@@ -25,6 +34,25 @@ export default {
     roles () {
       return this.activeProject.roles
     },
+
+  },
+
+  watch: {
+
+    activeProject () {
+      if (this.activeProject !== null) {
+        this.trigger.method = this.activeProject.trigger.method
+        this.trigger.url = this.activeProject.trigger.url
+      }
+    },
+
+    'trigger.method': function() {
+      this.updateTrigger()
+    },
+
+    'trigger.url': _.debounce(function () {
+      this.updateTrigger()
+    }, 500),
 
   },
 
@@ -72,7 +100,7 @@ export default {
     },
 
     removePermission (payload) {
-      let deleteConfirm = confirm(`You want to remove "${payload.email}". Are you sure?`);
+      let deleteConfirm = confirm(`You want to remove "${payload.email}". Are you sure?`)
 
       if (deleteConfirm === true) {
 
@@ -90,8 +118,21 @@ export default {
 
     },
 
+    updateTrigger (payload) {
+      let updateData = {}
+      updateData['trigger.method'] = this.trigger.method
+      updateData['trigger.url'] = this.trigger.url
+
+      firebase.firestore
+        .collection('projects')
+        .doc(this.activeProject.projectId)
+        .update(updateData)
+        .then(() => console.log('Trigger updated', updateData))
+        .catch((error) => console.error('Trigger updating failed', error))
+    },
+
     deleteProject () {
-      let deleteConfirm = prompt(`Write "${this.activeProject.projectId}" if you really want to delete project permanently.`, '');
+      let deleteConfirm = prompt(`Write "${this.activeProject.projectId}" if you really want to delete project permanently.`, '')
 
       if (deleteConfirm !== null && deleteConfirm !== this.activeProject.projectId) {
         console.error('Project Id is invalid', deleteConfirm)
@@ -114,6 +155,13 @@ export default {
       }
     },
 
+  },
+
+  mounted () {
+    if (this.activeProject !== null) {
+      this.trigger.method = this.activeProject.trigger.method
+      this.trigger.url = this.activeProject.trigger.url
+    }
   },
 
 }
@@ -192,21 +240,28 @@ export default {
       </button>
     </section>
 
-    <!-- <section class="group">
+    <section class="group">
       <h1 class="heading">
         Trigger request after publish
       </h1>
-      <input type="text" name="" value="" placeholder="https://example.com/folder/?foo=bar">
-    </section> -->
+
+      <div class="input-group">
+        <select v-model="trigger.method" class="select-method">
+          <option>GET</option>
+          <option>POST</option>
+        </select>
+        <input class="grow" type="text" v-model="trigger.url" placeholder="https://example.com/folder/?foo=bar">
+      </div>
+    </section>
 
     <section class="group">
       <h1 class="heading">
         Delete project
       </h1>
       <div class="danger">
-        <strong>Caution!</strong> Your project will be deleted permanently and you can’t undo this.
+        Your project will be deleted permanently and you can’t undo this.
       </div>
-      <button class="button -danger" @click="deleteProject()">
+      <button class="button -danger delete-project" @click="deleteProject()">
         Delete Project Permamently
       </button>
     </section>
@@ -265,13 +320,20 @@ export default {
 
 
 .danger
-  // border: 1px solid $color-danger
+  border: 1px solid $color-danger
   // +invert-colors()
   // background-color: $color-danger
-  background-color: mix($color-background, $color-danger, 75%)
+  // background-color: mix($color-background, $color-danger, 75%)
   color: $color-danger
   border-radius: $button-border-radius
   padding: .5rem 1rem
+  font-size: .9rem
+  font-weight: 600
+
+.delete-project
+  font-size: .8rem
+
+.select-method
   font-size: .9rem
 
 </style>

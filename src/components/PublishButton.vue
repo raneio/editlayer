@@ -90,6 +90,7 @@ export default {
         filename: this.activeProject.filename,
         draft: this.activeProject.draft,
         structure: this.activeProject.structure,
+        trigger: this.activeProject.trigger,
       })
 
       // this.publish.running = true
