@@ -131,6 +131,9 @@ exports.publishJson = functions.firestore.document('projects/{projectId}/version
       let urlWithoutParams = versionData.trigger.url.split('?').shift()
       let urlParts = url.parse(versionData.trigger.url, true)
       let params = urlParts.query
+      params.PUBLISHED_AT = versionData.publishedA
+      params.VERSION_ID = event.params.versionId
+      params.JSON_CONTENT = JSON.stringify(jsonFileContent, null, 2)
 
       console.log('Trigger', versionData.trigger.method, urlWithoutParams, params)
 

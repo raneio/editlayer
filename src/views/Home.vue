@@ -11,12 +11,12 @@ export default {
 <section class="home">
 
   <header class="header">
-    <!-- <div class="header-bottom">
+    <div class="header-bottom">
       <img src="../assets/home/header-bottom.svg" alt="">
-    </div> -->
+    </div>
 
     <!-- <div class="wave -blue"></div> -->
-    <div class="waves -blue">
+    <!-- <div class="waves -blue">
       <img class="wave" src="../assets/home/wave-blue.png" alt="">
       <img class="wave" src="../assets/home/wave-blue.png" alt="">
     </div>
@@ -24,7 +24,7 @@ export default {
     <div class="waves -white">
       <img class="wave" src="../assets/home/wave-white.png" alt="">
       <img class="wave" src="../assets/home/wave-white.png" alt="">
-    </div>
+    </div> -->
 
     <nav class="top-nav">
 
@@ -37,8 +37,11 @@ export default {
 
       <!-- <a href="#" class="link">Use Cases</a>
       <a href="#" class="link">Features</a>
+      <a href="#" class="link">How To</a>
       <a href="#" class="link">Pricing</a>
-      <a href="#" class="link">About Us</a> -->
+      <a href="#" class="link">
+        <button class="button">Login</button>
+      </a> -->
       <a href="mailto:editlayer@gmail.com" class="link">editlayer@gmail.com</a>
 
     </nav>
@@ -48,9 +51,9 @@ export default {
       <div class="text-area">
         <h1 class="heading">Edit content<br> with a simple UI</h1>
         <div class="subheading">
-          You can use any kind of<br>JSON data structure
+          Use any kind of JSON data structure
         </div>
-
+        <!-- <button class="button">Start for Free</button> -->
       </div>
 
       <div class="video-area">
@@ -58,7 +61,7 @@ export default {
           <div class="play">
             <img src="../assets/home/icon-play.svg" alt="" class="icon">
           </div>
-          <img src="../assets/home/video-placeholder.png" alt="">
+          <img src="../assets/home/video-placeholder.jpg" alt="">
         </a>
       </div>
 
@@ -102,9 +105,9 @@ export default {
   > .header
     +invert-colors()
     background-color: mix($color-link, $color-active, 50%)
-    background-image: url('../assets/home/header-background.jpg')
+    // background-image: url('../assets/home/header-background.jpg')
     background-size: cover
-    background-image: linear-gradient(90deg, darken($color-light, 20%) 0%, darken($color-light, 10%) 100%)
+    background-image: linear-gradient(90deg, #4F43AD 0%, #796DE3 100%)
     position: relative
     display: flex
     flex-direction: column
@@ -117,8 +120,8 @@ export default {
       padding-bottom: 1rem
       text-align: center
 
-      +for-tablet-portrait
-        +chain(1rem)
+      +for-tablet-landscape
+        +chain(1.5rem)
         padding-bottom: 3rem
 
       .logo
@@ -142,7 +145,7 @@ export default {
         font-weight: 600
         display: none
 
-        +for-tablet-portrait
+        +for-tablet-landscape
           display: block
 
     .content
@@ -150,7 +153,7 @@ export default {
       +container('default', 0)
       position: relative
 
-      +for-tablet-portrait
+      +for-tablet-landscape
         +chain()
 
       .text-area
@@ -159,14 +162,14 @@ export default {
         padding-top: 2rem
         +margin-to-childs()
 
-        +for-tablet-portrait
-          padding-top: 0
-          padding-bottom: 2rem
+        +for-tablet-landscape
+          text-align: left
+          padding-top: 5rem
+          padding-bottom: 9rem
           width: 50%
-          padding-bottom: 4rem
 
         .heading
-          font-size: 3.5rem
+          font-size: 4rem
           // font-style: italic
           font-weight: 900
           letter-spacing: -.075em
@@ -177,25 +180,18 @@ export default {
           // -webkit-text-fill-color: transparent
 
         .subheading
-          font-size: 1.3rem
+          font-size: 1.5rem
           margin-bottom: 1rem
           line-height: 1
           font-style: italic
-          color: $color-content
+          color: #BEBDEF
 
       .video-area
-        align-self: flex-end
-        perspective: 40rem
-        position: relative
-        cursor: not-allowed
         margin-top: 2rem
-        margin-bottom: -1rem
-
-        +for-tablet-portrait
-          width: 50%
+        text-align: center
 
         .video
-          display: block
+          display: inline-block
           transform: rotateY(-5deg)
           border-top: 1rem solid $color-background--invert
           border-bottom: 1rem solid $color-background--invert
@@ -203,10 +199,7 @@ export default {
           box-shadow: 0 .2rem 2rem mix(transparent, $color-background--invert, 50%)
           transition: transform .2s
           background-color: $color-background
-          min-height: 15rem
-
-          +for-tablet-portrait
-            transform: rotateY(-20deg)
+          max-width: 20rem
 
         .play
           height: 8rem
@@ -226,14 +219,26 @@ export default {
             left: 52.5%
             transform: translate(-50%, -50%)
 
-        &:hover
+        +for-tablet-landscape
+          align-self: flex-end
+          perspective: 40rem
+          position: relative
+          cursor: not-allowed
+          margin-bottom: -1rem
+          width: 50%
 
           .video
-            transform: rotateY(-5deg)
+            transform: rotateY(-20deg)
+            max-width: none
 
-          .play
-            transform: translate(-50%, -50%) scale(1.05)
-            background-color: mix(transparent, $color-link, 10%)
+          &:hover
+
+            .video
+              transform: rotateY(-5deg)
+
+            .play
+              transform: translate(-50%, -50%) scale(1.05)
+              background-color: mix(transparent, $color-link, 10%)
 
     .waves
       position: absolute
