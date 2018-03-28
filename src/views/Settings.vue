@@ -227,7 +227,7 @@ export default {
               email: role.email,
             })"
             >
-              <img src="../assets/icon-delete.svg" alt="">
+              <img src="@/assets/icon-delete.svg" alt="">
           </button>
         </li>
       </ul>
@@ -321,9 +321,6 @@ export default {
 
 .danger
   border: 1px solid $color-danger
-  // +invert-colors()
-  // background-color: $color-danger
-  // background-color: mix($color-background, $color-danger, 75%)
   color: $color-danger
   border-radius: $button-border-radius
   padding: .5rem 1rem

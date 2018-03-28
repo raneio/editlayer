@@ -114,7 +114,7 @@ echo '[]' > cors-config.json
     <img class="image" :src="preview.content" alt="" v-if="preview.content !== null">
   </div>
 
-  <img class="icon" src="../assets/icon-forward.svg" alt="" v-if="isParent || isFile">
+  <img class="icon" src="@/assets/icon-forward.svg" alt="" v-if="isParent || isFile">
 
   <!-- <div
     class="preview -text"

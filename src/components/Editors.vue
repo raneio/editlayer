@@ -1,8 +1,8 @@
 <script>
 import _ from 'lodash'
-import EditorText from '@/components/EditorText'
-import EditorTextarea from '@/components/EditorTextarea'
-import EditorImage from '@/components/EditorImage'
+import EditorText from '@/components/editors/EditorText'
+import EditorTextarea from '@/components/editors/EditorTextarea'
+import EditorImage from '@/components/editors/EditorImage'
 
 export default {
   name: 'Editors',
@@ -58,7 +58,7 @@ export default {
   </h1>
 
   <div class="info" v-if="activeStructure.INFO">
-    <img src="../assets/icon-info.svg" alt="" class="icon">
+    <img src="@/assets/icon-info.svg" alt="" class="icon">
     <div v-text="activeStructure.INFO"></div>
   </div>
 

@@ -9,10 +9,6 @@ export default {
 
   computed: {
 
-    // files () {
-    //   return this.$store.getters.projects
-    // },
-
     activeProject () {
       return this.$store.getters.activeProject
     },
@@ -79,24 +75,9 @@ export default {
         ]
       }
 
-      // if (this.projects.length > 1) {
-      //   breadcrumb.unshift({
-      //     name: 'Home',
-      //   })
-      // }
-
 
       return breadcrumb
     },
-
-    // showBreadcrumb () {
-    //   return true
-    //   if (this.breadcrumb.length === 1 && !_.find(this.navItems, { type: 'object' })) {
-    //     return false
-    //   } else {
-    //     return true
-    //   }
-    // },
 
   },
 
@@ -109,13 +90,6 @@ export default {
 
       return titleCase(text)
     },
-
-    // goBack () {
-    //   let backItem = this.breadcrumb[this.breadcrumb.length-2]
-    //   if (backItem) {
-    //     this.selectItem(backItem)
-    //   }
-    // },
 
     selectItem (item) {
       let path = _.replace(item.path, /\./g, '>')
@@ -145,7 +119,8 @@ export default {
           } else if (item.projectId) {
             this.$router.push({ name: routeName, params: { projectId: item.projectId }})
           } else {
-            this.$router.push({ name: routeName })
+            let view = (this.$route.name === 'Structure') ? 'structure' : null
+            this.$router.push({ name: 'Dashboard', params: { view: view } })
           }
         },
       })
@@ -168,18 +143,16 @@ export default {
 <section class="breadcrumb">
 
   <div class="crumb" v-if="!$route.params.projectId">
-    <img src="../assets/icon-home-disabled.svg" alt="">
-    <!-- <div>DASHBOARD</div> -->
+    <img src="@/assets/icon-home-disabled.svg" alt="">
   </div>
 
   <a @click="selectItem({})" class="crumb button -link" v-if="$route.params.projectId">
-    <img src="../assets/icon-home.svg" alt="">
-    <!-- <div>DASHBOARD</div> -->
+    <img src="@/assets/icon-home.svg" alt="">
   </a>
 
   <div v-for="(item, idx) in breadcrumb" class="crumb">
 
-    <img src="../assets/icon-crumb.svg" alt="">
+    <img src="@/assets/icon-crumb.svg" alt="">
 
     <button
       class="button -link"
@@ -203,8 +176,6 @@ export default {
 .breadcrumb
   +chain(.75rem)
   transition: opacity .2s
-  // padding-left: .5rem
-  // padding-right: .5rem
   padding-bottom: .25rem
   font-size: .9rem
   border-bottom: 1px solid $color-hr
@@ -220,17 +191,5 @@ export default {
 
     &[disabled]
       cursor: default
-
-  // .crumb + .crumb
-    // padding-left: 1.5em
-    // position: relative
-    //
-    // &::after
-    //   content: '>'
-    //   position: absolute
-    //   top: 50%
-    //   left: .5em
-    //   transform: translateY(-50%)
-    //   color: mix(transparent, $color-content--invert, 50%)
 
 </style>

@@ -1,4 +1,33 @@
 //
+// Fonts
+// --------------------------------------------------
+// You can add new fonts and change font names
+
+$font-primary: 'Source Sans Pro', sans-serif !default
+$font-secondary: 'Source Sans Pro', sans-serif !default
+
+
+//
+// Colors
+// --------------------------------------------------
+// You can add new colors and change color names
+
+$color-background: #ffffff !default
+$color-content: #000000 !default
+$color-primary: #4F47AB !default
+$color-secondary: #1D7CE2 !default
+$color-tertiary: #FECF65 !default
+
+
+// invert
+$color-background--invert: #000000 !default
+$color-content--invert: #ffffff !default
+$color-primary--invert: $color-primary !default
+$color-secondary--invert: $color-secondary !default
+$color-tertiary--invert: $color-tertiary !default
+
+
+//
 // Responsive
 // --------------------------------------------------
 // $rem is font size and others is relative to it
@@ -25,37 +54,11 @@ $container-vertical-padding: 6rem !default
 
 
 //
-// Fonts
-// --------------------------------------------------
-
-$font-content: 'Source Sans Pro', sans-serif !default
-$font-heading: 'Source Sans Pro', sans-serif !default
-
-
-//
-// Colors
-// --------------------------------------------------
-
-$color-background: #ffffff !default
-$color-content: #000000 !default
-$color-primary: #23B638 !default
-$color-secondary: #17C671 !default
-$color-tertiary: #74B5E5 !default
-
-
-// invert
-$color-background--invert: #000000 !default
-$color-content--invert: #ffffff !default
-$color-primary--invert: $color-primary !default
-$color-secondary--invert: $color-secondary !default
-$color-tertiary--invert: $color-tertiary !default
-
-
-//
 // Content
 // --------------------------------------------------
 
-$content-font-color: $color-content !default
+$content-font-color: $font-secondary !default
+$content-font-family: $font-secondary !default
 $content-font-line-height: 1.5 !default
 $content-font-weight: 300 !default
 
@@ -68,7 +71,8 @@ $content-font-weight--invert: 400 !default
 // Heading
 // --------------------------------------------------
 
-$heading-font-color: $content-font-color !default
+$heading-font-color: $font-primary !default
+$heading-font-family: $font-heading !default
 $heading-font-size: 1.7rem !default
 $heading-font-weight: 400 !default
 
@@ -101,7 +105,7 @@ $link-font-color--activ-invert: mix($color-content--invert, $link-font-color--ba
 // --------------------------------------------------
 
 $button-border-radius: .2em !default
-$button-font-family: $font-content !default
+$button-font-family: $font-secondary !default
 $button-font-size: 1em !default
 $button-font-weight: 500 !default
 $button-padding: 1em 2em !default
@@ -118,31 +122,18 @@ $button-font-color--basic: $color-background !default
 $button-font-color--hover: $color-background !default
 $button-font-color--activ: $color-background !default
 
-// invert
-$button-background--basic-invert: $color-primary--invert !default
-$button-background--hover-invert: mix($color-background--invert, $color-primary--invert, 10%) !default
-$button-background--activ-invert: mix($color-background--invert, $color-primary--invert, 20%) !default
-
-$button-border--basic-invert: 1px solid $color-primary--invert !default
-$button-border--hover-invert: 1px solid mix($color-background--invert, $color-primary--invert, 10%) !default
-$button-border--activ-invert: 1px solid mix($color-background--invert, $color-primary--invert, 20%) !default
-
-$button-font-color--basic-invert: $color-background--invert !default
-$button-font-color--hover-invert: $color-background--invert !default
-$button-font-color--activ-invert: $color-background--invert !default
-
 
 //
 // Inputs
 // --------------------------------------------------
 
-$input-color-background: $color-background !default
-$input-color-border: mix($color-content, $color-background, 50%) !default
-$input-color-content: $color-content !default
-$input-color-highlight: $color-primary !default
+// $input-color-background: $color-background !default
+// $input-color-border: mix($color-content, $color-background, 50%) !default
+// $input-color-content: $color-content !default
+// $input-color-highlight: $color-primary !default
 
 $input-border-radius: 0 !default
-$input-font-family: $font-content !default
+$input-font-family: $font-secondary !default
 $input-font-size: 1rem !default
 $input-font-weight: 400 !default
 $input-padding: .5em .7em !default
@@ -160,9 +151,6 @@ $input-border--focus: 1px solid $input-color-highlight !default
 $input-font-color--basic: $input-color-content !default
 $input-font-color--hover: $input-color-content !default
 $input-font-color--focus: $input-color-content !default
-
-// invert
-// TODO Add invert colors to inputs
 
 
 //

@@ -1,4 +1,38 @@
 //
+// Fonts
+// --------------------------------------------------
+// You can add new fonts and change font names
+
+
+$font-primary: 'Open Sans', sans-serif !default
+$font-secondary: 'Open Sans', sans-serif !default
+
+
+//
+// Colors
+// --------------------------------------------------
+// You can add new colors and change color names
+
+$color-active: #4F47AB
+$color-background: #FFFFFF
+$color-content: #1B1E2B
+$color-danger: #F75F61
+$color-disabled: #82879e
+$color-draft: #FECF65
+$color-hr: #E9EAF0
+$color-info: #A5D0F5
+$color-light: #FAFAFC
+$color-link: #1D7CE2
+$color-navigation: #3B3C6E
+$color-new: #1BCC83
+$color-button: #17B4FA
+
+// invert
+$color-background--invert: #1B1E27
+$color-content--invert: #FFFFFF
+
+
+//
 // Responsive
 // --------------------------------------------------
 // $rem is font size and others is relative to it
@@ -25,40 +59,11 @@ $container-vertical-padding: 6rem
 
 
 //
-// Fonts
-// --------------------------------------------------
-
-$font-content: 'Open Sans', sans-serif
-$font-heading: 'Open Sans', sans-serif
-
-
-//
-// Colors
-// --------------------------------------------------
-
-$color-active: #9151A8
-$color-background: #ffffff
-$color-content: #32325D
-$color-danger: #DF6389
-$color-disabled: #6A7C92
-$color-draft: #F6C06C
-$color-hr: #EDF2F7
-$color-info: #88BBF9
-$color-light: #F6F9FC
-$color-link: #6667C4
-$color-navigation: #3B3C71
-$color-new: #4CB2AC
-
-// invert
-$color-background--invert: #1B1E27
-$color-content--invert: #FFFFFF
-
-
-//
 // Content
 // --------------------------------------------------
 
 $content-font-color: $color-content
+$content-font-family: $font-secondary !default
 $content-font-line-height: 1.5
 $content-font-weight: 400
 
@@ -72,6 +77,7 @@ $content-font-weight--invert: 400
 // --------------------------------------------------
 
 $heading-font-color: $color-content
+$heading-font-family: $font-primary !default
 $heading-font-size: 1rem
 $heading-font-weight: 600
 
@@ -103,14 +109,14 @@ $link-font-color--activ-invert: mix($color-content--invert, $link-font-color--ba
 // --------------------------------------------------
 
 $button-border-radius: .3em
-$button-font-family: $font-content
+$button-font-family: $font-secondary
 $button-font-size: 1em
 $button-font-weight: 700
 $button-padding: .75em 1.5em
 
-$button-background--basic: $color-link
-$button-background--hover: mix(white, $color-link, 10%)
-$button-background--activ: mix($color-active, $color-link, 30%)
+$button-background--basic: $color-button
+$button-background--hover: mix(white, $color-button, 10%)
+$button-background--activ: mix($color-active, $color-button, 30%)
 
 $button-border--basic: none
 $button-border--hover: none
@@ -126,7 +132,7 @@ $button-font-color--activ: $color-background
 // --------------------------------------------------
 
 $input-border-radius: $button-border-radius
-$input-font-family: $font-content
+$input-font-family: $font-secondary
 $input-font-size: 1rem
 $input-font-weight: 400
 $input-padding: 1.2em 1em

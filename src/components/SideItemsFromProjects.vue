@@ -1,17 +1,17 @@
 <script>
 import _ from 'lodash'
 import anime from 'animejs'
-import Item from '@/components/Item'
+import SideItem from '@/components/SideItem'
 
 export default {
-  name: 'ItemsFromProjects',
+  name: 'SideItemsFromProjects',
 
   props: {
     selectItem: Function,
   },
 
   components: {
-    Item,
+    SideItem,
   },
 
   computed: {
@@ -35,17 +35,13 @@ export default {
 
   methods: {
 
-    // selectItem (item) {
-    //   this.$router.push({ name: this.$route.name, params: { projectId: item.FILE_ID }})
-    // },
-
     newProject () {
       let name = prompt('Name', 'Project');
 
       if (name != null && name != '') {
-          this.$store.dispatch('newProject', {
-            name: name,
-          })
+        this.$store.dispatch('newProject', {
+          name: name,
+        })
       }
     },
 
@@ -59,9 +55,11 @@ export default {
 <section class="projects items">
 
   <header class='header'>
-    <a href="/">
+    <!-- <router-link :to="{ name: 'Editlayer.com'}">
       <h1 class="heading -logo">Editlayer</h1>
-    </a>
+    </router-link> -->
+
+    <div></div>
 
     <button class="button -link -new" @click="newProject()">
       + New Project
@@ -78,7 +76,7 @@ export default {
 
   <div class="items">
 
-    <Item
+    <SideItem
       v-for="item in items"
       :item="item"
       :selectItem="selectItem"

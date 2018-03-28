@@ -1,5 +1,5 @@
 <script>
-import firebase from '../firebase'
+import firebase from '@/firebase'
 
 export default {
   name: 'Auth',
@@ -226,7 +226,7 @@ export default {
 </template>
 
 <style lang="sass" scoped>
-@import '../sass/features'
+@import './sass/features'
 
 .auth
   height: 100vh

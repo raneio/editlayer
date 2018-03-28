@@ -16,10 +16,6 @@ export default {
 
   computed: {
 
-    // structure () {
-    //   return this.$store.getters.structure
-    // },
-
     activeProject () {
       return this.$store.getters.activeProject
     },
@@ -28,54 +24,31 @@ export default {
       return this.$store.getters.activeRole
     },
 
-    // jsonStorage () {
-    //   if (!this.activeProject) return false
-    //   return `https://editlayer.storage.googleapis.com/${this.$route.params.projectId}/${this.activeProject.filename}`
-    // },
-
     jsonUrl () {
       if (!this.activeProject) return false
       return `https://cdn.editlayer.com/${this.$route.params.projectId}/${this.activeProject.filename}.json`
     },
-
-    // jsonImgix () {
-    //   if (!this.activeProject) return false
-    //   return `https://editlayer.imgix.net/${this.$route.params.projectId}/${this.activeProject.filename}.json`
-    // },
 
     jsonTarget () {
       if (!this.activeProject) return false
       return this.activeProject.projectId
     },
 
-    // isDraft () {
-    //   if (!this.activeProject) return false
-    //   if (!this.activeProject.published) return true
-    //   return !_.isEqual(this.activeProject.draft, this.activeProject.published.draft) || this.activeProject.structure !== this.activeProject.published.structure
-    // },
-
     neverPublished () {
       if (!this.activeProject) return false
       return this.activeProject.published === null
     },
-
-    // publishStatus () {
-    //   if (this.publish.running === true) {
-    //     return 'publishing'
-    //   } else if (this.isDraft === true) {
-    //     return 'publish'
-    //   } else {
-    //     return 'published'
-    //   }
-    // },
 
   },
 
   methods: {
 
     logout () {
-      firebase.auth.signOut()
-      this.$router.replace({ name: 'home' })
+      firebase.auth.signOut().then(() => {
+        window.location.href = 'https://editlayer.com'
+      }).catch((error) => {
+        console.error('Logout failed', error)
+      })
     },
 
   },
@@ -95,7 +68,7 @@ export default {
     :class="{ '-active': $route.name === 'Content' }"
     :to="{ name: 'Content', params: { projectId: $route.params.projectId, path: $route.params.path }}"
   >
-    <img class="icon" src="../assets/icon-edit.svg" alt="">
+    <img class="icon" src="@/assets/icon-edit.svg" alt="">
     Content
   </router-link>
 
@@ -105,7 +78,7 @@ export default {
     :class="{ '-active': $route.name === 'Structure' }"
     :to="{ name: 'Structure', params: { projectId: $route.params.projectId, path: $route.params.path }}"
   >
-    <img class="icon" src="../assets/icon-structure.svg" alt="">
+    <img class="icon" src="@/assets/icon-structure.svg" alt="">
     Structure
   </router-link>
 
@@ -115,7 +88,7 @@ export default {
     :class="{ '-active': $route.name === 'Settings' }"
     :to="{ name: 'Settings', params: { projectId: this.$route.params.projectId, path: this.$route.params.path }}"
   >
-    <img class="icon" src="../assets/icon-settings.svg" alt="">
+    <img class="icon" src="@/assets/icon-settings.svg" alt="">
     Settings
   </router-link>
 
@@ -126,14 +99,14 @@ export default {
     :href="jsonUrl"
     :target="jsonTarget"
   >
-    <img class="icon" src="../assets/icon-link.svg" alt="">
+    <img class="icon" src="@/assets/icon-link.svg" alt="">
     JSON File
   </a>
 
   <div class="spacer"></div>
 
   <div class="item" @click="logout()">
-    <img class="icon" src="../assets/icon-account.svg" alt="">
+    <img class="icon" src="@/assets/icon-account.svg" alt="">
     Logout
   </div>
 </nav>
@@ -148,7 +121,6 @@ export default {
   display: flex
   flex-direction: column
   background-color: $color-navigation
-  // padding-top: .5rem
   padding-bottom: .5rem
   overflow-y: auto
 

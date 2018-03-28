@@ -1,19 +1,19 @@
 <script>
 import _ from 'lodash'
 import firebase from '@/firebase'
-import Item from '@/components/Item'
+import SideItem from '@/components/SideItem'
 import BackButton from '@/components/BackButton'
 
 
 export default {
-  name: 'ItemsFromArray',
+  name: 'SideItemsFromArray',
 
   props: {
     selectItem: Function,
   },
 
   components: {
-    Item,
+    SideItem,
     BackButton,
   },
 
@@ -277,7 +277,7 @@ export default {
       @click="moveCancel(arrayItem)"
     >
 
-      <Item
+      <SideItem
         v-for="item in arrayItem"
         v-if="typeof item === 'object'"
         :item="item"

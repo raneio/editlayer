@@ -1,5 +1,6 @@
 <script>
-import Auth from '@/views/Auth'
+import _ from 'lodash'
+import Auth from '@/Auth'
 import Notifications from '@/components/Notifications'
 
 export default {
@@ -19,8 +20,8 @@ export default {
 
 <template>
 <div id="app">
-  <Auth v-if="$store.state.user.isLoggedIn === false && $route.name !== 'home'"/>
-  <router-view v-else/>
+  <Auth v-if="$store.state.user.isLoggedIn === false"/>
+  <router-view v-if="$store.state.user.isLoggedIn === true"/>
   <Notifications/>
 </div>
 </template>

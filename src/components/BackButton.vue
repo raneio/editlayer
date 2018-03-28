@@ -99,6 +99,8 @@ export default {
     selectItem (item) {
       let path = _.replace(item.path, /\./g, '>')
 
+      console.log('Back selectItem', this.$route.name, item.projectId, path)
+
       anime.timeline()
       .add({
         targets: '.side-panel > .content',
@@ -117,7 +119,8 @@ export default {
           } else if (item.projectId) {
             this.$router.push({ name: this.$route.name, params: { projectId: item.projectId }})
           } else {
-            this.$router.push({ name: this.$route.name })
+            let view = (this.$route.name === 'Structure') ? 'structure' : null
+            this.$router.push({ name: 'Dashboard', params: { view: view } })
           }
         },
       })
@@ -143,7 +146,7 @@ export default {
   class="button -link"
   @click.prevent="goBack()"
 >
-  <img class="icon" src="../assets/icon-back.svg" alt="">
+  <img class="icon" src="@/assets/icon-back.svg" alt="">
   <div>Back</div>
 </button>
 </template>

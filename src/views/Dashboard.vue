@@ -3,17 +3,21 @@ import _ from 'lodash'
 import Navigation from '@/components/Navigation'
 import SidePanel from '@/components/SidePanel'
 import Breadcrumb from '@/components/Breadcrumb'
-import StructureEditor from '@/components/StructureEditor'
 
 
 export default {
-  name: 'Structure',
+  name: 'Dashboard',
 
   components: {
     Navigation,
     SidePanel,
     Breadcrumb,
-    StructureEditor,
+  },
+
+  mounted () {
+    if (this.$route.params.view && this.$route.params.view !== 'structure') {
+      this.$router.push({ name: 'Content', params: { projectId: this.$route.params.view } })
+    }
   },
 
 }
@@ -27,7 +31,9 @@ export default {
 
   <main class="main-content">
     <Breadcrumb/>
-    <StructureEditor v-if="$route.params.projectId"/>
+    <h1 class="heading">
+      Dashboard
+    </h1>
   </main>
 </section>
 </template>
@@ -39,5 +45,9 @@ export default {
 .main-content
   overflow-y: auto
   padding: .25rem 2.5rem 2.5rem
+  +margin-to-childs(2rem)
+
+  img
+    width: 20rem
 
 </style>

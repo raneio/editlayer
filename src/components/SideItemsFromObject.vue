@@ -1,18 +1,18 @@
 <script>
 import _ from 'lodash'
-import Item from '@/components/Item'
+import SideItem from '@/components/SideItem'
 import BackButton from '@/components/BackButton'
 
 
 export default {
-  name: 'ItemsFromObject',
+  name: 'SideItemsFromObject',
 
   props: {
     selectItem: Function,
   },
 
   components: {
-    Item,
+    SideItem,
     BackButton,
   },
 
@@ -118,7 +118,7 @@ export default {
     <BackButton/>
   </header>
 
-  <Item
+  <SideItem
     v-for="item in items"
     :item="item"
     :selectItem="selectItem"

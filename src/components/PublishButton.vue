@@ -8,17 +8,6 @@ import Breadcrumb from '@/components/Breadcrumb'
 export default {
   name: 'PublishButton',
 
-  // data () {
-  //   return {
-  //     publish: {
-  //       running: false,
-  //       versionId: null,
-  //       structure: null,
-  //       draft: null,
-  //     },
-  //   }
-  // },
-
   components: {
     Breadcrumb,
   },
@@ -92,73 +81,7 @@ export default {
         structure: this.activeProject.structure,
         trigger: this.activeProject.trigger,
       })
-
-      // this.publish.running = true
-      // this.publish.draft = this.activeProject.draft
-      // this.publish.structure = this.activeProject.structure
-
-      // firebase.firestore.collection('projects').doc(this.projectId).collection('versions').add({
-      //   publishedBy: this.$store.state.user.id,
-      //   publishedAt: firebase.firestoreTimestamp,
-      //   content: content,
-      //   filename: this.activeProject.filename,
-      //   // downloadToken: payload.downloadToken,
-      // })
-      // .then((docRef) => {
-      //   let versionId = docRef.id
-      //   this.publish.versionId = versionId
-      //   console.log('Added version:', versionId)
-      //   this.isPublishReady()
-      // })
-      // .catch((error) => console.error('Error adding version:', error))
-
     },
-
-    // isPublishReady (publishTries = 0) {
-    //   publishTries = publishTries + 1
-    //
-    //   if (publishTries > 30) {
-    //     console.error('Publishing failed, try again.')
-    //     this.publish.running = false
-    //     return false
-    //   }
-    //
-    //   let random = Math.random().toString(36).slice(-4)
-    //
-    //   axios({
-    //     url: `${this.$store.state.storageUrlPrefix}${this.projectId}/${this.activeProject.filename}.json?${random}`,
-    //     responseType: 'json',
-    //   })
-    //   .then((response) => {
-    //
-    //     if (this.publish.versionId !== response.data.VERSION_ID) {
-    //       console.log('Try again', publishTries)
-    //       _.delay(() => {
-    //         this.isPublishReady(publishTries)
-    //       }, publishTries * 1000)
-    //     } else {
-    //       let publishedData = {
-    //         'published.draft': this.publish.draft,
-    //         'published.structure': this.publish.structure,
-    //       }
-    //
-    //       firebase.firestore.collection('projects').doc(this.projectId).update(publishedData)
-    //       .then(() => {
-    //         this.publish.running = false
-    //         console.log('Published successfully updated!')
-    //       })
-    //       .catch((error) => console.error('Publishing failed', error))
-    //     }
-    //
-    //   })
-    //   .catch((error) => {
-    //     // console.error('Getting published JSON failed try again', error.response)
-    //     _.delay(() => {
-    //       this.isPublishReady(publishTries)
-    //     }, 1000)
-    //   })
-    //
-    // },
 
   },
 
@@ -173,7 +96,7 @@ export default {
     v-if="$route.params.projectId && publishStatus === 'published'"
     class="item -published -disabled"
   >
-      <img class="icon" src="../assets/icon-published.svg" alt="">
+      <img class="icon" src="@/assets/icon-published.svg" alt="">
       Published
   </div>
 
@@ -182,7 +105,7 @@ export default {
     class="item -publish"
     @click="publishJson()"
   >
-      <img class="icon" src="../assets/icon-publish.svg" alt="">
+      <img class="icon" src="@/assets/icon-publish.svg" alt="">
       Publish
   </div>
 
@@ -190,7 +113,7 @@ export default {
     v-if="$route.params.projectId && publishStatus === 'publishing'"
     class="item -publishing -disabled"
   >
-      <img class="icon" src="../assets/icon-publishing.svg" alt="">
+      <img class="icon" src="@/assets/icon-publishing.svg" alt="">
       Publishing
   </div>
 

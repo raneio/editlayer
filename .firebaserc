@@ -1,6 +1,5 @@
 {
   "projects": {
-    "default": "editlayerapp",
-    "dev": "editlayerapp"
+    "default": "editlayerapp"
   }
 }

@@ -1,17 +1,17 @@
 <script>
 import _ from 'lodash'
 import anime from 'animejs'
-import ItemsFromProjects from '@/components/ItemsFromProjects'
-import ItemsFromObject from '@/components/ItemsFromObject'
-import ItemsFromArray from '@/components/ItemsFromArray'
+import SideItemsFromProjects from '@/components/SideItemsFromProjects'
+import SideItemsFromObject from '@/components/SideItemsFromObject'
+import SideItemsFromArray from '@/components/SideItemsFromArray'
 
 export default {
   name: 'SidePanel',
 
   components: {
-    ItemsFromProjects,
-    ItemsFromObject,
-    ItemsFromArray,
+    SideItemsFromProjects,
+    SideItemsFromObject,
+    SideItemsFromArray,
   },
 
   computed: {
@@ -70,6 +70,10 @@ export default {
       if (item.TYPE === 'value') {
         this.$router.push({ name: routeName, params: { projectId: projectId, path: path }})
         return false
+      }
+
+      if (routeName === 'Dashboard') {
+        routeName = (this.$route.params.view === 'structure') ? 'Structure' : 'Content'
       }
 
       anime.timeline()
@@ -155,9 +159,9 @@ export default {
 <aside class="side-panel">
   <div class="content">
 
-    <ItemsFromProjects :selectItem="selectItem" v-if="activeType === 'project'"/>
-    <ItemsFromObject :selectItem="selectItem" v-if="activeType === 'object'"/>
-    <ItemsFromArray :selectItem="selectItem" v-if="activeType === 'array'"/>
+    <SideItemsFromProjects :selectItem="selectItem" v-if="activeType === 'project'"/>
+    <SideItemsFromObject :selectItem="selectItem" v-if="activeType === 'object'"/>
+    <SideItemsFromArray :selectItem="selectItem" v-if="activeType === 'array'"/>
 
   </div>
 </aside>

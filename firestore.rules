@@ -48,7 +48,15 @@ service cloud.firestore {
 
       allow create: if request.auth != null
       							&& request.resource.data.roles[request.auth.uid].role == 'admin'
-      							&& request.resource.data.roles[request.auth.uid].email == request.auth.token.email;
+      							&& request.resource.data.roles[request.auth.uid].email == request.auth.token.email
+                    && projectId != 'index'
+                    && projectId != 'edit'
+      							&& projectId != 'content'
+      							&& projectId != 'structure'
+      							&& projectId != 'settings'
+      							&& projectId != '1-simple-example'
+      							&& projectId != '2-advanced-example'
+      							&& projectId != 'project';
 
       allow update: if allowDraft()
       							|| allowPublished()

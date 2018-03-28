@@ -86,15 +86,13 @@ export default new Vuex.Store({
   mutations: {
 
     resetAll (state) {
-      state.project = null
-      state.user = {
-        isLoggedIn: false,
-        id: null,
-        email: null,
-      }
-      state.publishProcesses = {}
-      // state.uploadProcesses = {}
+      state.projects.admin = null
+      state.projects.editor = null
+      state.user.isLoggedIn = false
+      state.user.id = null
+      state.user.email = null
       state.notifications = {}
+      state.publishProcesses = {}
     },
 
     setUser (state, user) {
