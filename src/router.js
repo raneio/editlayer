@@ -14,27 +14,27 @@ export default new Router({
     {
       name: 'Dashboard',
       path: '/',
-      component: Dashboard,
+      component: Dashboard
     },
     {
       name: 'Structure',
       path: '/:projectId/structure/:path?',
-      component: Structure,
+      component: Structure
     },
     {
       name: 'Settings',
       path: '/:projectId/settings/:path?',
-      component: Settings,
+      component: Settings
     },
     {
       name: 'Content',
       path: '/:projectId/:path?',
-      component: Content,
+      component: Content
     },
     {
       path: '*',
       redirect: { name: 'Dashboard' }
-    },
+    }
     // {
     //   path: '/:projectId',
     //   redirect: to => {

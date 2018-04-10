@@ -1,12 +1,12 @@
+import _ from 'lodash'
 import titleCase from 'title-case'
 
 const simpleToAdvance = (structure) => {
   _.each(structure, (value, key) => {
     if (!_.includes(['EDITOR', 'CONTENT', 'PATH', 'NAME', 'DEFAULT', 'TYPE', 'INFO', 'CONFIG'], key)) {
-
       if (_.isArray(value)) {
         structure[key] = {
-          ARRAY: value[0],
+          ARRAY: value[0]
         }
 
         if (_.has(value[0], 'NAME')) {
@@ -18,7 +18,7 @@ const simpleToAdvance = (structure) => {
 
       if (_.isString(value)) {
         structure[key] = {
-          EDITOR: value,
+          EDITOR: value
         }
       }
     }
@@ -60,7 +60,6 @@ const addArraysAndPaths = (structure, draft, parentPath = false) => {
 const addData = (structure, draft) => {
   _.each(structure, (value, key) => {
     if (_.isPlainObject(value) && !_.includes(['ARRAY', 'CONFIG'], key)) {
-
       if (!_.has(value, 'NAME')) {
         value.NAME = titleCase(key)
       }
@@ -76,13 +75,11 @@ const addData = (structure, draft) => {
       if (_.has(value, 'EDITOR')) {
         let content = _.get(draft, value.PATH)
 
-
         // console.log('content', value.NAME, content !== null, content !== undefined)
 
         if (content !== null && content !== undefined) {
           value.CONTENT = content
         } else if (_.has(value, 'DEFAULT')) {
-
           value.CONTENT = value.DEFAULT
         } else {
           value.CONTENT = null
@@ -97,11 +94,9 @@ const addData = (structure, draft) => {
 }
 
 export default (structure, draft) => {
-
   structure = simpleToAdvance(structure)
   structure = addArraysAndPaths(structure, draft)
   structure = addData(structure, draft)
 
   return structure
-
 }

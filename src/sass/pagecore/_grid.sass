@@ -13,6 +13,7 @@
 
   @if type-of($columns) == number and unitless($columns)
     display: flex
+    flex-wrap: wrap
 
     > *
       width: 100% / $columns

@@ -11,9 +11,9 @@ export default {
     image: String,
     deleteTime: {
       type: Number,
-      default: 10,
+      default: 10
     },
-    id: String,
+    id: String
   },
 
   computed: {
@@ -32,7 +32,7 @@ export default {
           this.close()
         }, 1000)
       }
-    },
+    }
 
   },
 
@@ -41,12 +41,11 @@ export default {
     close () {
       console.log('close', this.id)
       this.$store.commit('deleteNotification', this.id)
-    },
+    }
 
   },
 
   created () {
-
     if (this.progress === undefined && this.deleteTime !== false) {
       console.log('created', this.id)
       _.delay(() => {
@@ -54,12 +53,10 @@ export default {
         this.close()
       }, this.deleteTime * 1000)
     }
-
-  },
+  }
 
 }
 </script>
-
 
 <template>
 <div
@@ -85,7 +82,6 @@ export default {
 
 </div>
 </template>
-
 
 <style lang="sass" scoped>
 @import '../sass/features'
@@ -155,6 +151,5 @@ export default {
     .message
       font-weight: 600
       color: $color-danger
-
 
 </style>

@@ -1,17 +1,16 @@
 <script>
 import _ from 'lodash'
-import anime from 'animejs'
 import SideItem from '@/components/SideItem'
 
 export default {
   name: 'SideItemsFromProjects',
 
   props: {
-    selectItem: Function,
+    selectItem: Function
   },
 
   components: {
-    SideItem,
+    SideItem
   },
 
   computed: {
@@ -26,30 +25,29 @@ export default {
           NAME: file.name,
           FILE_ID: file.projectId,
           TYPE: 'file',
-          STATUS: (file.published && _.isEqual(file.draft, file.published.draft) && file.structure === file.published.structure) ? 'published' : 'draft',
+          STATUS: (file.published && _.isEqual(file.draft, file.published.draft) && file.structure === file.published.structure) ? 'published' : 'draft'
         }
       })
-    },
+    }
 
   },
 
   methods: {
 
     newProject () {
-      let name = prompt('Name', 'Project');
+      let name = prompt('Name', 'Project')
 
-      if (name != null && name != '') {
+      if (name !== null && name !== '') {
         this.$store.dispatch('newProject', {
-          name: name,
+          name: name
         })
       }
-    },
+    }
 
-  },
+  }
 
 }
 </script>
-
 
 <template>
 <section class="projects items">

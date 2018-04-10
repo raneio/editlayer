@@ -1,5 +1,4 @@
 <script>
-import _ from 'lodash'
 import Auth from '@/Auth'
 import Notifications from '@/components/Notifications'
 
@@ -8,13 +7,12 @@ export default {
 
   components: {
     Auth,
-    Notifications,
+    Notifications
   },
 
   created () {
     this.$store.dispatch('authState')
-  },
-
+  }
 }
 </script>
 

@@ -1,8 +1,36 @@
 .heading
-  letter-spacing: -.05em
-  font-size: 1.6rem
+  font-size: 1.5rem
 
-  &.-logo
+  &.-main
+    letter-spacing: -.06em
+    font-size: 2.7rem
+
+  &.-feature
     text-transform: uppercase
-    font-size: 1.2rem
+    font-size: 1.5rem
     font-weight: 800
+
+.heading-group
+
+  .tagline
+    color: $color-disabled
+    font-size: .9rem
+
+  &.-main
+    +container(700px, 6rem, 2rem)
+    text-align: center
+
+    +hx
+      @extend .heading.-main
+
+    .tagline
+      font-size: 1.3rem
+      font-weight: 300
+
+  &.-feature
+    +hx
+      @extend .heading.-feature
+
+    .tagline
+      font-weight: 300
+      color: $color-disabled

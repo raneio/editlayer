@@ -1,16 +1,17 @@
 <script>
+import _ from 'lodash'
 import firebase from '@/firebase'
 
 export default {
   name: 'Auth',
 
-  data() {
+  data () {
     return {
       state: 'login',
       email: '',
       password: '',
       error: null,
-      progress: false,
+      progress: false
     }
   },
 
@@ -22,7 +23,7 @@ export default {
 
     password () {
       this.error = null
-    },
+    }
 
   },
 
@@ -41,96 +42,90 @@ export default {
       }
     },
 
-    login () {
+    login () {
       firebase.auth.signInWithEmailAndPassword(this.email, this.password)
-      .then(user => console.log('Logged in', user.email))
-      .catch((error) => {
-        console.error('Logged in faild', error)
-        this.progress = false
+        .then(user => console.log('Logged in', user.email))
+        .catch((error) => {
+          console.error('Logged in faild', error)
+          this.progress = false
 
-        this.$store.commit('setNotification', {
-          id: Math.random().toString(36).slice(-8),
-          status: 'error',
-          message: error.message,
+          this.$store.commit('setNotification', {
+            id: Math.random().toString(36).slice(-8),
+            status: 'error',
+            message: error.message
+          })
+
+          if (_.includes(['auth/invalid-email', 'auth/user-not-found'], error.code)) {
+            this.error = 'email'
+          } else if (_.includes(['auth/wrong-password'], error.code)) {
+            this.error = 'password'
+          }
         })
-
-        if (_.includes(['auth/invalid-email', 'auth/user-not-found'], error.code)) {
-          this.error = 'email'
-        } else if (_.includes(['auth/wrong-password'], error.code)) {
-          this.error = 'password'
-        }
-
-      })
     },
 
-    register () {
+    register () {
       firebase.auth.createUserWithEmailAndPassword(this.email, this.password)
-      .then(user => {
-
-        firebase.firestore.collection('users').doc(user.uid).set({
-          email: user.email,
-        })
-        .then(() => {
-          console.log('Added user', user.email)
-
-          this.$store.dispatch('newProject', {
-            name: '1. Simple Example',
-            // redirect: false,
-            structure: {
-              title: 'text',
-              description: 'textarea',
-              image: 'image',
-            },
+        .then(user => {
+          firebase.firestore.collection('users').doc(user.uid).set({
+            email: user.email
           })
+            .then(() => {
+              console.log('Added user', user.email)
 
-          this.$store.dispatch('newProject', {
-            name: '2. Advanced Example',
-            // redirect: false,
-            structure: {
-              simpleField: 'text',
-              advancedField: {
-                EDITOR: 'text',
-                NAME: 'Advanced Field',
-                DEFAULT: 'Hello World!',
-                INFO: 'You can use NAME, DEFAULT and INFO properties with an object notation.',
-              },
-              nestedExample: {
-                NAME: 'Nested Fields Example',
-                title: 'text',
-                description: 'textarea',
-              },
-              arrayExample: [{
-                NAME: 'Image Gallery Example',
-                image: 'image',
-                caption: 'text',
-              }],
-            },
-          })
+              this.$store.dispatch('newProject', {
+                name: '1. Simple Example',
+                // redirect: false,
+                structure: {
+                  title: 'text',
+                  description: 'textarea',
+                  image: 'image'
+                }
+              })
 
+              this.$store.dispatch('newProject', {
+                name: '2. Advanced Example',
+                // redirect: false,
+                structure: {
+                  simpleField: 'text',
+                  advancedField: {
+                    EDITOR: 'text',
+                    NAME: 'Advanced Field',
+                    DEFAULT: 'Hello World!',
+                    INFO: 'You can use NAME, DEFAULT and INFO properties with an object notation.'
+                  },
+                  nestedExample: {
+                    NAME: 'Nested Fields Example',
+                    title: 'text',
+                    description: 'textarea'
+                  },
+                  arrayExample: [{
+                    NAME: 'Image Gallery Example',
+                    image: 'image',
+                    caption: 'text'
+                  }]
+                }
+              })
+            })
+            .catch(error => {
+              console.error('Adding user error', error)
+              this.progress = false
+            })
         })
         .catch(error => {
-          console.error('Adding user error', error)
+          console.error('register error', error)
           this.progress = false
+
+          if (_.includes(['auth/invalid-email', 'auth/email-already-in-use'], error.code)) {
+            this.error = 'email'
+          } else if (_.includes(['auth/weak-password'], error.code)) {
+            this.error = 'password'
+          } else {
+            alert('Unknown error! Try again later or contact us help@editlayer.com')
+          }
         })
-
-      })
-      .catch(error => {
-        console.error('register error', error)
-        this.progress = false
-
-        if (_.includes(['auth/invalid-email', 'auth/email-already-in-use'], error.code)) {
-          this.error = 'email'
-        } else if (_.includes(['auth/weak-password'], error.code)) {
-          this.error = 'password'
-        } else {
-          alert('Unknown error! Try again later or contact us help@editlayer.com')
-        }
-
-      })
     },
 
     resetPassword () {
-
       firebase.auth.sendPasswordResetEmail(this.email).then(() => {
         this.changeState('login')
       }).catch((error) => {
@@ -138,7 +133,6 @@ export default {
         console.error('Reseting faild', error)
         this.progress = false
       })
-
     },
 
     // register () {
@@ -150,17 +144,16 @@ export default {
 
     changeState (state) {
       this.state = state
-    },
+    }
 
   },
 
   created () {
     this.$store.dispatch('authState')
-  },
+  }
 
 }
 </script>
-
 
 <template>
 <section class="auth" :class="{ '-progress': progress}">

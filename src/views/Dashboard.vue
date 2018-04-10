@@ -1,9 +1,7 @@
 <script>
-import _ from 'lodash'
 import Navigation from '@/components/Navigation'
 import SidePanel from '@/components/SidePanel'
 import Breadcrumb from '@/components/Breadcrumb'
-
 
 export default {
   name: 'Dashboard',
@@ -11,18 +9,17 @@ export default {
   components: {
     Navigation,
     SidePanel,
-    Breadcrumb,
+    Breadcrumb
   },
 
   mounted () {
     if (this.$route.params.view && this.$route.params.view !== 'structure') {
       this.$router.push({ name: 'Content', params: { projectId: this.$route.params.view } })
     }
-  },
+  }
 
 }
 </script>
-
 
 <template>
 <section class="layout">
@@ -37,7 +34,6 @@ export default {
   </main>
 </section>
 </template>
-
 
 <style lang="sass" scoped>
 @import '../sass/features'

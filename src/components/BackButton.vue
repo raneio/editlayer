@@ -3,7 +3,6 @@ import _ from 'lodash'
 import anime from 'animejs'
 import titleCase from 'title-case'
 
-
 export default {
   name: 'BackButton',
 
@@ -51,7 +50,7 @@ export default {
           breadcrumb.unshift({
             name: this.stringToTitle(item.NAME),
             path: path,
-            projectId: this.$route.params.projectId,
+            projectId: this.$route.params.projectId
           })
         }
 
@@ -61,19 +60,18 @@ export default {
       if (this.$route.params.projectId && this.activeProject) {
         breadcrumb.unshift({
           name: this.activeProject.name,
-          projectId: this.$route.params.projectId,
+          projectId: this.$route.params.projectId
         })
       }
 
       if (this.projects.length > 1) {
         breadcrumb.unshift({
-          name: 'Home',
+          name: 'Home'
         })
       }
 
-
       return breadcrumb
-    },
+    }
 
   },
 
@@ -88,7 +86,7 @@ export default {
     },
 
     goBack () {
-      let backItem = this.breadcrumb[this.breadcrumb.length-2]
+      let backItem = this.breadcrumb[this.breadcrumb.length - 2]
       if (backItem) {
         this.selectItem(backItem)
       } else {
@@ -102,44 +100,41 @@ export default {
       console.log('Back selectItem', this.$route.name, item.projectId, path)
 
       anime.timeline()
-      .add({
-        targets: '.side-panel > .content',
-        translateX: '100%',
-        opacity: 0,
-        easing: 'linear',
-        duration: 100,
-      })
-      .add({
-        targets: '.side-panel > .content',
-        translateX: '-100%',
-        duration: 0,
-        complete: (anim) => {
-          if (item.projectId && path) {
-            this.$router.push({ name: this.$route.name, params: { projectId: item.projectId, path: path }})
-          } else if (item.projectId) {
-            this.$router.push({ name: this.$route.name, params: { projectId: item.projectId }})
-          } else {
-            let view = (this.$route.name === 'Structure') ? 'structure' : null
-            this.$router.push({ name: 'Dashboard', params: { view: view } })
+        .add({
+          targets: '.side-panel > .content',
+          translateX: '100%',
+          opacity: 0,
+          easing: 'linear',
+          duration: 100
+        })
+        .add({
+          targets: '.side-panel > .content',
+          translateX: '-100%',
+          duration: 0,
+          complete: (anim) => {
+            if (item.projectId && path) {
+              this.$router.push({name: this.$route.name, params: {projectId: item.projectId, path: path}})
+            } else if (item.projectId) {
+              this.$router.push({name: this.$route.name, params: {projectId: item.projectId}})
+            } else {
+              let view = (this.$route.name === 'Structure') ? 'structure' : null
+              this.$router.push({name: 'Dashboard', params: {view: view}})
+            }
           }
-        },
-      })
-      .add({
-        targets: '.side-panel > .content',
-        translateX: 0,
-        opacity: 1,
-        easing: 'linear',
-        duration: 100,
-      })
+        })
+        .add({
+          targets: '.side-panel > .content',
+          translateX: 0,
+          opacity: 1,
+          easing: 'linear',
+          duration: 100
+        })
+    }
 
-
-    },
-
-  },
+  }
 
 }
 </script>
-
 
 <template>
 <button
@@ -150,7 +145,6 @@ export default {
   <div>Back</div>
 </button>
 </template>
-
 
 <style lang="sass" scoped>
 @import '../sass/features'

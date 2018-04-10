@@ -1,4 +1,5 @@
 <script>
+import _ from 'lodash'
 import validator from 'validator'
 import firebase from '@/firebase'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -9,14 +10,14 @@ export default {
 
   components: {
     Breadcrumb,
-    Navigation,
+    Navigation
   },
 
   data () {
     return {
       trigger: {
-        method: null,
-        url: null,
+        method: 'GET',
+        url: null
       }
     }
   },
@@ -33,7 +34,7 @@ export default {
 
     roles () {
       return this.activeProject.roles
-    },
+    }
 
   },
 
@@ -46,25 +47,32 @@ export default {
       }
     },
 
-    'trigger.method': function() {
+    'trigger.method': function () {
       this.updateTrigger()
     },
 
     'trigger.url': _.debounce(function () {
       this.updateTrigger()
-    }, 500),
+    }, 500)
 
   },
 
   methods: {
 
     newPermission () {
-      let email = prompt('Email address', 'name@example.com');
+      let email = prompt('Email address', 'name@example.com')
 
       if (email !== null && !validator.isEmail(email)) {
         console.error('Email is invalid', email)
-      }
-      else if (email !== null) {
+      } else if (email !== null) {
+
+        let notificationId = Math.random().toString(36).slice(-8)
+
+        this.$store.commit('setNotification', {
+          id: notificationId,
+          status: 'info',
+          message: `Adding user "${email}", please wait...`,
+        })
 
         firebase.firestore
           .collection('projects')
@@ -72,7 +80,7 @@ export default {
           .collection('permissionJobs')
           .add({
             role: 'editor',
-            email: email,
+            email: email
           })
           .then(() => {
             console.log('Permission job added')
@@ -81,7 +89,6 @@ export default {
             console.error('Permission job adding failed', error)
           })
       }
-
     },
 
     updatePermission (payload) {
@@ -96,14 +103,12 @@ export default {
         .update(updateData)
         .then(() => console.log('Permission updated!'))
         .catch((error) => console.error('Permission updating failed', error))
-
     },
 
     removePermission (payload) {
       let deleteConfirm = confirm(`You want to remove "${payload.email}". Are you sure?`)
 
       if (deleteConfirm === true) {
-
         let updateData = {}
         updateData[`roles.${payload.roleId}`] = firebase.firestoreDelete
 
@@ -113,9 +118,7 @@ export default {
           .update(updateData)
           .then(() => console.log('Permission deleted'))
           .catch((error) => console.error('Permission deleting failed', error))
-
       }
-
     },
 
     updateTrigger (payload) {
@@ -136,37 +139,33 @@ export default {
 
       if (deleteConfirm !== null && deleteConfirm !== this.activeProject.projectId) {
         console.error('Project Id is invalid', deleteConfirm)
-      }
-      else if (deleteConfirm !== null) {
-
+      } else if (deleteConfirm !== null) {
         firebase.firestore
           .collection('projects')
           .doc(this.activeProject.projectId)
           .collection('deleteJobs')
           .add({
-            deleteProjectId: this.activeProject.projectId,
+            deleteProjectId: this.activeProject.projectId
           })
           .then(() => {
             this.$router.push({ name: 'Content' })
             console.log('Project Deleted')
           })
           .catch((error) => console.error('Project deleting failed', error))
-
       }
-    },
+    }
 
   },
 
   mounted () {
     if (this.activeProject !== null) {
-      this.trigger.method = this.activeProject.trigger.method
+      this.trigger.method = (this.activeProject.trigger.method) ? this.activeProject.trigger.method : 'GET'
       this.trigger.url = this.activeProject.trigger.url
     }
-  },
+  }
 
 }
 </script>
-
 
 <template>
 <section class="layout">
@@ -189,6 +188,7 @@ export default {
         </li>
         <li
           v-for="(role, roleId) in roles"
+          :key="roleId"
           v-if="roleId !== user.id"
           class="role"
         >
@@ -241,9 +241,12 @@ export default {
     </section>
 
     <section class="group">
-      <h1 class="heading">
-        Trigger request after publish
-      </h1>
+
+      <header class="heading-group">
+        <h1 class="heading">Webhook</h1>
+        <p class="tagline">Trigger request when publish is done</p>
+      </header>
+
 
       <div class="input-group">
         <select v-model="trigger.method" class="select-method">
@@ -270,7 +273,6 @@ export default {
 </section>
 </template>
 
-
 <style lang="sass" scoped>
 @import '../sass/features'
 
@@ -278,7 +280,6 @@ export default {
   overflow-y: auto
   padding: .25rem 2.5rem 2.5rem
   +margin-to-childs(2rem)
-
 
 .group
   +margin-to-childs(.5rem)
@@ -317,7 +318,6 @@ export default {
     background-position: bottom
     background-size: 10px 1px
     background-repeat: repeat-x
-
 
 .danger
   border: 1px solid $color-danger

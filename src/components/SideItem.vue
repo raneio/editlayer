@@ -1,13 +1,12 @@
 <script>
 import _ from 'lodash'
 
-
 export default {
   name: 'Item',
 
   props: {
     item: Object,
-    selectItem: Function,
+    selectItem: Function
   },
 
   computed: {
@@ -29,8 +28,11 @@ export default {
       return this.item.STATUS === 'draft'
     },
 
-    preview () {
+    // isSpacer () {
+    //   return _.has(this.item, 'SPACER')
+    // },
 
+    preview () {
       if (_.includes(['image'], this.item.EDITOR)) {
         // let content = null
         //
@@ -46,25 +48,28 @@ export default {
 
         return {
           type: 'image',
-          content: imageUrl,
+          content: imageUrl
         }
-
       } else if (this.item.CONTENT) {
         let content = this.item.CONTENT
 
-        if (this.item.CONTENT && this.item.CONTENT.length > 90) {
-          content = this.item.CONTENT.substring(0, 90).trim() + '...'
+        let div = document.createElement('div')
+        div.innerHTML = content
+
+        content = div.textContent || div.innerText || ''
+
+        if (content && content.length > 90) {
+          content = content.substring(0, 90).trim() + '...'
         }
 
         return {
           type: 'text',
-          content: content,
+          content: content
         }
-
       } else {
         return {}
       }
-    },
+    }
 
   },
 
@@ -78,7 +83,7 @@ export default {
     //   return titleCase(text)
     // }
 
-  },
+  }
 
 }
 </script>
@@ -88,7 +93,12 @@ echo '[]' > cors-config.json
 <template>
 <section
   class="button item"
-  :class="{'-parent': isParent, '-file': isFile, '-active': isActive, '-draft': isDraft}"
+  :class="{
+    '-parent': isParent,
+    '-file': isFile,
+    '-active': isActive,
+    '-draft': isDraft,
+  }"
   @click="selectItem(item)"
 >
 
@@ -99,7 +109,11 @@ echo '[]' > cors-config.json
     draft
   </div> -->
 
-  <div v-text="item.NAME"></div>
+  <!-- {{ item }} -->
+
+  <!-- <div class="spacer" v-if="item.SPACER" v-text="item.SPACER"></div> -->
+
+  <div class="item-heading" v-text="item.NAME"></div>
 
   <div
     class="preview -text"
@@ -116,6 +130,8 @@ echo '[]' > cors-config.json
 
   <img class="icon" src="@/assets/icon-forward.svg" alt="" v-if="isParent || isFile">
 
+
+
   <!-- <div
     class="preview -text"
     v-if="preview.type === 'status'"
@@ -131,7 +147,6 @@ echo '[]' > cors-config.json
 
 </section>
 </template>
-
 
 <style lang="sass" scoped>
 @import '../sass/features'
@@ -181,10 +196,26 @@ echo '[]' > cors-config.json
     padding-top: 1em
     padding-bottom: 1em
 
+  // &.-spacer
+  //   margin-top: 4rem
+
+  // .spacer
+  //   position: absolute
+  //   bottom: 100%
+  //   left: 0
+  //   color: $color-disabled
+  //   // font-weight: 400
+  //   font-size: .8rem
+  //   padding-bottom: .4em
+
   .content
     flex-grow: 1
 
+  .item-heading
+    overflow: hidden
+
   .preview
+    overflow: hidden
 
     &.-text
       font-size: .8em

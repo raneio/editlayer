@@ -3,7 +3,6 @@ import _ from 'lodash'
 import anime from 'animejs'
 import titleCase from 'title-case'
 
-
 export default {
   name: 'Breadcrumb',
 
@@ -47,7 +46,7 @@ export default {
           breadcrumb.unshift({
             name: this.stringToTitle(item.NAME),
             path: path,
-            projectId: this.$route.params.projectId,
+            projectId: this.$route.params.projectId
           })
         }
 
@@ -57,7 +56,7 @@ export default {
       if (this.$route.params.projectId && this.activeProject) {
         breadcrumb.unshift({
           name: this.activeProject.name,
-          projectId: this.$route.params.projectId,
+          projectId: this.$route.params.projectId
         })
       }
 
@@ -65,19 +64,18 @@ export default {
         breadcrumb = [
           {
             name: this.activeProject.name,
-            projectId: this.$route.params.projectId,
+            projectId: this.$route.params.projectId
           },
 
           {
             name: 'Settings',
-            projectId: this.$route.params.projectId,
-          },
+            projectId: this.$route.params.projectId
+          }
         ]
       }
 
-
       return breadcrumb
-    },
+    }
 
   },
 
@@ -101,43 +99,42 @@ export default {
       }
 
       anime.timeline()
-      .add({
-        targets: '.side-panel > .content',
-        translateX: '100%',
-        opacity: 0,
-        easing: 'linear',
-        duration: 100,
-      })
-      .add({
-        targets: '.side-panel > .content',
-        translateX: '-100%',
-        duration: 0,
-        complete: (anim) => {
-          console.log('selectItem', routeName)
-          if (item.projectId && path) {
-            this.$router.push({ name: routeName, params: { projectId: item.projectId, path: path }})
-          } else if (item.projectId) {
-            this.$router.push({ name: routeName, params: { projectId: item.projectId }})
-          } else {
-            let view = (this.$route.name === 'Structure') ? 'structure' : null
-            this.$router.push({ name: 'Dashboard', params: { view: view } })
+        .add({
+          targets: '.side-panel > .content',
+          translateX: '100%',
+          opacity: 0,
+          easing: 'linear',
+          duration: 100
+        })
+        .add({
+          targets: '.side-panel > .content',
+          translateX: '-100%',
+          duration: 0,
+          complete: (anim) => {
+            console.log('selectItem', routeName)
+            if (item.projectId && path) {
+              this.$router.push({name: routeName, params: {projectId: item.projectId, path: path}})
+            } else if (item.projectId) {
+              this.$router.push({name: routeName, params: {projectId: item.projectId}})
+            } else {
+              let view = (this.$route.name === 'Structure') ? 'structure' : null
+              this.$router.push({name: 'Dashboard', params: {view: view}})
+            }
           }
-        },
-      })
-      .add({
-        targets: '.side-panel > .content',
-        translateX: 0,
-        opacity: 1,
-        easing: 'linear',
-        duration: 100,
-      })
-    },
+        })
+        .add({
+          targets: '.side-panel > .content',
+          translateX: 0,
+          opacity: 1,
+          easing: 'linear',
+          duration: 100
+        })
+    }
 
-  },
+  }
 
 }
 </script>
-
 
 <template>
 <section class="breadcrumb">
@@ -150,7 +147,11 @@ export default {
     <img src="@/assets/icon-home.svg" alt="">
   </a>
 
-  <div v-for="(item, idx) in breadcrumb" class="crumb">
+  <div
+    class="crumb"
+    v-for="(item, idx) in breadcrumb"
+    :key="idx"
+  >
 
     <img src="@/assets/icon-crumb.svg" alt="">
 

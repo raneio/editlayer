@@ -1,6 +1,6 @@
 <script>
 import _ from 'lodash'
-import CodeMirror from 'codemirror'
+// import CodeMirror from 'codemirror'
 import { codemirror } from 'vue-codemirror'
 import 'codemirror/mode/javascript/javascript.js'
 import 'codemirror/lib/codemirror.css'
@@ -14,13 +14,13 @@ export default {
   name: 'StructureEditor',
 
   components: {
-    codemirror,
+    codemirror
   },
 
   data () {
     return {
       structure: '',
-      syntaxError: false,
+      syntaxError: false
     }
   },
 
@@ -28,7 +28,7 @@ export default {
 
     activeProject () {
       return this.$store.getters.activeProject
-    },
+    }
 
   },
 
@@ -51,7 +51,7 @@ export default {
       this.syntaxError = false
 
       try {
-      	JSON.parse(this.structure)
+        JSON.parse(this.structure)
       } catch (err) {
         console.warn('Syntax Error')
         this.syntaxError = true
@@ -59,15 +59,12 @@ export default {
       }
 
       if (this.structure !== this.activeProject.structure) {
-
         firebase.firestore.collection('projects').doc(this.activeProject.projectId).update({
-          structure: this.structure,
+          structure: this.structure
         })
-        .then(() => console.log('Structure successfully written!'))
-        .catch((error) => console.error('Error writing structure:', error))
-
+          .then(() => console.log('Structure successfully written!'))
+          .catch((error) => console.error('Error writing structure:', error))
       }
-
     },
 
     setStructure () {
@@ -80,11 +77,10 @@ export default {
 
   created () {
     this.setStructure()
-  },
+  }
 
 }
 </script>
-
 
 <template>
 <section class="structure" :class="{'-syntax-error': syntaxError}">
@@ -110,7 +106,6 @@ export default {
 
 </section>
 </template>
-
 
 <style lang="sass" scoped>
 

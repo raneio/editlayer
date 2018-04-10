@@ -4,25 +4,24 @@ import firebase from '@/firebase'
 import SideItem from '@/components/SideItem'
 import BackButton from '@/components/BackButton'
 
-
 export default {
   name: 'SideItemsFromArray',
 
   props: {
-    selectItem: Function,
+    selectItem: Function
   },
 
   components: {
     SideItem,
-    BackButton,
+    BackButton
   },
 
   data () {
     return {
       movingArrayItem: {
         idx: null,
-        path: null,
-      },
+        path: null
+      }
     }
   },
 
@@ -54,7 +53,7 @@ export default {
     arrayItems () {
       let arrayItems = []
       let source = []
-      let lastItem = null
+      // let lastItem = null
 
       _.each(this.activeStructure, (value, key) => {
         if (_.startsWith(key, '-')) {
@@ -77,7 +76,7 @@ export default {
 
     arrayItemsAmount () {
       return this.arrayItems.length
-    },
+    }
 
   },
 
@@ -85,7 +84,7 @@ export default {
 
     activeStructure (value) {
       this.findFirstItem()
-    },
+    }
 
   },
 
@@ -118,7 +117,7 @@ export default {
 
       let updateData = {}
       updateData[newPath] = {
-        ORDER: order,
+        ORDER: order
       }
 
       firebase.firestore
@@ -128,10 +127,9 @@ export default {
         .then(() => {
           console.log('New item added!')
           let pathUrl = _.replace(`${itemPath}.${randomKey}`, /\./g, '>')
-          this.$router.push({ name: 'Content', params: { projectId: this.projectId, path: pathUrl }})
+          this.$router.push({name: 'Content', params: {projectId: this.projectId, path: pathUrl}})
         })
         .catch((error) => console.error('Error new item:', error))
-
     },
 
     findFirstItem () {
@@ -149,7 +147,7 @@ export default {
 
       if (firstItem && this.activeStructure.TYPE === 'array') {
         let firstItemPath = _.replace(firstItem.PATH, /\./g, '>')
-        this.$router.replace({ name: 'Content', params: { projectId: this.projectId, path: firstItemPath }})
+        this.$router.replace({name: 'Content', params: {projectId: this.projectId, path: firstItemPath}})
       }
     },
 
@@ -162,7 +160,7 @@ export default {
 
       this.movingArrayItem = {
         idx: arrayIdx,
-        path: arrayItem.PATH,
+        path: arrayItem.PATH
       }
     },
 
@@ -173,22 +171,22 @@ export default {
       if (arrayItem === 'first') {
         newOrder = this.arrayItems[0].ORDER - 1
       } else if (arrayItem === 'last') {
-        newOrder = this.arrayItems[this.arrayItems.length-1].ORDER + 1
+        newOrder = this.arrayItems[this.arrayItems.length - 1].ORDER + 1
       } else if (arrayIdx === 0) {
         newOrder = arrayItem.ORDER - 1
       } else {
-        newOrder = (this.arrayItems[arrayIdx-1].ORDER + arrayItem.ORDER) / 2
+        newOrder = (this.arrayItems[arrayIdx - 1].ORDER + arrayItem.ORDER) / 2
       }
 
       this.$store.dispatch('updateContent', {
         projectId: this.projectId,
         path: `${this.movingArrayItem.path}.ORDER`,
-        content: newOrder,
+        content: newOrder
       })
 
       this.movingArrayItem = {
         idx: null,
-        path: null,
+        path: null
       }
     },
 
@@ -197,7 +195,7 @@ export default {
 
       this.movingArrayItem = {
         idx: null,
-        path: null,
+        path: null
       }
     },
 
@@ -213,7 +211,7 @@ export default {
       let parentPath = _.chain(this.$route.params.path).split('>').slice(0, -1).join('.').value()
 
       if (redirectPath && arrayItem.PATH === parentPath) {
-        this.$router.replace({ name: this.$route.name, params: { projectId: this.projectId, path: redirectPath }})
+        this.$router.replace({name: this.$route.name, params: {projectId: this.projectId, path: redirectPath}})
       }
       // else {
       //   redirectPathAfterLastItem = this.activeStructure.PATH
@@ -230,17 +228,16 @@ export default {
           // }
         })
         .catch((error) => console.error('Error deleting item', error))
-    },
+    }
 
   },
 
   created () {
     this.findFirstItem()
-  },
+  }
 
 }
 </script>
-
 
 <template>
 <section class="array-items" :class="{ '-moving': movingArrayItem.path !== null}">
@@ -256,7 +253,11 @@ export default {
     <div>No items - add first item</div>
   </div>
 
-  <div class="array-item" v-for="(arrayItem, arrayIdx) in arrayItems">
+  <div
+    class="array-item"
+    v-for="(arrayItem, arrayIdx) in arrayItems"
+    :key="arrayIdx"
+  >
 
     <button
       class="move-here button -primary"
@@ -300,7 +301,6 @@ export default {
 </section>
 </template>
 
-
 <style lang="sass" scoped>
 
 // You can use variables, mixins and functions of Page Core
@@ -332,11 +332,11 @@ export default {
     margin-top: 1rem
 
   .array-item
-    border-top: 1px solid $color-hr
     padding-top: .5rem
     position: relative
 
     & + .array-item
+      border-top: 1px solid $color-hr
       margin-top: 2rem
 
   .items
@@ -422,7 +422,5 @@ export default {
   .item:last-of-type .preview.-image .image
     border-bottom-left-radius: $button-border-radius
     border-bottom-right-radius: $button-border-radius
-
-
 
 </style>

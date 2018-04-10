@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 const basicToJson = (structure, result = {}) => {
   _.each(structure, (value, key) => {
     if (_.has(value, 'CONTENT') && _.has(value, 'PATH')) {
@@ -48,7 +50,6 @@ export default (content) => {
 
   content = basicToJson(content)
   content = _.merge(content, arrayToJson(content))
-
 
   console.log('content', content)
 

@@ -11,7 +11,7 @@ export default {
   components: {
     SideItemsFromProjects,
     SideItemsFromObject,
-    SideItemsFromArray,
+    SideItemsFromArray
   },
 
   computed: {
@@ -36,7 +36,7 @@ export default {
 
     activeType () {
       let path = _.replace(this.$route.params.path, />/g, '.')
-      let activeItem = _.get(this.structure, path)
+      // let activeItem = _.get(this.structure, path)
       let grandparent = _.get(this.structure, _.chain(path).split('.').dropRight(2).join('.').value())
 
       if (!this.projectId) {
@@ -48,7 +48,7 @@ export default {
       } else {
         return 'object'
       }
-    },
+    }
 
   },
 
@@ -56,7 +56,7 @@ export default {
 
     activeStructure (value) {
       this.redirectToParentIfInvalidPath()
-    },
+    }
 
   },
 
@@ -68,7 +68,7 @@ export default {
       let path = _.replace(item.PATH, /\./g, '>')
 
       if (item.TYPE === 'value') {
-        this.$router.push({ name: routeName, params: { projectId: projectId, path: path }})
+        this.$router.push({name: routeName, params: {projectId: projectId, path: path}})
         return false
       }
 
@@ -82,7 +82,7 @@ export default {
           translateX: '-100%',
           opacity: 0,
           easing: 'linear',
-          duration: 100,
+          duration: 100
         })
         .add({
           targets: '.side-panel > .content',
@@ -90,18 +90,18 @@ export default {
           duration: 0,
           complete: (anim) => {
             if (path) {
-              this.$router.push({ name: routeName, params: { projectId: projectId, path: path }})
+              this.$router.push({name: routeName, params: {projectId: projectId, path: path}})
             } else {
-              this.$router.push({ name: routeName, params: { projectId: projectId }})
+              this.$router.push({name: routeName, params: {projectId: projectId}})
             }
-          },
+          }
         })
         .add({
           targets: '.side-panel > .content',
           translateX: 0,
           opacity: 1,
           easing: 'linear',
-          duration: 100,
+          duration: 100
         })
 
       // anime({
@@ -122,7 +122,6 @@ export default {
       //   // loop: true
       // })
 
-
       // this.$router.push({ name: routeName, params: { projectId: this.$route.params.projectId, path: path }})
     },
 
@@ -137,15 +136,13 @@ export default {
       console.log('parentPath', parentPath)
 
       if (parentPath) {
-        this.$router.replace({ name: this.$route.name, params: { projectId: this.projectId, path: parentPath }})
+        this.$router.replace({name: this.$route.name, params: {projectId: this.projectId, path: parentPath}})
+      } else {
+        this.$router.replace({name: this.$route.name, params: {projectId: this.projectId}})
       }
-      else {
-        this.$router.replace({ name: this.$route.name, params: { projectId: this.projectId }})
-      }
+    }
 
-    },
-
-  },
+  }
 
   // mounted () {
   //   this.redirectToParentIfInvalidPath()
@@ -153,7 +150,6 @@ export default {
 
 }
 </script>
-
 
 <template>
 <aside class="side-panel">
@@ -166,7 +162,6 @@ export default {
   </div>
 </aside>
 </template>
-
 
 <style lang="sass" scoped>
 @import '../sass/features'
@@ -192,6 +187,5 @@ export default {
 
   .items
     +margin-to-childs(1rem)
-
 
 </style>

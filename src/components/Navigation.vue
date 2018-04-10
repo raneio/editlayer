@@ -1,8 +1,5 @@
 <script>
-import _ from 'lodash'
-import axios from 'axios'
 import firebase from '@/firebase'
-import buildJson from '@/utils/buildJson'
 import Breadcrumb from '@/components/Breadcrumb'
 import PublishButton from '@/components/PublishButton'
 
@@ -11,7 +8,7 @@ export default {
 
   components: {
     Breadcrumb,
-    PublishButton,
+    PublishButton
   },
 
   computed: {
@@ -37,7 +34,7 @@ export default {
     neverPublished () {
       if (!this.activeProject) return false
       return this.activeProject.published === null
-    },
+    }
 
   },
 
@@ -49,13 +46,12 @@ export default {
       }).catch((error) => {
         console.error('Logout failed', error)
       })
-    },
+    }
 
-  },
+  }
 
 }
 </script>
-
 
 <template>
 <nav class="navigation">
@@ -112,7 +108,6 @@ export default {
 </nav>
 </template>
 
-
 <style lang="sass" scoped>
 @import '../sass/features'
 
@@ -157,6 +152,5 @@ export default {
     .icon
       display: block
       margin-bottom: .2rem
-
 
 </style>

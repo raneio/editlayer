@@ -1,7 +1,5 @@
 <script>
 import _ from 'lodash'
-import axios from 'axios'
-import firebase from '@/firebase'
 import buildJson from '@/utils/buildJson'
 import Breadcrumb from '@/components/Breadcrumb'
 
@@ -9,7 +7,7 @@ export default {
   name: 'PublishButton',
 
   components: {
-    Breadcrumb,
+    Breadcrumb
   },
 
   computed: {
@@ -63,7 +61,7 @@ export default {
       } else {
         return 'published'
       }
-    },
+    }
 
   },
 
@@ -79,15 +77,14 @@ export default {
         filename: this.activeProject.filename,
         draft: this.activeProject.draft,
         structure: this.activeProject.structure,
-        trigger: this.activeProject.trigger,
+        trigger: this.activeProject.trigger
       })
-    },
+    }
 
-  },
+  }
 
 }
 </script>
-
 
 <template>
 <section class="publish-button">
@@ -120,7 +117,6 @@ export default {
 </section>
 </template>
 
-
 <style lang="sass" scoped>
 @import '../sass/features'
 
@@ -139,9 +135,7 @@ export default {
       animation-iteration-count: infinite
       animation-timing-function: linear
 
-
 // Under /deep/ you can also change style of child components
 .editor /deep/
-
 
 </style>

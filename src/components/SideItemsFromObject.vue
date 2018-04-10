@@ -3,17 +3,16 @@ import _ from 'lodash'
 import SideItem from '@/components/SideItem'
 import BackButton from '@/components/BackButton'
 
-
 export default {
   name: 'SideItemsFromObject',
 
   props: {
-    selectItem: Function,
+    selectItem: Function
   },
 
   components: {
     SideItem,
-    BackButton,
+    BackButton
   },
 
   computed: {
@@ -53,7 +52,7 @@ export default {
           return value
         }
       })
-    },
+    }
 
   },
 
@@ -61,7 +60,7 @@ export default {
 
     activeStructure (value) {
       this.findFirstItem()
-    },
+    }
 
   },
 
@@ -82,7 +81,7 @@ export default {
 
       if (firstItem && this.activeStructure.TYPE !== 'value') {
         let firstItemPath = _.replace(firstItem.PATH, /\./g, '>')
-        this.$router.replace({ name: 'Content', params: { projectId: this.$route.params.projectId, path: firstItemPath }})
+        this.$router.replace({name: 'Content', params: {projectId: this.$route.params.projectId, path: firstItemPath}})
       }
     },
 
@@ -99,17 +98,16 @@ export default {
 
     isActive (path) {
       return !!(path === _.replace(this.$route.params.path, />/g, '.'))
-    },
+    }
 
   },
 
   created () {
     this.findFirstItem()
-  },
+  }
 
 }
 </script>
-
 
 <template>
 <section class="items">
@@ -127,7 +125,6 @@ export default {
 
 </section>
 </template>
-
 
 <style lang="sass" scoped>
 

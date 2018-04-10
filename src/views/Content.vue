@@ -1,10 +1,8 @@
 <script>
-import _ from 'lodash'
 import Navigation from '@/components/Navigation'
 import SidePanel from '@/components/SidePanel'
 import Editors from '@/components/Editors'
 import Breadcrumb from '@/components/Breadcrumb'
-
 
 export default {
   name: 'Content',
@@ -13,12 +11,11 @@ export default {
     Navigation,
     SidePanel,
     Breadcrumb,
-    Editors,
-  },
+    Editors
+  }
 
 }
 </script>
-
 
 <template>
 <section class="layout">
@@ -31,7 +28,6 @@ export default {
   </main>
 </section>
 </template>
-
 
 <style lang="sass" scoped>
 @import '../sass/features'

@@ -1,30 +1,31 @@
 <script>
-import _ from 'lodash'
 import Notification from '@/components/Notification'
 
 export default {
   name: 'Notifications',
 
   components: {
-    Notification,
+    Notification
   },
 
   computed: {
 
     notifications () {
       return this.$store.state.notifications
-    },
+    }
 
-  },
+  }
 
 }
 </script>
 
-
 <template>
 <section class="notifications">
 
-  <div v-for="(notification, notificationId) in notifications">
+  <div
+    v-for="(notification, notificationId) in notifications"
+    :key="notificationId"
+  >
     <transition name="fade">
       <Notification
         :status="notification.status"
@@ -39,7 +40,6 @@ export default {
 
 </section>
 </template>
-
 
 <style lang="sass" scoped>
 @import '../sass/features'
@@ -57,6 +57,5 @@ export default {
 .fade-enter-active,
 .fade-leave-active
   transition: opacity .5s
-
 
 </style>

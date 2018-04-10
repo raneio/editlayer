@@ -6,12 +6,12 @@ export default {
 
   props: {
     editorData: Object,
-    saveFunction: Function,
+    saveFunction: Function
   },
 
   data () {
     return {
-        content: this.editorData.content,
+      content: this.editorData.content
     }
   },
 
@@ -32,7 +32,7 @@ export default {
 
     content: _.debounce(function () {
       this.saveFunction(this.editorData, this.content)
-    }, 500),
+    }, 500)
 
   },
 
@@ -43,7 +43,6 @@ export default {
 }
 </script>
 
-
 <template>
 <section class="editor -text">
 
@@ -52,7 +51,6 @@ export default {
 </section>
 </template>
 
-
 <style lang="sass" scoped>
 
 // You can use variables, mixins and functions of Page Core
@@ -60,6 +58,5 @@ export default {
 
 // Under /deep/ you can also change style of child components
 .editor /deep/
-
 
 </style>
