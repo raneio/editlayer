@@ -2,7 +2,7 @@
 import TextEditor from '@/components/editors/Text'
 import TextareaEditor from '@/components/editors/Textarea'
 import ImageEditor from '@/components/editors/Image'
-import MarkdownEditor from '@/components/editors/Markdown'
+import RichtextEditor from '@/components/editors/Richtext'
 
 export default {
   name: 'Editors',
@@ -11,7 +11,7 @@ export default {
     TextEditor,
     TextareaEditor,
     ImageEditor,
-    MarkdownEditor,
+    RichtextEditor,
   },
 
   computed: {
@@ -45,7 +45,7 @@ export default {
       })
     }
 
-  }
+  },
 
 }
 </script>
@@ -80,8 +80,8 @@ export default {
     :saveFunction="saveContent"
   />
 
-  <MarkdownEditor
-    v-if="activeStructure.EDITOR === 'markdown'"
+  <RichtextEditor
+    v-if="activeStructure.EDITOR === 'richtext'"
     :editorData="editorData"
     :saveFunction="saveContent"
   />
