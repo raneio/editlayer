@@ -41,7 +41,7 @@ export default {
 <template>
 <section class="editor -textarea">
 
-  <textarea class="textarea" ref="textarea" rows="8" cols="80" v-model="content"/>
+  <textarea class="textarea" ref="textarea" v-model="content"/>
 
   <!-- <div id="elementId">
     Foobar
@@ -56,5 +56,6 @@ export default {
 .textarea
   resize: none
   overflow: hidden
+  min-height: 10rem
 
 </style>

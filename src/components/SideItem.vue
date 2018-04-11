@@ -130,8 +130,6 @@ echo '[]' > cors-config.json
 
   <img class="icon" src="@/assets/icon-forward.svg" alt="" v-if="isParent || isFile">
 
-
-
   <!-- <div
     class="preview -text"
     v-if="preview.type === 'status'"

@@ -3,7 +3,7 @@ import _ from 'lodash'
 import BalloonEditor from '@ckeditor/ckeditor5-build-balloon'
 
 export default {
-  name: 'RichtextEditor',
+  name: 'CKEditor',
 
   props: {
     editorData: Object,
@@ -13,7 +13,7 @@ export default {
   data () {
     return {
       content: this.editorData.content,
-      stickyToolbar: false,
+      stickyToolbar: false
     }
   },
 
@@ -31,11 +31,9 @@ export default {
   },
 
   mounted () {
-    this.$refs['textarea'].focus()
-
     BalloonEditor
       .create(this.$refs['textarea'], {
-        toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo'],
+        toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo']
       })
       .then(editor => {
         editor.model.document.on('change', () => {
@@ -45,14 +43,13 @@ export default {
       .catch(error => {
         console.error(error)
       })
-
   }
 
 }
 </script>
 
 <template>
-<section class="editor -richtext" :class="{ '-sticky-toolbar': stickyToolbar }">
+<section class="editor -ckeditor" :class="{ '-sticky-toolbar': stickyToolbar }">
 
   <div ref="textarea" v-html="content"/>
 
@@ -62,10 +59,10 @@ export default {
 <style lang="sass" scoped>
 @import '../../sass/features'
 
-// .editor.-richtext
+// .editor.-ckeditor
 //   margin-bottom: -2.35rem
 
-.editor.-richtext /deep/
+.editor.-ckeditor /deep/
 
   .ck-content
     min-height: 10rem
@@ -114,7 +111,6 @@ export default {
     ul
       list-style-type: disc
 
-// .editor.-richtext.-sticky-toolbar /deep/
-
+// .editor.-ckeditor.-sticky-toolbar /deep/
 
 </style>

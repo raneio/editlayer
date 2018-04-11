@@ -34,6 +34,16 @@ export default {
 
     roles () {
       return this.activeProject.roles
+    },
+
+    jsonUrl () {
+      if (!this.activeProject) return false
+      return `https://cdn.editlayer.com/${this.$route.params.projectId}/${this.activeProject.filename}.json`
+    },
+
+    jsonTarget () {
+      if (!this.activeProject) return false
+      return this.activeProject.projectId
     }
 
   },
@@ -41,10 +51,7 @@ export default {
   watch: {
 
     activeProject () {
-      if (this.activeProject !== null) {
-        this.trigger.method = this.activeProject.trigger.method
-        this.trigger.url = this.activeProject.trigger.url
-      }
+      this.updateLocalTrigger()
     },
 
     'trigger.method': function () {
@@ -65,13 +72,12 @@ export default {
       if (email !== null && !validator.isEmail(email)) {
         console.error('Email is invalid', email)
       } else if (email !== null) {
-
         let notificationId = Math.random().toString(36).slice(-8)
 
         this.$store.commit('setNotification', {
           id: notificationId,
           status: 'info',
-          message: `Adding user "${email}", please wait...`,
+          message: `Adding user "${email}", please wait...`
         })
 
         firebase.firestore
@@ -122,6 +128,7 @@ export default {
     },
 
     updateTrigger (payload) {
+      console.log('updateTrigger')
       let updateData = {}
       updateData['trigger.method'] = this.trigger.method
       updateData['trigger.url'] = this.trigger.url
@@ -132,6 +139,15 @@ export default {
         .update(updateData)
         .then(() => console.log('Trigger updated', updateData))
         .catch((error) => console.error('Trigger updating failed', error))
+    },
+
+    updateLocalTrigger () {
+      if (_.has(this.activeProject, 'trigger.method')) {
+        this.trigger.method = this.activeProject.trigger.method
+      }
+      if (_.has(this.activeProject, 'trigger.url')) {
+        this.trigger.url = this.activeProject.trigger.url
+      }
     },
 
     deleteProject () {
@@ -148,7 +164,12 @@ export default {
             deleteProjectId: this.activeProject.projectId
           })
           .then(() => {
-            this.$router.push({ name: 'Content' })
+            this.$store.commit('setNotification', {
+              status: 'info',
+              message: `Deleting project "${this.activeProject.projectId}", please wait...`
+            })
+
+            this.$router.push({ name: 'Dashboard' })
             console.log('Project Deleted')
           })
           .catch((error) => console.error('Project deleting failed', error))
@@ -158,10 +179,7 @@ export default {
   },
 
   mounted () {
-    if (this.activeProject !== null) {
-      this.trigger.method = (this.activeProject.trigger.method) ? this.activeProject.trigger.method : 'GET'
-      this.trigger.url = this.activeProject.trigger.url
-    }
+    this.updateLocalTrigger()
   }
 
 }
@@ -174,6 +192,14 @@ export default {
   <main class="settings" v-if="activeProject">
 
     <Breadcrumb/>
+
+    <section class="group">
+      <header class="heading-group">
+        <h1 class="heading">Published content location</h1>
+        <p class="tagline"></p>
+      </header>
+      <div><a :href="jsonUrl" :target="jsonTarget" v-text="jsonUrl"></a></div>
+    </section>
 
     <section class="group">
       <h1 class="heading">
@@ -246,7 +272,6 @@ export default {
         <h1 class="heading">Webhook</h1>
         <p class="tagline">Trigger request when publish is done</p>
       </header>
-
 
       <div class="input-group">
         <select v-model="trigger.method" class="select-method">

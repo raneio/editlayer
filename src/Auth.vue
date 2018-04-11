@@ -77,7 +77,8 @@ export default {
                 // redirect: false,
                 structure: {
                   title: 'text',
-                  description: 'textarea',
+                  slogan: 'textarea',
+                  description: 'ckeditor',
                   image: 'image'
                 }
               })
@@ -87,7 +88,7 @@ export default {
                 // redirect: false,
                 structure: {
                   simpleField: 'text',
-                  advancedField: {
+                  anotherField: {
                     EDITOR: 'text',
                     NAME: 'Advanced Field',
                     DEFAULT: 'Hello World!',

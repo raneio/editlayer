@@ -2,7 +2,7 @@
 import TextEditor from '@/components/editors/Text'
 import TextareaEditor from '@/components/editors/Textarea'
 import ImageEditor from '@/components/editors/Image'
-import RichtextEditor from '@/components/editors/Richtext'
+import CKEditor from '@/components/editors/CKEditor'
 
 export default {
   name: 'Editors',
@@ -11,7 +11,7 @@ export default {
     TextEditor,
     TextareaEditor,
     ImageEditor,
-    RichtextEditor,
+    CKEditor
   },
 
   computed: {
@@ -45,7 +45,7 @@ export default {
       })
     }
 
-  },
+  }
 
 }
 </script>
@@ -80,8 +80,8 @@ export default {
     :saveFunction="saveContent"
   />
 
-  <RichtextEditor
-    v-if="activeStructure.EDITOR === 'richtext'"
+  <CKEditor
+    v-if="activeStructure.EDITOR === 'ckeditor'"
     :editorData="editorData"
     :saveFunction="saveContent"
   />
