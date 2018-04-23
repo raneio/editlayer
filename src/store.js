@@ -24,7 +24,25 @@ export default new Vuex.Store({
       email: null
     },
     notifications: {},
-    publishProcesses: {}
+    publishProcesses: {},
+    editors: [
+      'text',
+      'textarea',
+      'richtext',
+      'image',
+      'color',
+      'time',
+      'date',
+      'datetime',
+      'week',
+      'month',
+      'email',
+      'number',
+      'password',
+      'range',
+      'tel',
+      'url'
+    ]
   },
 
   getters: {
@@ -261,18 +279,21 @@ export default new Vuex.Store({
         })
     },
 
-    updateContent ({state}, payload) {
+    updateContent ({state, getters}, payload) {
       let updateData = {}
       updateData[`draft.${payload.path}`] = payload.content
+      let currentContent = _.get(getters.structure, `${payload.path}.CONTENT`)
 
-      console.log('updateContent', updateData)
+      if (!_.isEqual(currentContent, payload.content)) {
+        console.log('updateContent', updateData)
 
-      firebase.firestore
-        .collection('projects')
-        .doc(payload.projectId)
-        .update(updateData)
-        .then(() => console.log('Content successfully updated!'))
-        .catch((error) => console.error('Error updating content:', error))
+        firebase.firestore
+          .collection('projects')
+          .doc(payload.projectId)
+          .update(updateData)
+          .then(() => console.log('Content successfully updated!'))
+          .catch((error) => console.error('Error updating content:', error))
+      }
     },
 
     publishJson ({state, commit, dispatch}, payload) {

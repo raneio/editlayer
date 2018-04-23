@@ -4,7 +4,7 @@ import autosize from 'autosize'
 // import * as monaco from '@timkendrick/monaco-editor'
 
 export default {
-  name: 'EditorTextarea',
+  name: 'TextareaEditor',
 
   props: {
     editorData: Object,
@@ -21,7 +21,6 @@ export default {
 
     'editorData.content' (value) {
       this.content = value
-      this.$refs['textarea'].focus()
     },
 
     content: _.debounce(function () {
@@ -42,10 +41,6 @@ export default {
 <section class="editor -textarea">
 
   <textarea class="textarea" ref="textarea" v-model="content"/>
-
-  <!-- <div id="elementId">
-    Foobar
-  </div> -->
 
 </section>
 </template>

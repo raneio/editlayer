@@ -12,6 +12,14 @@ export default {
     SidePanel,
     Breadcrumb,
     Editors
+  },
+
+  computed: {
+
+    activeStructure () {
+      return this.$store.getters.activeStructure
+    }
+
   }
 
 }
@@ -24,7 +32,7 @@ export default {
 
   <main class="main-content">
     <Breadcrumb/>
-    <Editors v-if="$route.params.projectId"/>
+    <Editors/>
   </main>
 </section>
 </template>

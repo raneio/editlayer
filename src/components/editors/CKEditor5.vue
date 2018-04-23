@@ -3,7 +3,7 @@ import _ from 'lodash'
 import BalloonEditor from '@ckeditor/ckeditor5-build-balloon'
 
 export default {
-  name: 'CKEditor',
+  name: 'CKEditor5',
 
   props: {
     editorData: Object,
@@ -13,7 +13,7 @@ export default {
   data () {
     return {
       content: this.editorData.content,
-      stickyToolbar: false
+      editor: null
     }
   },
 
@@ -21,7 +21,6 @@ export default {
 
     'editorData.content' (value) {
       this.content = value
-      this.$refs['textarea'].focus()
     },
 
     content: _.debounce(function () {
@@ -30,26 +29,45 @@ export default {
 
   },
 
-  mounted () {
-    BalloonEditor
-      .create(this.$refs['textarea'], {
-        toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo']
-      })
-      .then(editor => {
-        editor.model.document.on('change', () => {
-          this.content = editor.getData()
+  methods: {
+
+    initEditor () {
+      BalloonEditor
+        .create(this.$refs['textarea'], {
+          toolbar: [
+            'heading',
+            '|',
+            'bold',
+            'italic',
+            'link',
+            'bulletedList',
+            'numberedList',
+            'blockQuote',
+            'undo',
+            'redo'
+          ]
         })
-      })
-      .catch(error => {
-        console.error(error)
-      })
+        .then(editor => {
+          editor.model.document.on('change', () => {
+            this.content = editor.getData()
+          })
+        })
+        .catch(error => {
+          console.error(error)
+        })
+    }
+
+  },
+
+  mounted () {
+    this.initEditor()
   }
 
 }
 </script>
 
 <template>
-<section class="editor -ckeditor" :class="{ '-sticky-toolbar': stickyToolbar }">
+<section class="editor -ckeditor">
 
   <div ref="textarea" v-html="content"/>
 
@@ -58,9 +76,6 @@ export default {
 
 <style lang="sass" scoped>
 @import '../../sass/features'
-
-// .editor.-ckeditor
-//   margin-bottom: -2.35rem
 
 .editor.-ckeditor /deep/
 
@@ -83,13 +98,13 @@ export default {
       box-shadow: none
 
     h2
-      font-size: 1.6em
+      font-size: 1.8em
 
     h3
-      font-size: 1.4em
+      font-size: 1.6em
 
     h4
-      font-size: 1.2em
+      font-size: 1.4em
 
     p,
     h2,
@@ -110,7 +125,5 @@ export default {
 
     ul
       list-style-type: disc
-
-// .editor.-ckeditor.-sticky-toolbar /deep/
 
 </style>

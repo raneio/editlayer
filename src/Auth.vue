@@ -78,7 +78,7 @@ export default {
                 structure: {
                   title: 'text',
                   slogan: 'textarea',
-                  description: 'ckeditor',
+                  description: 'richtext',
                   image: 'image'
                 }
               })

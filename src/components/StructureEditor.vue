@@ -8,6 +8,7 @@ import 'codemirror/lib/codemirror.css'
 // import 'codemirror/theme/icecoder.css'
 // import 'codemirror/theme/dracula.css'
 // import 'codemirror/theme/base16-dark.css'
+// import 'codemirror/theme/railscasts.css'
 import firebase from '@/firebase'
 
 export default {
@@ -104,6 +105,10 @@ export default {
     }"
   />
 
+  <div class="alert -info">
+    <strong>Supported editors:</strong> <i>{{$store.state.editors.join(', ')}}</i>
+  </div>
+
 </section>
 </template>
 
@@ -114,6 +119,7 @@ export default {
 
 .structure
   padding: 2rem .5rem
+  +margin-to-childs()
 
   .error-message
     margin-top: -.75rem

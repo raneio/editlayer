@@ -2,7 +2,7 @@
 import _ from 'lodash'
 
 export default {
-  name: 'EditorImage',
+  name: 'ImageEditor',
 
   props: {
     editorData: Object,
