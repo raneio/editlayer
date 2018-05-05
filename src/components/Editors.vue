@@ -69,7 +69,7 @@ export default {
       this.$store.dispatch('updateContent', {
         projectId: editorData.projectId,
         path: editorData.path,
-        content: content,
+        content: content
       })
     },
 

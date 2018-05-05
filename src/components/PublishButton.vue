@@ -25,8 +25,7 @@ export default {
     },
 
     jsonUrl () {
-      if (!this.activeProject) return false
-      return `https://cdn.editlayer.com/${this.$route.params.projectId}/${this.activeProject.filename}.json`
+      return this.$store.getters.jsonUrl
     },
 
     jsonTarget () {
@@ -77,7 +76,6 @@ export default {
         filename: this.activeProject.filename,
         draft: this.activeProject.draft,
         structure: this.activeProject.structure,
-        trigger: this.activeProject.trigger
       })
     }
 

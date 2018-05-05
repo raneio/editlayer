@@ -7,6 +7,7 @@ import ImageCompressor from 'image-compressor.js'
 import firebase from '@/firebase'
 import router from '@/router'
 import buildStructure from '@/utils/buildStructure'
+import webhook from '@/utils/webhook'
 
 Vue.use(Vuex)
 Vue.use(firebase)
@@ -97,7 +98,12 @@ export default new Vuex.Store({
       } else {
         return {}
       }
-    }
+    },
+
+    jsonUrl (state, getters) {
+      if (!getters.activeProject) return false
+      return `https://cdn.editlayer.com/${getters.activeProject.projectId}/${getters.activeProject.filename}.json`
+    },
 
   },
 
@@ -129,7 +135,7 @@ export default new Vuex.Store({
           structure: (doc.data().structure) ? doc.data().structure : null,
           draft: (doc.data().draft) ? doc.data().draft : null,
           published: (doc.data().published) ? doc.data().published : null,
-          trigger: (doc.data().trigger) ? doc.data().trigger : null
+          settings: (doc.data().settings) ? doc.data().settings : null,
         }
       })
 
@@ -321,7 +327,6 @@ export default new Vuex.Store({
           publishedAt: firebase.firestoreTimestamp,
           content: payload.content,
           filename: payload.filename,
-          trigger: payload.trigger
         })
         .then((docRef) => {
           let versionId = docRef.id
@@ -338,7 +343,7 @@ export default new Vuex.Store({
         .catch((error) => console.error('Error adding version:', error))
     },
 
-    isPublishReady ({state, commit, dispatch}, payload) {
+    isPublishReady ({state, getters, commit, dispatch}, payload) {
       payload.versionCheck = payload.versionCheck + 1
 
       if (payload.versionCheck > 15) {
@@ -366,6 +371,11 @@ export default new Vuex.Store({
         })
         .then(() => {
           console.log('Published successfully updated!')
+
+          // Webhook here
+          if (_.get(getters, 'activeProject.settings.webhook.enabled') === true) {
+            webhook(getters.activeProject.settings.webhook.config, getters.jsonUrl)
+          }
 
           commit('updatePublishProcess', {
             projectId: payload.projectId,

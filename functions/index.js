@@ -45,28 +45,28 @@ exports.publishJson = functions.firestore.document('projects/{projectId}/version
     })
     .then(() => {
       console.log('JSON publishing done')
-      if (!_.has(versionData, 'trigger.method') || !_.has(versionData, 'trigger.url')) return false
-      if (!validator.isURL(versionData.trigger.url)) return false
-
-      let urlWithoutParams = versionData.trigger.url.split('?').shift()
-      let urlParts = url.parse(versionData.trigger.url, true)
-      let params = urlParts.query
-      params.PUBLISHED_AT = versionData.publishedA
-      params.VERSION_ID = event.params.versionId
-      params.CONTENT_JSON = JSON.stringify(jsonFileContent, null, 2)
-
-      console.log('Trigger', versionData.trigger.method, urlWithoutParams, params)
-
-      return axios({
-        method: versionData.trigger.method,
-        url: urlWithoutParams,
-        params: params,
-      })
-    })
-    .then((response) => {
-      if (response === false) return true
-
-      console.log('Triggered done', response.data)
+    //   if (!_.has(versionData, 'trigger.method') || !_.has(versionData, 'trigger.url')) return false
+    //   if (!_.isString(versionData.trigger.url) || !validator.isURL(versionData.trigger.url)) return false
+    //
+    //   let urlWithoutParams = versionData.trigger.url.split('?').shift()
+    //   let urlParts = url.parse(versionData.trigger.url, true)
+    //   let params = urlParts.query
+    //   params.PUBLISHED_AT = versionData.publishedAt
+    //   params.VERSION_ID = event.params.versionId
+    //   params.CONTENT_JSON = JSON.stringify(jsonFileContent, null, 2)
+    //
+    //   console.log('Trigger', versionData.trigger.method, urlWithoutParams, params)
+    //
+    //   return axios({
+    //     method: versionData.trigger.method,
+    //     url: urlWithoutParams,
+    //     params: params,
+    //   })
+    // })
+    // .then((response) => {
+    //   if (response === false) return true
+    //
+    //   console.log('Triggered done', response.data)
       return true
     })
     .catch((error) => console.error('JSON publishing failed', error.message))

@@ -2,8 +2,8 @@
 import _ from 'lodash'
 // import CodeMirror from 'codemirror'
 import { codemirror } from 'vue-codemirror'
-import 'codemirror/mode/javascript/javascript.js'
-import 'codemirror/lib/codemirror.css'
+// import 'codemirror/mode/javascript/javascript.js'
+// import 'codemirror/lib/codemirror.css'
 // import 'codemirror/theme/material.css'
 // import 'codemirror/theme/icecoder.css'
 // import 'codemirror/theme/dracula.css'
@@ -15,7 +15,7 @@ export default {
   name: 'StructureEditor',
 
   components: {
-    codemirror
+    codemirror,
   },
 
   data () {
@@ -137,12 +137,7 @@ export default {
 .structure /deep/
 
   .CodeMirror
-    margin-left: -.5rem
-    margin-right: -.5rem
-    border-radius: $button-border-radius
-    box-shadow: 0 5px 12px 0 mix(transparent, $color-content, 90%), 0 2px 5px 0 mix(transparent, black, 93%)
     height: auto
-    transition: box-shadow .2s
 
   &.-syntax-error .CodeMirror
     box-shadow: 0 5px 12px 0 mix(transparent, $color-content, 90%), 0 2px 5px 0 mix(transparent, black, 93%), inset 0 0 0 .2rem $color-danger, 0 0 0 .2rem $color-danger

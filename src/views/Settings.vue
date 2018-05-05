@@ -1,25 +1,19 @@
 <script>
 import _ from 'lodash'
+import axios from 'axios'
 import validator from 'validator'
 import firebase from '@/firebase'
 import Breadcrumb from '@/components/Breadcrumb'
 import Navigation from '@/components/Navigation'
+import Webhook from '@/components/settings/Webhook'
 
 export default {
   name: 'Settings',
 
   components: {
     Breadcrumb,
-    Navigation
-  },
-
-  data () {
-    return {
-      trigger: {
-        method: 'GET',
-        url: null
-      }
-    }
+    Navigation,
+    Webhook,
   },
 
   computed: {
@@ -37,30 +31,13 @@ export default {
     },
 
     jsonUrl () {
-      if (!this.activeProject) return false
-      return `https://cdn.editlayer.com/${this.$route.params.projectId}/${this.activeProject.filename}.json`
+      return this.$store.getters.jsonUrl
     },
 
     jsonTarget () {
       if (!this.activeProject) return false
       return this.activeProject.projectId
     }
-
-  },
-
-  watch: {
-
-    activeProject () {
-      this.updateLocalTrigger()
-    },
-
-    'trigger.method': function () {
-      this.updateTrigger()
-    },
-
-    'trigger.url': _.debounce(function () {
-      this.updateTrigger()
-    }, 500)
 
   },
 
@@ -127,29 +104,6 @@ export default {
       }
     },
 
-    updateTrigger (payload) {
-      console.log('updateTrigger')
-      let updateData = {}
-      updateData['trigger.method'] = this.trigger.method
-      updateData['trigger.url'] = this.trigger.url
-
-      firebase.firestore
-        .collection('projects')
-        .doc(this.activeProject.projectId)
-        .update(updateData)
-        .then(() => console.log('Trigger updated', updateData))
-        .catch((error) => console.error('Trigger updating failed', error))
-    },
-
-    updateLocalTrigger () {
-      if (_.has(this.activeProject, 'trigger.method')) {
-        this.trigger.method = this.activeProject.trigger.method
-      }
-      if (_.has(this.activeProject, 'trigger.url')) {
-        this.trigger.url = this.activeProject.trigger.url
-      }
-    },
-
     deleteProject () {
       let deleteConfirm = prompt(`Write "${this.activeProject.projectId}" if you really want to delete project permanently.`, '')
 
@@ -174,13 +128,9 @@ export default {
           })
           .catch((error) => console.error('Project deleting failed', error))
       }
-    }
+    },
 
   },
-
-  mounted () {
-    this.updateLocalTrigger()
-  }
 
 }
 </script>
@@ -195,8 +145,8 @@ export default {
 
     <section class="group">
       <header class="heading-group">
-        <h1 class="heading">Published content location</h1>
-        <p class="tagline"></p>
+        <h1 class="heading">Location of published file</h1>
+        <p class="tagline">You can always find latest published JSON file from this URL address</p>
       </header>
       <div><a :href="jsonUrl" :target="jsonTarget" v-text="jsonUrl"></a></div>
     </section>
@@ -266,29 +216,15 @@ export default {
       </button>
     </section>
 
+    <Webhook class="group"/>
+
     <section class="group">
 
       <header class="heading-group">
-        <h1 class="heading">Webhook</h1>
-        <p class="tagline">Trigger request when publish is done</p>
+        <h1 class="heading">Delete project</h1>
+        <p class="tagline danger">Your project will be deleted permanently and you can’t undo this.</p>
       </header>
 
-      <div class="input-group">
-        <select v-model="trigger.method" class="select-method">
-          <option>GET</option>
-          <option>POST</option>
-        </select>
-        <input class="grow" type="text" v-model="trigger.url" placeholder="https://example.com/folder/?foo=bar">
-      </div>
-    </section>
-
-    <section class="group">
-      <h1 class="heading">
-        Delete project
-      </h1>
-      <div class="danger">
-        Your project will be deleted permanently and you can’t undo this.
-      </div>
       <button class="button -danger delete-project" @click="deleteProject()">
         Delete Project Permamently
       </button>
@@ -308,7 +244,7 @@ export default {
 
 .group
   +margin-to-childs(.5rem)
-  max-width: 35rem
+  max-width: 45rem
 
   & + .group
     margin-top: 6rem
@@ -345,12 +281,7 @@ export default {
     background-repeat: repeat-x
 
 .danger
-  border: 1px solid $color-danger
   color: $color-danger
-  border-radius: $button-border-radius
-  padding: .5rem 1rem
-  font-size: .9rem
-  font-weight: 600
 
 .delete-project
   font-size: .8rem

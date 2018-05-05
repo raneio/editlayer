@@ -25,11 +25,10 @@ service cloud.firestore {
         		&& request.writeFields[0] == 'published.draft' || request.writeFields[1] == 'published.draft';
       }
 
-      function allowTriggers () {
+      function allowWebhook () {
       	return isRole(['admin'])
-        		&& request.writeFields.size() == 2
-        		&& request.writeFields[0] == 'trigger.method' || request.writeFields[1] == 'trigger.method'
-        		&& request.writeFields[0] == 'trigger.url' || request.writeFields[1] == 'trigger.url';
+        		&& request.writeFields.size() == 1
+        		&& request.writeFields[0] == 'settings.webhook.config' || request.writeFields[0] == 'settings.webhook.enabled';
       }
 
       function allowStructure () {
@@ -60,7 +59,7 @@ service cloud.firestore {
 
       allow update: if allowDraft()
       							|| allowPublished()
-      							|| allowTriggers()
+      							|| allowWebhook()
                     || allowRoles()
                     || allowStructure();
     }
