@@ -1,6 +1,4 @@
 <script>
-import _ from 'lodash'
-import axios from 'axios'
 import validator from 'validator'
 import firebase from '@/firebase'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -13,7 +11,7 @@ export default {
   components: {
     Breadcrumb,
     Navigation,
-    Webhook,
+    Webhook
   },
 
   computed: {
@@ -128,9 +126,9 @@ export default {
           })
           .catch((error) => console.error('Project deleting failed', error))
       }
-    },
+    }
 
-  },
+  }
 
 }
 </script>

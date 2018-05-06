@@ -1,13 +1,10 @@
 <script>
 import _ from 'lodash'
-import axios from 'axios'
-import validator from 'validator'
-import devtools from 'devtools-detect'
 import { codemirror } from 'vue-codemirror'
 import firebase from '@/firebase'
-import webhook from '@/utils/webhook'
 import Breadcrumb from '@/components/Breadcrumb'
 import Navigation from '@/components/Navigation'
+import webhook from '@/utils/webhook'
 
 export default {
   name: 'Webhook',
@@ -15,14 +12,14 @@ export default {
   components: {
     Breadcrumb,
     Navigation,
-    codemirror,
+    codemirror
   },
 
   data () {
     return {
       enabled: false,
       config: false,
-      openDevtoolInfo: false,
+      openDevtoolInfo: false
     }
   },
 
@@ -34,7 +31,7 @@ export default {
 
     jsonUrl () {
       return this.$store.getters.jsonUrl
-    },
+    }
 
   },
 
@@ -50,7 +47,7 @@ export default {
 
     enabled () {
       this.saveEnabled()
-    },
+    }
 
   },
 
@@ -99,10 +96,6 @@ export default {
       _.delay(() => {
         this.openDevtoolInfo = false
       }, 10000)
-
-      // if (!devtools.open) {
-      //   this.openDevtoolInfo = true
-      // }
     },
 
     enableWebhook () {
@@ -129,18 +122,12 @@ export default {
     "versionId": "{{VERSION_ID}}"
   }
 }`
-    },
+    }
 
   },
 
   mounted () {
     this.updateData()
-
-    // window.addEventListener('devtoolschange', (e) => {
-  	// 	if (e.detail.open) {
-    //     this.openDevtoolInfo = false
-    //   }
-  	// })
   }
 
 }
@@ -208,7 +195,6 @@ export default {
   </div>
 
   <textarea v-model="config" rows="10"></textarea> -->
-
 
 </section>
 </template>

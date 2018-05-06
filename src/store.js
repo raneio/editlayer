@@ -103,7 +103,7 @@ export default new Vuex.Store({
     jsonUrl (state, getters) {
       if (!getters.activeProject) return false
       return `https://cdn.editlayer.com/${getters.activeProject.projectId}/${getters.activeProject.filename}.json`
-    },
+    }
 
   },
 
@@ -135,7 +135,7 @@ export default new Vuex.Store({
           structure: (doc.data().structure) ? doc.data().structure : null,
           draft: (doc.data().draft) ? doc.data().draft : null,
           published: (doc.data().published) ? doc.data().published : null,
-          settings: (doc.data().settings) ? doc.data().settings : null,
+          settings: (doc.data().settings) ? doc.data().settings : null
         }
       })
 
@@ -326,7 +326,7 @@ export default new Vuex.Store({
           publishedBy: payload.publishedBy,
           publishedAt: firebase.firestoreTimestamp,
           content: payload.content,
-          filename: payload.filename,
+          filename: payload.filename
         })
         .then((docRef) => {
           let versionId = docRef.id

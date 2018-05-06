@@ -1,6 +1,5 @@
 import _ from 'lodash'
 import axios from 'axios'
-import escapeJSON from 'escape-json-node'
 
 const errorHandler = (message) => {
   console.error(message)
@@ -13,7 +12,6 @@ export default (configString, jsonUrl) => {
 
   return axios.get(jsonUrl)
     .then((response) => {
-
       let publishedContent = response.data
       let config = {}
       let base64Content = btoa(JSON.stringify(publishedContent))

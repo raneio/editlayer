@@ -15,7 +15,7 @@ export default {
   name: 'StructureEditor',
 
   components: {
-    codemirror,
+    codemirror
   },
 
   data () {
