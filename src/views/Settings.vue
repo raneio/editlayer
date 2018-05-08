@@ -33,7 +33,7 @@ export default {
     jsonTarget () {
       if (!this.activeProject) return false
       return this.activeProject.projectId
-    },
+    }
 
   },
 

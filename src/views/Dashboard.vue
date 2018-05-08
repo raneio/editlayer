@@ -8,7 +8,7 @@ export default {
 
   components: {
     Navigation,
-    Projects,
+    Projects
   },
 
   computed: {
@@ -25,7 +25,7 @@ export default {
       }).catch((error) => {
         console.error('Logout failed', error)
       })
-    },
+    }
 
   },
 
@@ -92,5 +92,8 @@ export default {
 
       +for-tablet-portrait
         display: block
+
+    .button
+      font-size: .8rem
 
 </style>

@@ -1,5 +1,4 @@
 <script>
-import firebase from '@/firebase'
 import Breadcrumb from '@/components/Breadcrumb'
 import PublishButton from '@/components/PublishButton'
 
@@ -162,7 +161,5 @@ export default {
     transition: opacity 1s
     transition-delay: 1s
     opacity: 0
-
-
 
 </style>

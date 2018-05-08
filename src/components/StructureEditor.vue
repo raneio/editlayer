@@ -87,7 +87,7 @@ export default {
 <section class="structure" :class="{'-syntax-error': syntaxError}">
 
   <h1 class="heading">
-    Structure of JSON
+    Content structure
   </h1>
 
   <div class="error-message">

@@ -5,16 +5,14 @@ export default {
   name: 'Loader',
 
   mounted () {
-
     anime({
       targets: this.$refs['loader'],
       rotate: '360deg',
       easing: 'linear',
       duration: 1000,
-      loop: true,
+      loop: true
     })
-
-  },
+  }
 
 }
 </script>

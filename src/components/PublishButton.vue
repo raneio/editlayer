@@ -8,7 +8,7 @@ export default {
   name: 'PublishButton',
 
   components: {
-    Loader,
+    Loader
   },
 
   computed: {
@@ -66,22 +66,19 @@ export default {
         draft: this.activeProject.draft,
         structure: this.activeProject.structure
       })
-
     }
 
   },
 
   mounted () {
-
     anime({
       targets: this.$refs['rotate-icon'],
       rotate: '360deg',
       easing: 'linear',
       duration: 1000,
-      loop: true,
+      loop: true
     })
-
-  },
+  }
 
 }
 </script>

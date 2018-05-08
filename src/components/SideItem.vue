@@ -25,9 +25,7 @@ export default {
     },
 
     preview () {
-
       if (_.includes(['image'], this.item.EDITOR)) {
-
         let imageUrl = this.item.CONTENT
 
         if (_.startsWith(imageUrl, 'https://cdn.editlayer.com/')) {
@@ -38,8 +36,7 @@ export default {
           type: 'image',
           content: imageUrl
         }
-      }
-      else if (this.item.CONTENT) {
+      } else if (this.item.CONTENT) {
         let content = this.item.CONTENT
 
         let div = document.createElement('div')
@@ -55,13 +52,12 @@ export default {
           type: 'text',
           content: content
         }
-      }
-      else {
+      } else {
         return {}
       }
     }
 
-  },
+  }
 
 }
 </script>
@@ -164,7 +160,7 @@ export default {
       font-size: .8em
       color: $color-gray
       font-weight: 400
-      padding: .5rem 1rem
+      padding: .35rem 1rem
 
     &.-image
       position: relative

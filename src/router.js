@@ -30,11 +30,11 @@ export default new Router({
       name: 'Content',
       path: '/:projectId/:path?',
       component: Content
-    },
-    {
-      path: '*',
-      redirect: { name: 'Dashboard' }
     }
+    // {
+    //   path: '*',
+    //   redirect: { name: 'Dashboard' }
+    // },
     // {
     //   path: '/:projectId',
     //   redirect: to => {

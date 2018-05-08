@@ -20,8 +20,7 @@ export default {
         _.each(file.roles, (role, userId) => {
           if (role.role === 'editor') {
             roleEditors++
-          }
-          else if (role.role === 'admin') {
+          } else if (role.role === 'admin') {
             roleAdmins++
           }
 
@@ -36,13 +35,13 @@ export default {
           status: (file.published && _.isEqual(file.draft, file.published.draft) && file.structure === file.published.structure) ? 'published' : 'draft',
           users: {
             editors: roleEditors,
-            admins: roleAdmins,
+            admins: roleAdmins
           },
           role: myRole,
-          jsonUrl: `https://cdn.editlayer.com/${file.projectId}/${file.filename}.json`,
+          jsonUrl: `https://cdn.editlayer.com/${file.projectId}/${file.filename}.json`
         }
       })
-    },
+    }
 
   },
 
@@ -60,9 +59,9 @@ export default {
 
     selectProject (project, event) {
       if (event.target.tagName !== 'A') {
-        this.$router.push({ name: 'Content', params: { projectId: project.projectId }})
+        this.$router.push({name: 'Content', params: {projectId: project.projectId}})
       }
-    },
+    }
 
   }
 
@@ -82,13 +81,9 @@ export default {
 
   <div class="project-grid">
 
-    <div class="project" v-for="project in projects">
+    <div class="project" v-for="project in projects" :key="project.projectId">
 
-      <div
-        class="button -versatile"
-        @click="selectProject(project, $event)"
-        :key="project.projectId"
-      >
+      <div class="button -versatile" @click="selectProject(project, $event)">
         <h2 class="heading">
           <div v-text="project.name"></div>
           <div class="icon">
@@ -153,7 +148,6 @@ export default {
   +for-big-desktop
     +grid(4, 2rem)
 
-
 .project
   display: flex
 
@@ -187,6 +181,5 @@ export default {
   font-size: 1.4rem
   padding-top: 2rem
   padding-bottom: 2rem
-
 
 </style>
