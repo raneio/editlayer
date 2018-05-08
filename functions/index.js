@@ -1,6 +1,6 @@
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
-admin.initializeApp(functions.config().firebase)
+admin.initializeApp()
 const fs = require('fs')
 const _ = require('lodash')
 const axios = require('axios')
@@ -17,17 +17,21 @@ const bunnyCdnHeaders = {
 }
 
 
-exports.publishJson = functions.firestore.document('projects/{projectId}/versions/{versionId}').onCreate((event) => {
+exports.publishJson = functions.firestore.document('projects/{projectId}/versions/{versionId}').onCreate((snap, context) => {
+
+  console.log('snap', snap)
+  console.log('snap.data()', snap.data())
+
   const tempFilePath = '/tmp/tempfile.json'
   // const bucket = admin.storage().bucket(bucketName)
-  const versionData = event.data.data()
-  const destinationPath = `${event.params.projectId}/${versionData.filename}.json`
+  const versionData = snap.data()
+  const destinationPath = `${context.params.projectId}/${versionData.filename}.json`
 
-  console.log('Upload JSON with versionId', event.params.versionId)
+  console.log('Upload JSON with versionId', context.params.versionId)
 
   const jsonFileContent = _.merge(versionData.content, {
     PUBLISHED_AT: versionData.publishedAt,
-    VERSION_ID: event.params.versionId,
+    VERSION_ID: context.params.versionId,
   })
 
   fs.writeFileSync(tempFilePath, JSON.stringify(jsonFileContent, null, 2))
@@ -52,7 +56,7 @@ exports.publishJson = functions.firestore.document('projects/{projectId}/version
     //   let urlParts = url.parse(versionData.trigger.url, true)
     //   let params = urlParts.query
     //   params.PUBLISHED_AT = versionData.publishedAt
-    //   params.VERSION_ID = event.params.versionId
+    //   params.VERSION_ID = context.params.versionId
     //   params.CONTENT_JSON = JSON.stringify(jsonFileContent, null, 2)
     //
     //   console.log('Trigger', versionData.trigger.method, urlWithoutParams, params)
@@ -73,9 +77,10 @@ exports.publishJson = functions.firestore.document('projects/{projectId}/version
 
 })
 
-exports.attachRole = functions.firestore.document('projects/{projectId}/permissionJobs/{permissionId}').onCreate((event) => {
+exports.attachRole = functions.firestore.document('projects/{projectId}/permissionJobs/{permissionId}').onCreate((snap, context) => {
   // const firestore = admin.firestore()
-  const storeData = event.data.data()
+
+  const storeData = snap.data()
 
   return firestore
     .collection('users')
@@ -114,7 +119,7 @@ exports.attachRole = functions.firestore.document('projects/{projectId}/permissi
 
       return firestore
         .collection('projects')
-        .doc(event.params.projectId)
+        .doc(context.params.projectId)
         .update(updateData)
 
     })
@@ -125,14 +130,13 @@ exports.attachRole = functions.firestore.document('projects/{projectId}/permissi
 })
 
 // exports.attachRolesWhenRegister = functions.https.onRequest((request, response) => {
-exports.attachRolesAfterRegister = functions.auth.user().onCreate((event) => {
+exports.attachRolesAfterRegister = functions.auth.user().onCreate((userRecord, context) => {
   // const firestore = admin.firestore()
 
-  console.log('userEventId', event.data.uid)
-  console.log('userEventData', event.data)
+  // console.log('userEventData', event.data)
+  console.log('userRecord', userRecord)
 
-  const user = event.data
-  const emailSha1 = sha1(user.email)
+  const emailSha1 = sha1(userRecord.email)
 
   return firestore
     .collection('projects')
@@ -146,9 +150,9 @@ exports.attachRolesAfterRegister = functions.auth.user().onCreate((event) => {
 
           let updateData = {}
 
-          updateData[`roles.${user.uid}`] = {
+          updateData[`roles.${userRecord.uid}`] = {
             role: permissionData.role,
-            email: user.email,
+            email: userRecord.email,
             userExist: true,
           }
 
@@ -178,13 +182,13 @@ exports.attachRolesAfterRegister = functions.auth.user().onCreate((event) => {
 })
 
 
-exports.deleteProject = functions.firestore.document('projects/{projectId}/deleteJobs/{permissionId}').onCreate((event) => {
-  const storeData = event.data.data()
+exports.deleteProject = functions.firestore.document('projects/{projectId}/deleteJobs/{permissionId}').onCreate((snap, context) => {
+  const storeData = snap.data()
 
-  if (storeData.deleteProjectId !== event.params.projectId) return false
+  if (storeData.deleteProjectId !== context.params.projectId) return false
 
   return bucket
-    .getFiles({ prefix: event.params.projectId })
+    .getFiles({ prefix: context.params.projectId })
     .then((result) => {
       let files = result[0]
 
@@ -207,7 +211,7 @@ exports.deleteProject = functions.firestore.document('projects/{projectId}/delet
     .then(() => {
       return firestore
         .collection('projects')
-        .doc(event.params.projectId)
+        .doc(context.params.projectId)
         .collection('versions')
         .get()
     })
@@ -215,7 +219,7 @@ exports.deleteProject = functions.firestore.document('projects/{projectId}/delet
       versions.forEach(doc => {
         firestore
           .collection('projects')
-          .doc(event.params.projectId)
+          .doc(context.params.projectId)
           .collection('versions')
           .doc(doc.id)
           .delete()
@@ -223,7 +227,7 @@ exports.deleteProject = functions.firestore.document('projects/{projectId}/delet
 
       return firestore
         .collection('projects')
-        .doc(event.params.projectId)
+        .doc(context.params.projectId)
         .collection('permissionJobs')
         .get()
     })
@@ -231,7 +235,7 @@ exports.deleteProject = functions.firestore.document('projects/{projectId}/delet
       permissionJobs.forEach(doc => {
         firestore
           .collection('projects')
-          .doc(event.params.projectId)
+          .doc(context.params.projectId)
           .collection('permissionJobs')
           .doc(doc.id)
           .delete()
@@ -239,7 +243,7 @@ exports.deleteProject = functions.firestore.document('projects/{projectId}/delet
 
       return firestore
         .collection('projects')
-        .doc(event.params.projectId)
+        .doc(context.params.projectId)
         .collection('deleteJobs')
         .get()
     })
@@ -247,7 +251,7 @@ exports.deleteProject = functions.firestore.document('projects/{projectId}/delet
       deleteJobs.forEach(doc => {
         firestore
           .collection('projects')
-          .doc(event.params.projectId)
+          .doc(context.params.projectId)
           .collection('deleteJobs')
           .doc(doc.id)
           .delete()
@@ -255,7 +259,7 @@ exports.deleteProject = functions.firestore.document('projects/{projectId}/delet
 
       return firestore
         .collection('projects')
-        .doc(event.params.projectId)
+        .doc(context.params.projectId)
         .delete()
     })
     .catch(error => {
