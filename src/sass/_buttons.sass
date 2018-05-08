@@ -1,13 +1,19 @@
 button,
 .button
   @extend button
-  box-shadow: 0 5px 12px 0 mix(transparent, $color-content, 90%), 0 2px 5px 0 mix(transparent, black, 93%)
+  box-shadow: 0 .5em 1em 0 mix($color-black, transparent, 5%), 0 0 .4em 0 mix(black, transparent, 10%)
   text-transform: uppercase
-  transition: transform .2s
+  transition: transform .2s, box-shadow .2s
   text-align: center
 
+  &.-active
+    box-shadow: 0 0 1em 0 mix($color-black, transparent, 5%), 0 0 .4em 0 mix(black, transparent, 10%)
+
   &.-danger
-    background-color: $color-danger
+    background-color: $color-red
+
+  &.-new
+    background-color: $color-green
 
   &.-link,
   &.-pill
@@ -17,22 +23,58 @@ button,
     font-weight: 600
     padding-left: 0
     padding-right: 0
-    color: $color-link
+    color: $color-black
+
+    &:hover
+      color: mix($color-black, white, 80%)
 
     &.-new
-      color: $color-new
+      color: $color-green
 
     &.-danger
-      color: $color-danger
+      color: $color-red
 
   &.-pill
     padding: .1em .75em
     border-radius: 1em
 
     &.-active
-      color: $color-background
-      background-color: $color-content
+      color: $color-white
+      background-color: $color-black
       pointer-events: none
+
+  &.-versatile
+    color: $color-gray
+    text-transform: none
+    font-weight: 600
+    text-align: left
+    position: relative
+    background-color: mix($color-violet, white, 2%)
+    display: block
+    padding: 0
+    font-weight: 400
+
+    &:hover
+
+      .heading
+        color: mix($color-black, white, 80%)
+
+    .heading
+      font-weight: 400
+      font-size: 1.2rem
+      overflow: hidden
+      border-bottom: 1px solid mix($color-violet, white, 8%)
+      padding: .5rem 1rem
+      +chain()
+      justify-content: space-between
+      align-items: center
+
+    .content
+      background-color: $color-white
+      border-bottom-left-radius: $button-border-radius
+      border-bottom-right-radius: $button-border-radius
+      font-size: .9rem
+
 
 
   &[disabled]

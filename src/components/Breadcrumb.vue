@@ -17,13 +17,7 @@ export default {
     },
 
     activeStructure (state, getters) {
-      let path = _.replace(this.$route.params.path, />/g, '.')
-
-      if (_.has(this.structure, path)) {
-        return _.get(this.structure, path)
-      } else {
-        return {}
-      }
+      return this.$store.getters.activeStructure
     },
 
     breadcrumb () {
@@ -44,7 +38,7 @@ export default {
 
         if (item && !_.has(item, 'ORDER')) {
           breadcrumb.unshift({
-            name: this.stringToTitle(item.NAME),
+            name: titleCase(item.NAME),
             path: path,
             projectId: this.$route.params.projectId
           })
@@ -60,20 +54,6 @@ export default {
         })
       }
 
-      if (this.$route.name === 'Settings') {
-        breadcrumb = [
-          {
-            name: this.activeProject.name,
-            projectId: this.$route.params.projectId
-          },
-
-          {
-            name: 'Settings',
-            projectId: this.$route.params.projectId
-          }
-        ]
-      }
-
       return breadcrumb
     }
 
@@ -81,22 +61,8 @@ export default {
 
   methods: {
 
-    stringToTitle (text) {
-      if (_.endsWith(text, '.json')) {
-        text = text.slice(0, -5)
-      }
-
-      return titleCase(text)
-    },
-
     selectItem (item) {
       let path = _.replace(item.path, /\./g, '>')
-
-      let routeName = this.$route.name
-
-      if (routeName === 'Settings') {
-        routeName = 'Content'
-      }
 
       anime.timeline()
         .add({
@@ -111,14 +77,10 @@ export default {
           translateX: '-100%',
           duration: 0,
           complete: (anim) => {
-            console.log('selectItem', routeName)
             if (item.projectId && path) {
-              this.$router.push({name: routeName, params: {projectId: item.projectId, path: path}})
+              this.$router.push({name: this.$route.name, params: {projectId: item.projectId, path: path}})
             } else if (item.projectId) {
-              this.$router.push({name: routeName, params: {projectId: item.projectId}})
-            } else {
-              let view = (this.$route.name === 'Structure') ? 'structure' : null
-              this.$router.push({name: 'Dashboard', params: {view: view}})
+              this.$router.push({name: this.$route.name, params: {projectId: item.projectId}})
             }
           }
         })
@@ -139,21 +101,15 @@ export default {
 <template>
 <section class="breadcrumb">
 
-  <div class="crumb" v-if="!$route.params.projectId">
-    <img src="@/assets/icon-home-disabled.svg" alt="">
-  </div>
-
-  <a @click="selectItem({})" class="crumb button -link" v-if="$route.params.projectId">
-    <img src="@/assets/icon-home.svg" alt="">
-  </a>
-
   <div
     class="crumb"
     v-for="(item, idx) in breadcrumb"
     :key="idx"
   >
 
-    <img src="@/assets/icon-crumb.svg" alt="">
+    <svg width="6" height="8" viewBox="0 0 6 8" xmlns="http://www.w3.org/2000/svg" v-if="idx > 0">
+      <path d="M5.219 4.25v.031A.457.457 0 0 0 5.312 4a.457.457 0 0 0-.093-.281L1.53.094A.338.338 0 0 0 1.281 0 .457.457 0 0 0 1 .094l-.219.25a.338.338 0 0 0-.094.25c0 .104.032.198.094.281L3.97 4 .78 7.125a.389.389 0 0 0-.125.281c0 .104.042.188.125.25L1 7.875A.389.389 0 0 0 1.281 8a.297.297 0 0 0 .25-.125L5.22 4.25z" fill="#797979" fill-rule="evenodd"/>
+    </svg>
 
     <button
       class="button -link"
@@ -175,22 +131,18 @@ export default {
 @import '../sass/features'
 
 .breadcrumb
-  +chain(.75rem)
+  +chain(.6em)
   transition: opacity .2s
-  padding-bottom: .25rem
-  font-size: .9rem
-  border-bottom: 1px solid $color-hr
+  font-size: .8rem
+  border-bottom: 1px solid mix($color-violet, transparent, 10%)
   height: 3rem
-  color: $color-disabled
+  color: $color-gray
 
-  .crumb
-    +chain(.75rem)
-    align-items: center
+.button.-link
+  text-transform: none
 
-  .button
-    // text-transform: none
-
-    &[disabled]
-      cursor: default
+.crumb
+  +chain(.6em)
+  align-items: center
 
 </style>

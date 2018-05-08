@@ -1,7 +1,6 @@
 <script>
 import validator from 'validator'
 import firebase from '@/firebase'
-import Breadcrumb from '@/components/Breadcrumb'
 import Navigation from '@/components/Navigation'
 import Webhook from '@/components/settings/Webhook'
 
@@ -9,7 +8,6 @@ export default {
   name: 'Settings',
 
   components: {
-    Breadcrumb,
     Navigation,
     Webhook
   },
@@ -35,7 +33,7 @@ export default {
     jsonTarget () {
       if (!this.activeProject) return false
       return this.activeProject.projectId
-    }
+    },
 
   },
 
@@ -139,11 +137,9 @@ export default {
 
   <main class="settings" v-if="activeProject">
 
-    <Breadcrumb/>
-
     <section class="group">
       <header class="heading-group">
-        <h1 class="heading">Location of published file</h1>
+        <h1 class="heading">File location</h1>
         <p class="tagline">You can always find latest published JSON file from this URL address</p>
       </header>
       <div><a :href="jsonUrl" :target="jsonTarget" v-text="jsonUrl"></a></div>
@@ -236,8 +232,9 @@ export default {
 @import '../sass/features'
 
 .settings
+  background-image: linear-gradient(left, mix($color-violet, transparent, 4%), mix($color-violet, transparent, 8%))
   overflow-y: auto
-  padding: .25rem 2.5rem 2.5rem
+  padding: 2.5rem
   +margin-to-childs(2rem)
 
 .group

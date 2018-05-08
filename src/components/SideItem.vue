@@ -20,25 +20,13 @@ export default {
       return this.item.TYPE === 'object' || this.item.TYPE === 'array'
     },
 
-    isFile () {
-      return this.item.TYPE === 'file'
-    },
-
     isDraft () {
       return this.item.STATUS === 'draft'
     },
 
-    // isSpacer () {
-    //   return _.has(this.item, 'SPACER')
-    // },
-
     preview () {
+
       if (_.includes(['image'], this.item.EDITOR)) {
-        // let content = null
-        //
-        // if (this.item.CONTENT !== null) {
-        //   content = `${this.$store.state.storageUrlPrefix}${this.$route.params.projectId}/${this.item.CONTENT}`
-        // }
 
         let imageUrl = this.item.CONTENT
 
@@ -50,7 +38,8 @@ export default {
           type: 'image',
           content: imageUrl
         }
-      } else if (this.item.CONTENT) {
+      }
+      else if (this.item.CONTENT) {
         let content = this.item.CONTENT
 
         let div = document.createElement('div')
@@ -58,90 +47,55 @@ export default {
 
         content = div.textContent || div.innerText || ''
 
-        if (content && content.length > 90) {
-          content = content.substring(0, 90).trim() + '...'
+        if (content && content.length > 70) {
+          content = content.substring(0, 70).trim() + '...'
         }
 
         return {
           type: 'text',
           content: content
         }
-      } else {
+      }
+      else {
         return {}
       }
     }
 
   },
 
-  methods: {
-
-    // stringToTitle (text) {
-    //   if (_.endsWith(text, '.json')) {
-    //     text = text.slice(0, -5)
-    //   }
-    //
-    //   return titleCase(text)
-    // }
-
-  }
-
 }
 </script>
 
-echo '[]' > cors-config.json
-
 <template>
 <section
-  class="button item"
+  class="item button -versatile"
   :class="{
     '-parent': isParent,
-    '-file': isFile,
     '-active': isActive,
     '-draft': isDraft,
   }"
   @click="selectItem(item)"
 >
 
-  <!-- <div
-    v-if="item.STATUS === 'draft'"
-    class="draft"
-  >
-    draft
-  </div> -->
-
-  <!-- {{ item }} -->
-
-  <!-- <div class="spacer" v-if="item.SPACER" v-text="item.SPACER"></div> -->
-
-  <div class="item-heading" v-text="item.NAME"></div>
+  <h2 class="heading">
+    <div v-text="item.NAME"></div>
+    <svg width="11" height="20" viewBox="0 0 11 20" xmlns="http://www.w3.org/2000/svg" v-if="isParent">
+      <path d="M.773.297a.465.465 0 0 1 .344-.129c.143 0 .258.043.344.129l9.11 9.11c.085.085.128.2.128.343a.465.465 0 0 1-.129.344l-9.11 9.11a.465.465 0 0 1-.343.128.465.465 0 0 1-.344-.129L.43 18.86a.465.465 0 0 1-.13-.343c0-.144.044-.273.13-.387L8.852 9.75.43 1.371A.628.628 0 0 1 .3.984C.3.841.345.727.43.641L.773.297z" fill="#252525" fill-rule="evenodd"/>
+    </svg>
+  </h2>
 
   <div
-    class="preview -text"
+    class="content -text"
     v-if="preview.type === 'text'"
     v-text="preview.content"
-  ></div>
+  />
 
   <div
-    class="preview -image"
+    class="content -image"
     v-if="preview.type === 'image'"
   >
     <img class="image" :src="preview.content" alt="" v-if="preview.content !== null">
   </div>
-
-  <img class="icon" src="@/assets/icon-forward.svg" alt="" v-if="isParent || isFile">
-
-  <!-- <div
-    class="preview -text"
-    v-if="preview.type === 'status'"
-  >
-    Status:
-    <span v-if="preview.status === 'draft'" class="status -draft">draft</span>
-    <span v-if="preview.status === 'published'" class="status -published">published</span>
-  </div> -->
-
-  <!-- <div class="image" v-if="item.previewType === 'image'">
-    <img :src="item.preview.content" alt="">
-  </div> -->
 
 </section>
 </template>
@@ -150,14 +104,17 @@ echo '[]' > cors-config.json
 @import '../sass/features'
 
 .item
-  text-transform: none
-  font-weight: 600
-  text-align: left
-  position: relative
-  background-color: $color-background
-  color: $color-content
-  display: block
-  padding: .75em 1rem
+  // text-transform: none
+  // font-weight: 600
+  // text-align: left
+  // position: relative
+  // background-color: $color-background
+  // color: $color-content
+  // display: block
+  // padding: 0
+
+  // &:hover
+  //   color: mix($color-black, white, 80%)
 
   &::after
     content: ''
@@ -165,66 +122,51 @@ echo '[]' > cors-config.json
     left: 0
     top: 0
     bottom: 0
-    width: .5rem
+    width: .45rem
     border-top-left-radius: $button-border-radius
     border-bottom-left-radius: $button-border-radius
     transition: opacity .2s
     opacity: 0
 
-  &.-draft::after
-    background-color: $color-draft
-    opacity: 1
+  // &.-draft::after
+  //   background-color: $color-draft
+  //   opacity: 1
 
   &.-active::after
-    background-color: $color-active
+    background-color: $color-blue
     opacity: 1
 
-  &.-parent
-    +chain(.75em)
-    text-transform: uppercase
-    color: $color-link
-    font-size: .9em
-    justify-content: flex-end
-    padding-top: 1em
-    padding-bottom: 1em
+  .heading
+    font-size: 1rem
+    font-weight: 600
 
-  &.-file
-    +chain(.75em)
+  .parent
+    +chain()
+    align-items: center
     justify-content: space-between
-    padding-top: 1em
-    padding-bottom: 1em
-
-  // &.-spacer
-  //   margin-top: 4rem
-
-  // .spacer
-  //   position: absolute
-  //   bottom: 100%
-  //   left: 0
-  //   color: $color-disabled
-  //   // font-weight: 400
-  //   font-size: .8rem
-  //   padding-bottom: .4em
+    padding: .5rem 1rem
 
   .content
     flex-grow: 1
 
-  .item-heading
-    overflow: hidden
+  // .title
+  //   overflow: hidden
+  //   background-color: mix($color-violet, white, 2%)
+  //   border-bottom: 1px solid mix($color-violet, white, 8%)
+  //   padding: .5rem 1rem
+  //   border-top-left-radius: $button-border-radius
+  //   border-top-right-radius: $button-border-radius
 
-  .preview
+  .content
     overflow: hidden
 
     &.-text
       font-size: .8em
-      color: $color-disabled
+      color: $color-gray
       font-weight: 400
+      padding: .5rem 1rem
 
     &.-image
-      margin-left: -1rem
-      margin-right: -1rem
-      margin-bottom: -.75em
-      margin-top: .4em
       position: relative
       background-image: url('../assets/image-background.png')
       background-position: center
@@ -241,5 +183,6 @@ echo '[]' > cors-config.json
         height: 6em
         width: 100%
         object-fit: cover
+        filter: brightness(95%)
 
 </style>

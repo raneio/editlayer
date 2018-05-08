@@ -1,7 +1,6 @@
 <script>
 import _ from 'lodash'
 import anime from 'animejs'
-import titleCase from 'title-case'
 
 export default {
   name: 'BackButton',
@@ -21,13 +20,7 @@ export default {
     },
 
     activeStructure (state, getters) {
-      let path = _.replace(this.$route.params.path, />/g, '.')
-
-      if (_.has(this.structure, path)) {
-        return _.get(this.structure, path)
-      } else {
-        return {}
-      }
+      return this.$store.getters.activeStructure
     },
 
     breadcrumb () {
@@ -48,7 +41,6 @@ export default {
 
         if (item && !_.has(item, 'ORDER')) {
           breadcrumb.unshift({
-            name: this.stringToTitle(item.NAME),
             path: path,
             projectId: this.$route.params.projectId
           })
@@ -64,12 +56,6 @@ export default {
         })
       }
 
-      if (this.projects.length > 1) {
-        breadcrumb.unshift({
-          name: 'Home'
-        })
-      }
-
       return breadcrumb
     }
 
@@ -77,27 +63,17 @@ export default {
 
   methods: {
 
-    stringToTitle (text) {
-      if (_.endsWith(text, '.json')) {
-        text = text.slice(0, -5)
-      }
-
-      return titleCase(text)
-    },
-
     goBack () {
       let backItem = this.breadcrumb[this.breadcrumb.length - 2]
       if (backItem) {
         this.selectItem(backItem)
       } else {
-        this.selectItem('home')
+        this.$router.push({name: 'Dashboard'})
       }
     },
 
     selectItem (item) {
       let path = _.replace(item.path, /\./g, '>')
-
-      console.log('Back selectItem', this.$route.name, item.projectId, path)
 
       anime.timeline()
         .add({
@@ -116,9 +92,6 @@ export default {
               this.$router.push({name: this.$route.name, params: {projectId: item.projectId, path: path}})
             } else if (item.projectId) {
               this.$router.push({name: this.$route.name, params: {projectId: item.projectId}})
-            } else {
-              let view = (this.$route.name === 'Structure') ? 'structure' : null
-              this.$router.push({name: 'Dashboard', params: {view: view}})
             }
           }
         })
@@ -141,8 +114,16 @@ export default {
   class="button -link"
   @click.prevent="goBack()"
 >
-  <img class="icon" src="@/assets/icon-back.svg" alt="">
-  <div>Back</div>
+  <svg width="11" height="20" viewBox="0 0 11 20" xmlns="http://www.w3.org/2000/svg">
+    <path d="M10.227 19.203a.465.465 0 0 1-.344.129.465.465 0 0 1-.344-.129l-9.11-9.11a.465.465 0 0 1-.128-.343c0-.143.043-.258.129-.344L9.539.296a.465.465 0 0 1 .344-.128c.143 0 .258.043.344.129l.343.344c.086.086.13.2.13.343a.628.628 0 0 1-.13.387L2.148 9.75l8.422 8.379a.628.628 0 0 1 .13.387.465.465 0 0 1-.13.343l-.343.344z" fill="#252525" fill-rule="evenodd"/>
+  </svg>
+
+  <div v-if="breadcrumb.length === 1">
+    Dashboard
+  </div>
+  <div v-else>
+    Back
+  </div>
 </button>
 </template>
 
@@ -151,14 +132,5 @@ export default {
 
 .button
   +chain(.75rem)
-  // padding-left: 1.5em
-  // position: relative
-
-  // &::after
-  //   content: '<'
-  //   position: absolute
-  //   top: 50%
-  //   left: .5em
-  //   transform: translateY(-50%)
 
 </style>

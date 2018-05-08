@@ -1,7 +1,6 @@
 <script>
 import _ from 'lodash'
 import anime from 'animejs'
-import SideItemsFromProjects from '@/components/SideItemsFromProjects'
 import SideItemsFromObject from '@/components/SideItemsFromObject'
 import SideItemsFromArray from '@/components/SideItemsFromArray'
 
@@ -9,7 +8,6 @@ export default {
   name: 'SidePanel',
 
   components: {
-    SideItemsFromProjects,
     SideItemsFromObject,
     SideItemsFromArray
   },
@@ -155,7 +153,6 @@ export default {
 <aside class="side-panel">
   <div class="content">
 
-    <SideItemsFromProjects :selectItem="selectItem" v-if="activeType === 'project'"/>
     <SideItemsFromObject :selectItem="selectItem" v-if="activeType === 'object'"/>
     <SideItemsFromArray :selectItem="selectItem" v-if="activeType === 'array'"/>
 
@@ -167,7 +164,7 @@ export default {
 @import '../sass/features'
 
 .side-panel
-  background-color: $color-light
+  background-image: linear-gradient(left, mix($color-violet, transparent, 4%), mix($color-violet, transparent, 8%))
   padding: 1.25rem
   overflow-y: auto
 
