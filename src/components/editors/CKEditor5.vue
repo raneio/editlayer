@@ -97,14 +97,17 @@ export default {
       background-color: $input-background--focus
       box-shadow: none
 
+    +hx
+      font-weight: 600
+
     h2
-      font-size: 1.8em
+      font-size: 1.5em
 
     h3
-      font-size: 1.6em
+      font-size: 1.3em
 
     h4
-      font-size: 1.4em
+      font-size: 1.1em
 
     p,
     h2,

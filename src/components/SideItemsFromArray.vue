@@ -340,7 +340,7 @@ export default {
       margin-top: 2rem
 
   .items
-    +margin-to-childs(.3rem)
+    +margin-to-childs(.6rem)
     position: relative
     transition: transform .2s
 

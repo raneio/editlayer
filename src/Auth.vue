@@ -7,7 +7,7 @@ export default {
 
   data () {
     return {
-      state: 'login',
+      state: this.$route.name === 'Register' ? 'register' : 'login',
       email: '',
       password: '',
       error: null,
@@ -73,8 +73,7 @@ export default {
               console.log('Added user', user.email)
 
               this.$store.dispatch('newProject', {
-                name: '1. Simple Example',
-                // redirect: false,
+                name: 'Simple Example',
                 structure: {
                   title: 'text',
                   slogan: 'textarea',
@@ -84,8 +83,7 @@ export default {
               })
 
               this.$store.dispatch('newProject', {
-                name: '2. Advanced Example',
-                // redirect: false,
+                name: 'Advanced Example',
                 structure: {
                   simpleField: 'text',
                   anotherField: {
@@ -129,6 +127,7 @@ export default {
     resetPassword () {
       firebase.auth.sendPasswordResetEmail(this.email).then(() => {
         this.changeState('login')
+        this.progress = false
       }).catch((error) => {
         this.error = 'email'
         console.error('Reseting faild', error)

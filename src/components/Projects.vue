@@ -12,35 +12,38 @@ export default {
   computed: {
 
     projects () {
-      return _.map(this.$store.getters.projects, (file) => {
-        let roleEditors = 0
-        let roleAdmins = 0
-        let myRole = null
+      return _.chain(this.$store.getters.projects)
+        .map((file) => {
+          let roleEditors = 0
+          let roleAdmins = 0
+          let myRole = null
 
-        _.each(file.roles, (role, userId) => {
-          if (role.role === 'editor') {
-            roleEditors++
-          } else if (role.role === 'admin') {
-            roleAdmins++
-          }
+          _.each(file.roles, (role, userId) => {
+            if (role.role === 'editor') {
+              roleEditors++
+            } else if (role.role === 'admin') {
+              roleAdmins++
+            }
 
-          if (userId === this.$store.state.user.id) {
-            myRole = role.role
+            if (userId === this.$store.state.user.id) {
+              myRole = role.role
+            }
+          })
+
+          return {
+            name: file.name,
+            projectId: file.projectId,
+            status: (file.published && _.isEqual(file.draft, file.published.draft) && file.structure === file.published.structure) ? 'published' : 'draft',
+            users: {
+              editors: roleEditors,
+              admins: roleAdmins
+            },
+            role: myRole,
+            jsonUrl: `https://cdn.editlayer.com/${file.projectId}/${file.filename}.json`
           }
         })
-
-        return {
-          name: file.name,
-          projectId: file.projectId,
-          status: (file.published && _.isEqual(file.draft, file.published.draft) && file.structure === file.published.structure) ? 'published' : 'draft',
-          users: {
-            editors: roleEditors,
-            admins: roleAdmins
-          },
-          role: myRole,
-          jsonUrl: `https://cdn.editlayer.com/${file.projectId}/${file.filename}.json`
-        }
-      })
+        .orderBy('name')
+        .value()
     }
 
   },

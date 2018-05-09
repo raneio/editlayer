@@ -17,6 +17,10 @@ export default new Router({
       component: Dashboard
     },
     {
+      name: 'Register',
+      path: '/register'
+    },
+    {
       name: 'Structure',
       path: '/:projectId/structure/:path?',
       component: Structure

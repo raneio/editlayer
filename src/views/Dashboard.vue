@@ -65,7 +65,7 @@ export default {
 @import '../sass/features'
 
 .dashboard
-  background-image: linear-gradient(left, mix($color-violet, transparent, 4%), mix($color-violet, transparent, 8%))
+  background-image: linear-gradient(to left, mix($color-violet, transparent, 4%), mix($color-violet, transparent, 8%))
   overflow-y: auto
   padding: 2.5rem
   +margin-to-childs(2rem)

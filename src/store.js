@@ -65,7 +65,7 @@ export default new Vuex.Store({
       let activeProject = _.find(getters.projects, { projectId: state.route.params.projectId })
 
       if (getters.projects !== null && state.route.params.projectId && !activeProject) {
-        router.push({ name: state.route.name })
+        router.push({name: state.route.name})
       }
 
       return (activeProject) || null
@@ -87,7 +87,10 @@ export default new Vuex.Store({
         return structure
       }
 
-      return buildStructure(structure, getters.activeProject.draft)
+      let draft = getters.activeProject.draft
+      let published = _.has(getters, 'activeProject.published.draft') ? getters.activeProject.published.draft : {}
+
+      return buildStructure(structure, draft, published)
     },
 
     activeStructure (state, getters) {
@@ -210,6 +213,10 @@ export default new Vuex.Store({
           })
 
           dispatch('getProjectsFromDatabase')
+
+          if (state.route.name === 'Register') {
+            router.push({name: 'Dashboard'})
+          }
         } else {
           commit('resetAll')
         }

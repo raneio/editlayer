@@ -34,7 +34,6 @@ export default {
 
     activeType () {
       let path = _.replace(this.$route.params.path, />/g, '.')
-      // let activeItem = _.get(this.structure, path)
       let grandparent = _.get(this.structure, _.chain(path).split('.').dropRight(2).join('.').value())
 
       if (!this.projectId) {
@@ -101,26 +100,6 @@ export default {
           easing: 'linear',
           duration: 100
         })
-
-      // anime({
-      //   targets: '.side-panel > .content',
-      //   translateX: -100,
-      //
-      //   complete: (anim) => {
-      //     console.log(anim.completed);
-      //     this.$router.push({ name: routeName, params: { projectId: this.$route.params.projectId, path: path }})
-      //   },
-      //   // translateX: [
-      //   //   { value: 100, duration: 1200 },
-      //   //   { value: 0, duration: 800 }
-      //   // ],
-      //   // rotate: '1turn',
-      //   // backgroundColor: '#FFF',
-      //   // duration: 2000,
-      //   // loop: true
-      // })
-
-      // this.$router.push({ name: routeName, params: { projectId: this.$route.params.projectId, path: path }})
     },
 
     redirectToParentIfInvalidPath () {
@@ -131,8 +110,6 @@ export default {
 
       let parentPath = _.chain(this.$route.params.path).split('>').slice(0, -1).join('>').value()
 
-      console.log('parentPath', parentPath)
-
       if (parentPath) {
         this.$router.replace({name: this.$route.name, params: {projectId: this.projectId, path: parentPath}})
       } else {
@@ -142,20 +119,14 @@ export default {
 
   }
 
-  // mounted () {
-  //   this.redirectToParentIfInvalidPath()
-  // },
-
 }
 </script>
 
 <template>
 <aside class="side-panel">
   <div class="content">
-
     <SideItemsFromObject :selectItem="selectItem" v-if="activeType === 'object'"/>
     <SideItemsFromArray :selectItem="selectItem" v-if="activeType === 'array'"/>
-
   </div>
 </aside>
 </template>
@@ -164,11 +135,10 @@ export default {
 @import '../sass/features'
 
 .side-panel
-  background-image: linear-gradient(left, mix($color-violet, transparent, 4%), mix($color-violet, transparent, 8%))
+  background-image: linear-gradient(to left, mix($color-violet, transparent, 4%), mix($color-violet, transparent, 8%))
   padding: 1.25rem
   overflow-y: auto
 
-// Under /deep/ you can also change style of child components
 .side-panel /deep/
 
   .header
@@ -177,7 +147,6 @@ export default {
     align-items: center
     transition: opacity .2s
     margin-top: -1rem
-    // padding-bottom: .25rem
     font-size: .9rem
     border-bottom: 1px solid $color-hr
     height: 3rem

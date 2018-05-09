@@ -2,13 +2,13 @@
 import _ from 'lodash'
 import anime from 'animejs'
 import buildJson from '@/utils/buildJson'
-import Loader from '@/components/Loader'
+import LoaderIcon from '@/components/LoaderIcon'
 
 export default {
   name: 'PublishButton',
 
   components: {
-    Loader
+    LoaderIcon
   },
 
   computed: {
@@ -111,7 +111,7 @@ export default {
     class="item -publishing"
     title="Publishing"
   >
-    <Loader/>
+    <LoaderIcon/>
   </div>
 
 </section>

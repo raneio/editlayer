@@ -40,7 +40,6 @@ const addArraysAndPaths = (structure, draft, parentPath = false) => {
 
       _.each(items, (itemValue, itemKey) => {
         _.set(value, `${itemKey}.ORDER`, itemValue.ORDER)
-        // _.set(value, `${itemKey}.DELETED`, itemValue.DELETED)
 
         _.each(value.ARRAY, (arrayValue, arrayKey) => {
           _.set(value, `${itemKey}.${arrayKey}`, _.cloneDeep(arrayValue))
@@ -93,10 +92,25 @@ const addData = (structure, draft) => {
   return structure
 }
 
-export default (structure, draft) => {
+const addStatus = (structure, draft, published) => {
+  // console.log('draft', draft)
+  _.each(structure, (value, key) => {
+    if (_.isPlainObject(value) && !_.includes(['ARRAY', 'CONFIG'], key)) {
+      value.STATUS = _.isEqual(_.get(draft, value.PATH), _.get(published, value.PATH)) ? 'published' : 'draft'
+      value = addStatus(value, draft, published)
+    }
+  })
+
+  return structure
+}
+
+export default (structure, draft, published) => {
+  // console.log('draft', draft)
+  // console.log('published', published)
   structure = simpleToAdvance(structure)
   structure = addArraysAndPaths(structure, draft)
   structure = addData(structure, draft)
+  structure = addStatus(structure, draft, published)
 
   return structure
 }
