@@ -12,18 +12,31 @@ export default {
     SidePanel,
     Breadcrumb,
     StructureEditor
-  }
+  },
 
+  computed: {
+
+    isMobile () {
+      return this.$store.getters.isMobile
+    }
+
+  },
+
+  created () {
+    if (this.$store.getters.activeRole !== 'admin') {
+      this.$router.replace({name: 'Content', params: {projectId: this.$store.getters.activeProject.projectId}})
+    }
+  }
 }
 </script>
 
 <template>
 <section class="layout">
   <Navigation/>
-  <SidePanel/>
+  <SidePanel v-if="!isMobile"/>
 
-  <main class="main-content">
-    <Breadcrumb/>
+  <main class="main -structure">
+    <Breadcrumb v-if="!isMobile"/>
     <StructureEditor v-if="$route.params.projectId"/>
   </main>
 </section>
@@ -32,8 +45,11 @@ export default {
 <style lang="sass" scoped>
 @import '../sass/features'
 
-.main-content
+.main.-structure
   overflow-y: auto
-  padding: .25rem 2.5rem 2.5rem
+  padding: .25rem 1.5rem 1.5rem
+
+  +for-tablet-portrait
+    padding: .25rem 2.5rem 2.5rem
 
 </style>

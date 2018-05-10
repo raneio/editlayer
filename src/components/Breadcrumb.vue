@@ -55,6 +55,10 @@ export default {
       }
 
       return breadcrumb
+    },
+
+    isMobile () {
+      return this.$store.getters.isMobile
     }
 
   },
@@ -113,7 +117,7 @@ export default {
 
     <button
       class="button -link"
-      v-if="idx < breadcrumb.length-1"
+      v-if="idx < breadcrumb.length-1 || isMobile"
       v-text="item.name"
       @click.prevent="selectItem(item)"
     />

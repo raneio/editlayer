@@ -21,14 +21,14 @@ service cloud.firestore {
       function allowPublished () {
       	return isRole(['admin', 'editor'])
         		&& request.writeFields.size() == 2
-        		&& request.writeFields[0] == 'published.structure' || request.writeFields[1] == 'published.structure'
-        		&& request.writeFields[0] == 'published.draft' || request.writeFields[1] == 'published.draft';
+        		&& (request.writeFields[0] == 'published.structure' || request.writeFields[1] == 'published.structure')
+        		&& (request.writeFields[0] == 'published.draft' || request.writeFields[1] == 'published.draft');
       }
 
       function allowWebhook () {
       	return isRole(['admin'])
         		&& request.writeFields.size() == 1
-        		&& request.writeFields[0] == 'settings.webhook.config' || request.writeFields[0] == 'settings.webhook.enabled';
+        		&& (request.writeFields[0] == 'settings.webhook.config' || request.writeFields[0] == 'settings.webhook.enabled');
       }
 
       function allowStructure () {
@@ -53,8 +53,8 @@ service cloud.firestore {
       							&& projectId != 'content'
       							&& projectId != 'structure'
       							&& projectId != 'settings'
-      							&& projectId != '1-simple-example'
-      							&& projectId != '2-advanced-example'
+      							&& projectId != 'simple-example'
+      							&& projectId != 'advanced-example'
       							&& projectId != 'project';
 
       allow update: if allowDraft()
@@ -62,30 +62,31 @@ service cloud.firestore {
       							|| allowWebhook()
                     || allowRoles()
                     || allowStructure();
-    }
 
-    match /projects/{projectId}/versions/{versionId} {
-      function isRole(roles) {
-        return get(/databases/$(database)/documents/projects/$(projectId)).data.roles[request.auth.uid].role in roles;
+      match /versions/{versionId} {
+        function isRole(roles) {
+          return get(/databases/$(database)/documents/projects/$(projectId)).data.roles[request.auth.uid].role in roles;
+        }
+
+        allow create: if isRole(['admin', 'editor']);
       }
 
-      allow create: if isRole(['admin', 'editor']);
-    }
+      match /permissionJobs/{jobId} {
+        function isRole(roles) {
+          return get(/databases/$(database)/documents/projects/$(projectId)).data.roles[request.auth.uid].role in roles;
+        }
 
-    match /projects/{projectId}/permissionJobs/{permissionId} {
-      function isRole(roles) {
-        return get(/databases/$(database)/documents/projects/$(projectId)).data.roles[request.auth.uid].role in roles;
+        allow create: if isRole(['admin']);
       }
 
-      allow create: if isRole(['admin']);
-    }
+      match /deleteJobs/{jobId} {
+        function isRole(roles) {
+          return get(/databases/$(database)/documents/projects/$(projectId)).data.roles[request.auth.uid].role in roles;
+        }
 
-    match /projects/{projectId}/deleteJobs/{permissionId} {
-      function isRole(roles) {
-        return get(/databases/$(database)/documents/projects/$(projectId)).data.roles[request.auth.uid].role in roles;
+        allow create: if isRole(['admin']);
       }
 
-      allow create: if isRole(['admin']);
     }
 
   }

@@ -28,6 +28,7 @@ export default {
 
   created () {
     this.$store.dispatch('authState')
+    this.$store.dispatch('resizeListener')
   }
 }
 </script>

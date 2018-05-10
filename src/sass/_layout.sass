@@ -1,25 +1,26 @@
+#app
+  height: 100%
+
 .layout
-  display: grid
-  grid-template-columns: 5rem 22rem auto
-  height: 100vh
+  display: flex
+  height: 100%
+  width: 100%
 
-  .navigation
-    grid-column-start: 1
-    grid-column-end: 2
+  > .navigation
+    flex-shrink: 0
+    flex-grow: 0
+    width: 4rem
 
-  .side-panel
-    grid-column-start: 2
-    grid-column-end: 3
+    +for-tablet-portrait
+      width: 5rem
 
-  .main-content
-    grid-column-start: 3
-    grid-column-end: 4
-    min-width: 30rem
+  > .side-panel
+    width: 100%
 
-  .settings
-    grid-column-start: 2
-    grid-column-end: 4
+    +for-tablet-landscape
+      flex-shrink: 0
+      flex-grow: 0
+      width: 22rem
 
-  .dashboard
-    grid-column-start: 2
-    grid-column-end: 4
+  > .main
+    width: 100%

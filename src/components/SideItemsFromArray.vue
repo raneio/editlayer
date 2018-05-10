@@ -135,13 +135,9 @@ export default {
     findFirstItem () {
       let path = _.replace(this.$route.params.path, />/g, '.')
 
-      if (path !== this.activeStructure.PATH) {
-        return false
-      }
-
-      if (this.$route.name !== 'Content') {
-        return false
-      }
+      if (path !== this.activeStructure.PATH) return false
+      if (this.$route.name !== 'Content') return false
+      if (this.$store.getters.isMobile) return false
 
       let firstItem = _.find(this.arrayItems[0], { TYPE: 'value' })
 
@@ -240,7 +236,7 @@ export default {
 </script>
 
 <template>
-<section class="array-items" :class="{ '-moving': movingArrayItem.path !== null}">
+<section class="items -array" :class="{ '-moving': movingArrayItem.path !== null}">
 
   <header class="header">
     <BackButton/>
@@ -306,7 +302,7 @@ export default {
 // You can use variables, mixins and functions of Page Core
 @import '../sass/features'
 
-.array-items
+.items.-array
 
   .tools
     +chain(.5rem)
@@ -414,7 +410,7 @@ export default {
     font-style: italic
     text-align: center
 
-.array-items /deep/
+.items.-array /deep/
 
   .item .preview.-image .image
     border-radius: 0

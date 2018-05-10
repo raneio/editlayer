@@ -126,6 +126,12 @@ export default {
       }
     }
 
+  },
+
+  created () {
+    if (this.$store.getters.activeRole !== 'admin') {
+      this.$router.replace({name: 'Content', params: {projectId: this.$store.getters.activeProject.projectId}})
+    }
   }
 
 }
@@ -135,7 +141,7 @@ export default {
 <section class="layout">
   <Navigation/>
 
-  <main class="settings" v-if="activeProject">
+  <main class="main -settings" v-if="activeProject">
 
     <section class="group">
       <header class="heading-group">
@@ -231,7 +237,7 @@ export default {
 <style lang="sass" scoped>
 @import '../sass/features'
 
-.settings
+.main.-settings
   background-image: linear-gradient(to left, mix($color-violet, transparent, 4%), mix($color-violet, transparent, 8%))
   overflow-y: auto
   padding: 2.5rem

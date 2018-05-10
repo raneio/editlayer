@@ -154,4 +154,9 @@ export default {
   .items
     +margin-to-childs(1rem)
 
+    .item
+      max-width: 28rem
+      margin-left: auto
+      margin-right: auto
+
 </style>

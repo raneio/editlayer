@@ -43,7 +43,11 @@ export default new Vuex.Store({
       'range',
       'tel',
       'url'
-    ]
+    ],
+    windowSize: {
+      width: window.innerWidth,
+      height: window.innerHeight
+    }
   },
 
   getters: {
@@ -106,6 +110,10 @@ export default new Vuex.Store({
     jsonUrl (state, getters) {
       if (!getters.activeProject) return false
       return `https://cdn.editlayer.com/${getters.activeProject.projectId}/${getters.activeProject.filename}.json`
+    },
+
+    isMobile (state) {
+      return state.windowSize.width <= 900
     }
 
   },
@@ -197,6 +205,11 @@ export default new Vuex.Store({
     deleteNotification (state, id) {
       console.log('deleteNotification', id)
       Vue.delete(state.notifications, id)
+    },
+
+    setwWindowSize (state) {
+      state.windowSize.width = window.innerWidth
+      state.windowSize.height = window.innerHeight
     }
 
   },
@@ -518,6 +531,12 @@ export default new Vuex.Store({
           path: _.replace(payload.path, />/g, '.'),
           content: `https://cdn.editlayer.com/${payload.projectId}/${filename}`
         })
+      })
+    },
+
+    resizeListener ({commit}) {
+      window.addEventListener('resize', () => {
+        commit('setwWindowSize')
       })
     }
 

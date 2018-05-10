@@ -1,0 +1,361 @@
+[debug] [2018-05-10T17:49:21.568Z] ----------------------------------------------------------------------
+[debug] [2018-05-10T17:49:21.570Z] Command:       /usr/local/Cellar/node/8.5.0/bin/node /usr/local/bin/firebase deploy
+[debug] [2018-05-10T17:49:21.570Z] CLI Version:   3.18.4
+[debug] [2018-05-10T17:49:21.570Z] Platform:      darwin
+[debug] [2018-05-10T17:49:21.570Z] Node Version:  v8.5.0
+[debug] [2018-05-10T17:49:21.571Z] Time:          Thu May 10 2018 20:49:21 GMT+0300 (EEST)
+[debug] [2018-05-10T17:49:21.571Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2018-05-10T17:49:21.587Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2018-05-10T17:49:21.587Z] > authorizing via signed-in user
+[debug] [2018-05-10T17:49:21.589Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2018-05-10T17:49:21.589Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ { refresh_token: '1/029xen8GgiLbnjFympDe-TN1d6OC_jtfGpVu1EAxhTtUELT9KEC9usm8EmcY0iFJ',
+  client_id: '563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com',
+  client_secret: 'j9iVZfS8kkCEFUPaAeJV0sAi',
+  grant_type: 'refresh_token',
+  scope: 'email https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/firebase openid' } 
+ Thu May 10 2018 20:49:21 GMT+0300 (EEST)
+[debug] [2018-05-10T17:49:21.790Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:49:21.807Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/editlayerapp  
+  
+ Thu May 10 2018 20:49:21 GMT+0300 (EEST)
+[debug] [2018-05-10T17:49:22.685Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:49:22.686Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/editlayerapp/tokens  
+  
+ Thu May 10 2018 20:49:22 GMT+0300 (EEST)
+[debug] [2018-05-10T17:49:23.791Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'editlayerapp'...
+[info] 
+[info] i  deploying storage, firestore, functions, hosting
+[info] Running command: npm --prefix $RESOURCE_DIR run lint
+[info] ✔  functions: Finished running predeploy script.
+[debug] [2018-05-10T17:49:28.221Z] >>> HTTP REQUEST GET https://appengine.googleapis.com/v1/apps/editlayerapp  
+  
+ Thu May 10 2018 20:49:28 GMT+0300 (EEST)
+[debug] [2018-05-10T17:49:29.344Z] <<< HTTP RESPONSE 200
+[info] i  storage: checking storage.rules for compilation errors...
+[debug] [2018-05-10T17:49:29.346Z] >>> HTTP REQUEST POST https://firebaserules.googleapis.com/v1/projects/editlayerapp:test  
+ { source: { files: [ [Object] ] } } 
+ Thu May 10 2018 20:49:29 GMT+0300 (EEST)
+[debug] [2018-05-10T17:49:30.481Z] <<< HTTP RESPONSE 200
+[info] ✔  storage: rules file storage.rules compiled successfully
+[info] i  firestore: checking firestore.rules for compilation errors...
+[debug] [2018-05-10T17:49:30.486Z] >>> HTTP REQUEST POST https://firebaserules.googleapis.com/v1/projects/editlayerapp:test  
+ { source: { files: [ [Object] ] } } 
+ Thu May 10 2018 20:49:30 GMT+0300 (EEST)
+[debug] [2018-05-10T17:49:31.556Z] <<< HTTP RESPONSE 200
+[info] ✔  firestore: rules file firestore.rules compiled successfully
+[debug] [2018-05-10T17:49:31.557Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "lint": "./node_modules/.bin/eslint .",
+    "serve": "firebase serve --only functions",
+    "shell": "firebase experimental:functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "backblaze-b2": "^1.0.4",
+    "cors": "^2.8.4",
+    "firebase-admin": "^5.12.0",
+    "firebase-functions": "^1.0.2",
+    "lodash": "^4.17.5",
+    "node-sha1": "^1.0.1",
+    "request": "^2.83.0",
+    "uuid": "^3.2.1",
+    "validator": "^9.4.1"
+  },
+  "devDependencies": {
+    "eslint": "^4.12.0",
+    "eslint-plugin-promise": "^3.6.0"
+  },
+  "private": true
+}
+[info] i  functions: ensuring necessary APIs are enabled...
+[debug] [2018-05-10T17:49:31.558Z] >>> HTTP REQUEST GET https://servicemanagement.googleapis.com/v1/services/cloudfunctions.googleapis.com/projectSettings/editlayerapp?view=CONSUMER_VIEW  
+  
+ Thu May 10 2018 20:49:31 GMT+0300 (EEST)
+[debug] [2018-05-10T17:49:31.559Z] >>> HTTP REQUEST GET https://servicemanagement.googleapis.com/v1/services/runtimeconfig.googleapis.com/projectSettings/editlayerapp?view=CONSUMER_VIEW  
+  
+ Thu May 10 2018 20:49:31 GMT+0300 (EEST)
+[debug] [2018-05-10T17:49:33.031Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:49:33.071Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: all necessary APIs are enabled
+[debug] [2018-05-10T17:49:33.072Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/editlayerapp  
+  
+ Thu May 10 2018 20:49:33 GMT+0300 (EEST)
+[debug] [2018-05-10T17:49:34.258Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:49:34.258Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/859710668845:getServerAppConfig  
+  
+ Thu May 10 2018 20:49:34 GMT+0300 (EEST)
+[debug] [2018-05-10T17:49:34.873Z] <<< HTTP RESPONSE 200
+[info] i  storage: uploading rules storage.rules...
+[debug] [2018-05-10T17:49:34.876Z] >>> HTTP REQUEST POST https://firebaserules.googleapis.com/v1/projects/editlayerapp/rulesets  
+ { source: { files: [ [Object] ] } } 
+ Thu May 10 2018 20:49:34 GMT+0300 (EEST)
+[debug] [2018-05-10T17:49:36.119Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:49:36.120Z] [rules] created ruleset projects/editlayerapp/rulesets/a12a0c4b-f6d6-46b1-96e4-f4a0d6d523f2
+[info] i  firestore: uploading rules firestore.rules...
+[debug] [2018-05-10T17:49:36.121Z] >>> HTTP REQUEST POST https://firebaserules.googleapis.com/v1/projects/editlayerapp/rulesets  
+ { source: { files: [ [Object] ] } } 
+ Thu May 10 2018 20:49:36 GMT+0300 (EEST)
+[debug] [2018-05-10T17:49:36.122Z] >>> HTTP REQUEST GET https://firestore.googleapis.com/v1beta1/projects/editlayerapp/databases/(default)/indexes  
+  
+ Thu May 10 2018 20:49:36 GMT+0300 (EEST)
+[debug] [2018-05-10T17:49:37.331Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:49:37.333Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:49:37.333Z] [rules] created ruleset projects/editlayerapp/rulesets/b3ca5b43-b9bb-4345-aa60-615dfb0984e2
+[info] i  functions: preparing functions directory for uploading...
+[debug] [2018-05-10T17:49:37.334Z] >>> HTTP REQUEST GET https://runtimeconfig.googleapis.com/v1beta1/projects/editlayerapp/configs  
+  
+ Thu May 10 2018 20:49:37 GMT+0300 (EEST)
+[debug] [2018-05-10T17:49:38.659Z] <<< HTTP RESPONSE 200
+[info] i  functions: packaged functions (51.89 KB) for uploading
+[debug] [2018-05-10T17:49:39.760Z] >>> HTTP REQUEST POST https://cloudfunctions.googleapis.com/v1/projects/editlayerapp/locations/us-central1/functions:generateUploadUrl  
+  
+ Thu May 10 2018 20:49:39 GMT+0300 (EEST)
+[debug] [2018-05-10T17:49:40.709Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:49:40.710Z] >>> HTTP REQUEST PUT https://storage.googleapis.com/gcf-upload-us-central1-ac59c21b-9d86-4bf6-adcd-ed57f7c5fbb6/ade3a917-2ec3-47e1-a9fa-ca4ae7adc127.zip?GoogleAccessId=859710668845@cloudservices.gserviceaccount.com&Expires=1525976380&Signature=LLcECsEB5TjTR2nRIL3xBnJIgoj7fiZ3KPuFBOq7i9f2%2FgcIrA4FQRovyDOPbsNUnQpPJgU1pQCLVE%2BTrH3sz38QT%2Ftum%2BSj7hkG3wjmXNsmt9RzDJ%2BDKzZhBZjxFLWhRPr8V8ZbcAawLZCaphVftvFQGragTi%2F6gUf3xLbgTSEpnflTh3p3GbsN%2F6mZUzink0ObWn4ncdQyR8TqQt3KQvqmd3iNsdUc5%2BMD3d%2Fl1fZ4f9NvTnrtQHaWcYa9Jyf0mOQEFHGkixCmSXihtrpcI8mHk7gEmFv21w92xltXDe9iToXc2rI5iJ6kEfhRAX%2FYlGVY0xaWxBQ2CniTnzdlfw%3D%3D  
+ ReadStream {
+  _readableState: 
+   ReadableState {
+     objectMode: false,
+     highWaterMark: 65536,
+     buffer: BufferList { head: [Object], tail: [Object], length: 1 },
+     length: 53134,
+     pipes: null,
+     pipesCount: 0,
+     flowing: null,
+     ended: true,
+     endEmitted: false,
+     reading: false,
+     sync: false,
+     needReadable: false,
+     emittedReadable: true,
+     readableListening: false,
+     resumeScheduled: false,
+     destroyed: false,
+     defaultEncoding: 'utf8',
+     awaitDrain: 0,
+     readingMore: false,
+     decoder: null,
+     encoding: null },
+  readable: true,
+  domain: null,
+  _events: { end: [Function] },
+  _eventsCount: 1,
+  _maxListeners: undefined,
+  path: '/var/folders/sh/lhf5zpfx38nf4611b1k9_tdr0000gn/T/firebase-functions-18710hGa68pWyUoQI.zip',
+  fd: 19,
+  flags: 'r',
+  mode: 438,
+  start: undefined,
+  end: undefined,
+  autoClose: true,
+  pos: undefined,
+  bytesRead: 53134 } 
+ Thu May 10 2018 20:49:40 GMT+0300 (EEST)
+[debug] [2018-05-10T17:49:41.486Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: functions folder uploaded successfully
+[info] i  hosting: preparing dist directory for upload...
+[debug] [2018-05-10T17:49:41.916Z] >>> HTTP REQUEST PUT https://deploy.firebase.com/v1/hosting/editlayerapp/uploads/-LCAA1Q5vFQEulMvUwcy?fileCount=9&message=  
+  
+ Thu May 10 2018 20:49:41 GMT+0300 (EEST)
+[debug] [2018-05-10T17:49:47.339Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:49:47.340Z] [hosting] .tgz uploaded successfully, waiting for extraction
+[info] ✔  hosting: 9 files uploaded successfully
+[debug] [2018-05-10T17:49:48.499Z] [hosting] deploy completed after 7011ms
+[debug] [2018-05-10T17:49:48.652Z] [rules] releasing firebase.storage/editlayerapp.appspot.com with ruleset projects/editlayerapp/rulesets/a12a0c4b-f6d6-46b1-96e4-f4a0d6d523f2
+[debug] [2018-05-10T17:49:48.653Z] >>> HTTP REQUEST PATCH https://firebaserules.googleapis.com/v1/projects/editlayerapp/releases/firebase.storage/editlayerapp.appspot.com  
+ { release: 
+   { name: 'projects/editlayerapp/releases/firebase.storage/editlayerapp.appspot.com',
+     rulesetName: 'projects/editlayerapp/rulesets/a12a0c4b-f6d6-46b1-96e4-f4a0d6d523f2' } } 
+ Thu May 10 2018 20:49:48 GMT+0300 (EEST)
+[debug] [2018-05-10T17:49:49.927Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:49:49.927Z] [rules] updated release projects/editlayerapp/releases/firebase.storage/editlayerapp.appspot.com
+[info] ✔  storage: released rules storage.rules to firebase.storage/editlayerapp.appspot.com
+[debug] [2018-05-10T17:49:49.928Z] [rules] releasing cloud.firestore with ruleset projects/editlayerapp/rulesets/b3ca5b43-b9bb-4345-aa60-615dfb0984e2
+[debug] [2018-05-10T17:49:49.928Z] >>> HTTP REQUEST PATCH https://firebaserules.googleapis.com/v1/projects/editlayerapp/releases/cloud.firestore  
+ { release: 
+   { name: 'projects/editlayerapp/releases/cloud.firestore',
+     rulesetName: 'projects/editlayerapp/rulesets/b3ca5b43-b9bb-4345-aa60-615dfb0984e2' } } 
+ Thu May 10 2018 20:49:49 GMT+0300 (EEST)
+[debug] [2018-05-10T17:49:51.462Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:49:51.462Z] [rules] updated release projects/editlayerapp/releases/cloud.firestore
+[info] ✔  firestore: released rules firestore.rules to cloud.firestore
+[debug] [2018-05-10T17:49:51.464Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/projects/editlayerapp/locations/us-central1/functions  
+  
+ Thu May 10 2018 20:49:51 GMT+0300 (EEST)
+[debug] [2018-05-10T17:49:52.077Z] <<< HTTP RESPONSE 200
+[info] i  functions: updating function publishJson...
+[debug] [2018-05-10T17:49:52.079Z] Trigger is:  {"eventTrigger":{"resource":"projects/editlayerapp/databases/(default)/documents/projects/{projectId}/versions/{versionId}","eventType":"providers/cloud.firestore/eventTypes/document.create","service":"firestore.googleapis.com"}}
+[info] i  functions: updating function attachRole...
+[debug] [2018-05-10T17:49:52.080Z] Trigger is:  {"eventTrigger":{"resource":"projects/editlayerapp/databases/(default)/documents/projects/{projectId}/permissionJobs/{permissionId}","eventType":"providers/cloud.firestore/eventTypes/document.create","service":"firestore.googleapis.com"}}
+[info] i  functions: updating function attachRolesAfterRegister...
+[debug] [2018-05-10T17:49:52.080Z] Trigger is:  {"eventTrigger":{"resource":"projects/editlayerapp","eventType":"providers/firebase.auth/eventTypes/user.create","service":"firebaseauth.googleapis.com"}}
+[info] i  functions: updating function deleteProject...
+[debug] [2018-05-10T17:49:52.080Z] Trigger is:  {"eventTrigger":{"resource":"projects/editlayerapp/databases/(default)/documents/projects/{projectId}/deleteJobs/{permissionId}","eventType":"providers/cloud.firestore/eventTypes/document.create","service":"firestore.googleapis.com"}}
+[debug] [2018-05-10T17:49:52.082Z] >>> HTTP REQUEST PATCH https://cloudfunctions.googleapis.com/v1/projects/editlayerapp/locations/us-central1/functions/publishJson 
+query params: {"updateMask":"sourceUploadUrl,name,labels,eventTrigger.resource,eventTrigger.eventType,eventTrigger.service"} 
+ { sourceUploadUrl: 'https://storage.googleapis.com/gcf-upload-us-central1-ac59c21b-9d86-4bf6-adcd-ed57f7c5fbb6/ade3a917-2ec3-47e1-a9fa-ca4ae7adc127.zip?GoogleAccessId=859710668845@cloudservices.gserviceaccount.com&Expires=1525976380&Signature=LLcECsEB5TjTR2nRIL3xBnJIgoj7fiZ3KPuFBOq7i9f2%2FgcIrA4FQRovyDOPbsNUnQpPJgU1pQCLVE%2BTrH3sz38QT%2Ftum%2BSj7hkG3wjmXNsmt9RzDJ%2BDKzZhBZjxFLWhRPr8V8ZbcAawLZCaphVftvFQGragTi%2F6gUf3xLbgTSEpnflTh3p3GbsN%2F6mZUzink0ObWn4ncdQyR8TqQt3KQvqmd3iNsdUc5%2BMD3d%2Fl1fZ4f9NvTnrtQHaWcYa9Jyf0mOQEFHGkixCmSXihtrpcI8mHk7gEmFv21w92xltXDe9iToXc2rI5iJ6kEfhRAX%2FYlGVY0xaWxBQ2CniTnzdlfw%3D%3D',
+  name: 'projects/editlayerapp/locations/us-central1/functions/publishJson',
+  labels: { 'deployment-tool': 'cli-firebase' },
+  eventTrigger: 
+   { resource: 'projects/editlayerapp/databases/(default)/documents/projects/{projectId}/versions/{versionId}',
+     eventType: 'providers/cloud.firestore/eventTypes/document.create',
+     service: 'firestore.googleapis.com' } } 
+ Thu May 10 2018 20:49:52 GMT+0300 (EEST)
+[debug] [2018-05-10T17:49:52.083Z] >>> HTTP REQUEST PATCH https://cloudfunctions.googleapis.com/v1/projects/editlayerapp/locations/us-central1/functions/attachRole 
+query params: {"updateMask":"sourceUploadUrl,name,labels,eventTrigger.resource,eventTrigger.eventType,eventTrigger.service"} 
+ { sourceUploadUrl: 'https://storage.googleapis.com/gcf-upload-us-central1-ac59c21b-9d86-4bf6-adcd-ed57f7c5fbb6/ade3a917-2ec3-47e1-a9fa-ca4ae7adc127.zip?GoogleAccessId=859710668845@cloudservices.gserviceaccount.com&Expires=1525976380&Signature=LLcECsEB5TjTR2nRIL3xBnJIgoj7fiZ3KPuFBOq7i9f2%2FgcIrA4FQRovyDOPbsNUnQpPJgU1pQCLVE%2BTrH3sz38QT%2Ftum%2BSj7hkG3wjmXNsmt9RzDJ%2BDKzZhBZjxFLWhRPr8V8ZbcAawLZCaphVftvFQGragTi%2F6gUf3xLbgTSEpnflTh3p3GbsN%2F6mZUzink0ObWn4ncdQyR8TqQt3KQvqmd3iNsdUc5%2BMD3d%2Fl1fZ4f9NvTnrtQHaWcYa9Jyf0mOQEFHGkixCmSXihtrpcI8mHk7gEmFv21w92xltXDe9iToXc2rI5iJ6kEfhRAX%2FYlGVY0xaWxBQ2CniTnzdlfw%3D%3D',
+  name: 'projects/editlayerapp/locations/us-central1/functions/attachRole',
+  labels: { 'deployment-tool': 'cli-firebase' },
+  eventTrigger: 
+   { resource: 'projects/editlayerapp/databases/(default)/documents/projects/{projectId}/permissionJobs/{permissionId}',
+     eventType: 'providers/cloud.firestore/eventTypes/document.create',
+     service: 'firestore.googleapis.com' } } 
+ Thu May 10 2018 20:49:52 GMT+0300 (EEST)
+[debug] [2018-05-10T17:49:52.084Z] >>> HTTP REQUEST PATCH https://cloudfunctions.googleapis.com/v1/projects/editlayerapp/locations/us-central1/functions/attachRolesAfterRegister 
+query params: {"updateMask":"sourceUploadUrl,name,labels,eventTrigger.resource,eventTrigger.eventType,eventTrigger.service"} 
+ { sourceUploadUrl: 'https://storage.googleapis.com/gcf-upload-us-central1-ac59c21b-9d86-4bf6-adcd-ed57f7c5fbb6/ade3a917-2ec3-47e1-a9fa-ca4ae7adc127.zip?GoogleAccessId=859710668845@cloudservices.gserviceaccount.com&Expires=1525976380&Signature=LLcECsEB5TjTR2nRIL3xBnJIgoj7fiZ3KPuFBOq7i9f2%2FgcIrA4FQRovyDOPbsNUnQpPJgU1pQCLVE%2BTrH3sz38QT%2Ftum%2BSj7hkG3wjmXNsmt9RzDJ%2BDKzZhBZjxFLWhRPr8V8ZbcAawLZCaphVftvFQGragTi%2F6gUf3xLbgTSEpnflTh3p3GbsN%2F6mZUzink0ObWn4ncdQyR8TqQt3KQvqmd3iNsdUc5%2BMD3d%2Fl1fZ4f9NvTnrtQHaWcYa9Jyf0mOQEFHGkixCmSXihtrpcI8mHk7gEmFv21w92xltXDe9iToXc2rI5iJ6kEfhRAX%2FYlGVY0xaWxBQ2CniTnzdlfw%3D%3D',
+  name: 'projects/editlayerapp/locations/us-central1/functions/attachRolesAfterRegister',
+  labels: { 'deployment-tool': 'cli-firebase' },
+  eventTrigger: 
+   { resource: 'projects/editlayerapp',
+     eventType: 'providers/firebase.auth/eventTypes/user.create',
+     service: 'firebaseauth.googleapis.com' } } 
+ Thu May 10 2018 20:49:52 GMT+0300 (EEST)
+[debug] [2018-05-10T17:49:52.084Z] >>> HTTP REQUEST PATCH https://cloudfunctions.googleapis.com/v1/projects/editlayerapp/locations/us-central1/functions/deleteProject 
+query params: {"updateMask":"sourceUploadUrl,name,labels,eventTrigger.resource,eventTrigger.eventType,eventTrigger.service"} 
+ { sourceUploadUrl: 'https://storage.googleapis.com/gcf-upload-us-central1-ac59c21b-9d86-4bf6-adcd-ed57f7c5fbb6/ade3a917-2ec3-47e1-a9fa-ca4ae7adc127.zip?GoogleAccessId=859710668845@cloudservices.gserviceaccount.com&Expires=1525976380&Signature=LLcECsEB5TjTR2nRIL3xBnJIgoj7fiZ3KPuFBOq7i9f2%2FgcIrA4FQRovyDOPbsNUnQpPJgU1pQCLVE%2BTrH3sz38QT%2Ftum%2BSj7hkG3wjmXNsmt9RzDJ%2BDKzZhBZjxFLWhRPr8V8ZbcAawLZCaphVftvFQGragTi%2F6gUf3xLbgTSEpnflTh3p3GbsN%2F6mZUzink0ObWn4ncdQyR8TqQt3KQvqmd3iNsdUc5%2BMD3d%2Fl1fZ4f9NvTnrtQHaWcYa9Jyf0mOQEFHGkixCmSXihtrpcI8mHk7gEmFv21w92xltXDe9iToXc2rI5iJ6kEfhRAX%2FYlGVY0xaWxBQ2CniTnzdlfw%3D%3D',
+  name: 'projects/editlayerapp/locations/us-central1/functions/deleteProject',
+  labels: { 'deployment-tool': 'cli-firebase' },
+  eventTrigger: 
+   { resource: 'projects/editlayerapp/databases/(default)/documents/projects/{projectId}/deleteJobs/{permissionId}',
+     eventType: 'providers/cloud.firestore/eventTypes/document.create',
+     service: 'firestore.googleapis.com' } } 
+ Thu May 10 2018 20:49:52 GMT+0300 (EEST)
+[debug] [2018-05-10T17:49:52.690Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:49:52.692Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:49:52.693Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:49:52.766Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:49:52.768Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZWRpdGxheWVyYXBwL3VzLWNlbnRyYWwxL3B1Ymxpc2hKc29uLzhnZ1d5ZnhrRzNN  
+  
+ Thu May 10 2018 20:49:52 GMT+0300 (EEST)
+[debug] [2018-05-10T17:49:52.769Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZWRpdGxheWVyYXBwL3VzLWNlbnRyYWwxL2F0dGFjaFJvbGUvU2J4eDBoY1RzUmc  
+  
+ Thu May 10 2018 20:49:52 GMT+0300 (EEST)
+[debug] [2018-05-10T17:49:52.772Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZWRpdGxheWVyYXBwL3VzLWNlbnRyYWwxL2F0dGFjaFJvbGVzQWZ0ZXJSZWdpc3Rlci9YTmg5NXhZSlFCUQ  
+  
+ Thu May 10 2018 20:49:52 GMT+0300 (EEST)
+[debug] [2018-05-10T17:49:52.773Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZWRpdGxheWVyYXBwL3VzLWNlbnRyYWwxL2RlbGV0ZVByb2plY3QvaWFsX281bTFlQ00  
+  
+ Thu May 10 2018 20:49:52 GMT+0300 (EEST)
+[debug] [2018-05-10T17:49:53.090Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:49:53.273Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:49:53.279Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:49:53.297Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:49:55.093Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZWRpdGxheWVyYXBwL3VzLWNlbnRyYWwxL2RlbGV0ZVByb2plY3QvaWFsX281bTFlQ00  
+  
+ Thu May 10 2018 20:49:55 GMT+0300 (EEST)
+[debug] [2018-05-10T17:49:55.277Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZWRpdGxheWVyYXBwL3VzLWNlbnRyYWwxL2F0dGFjaFJvbGUvU2J4eDBoY1RzUmc  
+  
+ Thu May 10 2018 20:49:55 GMT+0300 (EEST)
+[debug] [2018-05-10T17:49:55.280Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZWRpdGxheWVyYXBwL3VzLWNlbnRyYWwxL3B1Ymxpc2hKc29uLzhnZ1d5ZnhrRzNN  
+  
+ Thu May 10 2018 20:49:55 GMT+0300 (EEST)
+[debug] [2018-05-10T17:49:55.300Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZWRpdGxheWVyYXBwL3VzLWNlbnRyYWwxL2F0dGFjaFJvbGVzQWZ0ZXJSZWdpc3Rlci9YTmg5NXhZSlFCUQ  
+  
+ Thu May 10 2018 20:49:55 GMT+0300 (EEST)
+[debug] [2018-05-10T17:49:55.604Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:49:55.773Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:49:55.774Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:49:55.838Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:49:57.606Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZWRpdGxheWVyYXBwL3VzLWNlbnRyYWwxL2RlbGV0ZVByb2plY3QvaWFsX281bTFlQ00  
+  
+ Thu May 10 2018 20:49:57 GMT+0300 (EEST)
+[debug] [2018-05-10T17:49:57.777Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZWRpdGxheWVyYXBwL3VzLWNlbnRyYWwxL3B1Ymxpc2hKc29uLzhnZ1d5ZnhrRzNN  
+  
+ Thu May 10 2018 20:49:57 GMT+0300 (EEST)
+[debug] [2018-05-10T17:49:57.777Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZWRpdGxheWVyYXBwL3VzLWNlbnRyYWwxL2F0dGFjaFJvbGUvU2J4eDBoY1RzUmc  
+  
+ Thu May 10 2018 20:49:57 GMT+0300 (EEST)
+[debug] [2018-05-10T17:49:57.840Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZWRpdGxheWVyYXBwL3VzLWNlbnRyYWwxL2F0dGFjaFJvbGVzQWZ0ZXJSZWdpc3Rlci9YTmg5NXhZSlFCUQ  
+  
+ Thu May 10 2018 20:49:57 GMT+0300 (EEST)
+[debug] [2018-05-10T17:49:58.110Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:49:58.271Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:49:58.279Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:49:58.340Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:50:00.112Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZWRpdGxheWVyYXBwL3VzLWNlbnRyYWwxL2RlbGV0ZVByb2plY3QvaWFsX281bTFlQ00  
+  
+ Thu May 10 2018 20:50:00 GMT+0300 (EEST)
+[debug] [2018-05-10T17:50:00.276Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZWRpdGxheWVyYXBwL3VzLWNlbnRyYWwxL3B1Ymxpc2hKc29uLzhnZ1d5ZnhrRzNN  
+  
+ Thu May 10 2018 20:50:00 GMT+0300 (EEST)
+[debug] [2018-05-10T17:50:00.280Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZWRpdGxheWVyYXBwL3VzLWNlbnRyYWwxL2F0dGFjaFJvbGUvU2J4eDBoY1RzUmc  
+  
+ Thu May 10 2018 20:50:00 GMT+0300 (EEST)
+[debug] [2018-05-10T17:50:00.341Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZWRpdGxheWVyYXBwL3VzLWNlbnRyYWwxL2F0dGFjaFJvbGVzQWZ0ZXJSZWdpc3Rlci9YTmg5NXhZSlFCUQ  
+  
+ Thu May 10 2018 20:50:00 GMT+0300 (EEST)
+[debug] [2018-05-10T17:50:00.615Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:50:00.667Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:50:00.759Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:50:00.772Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:50:02.616Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZWRpdGxheWVyYXBwL3VzLWNlbnRyYWwxL2RlbGV0ZVByb2plY3QvaWFsX281bTFlQ00  
+  
+ Thu May 10 2018 20:50:02 GMT+0300 (EEST)
+[debug] [2018-05-10T17:50:02.670Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZWRpdGxheWVyYXBwL3VzLWNlbnRyYWwxL2F0dGFjaFJvbGVzQWZ0ZXJSZWdpc3Rlci9YTmg5NXhZSlFCUQ  
+  
+ Thu May 10 2018 20:50:02 GMT+0300 (EEST)
+[debug] [2018-05-10T17:50:02.762Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZWRpdGxheWVyYXBwL3VzLWNlbnRyYWwxL3B1Ymxpc2hKc29uLzhnZ1d5ZnhrRzNN  
+  
+ Thu May 10 2018 20:50:02 GMT+0300 (EEST)
+[debug] [2018-05-10T17:50:02.775Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZWRpdGxheWVyYXBwL3VzLWNlbnRyYWwxL2F0dGFjaFJvbGUvU2J4eDBoY1RzUmc  
+  
+ Thu May 10 2018 20:50:02 GMT+0300 (EEST)
+[debug] [2018-05-10T17:50:03.105Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:50:03.157Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:50:03.248Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:50:03.274Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:50:05.107Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZWRpdGxheWVyYXBwL3VzLWNlbnRyYWwxL2RlbGV0ZVByb2plY3QvaWFsX281bTFlQ00  
+  
+ Thu May 10 2018 20:50:05 GMT+0300 (EEST)
+[debug] [2018-05-10T17:50:05.161Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZWRpdGxheWVyYXBwL3VzLWNlbnRyYWwxL2F0dGFjaFJvbGVzQWZ0ZXJSZWdpc3Rlci9YTmg5NXhZSlFCUQ  
+  
+ Thu May 10 2018 20:50:05 GMT+0300 (EEST)
+[debug] [2018-05-10T17:50:05.250Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZWRpdGxheWVyYXBwL3VzLWNlbnRyYWwxL3B1Ymxpc2hKc29uLzhnZ1d5ZnhrRzNN  
+  
+ Thu May 10 2018 20:50:05 GMT+0300 (EEST)
+[debug] [2018-05-10T17:50:05.279Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZWRpdGxheWVyYXBwL3VzLWNlbnRyYWwxL2F0dGFjaFJvbGUvU2J4eDBoY1RzUmc  
+  
+ Thu May 10 2018 20:50:05 GMT+0300 (EEST)
+[debug] [2018-05-10T17:50:05.463Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:50:05.602Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:50:05.736Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:50:05.768Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:50:07.464Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZWRpdGxheWVyYXBwL3VzLWNlbnRyYWwxL2F0dGFjaFJvbGVzQWZ0ZXJSZWdpc3Rlci9YTmg5NXhZSlFCUQ  
+  
+ Thu May 10 2018 20:50:07 GMT+0300 (EEST)
+[debug] [2018-05-10T17:50:07.607Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZWRpdGxheWVyYXBwL3VzLWNlbnRyYWwxL2RlbGV0ZVByb2plY3QvaWFsX281bTFlQ00  
+  
+ Thu May 10 2018 20:50:07 GMT+0300 (EEST)
+[debug] [2018-05-10T17:50:07.740Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZWRpdGxheWVyYXBwL3VzLWNlbnRyYWwxL3B1Ymxpc2hKc29uLzhnZ1d5ZnhrRzNN  
+  
+ Thu May 10 2018 20:50:07 GMT+0300 (EEST)
+[debug] [2018-05-10T17:50:07.754Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:50:07.769Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZWRpdGxheWVyYXBwL3VzLWNlbnRyYWwxL2F0dGFjaFJvbGUvU2J4eDBoY1RzUmc  
+  
+ Thu May 10 2018 20:50:07 GMT+0300 (EEST)
+[debug] [2018-05-10T17:50:08.095Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:50:08.226Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:50:08.273Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-10T17:50:09.759Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZWRpdGxheWVyYXBwL3VzLWNlbnRyYWwxL2F0dGFjaFJvbGVzQWZ0ZXJSZWdpc3Rlci9YTmg5NXhZSlFCUQ  
+  
+ Thu May 10 2018 20:50:09 GMT+0300 (EEST)

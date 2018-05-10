@@ -58,6 +58,7 @@ export default {
     findFirstItem () {
       if (!this.activeStructure) return false
       if (this.$route.name !== 'Content') return false
+      if (this.$store.getters.isMobile) return false
 
       let path = _.replace(this.$route.params.path, />/g, '.')
       if (path !== '' && path !== this.activeStructure.PATH) return false
@@ -84,7 +85,7 @@ export default {
 </script>
 
 <template>
-<section class="items">
+<section class="items -object">
 
   <header class="header">
     <BackButton/>
