@@ -74,14 +74,6 @@ export default {
 <template>
 <section class="projects">
 
-  <div class="no-items" v-if="projects !== null && projects.length === 0">
-    <div>No projects - create first project</div>
-  </div>
-
-  <div class="no-items" v-if="projects === null">
-    <div>Loading projects...</div>
-  </div>
-
   <div class="project-grid">
 
     <div class="project" v-for="project in projects" :key="project.projectId">

@@ -40,7 +40,7 @@ export default {
 
 <template>
 <section class="layout">
-  <Navigation/>
+  <Navigation class="navigation"/>
 
   <main class="main -dashboard">
     <header class="header">
@@ -95,5 +95,11 @@ export default {
 
     .button
       font-size: .8rem
+
+.navigation
+  max-width: 1rem
+
+  +for-tablet-portrait
+    max-width: none
 
 </style>
