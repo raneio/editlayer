@@ -58,13 +58,19 @@ export default {
     publishJson () {
       let content = buildJson(this.structure)
 
+      let webhookConfig = _.has(this.$store.getters.activeProject, 'settings.webhook.config') ? this.$store.getters.activeProject.settings.webhook.config : null
+
       this.$store.dispatch('publishJson', {
         projectId: this.activeProject.projectId,
+        projectName: this.activeProject.name,
         publishedBy: this.$store.state.user.id,
         content: content,
         filename: this.activeProject.filename,
         draft: this.activeProject.draft,
         structure: this.activeProject.structure,
+        jsonUrl: this.$store.getters.jsonUrl,
+        activeRole: this.$store.getters.activeRole,
+        webhookConfig: webhookConfig,
       })
     },
 

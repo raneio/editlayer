@@ -7,6 +7,7 @@ export default {
   props: {
     status: String,
     message: String,
+    link: Object,
     progress: Number,
     image: String,
     deleteTime: {
@@ -69,7 +70,11 @@ export default {
   <div class="status-bar"></div>
 
   <div class="content">
-    <div class="message" v-text="message"></div>
+    <div class="message" v-html="message"></div>
+
+    <div class="link" v-if="link && link.url && link.text">
+      <a class="button" :href="link.url" :target="link.target" v-text="link.text"></a>
+    </div>
 
     <div class="progress" v-if="progress !== undefined">
       <div class="percent" :style="{ width: progress + '%'}"></div>
@@ -108,7 +113,7 @@ export default {
   .content
     flex-grow: 1
     padding: .5rem
-    +margin-to-childs(.25rem)
+    +margin-to-childs(.5rem)
 
     .progress
       height: .4rem

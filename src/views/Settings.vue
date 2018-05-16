@@ -225,7 +225,7 @@ export default {
         <p class="tagline danger">Your project will be deleted permanently and you can’t undo this.</p>
       </header>
 
-      <button class="button -danger delete-project" @click="deleteProject()">
+      <button class="button -red delete-project" @click="deleteProject()">
         Delete Project Permamently
       </button>
     </section>

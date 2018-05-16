@@ -30,6 +30,7 @@ export default {
       <Notification
         :status="notification.status"
         :message="notification.message"
+        :link="notification.link"
         :progress="notification.progress"
         :image="notification.image"
         :deleteTime="notification.deleteTime"

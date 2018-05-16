@@ -48,14 +48,14 @@ export default {
   <div class="input-group">
     <button
       class="button"
-      :class="{'-red': !content, '-gray': content}"
+      :class="{'-red': content === false, '-gray': content !== false}"
       @click="switchOff()"
     >
       Off
     </button>
     <button
       class="button"
-      :class="{'-green': content, '-gray': !content}"
+      :class="{'-green': content === true, '-gray': content !== true}"
       @click="switchOn()"
     >
       On

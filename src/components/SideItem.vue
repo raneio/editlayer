@@ -63,18 +63,18 @@ export default {
         }
       }
       else if (this.item.EDITOR === 'switch') {
-        let content = 'ON'
-        let isOn = true
+        let content = null
 
-        if (this.item.CONTENT === false) {
+        if (this.item.CONTENT === true) {
+          content = 'ON'
+        }
+        else if (this.item.CONTENT === false) {
           content = 'OFF'
-          isOn = false
         }
 
         return {
           type: 'switch',
           content: content,
-          isOn: isOn
         }
       }
       else if (this.item.CONTENT) {
@@ -155,7 +155,7 @@ export default {
 
   <div
     class="content -switch"
-    :class="{'-isOn': preview.isOn}"
+    :class="{'-isOn': preview.content === 'ON', '-isOff': preview.content === 'OFF'}"
     v-if="preview.type === 'switch'"
     v-text="preview.content"
   />
@@ -228,10 +228,12 @@ export default {
     &.-switch
       font-size: 1rem
       font-weight: 900
-      color: $color-red
 
       &.-isOn
         color: $color-green
+
+      &.-isOff
+        color: $color-red
 
     &.-image
       position: relative

@@ -177,8 +177,10 @@ export default new Vuex.Store({
       let notification = _.merge(currentNotification, {
         status: payload.status,
         message: payload.message,
+        link: payload.link,
         progress: payload.progress,
         image: payload.image,
+        deleteTime: payload.deleteTime,
       })
 
       console.log('setNotification', notification)
@@ -392,17 +394,33 @@ export default new Vuex.Store({
             })
         })
         .then(() => {
-          console.log('Published successfully updated!')
+          console.log('Published successfully updated!', payload)
 
           // Webhook here
           if (_.get(getters, 'activeProject.settings.webhook.enabled') === true) {
-            webhook(getters.activeProject.settings.webhook.config, getters.jsonUrl)
+            webhook(payload.webhookConfig, payload.jsonUrl)
           }
 
           commit('updatePublishProcess', {
             projectId: payload.projectId,
             status: 'done',
           })
+
+          let link = {}
+
+          if (payload.activeRole === 'admin') {
+            link.url = payload.jsonUrl
+            link.target = payload.projectId
+            link.text = 'Open file'
+          }
+
+          commit('setNotification', {
+            status: 'success',
+            message: `Project "${payload.projectName}" is published.`,
+            link: link,
+            deleteTime: 20,
+          })
+
         })
         .catch((error) => {
           console.warn('Try again', payload.versionCheck, error.message)
