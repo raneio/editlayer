@@ -12,14 +12,14 @@ export default {
   components: {
     Breadcrumb,
     Navigation,
-    codemirror
+    codemirror,
   },
 
   data () {
     return {
       enabled: false,
       config: false,
-      openDevtoolInfo: false
+      openDevtoolInfo: false,
     }
   },
 
@@ -31,7 +31,7 @@ export default {
 
     jsonUrl () {
       return this.$store.getters.jsonUrl
-    }
+    },
 
   },
 
@@ -47,7 +47,7 @@ export default {
 
     enabled () {
       this.saveEnabled()
-    }
+    },
 
   },
 
@@ -122,13 +122,13 @@ export default {
     "versionId": "{{VERSION_ID}}"
   }
 }`
-    }
+    },
 
   },
 
   mounted () {
     this.updateData()
-  }
+  },
 
 }
 </script>
@@ -154,11 +154,10 @@ export default {
     v-if="enabled !== false"
     v-model="config"
     :options="{
+      theme: 'dracula',
       tabSize: 2,
-      mode: 'application/ld+json',
-      lineWrapping: true,
-      theme: 'editlayer',
       lineNumbers: false,
+      mode: 'application/ld+json',
     }"
   />
 

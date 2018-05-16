@@ -10,9 +10,9 @@ export default {
       rotate: '360deg',
       easing: 'linear',
       duration: 1000,
-      loop: true
+      loop: true,
     })
-  }
+  },
 
 }
 </script>

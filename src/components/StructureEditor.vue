@@ -15,13 +15,13 @@ export default {
   name: 'StructureEditor',
 
   components: {
-    codemirror
+    codemirror,
   },
 
   data () {
     return {
       structure: '',
-      syntaxError: false
+      syntaxError: false,
     }
   },
 
@@ -29,7 +29,7 @@ export default {
 
     activeProject () {
       return this.$store.getters.activeProject
-    }
+    },
 
   },
 
@@ -41,7 +41,7 @@ export default {
 
     structure: _.debounce(function () {
       this.saveStructure()
-    }, 500)
+    }, 500),
 
   },
 
@@ -61,7 +61,7 @@ export default {
 
       if (this.structure !== this.activeProject.structure) {
         firebase.firestore.collection('projects').doc(this.activeProject.projectId).update({
-          structure: this.structure
+          structure: this.structure,
         })
           .then(() => console.log('Structure successfully written!'))
           .catch((error) => console.error('Error writing structure:', error))
@@ -72,13 +72,13 @@ export default {
       if (_.has(this.activeProject, 'structure')) {
         this.structure = this.activeProject.structure
       }
-    }
+    },
 
   },
 
   created () {
     this.setStructure()
-  }
+  },
 
 }
 </script>
@@ -97,11 +97,10 @@ export default {
   <codemirror
     v-model="structure"
     :options="{
+      theme: 'dracula',
       tabSize: 2,
-      mode: 'application/ld+json',
-      lineWrapping: true,
-      theme: 'editlayer',
       lineNumbers: true,
+      mode: 'application/ld+json',
     }"
   />
 
@@ -136,10 +135,7 @@ export default {
 
 .structure /deep/
 
-  .CodeMirror
-    height: auto
-
-  &.-syntax-error .CodeMirror
+  &.-syntax-error .vue-codemirror
     box-shadow: 0 5px 12px 0 mix(transparent, $color-content, 90%), 0 2px 5px 0 mix(transparent, black, 93%), inset 0 0 0 .2rem $color-danger, 0 0 0 .2rem $color-danger
 
 </style>

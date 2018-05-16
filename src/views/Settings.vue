@@ -9,7 +9,7 @@ export default {
 
   components: {
     Navigation,
-    Webhook
+    Webhook,
   },
 
   computed: {
@@ -33,7 +33,7 @@ export default {
     jsonTarget () {
       if (!this.activeProject) return false
       return this.activeProject.projectId
-    }
+    },
 
   },
 
@@ -50,7 +50,7 @@ export default {
         this.$store.commit('setNotification', {
           id: notificationId,
           status: 'info',
-          message: `Adding user "${email}", please wait...`
+          message: `Adding user "${email}", please wait...`,
         })
 
         firebase.firestore
@@ -59,7 +59,7 @@ export default {
           .collection('permissionJobs')
           .add({
             role: 'editor',
-            email: email
+            email: email,
           })
           .then(() => {
             console.log('Permission job added')
@@ -111,12 +111,12 @@ export default {
           .doc(this.activeProject.projectId)
           .collection('deleteJobs')
           .add({
-            deleteProjectId: this.activeProject.projectId
+            deleteProjectId: this.activeProject.projectId,
           })
           .then(() => {
             this.$store.commit('setNotification', {
               status: 'info',
-              message: `Deleting project "${this.activeProject.projectId}", please wait...`
+              message: `Deleting project "${this.activeProject.projectId}", please wait...`,
             })
 
             this.$router.push({ name: 'Dashboard' })
@@ -124,7 +124,7 @@ export default {
           })
           .catch((error) => console.error('Project deleting failed', error))
       }
-    }
+    },
 
   },
 
@@ -132,7 +132,7 @@ export default {
     if (this.$store.getters.activeRole !== 'admin') {
       this.$router.replace({name: 'Content', params: {projectId: this.$store.getters.activeProject.projectId}})
     }
-  }
+  },
 
 }
 </script>

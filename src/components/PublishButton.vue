@@ -8,7 +8,7 @@ export default {
   name: 'PublishButton',
 
   components: {
-    LoaderIcon
+    LoaderIcon,
   },
 
   computed: {
@@ -49,7 +49,7 @@ export default {
       } else {
         return 'published'
       }
-    }
+    },
 
   },
 
@@ -64,9 +64,9 @@ export default {
         content: content,
         filename: this.activeProject.filename,
         draft: this.activeProject.draft,
-        structure: this.activeProject.structure
+        structure: this.activeProject.structure,
       })
-    }
+    },
 
   },
 
@@ -76,9 +76,9 @@ export default {
       rotate: '360deg',
       easing: 'linear',
       duration: 1000,
-      loop: true
+      loop: true,
     })
-  }
+  },
 
 }
 </script>

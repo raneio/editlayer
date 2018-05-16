@@ -5,16 +5,16 @@ export default {
   name: 'Notifications',
 
   components: {
-    Notification
+    Notification,
   },
 
   computed: {
 
     notifications () {
       return this.$store.state.notifications
-    }
+    },
 
-  }
+  },
 
 }
 </script>

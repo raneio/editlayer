@@ -8,12 +8,12 @@ export default {
 
   props: {
     editorData: Object,
-    saveFunction: Function
+    saveFunction: Function,
   },
 
   data () {
     return {
-      content: this.editorData.content
+      content: this.editorData.content,
     }
   },
 
@@ -25,14 +25,14 @@ export default {
 
     content: _.debounce(function () {
       this.saveFunction(this.editorData, this.content)
-    }, 500)
+    }, 500),
 
   },
 
   mounted () {
     this.$refs['textarea'].focus()
     autosize(this.$refs['textarea'])
-  }
+  },
 
 }
 </script>

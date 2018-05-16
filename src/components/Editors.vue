@@ -3,7 +3,9 @@ import _ from 'lodash'
 import Input from '@/components/editors/Input'
 import Textarea from '@/components/editors/Textarea'
 import ImageEditor from '@/components/editors/Image'
+import SwitchEditor from '@/components/editors/Switch'
 import CKEditor5 from '@/components/editors/CKEditor5'
+import CodeMirror from '@/components/editors/CodeMirror'
 
 export default {
   name: 'Editors',
@@ -12,12 +14,14 @@ export default {
     Input,
     Textarea,
     ImageEditor,
-    CKEditor5
+    SwitchEditor,
+    CKEditor5,
+    CodeMirror,
   },
 
   data () {
     return {
-      activeEditor: null
+      activeEditor: null,
     }
   },
 
@@ -37,21 +41,14 @@ export default {
 
     editorData () {
       return {
+        name: this.activeStructure.NAME,
         editor: this.activeStructure.EDITOR,
         projectId: this.$route.params.projectId,
         path: this.activeStructure.PATH,
         content: this.activeStructure.CONTENT,
-        config: (this.activeStructure.CONFIG) ? this.activeStructure.CONFIG : null
+        config: (this.activeStructure.CONFIG) ? this.activeStructure.CONFIG : null,
       }
-    }
-
-    // editorIsExists () {
-    //   return _.includes(this.editors, this.activeStructure.EDITOR)
-    // },
-
-    // isInput () {
-    //   return
-    // }
+    },
 
   },
 
@@ -59,7 +56,7 @@ export default {
 
     'editorData.path' (value) {
       this.selectEditor()
-    }
+    },
 
   },
 
@@ -69,7 +66,7 @@ export default {
       this.$store.dispatch('updateContent', {
         projectId: editorData.projectId,
         path: editorData.path,
-        content: content
+        content: content,
       })
     },
 
@@ -90,7 +87,7 @@ export default {
         'password',
         'range',
         'tel',
-        'url'
+        'url',
       ]
 
       this.$nextTick(function () {
@@ -100,19 +97,24 @@ export default {
           this.activeEditor = 'textarea'
         } else if (this.activeStructure.EDITOR === 'image') {
           this.activeEditor = 'image'
-        } else if (this.activeStructure.EDITOR === 'richtext') {
+        } else if (this.activeStructure.EDITOR === 'switch') {
+          this.activeEditor = 'switch'
+        } else if (_.includes(['richtext', 'CKEditor5'], this.activeStructure.EDITOR)) {
           this.activeEditor = 'richtext'
+        } else if (_.includes(['code', 'CodeMirror'], this.activeStructure.EDITOR)) {
+          this.activeEditor = 'code'
         } else {
           this.activeEditor = null
         }
       })
-    }
+    },
 
   },
 
   mounted () {
+    console.log('config', this.editorData.config)
     this.selectEditor()
-  }
+  },
 
 }
 </script>
@@ -144,8 +146,20 @@ export default {
     :saveFunction="saveContent"
   />
 
+  <SwitchEditor
+    v-if="activeEditor === 'switch'"
+    :editorData="editorData"
+    :saveFunction="saveContent"
+  />
+
   <CKEditor5
     v-if="activeEditor === 'richtext'"
+    :editorData="editorData"
+    :saveFunction="saveContent"
+  />
+
+  <CodeMirror
+    v-if="activeEditor === 'code'"
     :editorData="editorData"
     :saveFunction="saveContent"
   />

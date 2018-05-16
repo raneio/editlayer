@@ -1,9 +1,14 @@
 .input-group
   +chain(0)
 
-  > input,
-  > select,
+
   > button
+    border-radius: 0
+    border-right: 0
+    width: auto
+
+  > input,
+  > select
     border-radius: 0
     border-right: 0
     width: auto
@@ -25,6 +30,10 @@
       + *
         border-left: $input-border--focus
 
+  > input,
+  > select,
+  > button
+
     &:first-child
       border-top-left-radius: $button-border-radius
       border-bottom-left-radius: $button-border-radius
@@ -36,3 +45,23 @@
 
   .grow
     flex-grow: 1
+
+// input[type="checkbox"]
+//   position: relative
+//   font-size: 1rem
+//
+//   &::after
+//     content: ''
+//     position: absolute
+//     top: -.5em
+//     left: 0
+//     border: 2px solid red
+//     background-color: $color-white
+//     width: 4em
+//     height: 2em
+//     border-radius: 1em
+//
+//   &:checked
+//
+//     &::after
+//       border: 2px solid blue

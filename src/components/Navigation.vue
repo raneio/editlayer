@@ -7,7 +7,7 @@ export default {
 
   components: {
     Breadcrumb,
-    PublishButton
+    PublishButton,
   },
 
   computed: {
@@ -32,7 +32,7 @@ export default {
     neverPublished () {
       if (!this.activeProject) return false
       return this.activeProject.published === null
-    }
+    },
 
   },
 
@@ -46,7 +46,7 @@ export default {
     //   })
     // }
 
-  }
+  },
 
 }
 </script>

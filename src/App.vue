@@ -9,7 +9,7 @@ export default {
   components: {
     Auth,
     Notifications,
-    LoaderOverlay
+    LoaderOverlay,
   },
 
   computed: {
@@ -22,14 +22,14 @@ export default {
       return this.$store.state.user.isLoggedIn === true &&
         this.$store.state.projects.admin !== null &&
         this.$store.state.projects.editor !== null
-    }
+    },
 
   },
 
   created () {
     this.$store.dispatch('authState')
     this.$store.dispatch('resizeListener')
-  }
+  },
 }
 </script>
 

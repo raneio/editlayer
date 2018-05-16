@@ -5,8 +5,8 @@ export default {
   name: 'LoaderOverlay',
 
   components: {
-    LoaderIcon
-  }
+    LoaderIcon,
+  },
 
 }
 </script>

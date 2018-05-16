@@ -40,7 +40,7 @@ export default {
           breadcrumb.unshift({
             name: titleCase(item.NAME),
             path: path,
-            projectId: this.$route.params.projectId
+            projectId: this.$route.params.projectId,
           })
         }
 
@@ -50,7 +50,7 @@ export default {
       if (this.$route.params.projectId && this.activeProject) {
         breadcrumb.unshift({
           name: this.activeProject.name,
-          projectId: this.$route.params.projectId
+          projectId: this.$route.params.projectId,
         })
       }
 
@@ -59,7 +59,7 @@ export default {
 
     isMobile () {
       return this.$store.getters.isMobile
-    }
+    },
 
   },
 
@@ -74,7 +74,7 @@ export default {
           translateX: '100%',
           opacity: 0,
           easing: 'linear',
-          duration: 100
+          duration: 100,
         })
         .add({
           targets: '.side-panel > .content',
@@ -86,18 +86,18 @@ export default {
             } else if (item.projectId) {
               this.$router.push({name: this.$route.name, params: {projectId: item.projectId}})
             }
-          }
+          },
         })
         .add({
           targets: '.side-panel > .content',
           translateX: 0,
           opacity: 1,
           easing: 'linear',
-          duration: 100
+          duration: 100,
         })
-    }
+    },
 
-  }
+  },
 
 }
 </script>

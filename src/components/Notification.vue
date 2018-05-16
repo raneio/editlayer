@@ -11,16 +11,16 @@ export default {
     image: String,
     deleteTime: {
       type: Number,
-      default: 10
+      default: 10,
     },
-    id: String
+    id: String,
   },
 
   computed: {
 
     statusClass () {
       return `-${this.status}`
-    }
+    },
 
   },
 
@@ -32,7 +32,7 @@ export default {
           this.close()
         }, 1000)
       }
-    }
+    },
 
   },
 
@@ -41,7 +41,7 @@ export default {
     close () {
       console.log('close', this.id)
       this.$store.commit('deleteNotification', this.id)
-    }
+    },
 
   },
 
@@ -53,7 +53,7 @@ export default {
         this.close()
       }, this.deleteTime * 1000)
     }
-  }
+  },
 
 }
 </script>

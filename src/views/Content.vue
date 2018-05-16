@@ -14,7 +14,7 @@ export default {
     SidePanel,
     Breadcrumb,
     Editors,
-    BackButton
+    BackButton,
   },
 
   computed: {
@@ -33,7 +33,7 @@ export default {
 
     mobileView () {
       return this.activeStructure.TYPE === 'value' ? 'main' : 'side'
-    }
+    },
 
   },
 
@@ -55,9 +55,9 @@ export default {
       }
 
       this.$router.push({name: 'Content', params: {projectId: this.$store.getters.activeProject.projectId}})
-    }
+    },
 
-  }
+  },
 
 }
 </script>

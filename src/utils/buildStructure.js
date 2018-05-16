@@ -6,7 +6,7 @@ const simpleToAdvance = (structure) => {
     if (!_.includes(['EDITOR', 'CONTENT', 'PATH', 'NAME', 'DEFAULT', 'TYPE', 'INFO', 'CONFIG'], key)) {
       if (_.isArray(value)) {
         structure[key] = {
-          ARRAY: value[0]
+          ARRAY: value[0],
         }
 
         if (_.has(value[0], 'NAME')) {
@@ -18,13 +18,14 @@ const simpleToAdvance = (structure) => {
 
       if (_.isString(value)) {
         structure[key] = {
-          EDITOR: value
+          EDITOR: value,
         }
       }
-    }
 
-    if (_.isPlainObject(value)) {
-      value = simpleToAdvance(value)
+      if (_.isPlainObject(value)) {
+        value = simpleToAdvance(value)
+      }
+
     }
   })
 

@@ -163,8 +163,6 @@ exports.attachRolesAfterRegister = functions.auth.user().onCreate((userRecord, c
             .doc(doc.id)
             .update(updateData)
 
-        } else {
-          console.log('no email', doc.id, emailSha1)
         }
 
         return true

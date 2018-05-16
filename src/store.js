@@ -17,12 +17,12 @@ export default new Vuex.Store({
   state: {
     projects: {
       admin: null,
-      editor: null
+      editor: null,
     },
     user: {
       isLoggedIn: null,
       id: null,
-      email: null
+      email: null,
     },
     notifications: {},
     publishProcesses: {},
@@ -42,12 +42,14 @@ export default new Vuex.Store({
       'password',
       'range',
       'tel',
-      'url'
+      'url',
+      'code',
+      'switch',
     ],
     windowSize: {
       width: window.innerWidth,
-      height: window.innerHeight
-    }
+      height: window.innerHeight,
+    },
   },
 
   getters: {
@@ -114,7 +116,7 @@ export default new Vuex.Store({
 
     isMobile (state) {
       return state.windowSize.width <= 900
-    }
+    },
 
   },
 
@@ -146,7 +148,7 @@ export default new Vuex.Store({
           structure: (doc.data().structure) ? doc.data().structure : null,
           draft: (doc.data().draft) ? doc.data().draft : null,
           published: (doc.data().published) ? doc.data().published : null,
-          settings: (doc.data().settings) ? doc.data().settings : null
+          settings: (doc.data().settings) ? doc.data().settings : null,
         }
       })
 
@@ -157,7 +159,7 @@ export default new Vuex.Store({
       Vue.set(state.contents, payload.contentId, {
         content: payload.content,
         projectId: payload.projectId,
-        path: payload.path
+        path: payload.path,
       })
     },
 
@@ -176,7 +178,7 @@ export default new Vuex.Store({
         status: payload.status,
         message: payload.message,
         progress: payload.progress,
-        image: payload.image
+        image: payload.image,
       })
 
       console.log('setNotification', notification)
@@ -187,7 +189,7 @@ export default new Vuex.Store({
     setPublishProcess (state, payload) {
       Vue.set(state.publishProcesses, payload.projectId, {
         status: 'publishing',
-        message: null
+        message: null,
       })
     },
 
@@ -196,7 +198,7 @@ export default new Vuex.Store({
       let updatedPublishProcess = _.merge(currentPublishProcess, {
         versionId: payload.versionId,
         status: payload.status,
-        message: payload.message
+        message: payload.message,
       })
 
       Vue.set(state.publishProcesses, payload.projectId, updatedPublishProcess)
@@ -210,7 +212,7 @@ export default new Vuex.Store({
     setwWindowSize (state) {
       state.windowSize.width = window.innerWidth
       state.windowSize.height = window.innerHeight
-    }
+    },
 
   },
 
@@ -222,7 +224,7 @@ export default new Vuex.Store({
           commit('setUser', {
             id: firebaseUser.uid,
             email: firebaseUser.email,
-            isLoggedIn: true
+            isLoggedIn: true,
           })
 
           dispatch('getProjectsFromDatabase')
@@ -243,7 +245,7 @@ export default new Vuex.Store({
         .onSnapshot((querySnapshot) => {
           commit('setProjects', {
             myRole: 'admin',
-            querySnapshot: querySnapshot
+            querySnapshot: querySnapshot,
           })
         })
 
@@ -253,7 +255,7 @@ export default new Vuex.Store({
         .onSnapshot((querySnapshot) => {
           commit('setProjects', {
             myRole: 'editor',
-            querySnapshot: querySnapshot
+            querySnapshot: querySnapshot,
           })
         })
     },
@@ -268,7 +270,7 @@ export default new Vuex.Store({
       let defaultStructure = {
         title: 'text',
         description: 'textarea',
-        photo: 'image'
+        photo: 'image',
       }
 
       let structure = (payload.structure) ? payload.structure : defaultStructure
@@ -277,13 +279,13 @@ export default new Vuex.Store({
         filename: 'content',
         name: payload.name,
         structure: JSON.stringify(structure, '', '\t'),
-        roles: {}
+        roles: {},
       }
 
       newProject.roles[state.user.id] = {
         role: 'admin',
         email: state.user.email,
-        userExist: true
+        userExist: true,
       }
 
       firebase.firestore
@@ -330,12 +332,12 @@ export default new Vuex.Store({
         console.error('Publishing failed, try again.')
         commit('updatePublishProcess', {
           projectId: payload.projectId,
-          status: 'error'
+          status: 'error',
         })
       }
 
       commit('setPublishProcess', {
-        projectId: payload.projectId
+        projectId: payload.projectId,
       })
 
       firebase.firestore
@@ -346,18 +348,18 @@ export default new Vuex.Store({
           publishedBy: payload.publishedBy,
           publishedAt: firebase.firestoreTimestamp,
           content: payload.content,
-          filename: payload.filename
+          filename: payload.filename,
         })
         .then((docRef) => {
           let versionId = docRef.id
 
           commit('updatePublishProcess', {
             projectId: payload.projectId,
-            versionId: versionId
+            versionId: versionId,
           })
 
           dispatch('isPublishReady', _.merge(payload, {
-            versionId: versionId
+            versionId: versionId,
           }))
         })
         .catch((error) => console.error('Error adding version:', error))
@@ -376,7 +378,7 @@ export default new Vuex.Store({
       axios({
         method: 'GET',
         url: `https://cdn.editlayer.com/${payload.projectId}/${payload.filename}.json`,
-        responseType: 'json'
+        responseType: 'json',
       })
         .then((response) => {
           if (payload.versionId !== response.data.VERSION_ID) throw new Error('Publishing not ready')
@@ -386,7 +388,7 @@ export default new Vuex.Store({
             .doc(payload.projectId)
             .update({
               'published.draft': payload.draft,
-              'published.structure': payload.structure
+              'published.structure': payload.structure,
             })
         })
         .then(() => {
@@ -399,7 +401,7 @@ export default new Vuex.Store({
 
           commit('updatePublishProcess', {
             projectId: payload.projectId,
-            status: 'done'
+            status: 'done',
           })
         })
         .catch((error) => {
@@ -427,7 +429,7 @@ export default new Vuex.Store({
         status: 'info',
         message: filenameWithoutExt,
         image: blobUrl,
-        progress: 0
+        progress: 0,
       })
 
       // let dimensions = await new Promise(function(resolve, reject) {
@@ -453,7 +455,7 @@ export default new Vuex.Store({
           quality: 0.8,
           convertSize: 1000000,
           maxWidth: maxWidth,
-          maxHeight: maxHeight
+          maxHeight: maxHeight,
         })
           .then((result) => {
             console.log('Image optimized')
@@ -474,7 +476,7 @@ export default new Vuex.Store({
           id: `${payload.projectId}>${payload.path}>upload`,
           status: 'error',
           message: 'Max image size 1 MB, try another image.',
-          image: blobUrl
+          image: blobUrl,
         })
 
         console.error('Max image size 1 MB, try another image.')
@@ -495,7 +497,7 @@ export default new Vuex.Store({
         commit('setNotification', {
           id: `${payload.projectId}>${payload.path}>upload`,
           status: 'error',
-          message: `Unsupported file type. Send jpg, png, gif or svg.`
+          message: `Unsupported file type. Send jpg, png, gif or svg.`,
         })
         console.error('Unsupported file type', uploadImage.type)
         return false
@@ -508,7 +510,7 @@ export default new Vuex.Store({
 
         commit('setNotification', {
           id: `${payload.projectId}>${payload.path}>upload`,
-          progress: percent
+          progress: percent,
         })
 
         console.log('Upload is ' + percent + '% done')
@@ -516,7 +518,7 @@ export default new Vuex.Store({
         commit('setNotification', {
           id: `${payload.projectId}>${payload.path}>upload`,
           status: 'error',
-          message: 'Upload failer, try again later.'
+          message: 'Upload failer, try again later.',
         })
         console.error('Upload failed', error)
       }, () => {
@@ -529,7 +531,7 @@ export default new Vuex.Store({
         dispatch('updateContent', {
           projectId: payload.projectId,
           path: _.replace(payload.path, />/g, '.'),
-          content: `https://cdn.editlayer.com/${payload.projectId}/${filename}`
+          content: `https://cdn.editlayer.com/${payload.projectId}/${filename}`,
         })
       })
     },
@@ -538,8 +540,8 @@ export default new Vuex.Store({
       window.addEventListener('resize', () => {
         commit('setwWindowSize')
       })
-    }
+    },
 
-  }
+  },
 
 })

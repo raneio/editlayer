@@ -8,13 +8,13 @@ export default {
 
   components: {
     Navigation,
-    Projects
+    Projects,
   },
 
   computed: {
     email () {
       return this.$store.state.user.email
-    }
+    },
   },
 
   methods: {
@@ -25,7 +25,7 @@ export default {
       }).catch((error) => {
         console.error('Logout failed', error)
       })
-    }
+    },
 
   },
 
@@ -33,7 +33,7 @@ export default {
     if (this.$route.params.view && this.$route.params.view !== 'structure') {
       this.$router.push({ name: 'Content', params: { projectId: this.$route.params.view } })
     }
-  }
+  },
 
 }
 </script>

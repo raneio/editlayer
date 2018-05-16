@@ -11,14 +11,14 @@ export default {
     Navigation,
     SidePanel,
     Breadcrumb,
-    StructureEditor
+    StructureEditor,
   },
 
   computed: {
 
     isMobile () {
       return this.$store.getters.isMobile
-    }
+    },
 
   },
 
@@ -26,7 +26,7 @@ export default {
     if (this.$store.getters.activeRole !== 'admin') {
       this.$router.replace({name: 'Content', params: {projectId: this.$store.getters.activeProject.projectId}})
     }
-  }
+  },
 }
 </script>
 

@@ -7,13 +7,13 @@ export default {
 
   props: {
     editorData: Object,
-    saveFunction: Function
+    saveFunction: Function,
   },
 
   data () {
     return {
       content: this.editorData.content,
-      editor: null
+      editor: null,
     }
   },
 
@@ -25,7 +25,7 @@ export default {
 
     content: _.debounce(function () {
       this.saveFunction(this.editorData, this.content)
-    }, 500)
+    }, 500),
 
   },
 
@@ -44,8 +44,8 @@ export default {
             'numberedList',
             'blockQuote',
             'undo',
-            'redo'
-          ]
+            'redo',
+          ],
         })
         .then(editor => {
           editor.model.document.on('change', () => {
@@ -55,13 +55,13 @@ export default {
         .catch(error => {
           console.error(error)
         })
-    }
+    },
 
   },
 
   mounted () {
     this.initEditor()
-  }
+  },
 
 }
 </script>

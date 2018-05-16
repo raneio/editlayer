@@ -11,7 +11,7 @@ export default {
       email: '',
       password: '',
       error: null,
-      progress: false
+      progress: false,
     }
   },
 
@@ -23,7 +23,7 @@ export default {
 
     password () {
       this.error = null
-    }
+    },
 
   },
 
@@ -52,7 +52,7 @@ export default {
           this.$store.commit('setNotification', {
             id: Math.random().toString(36).slice(-8),
             status: 'error',
-            message: error.message
+            message: error.message,
           })
 
           if (_.includes(['auth/invalid-email', 'auth/user-not-found'], error.code)) {
@@ -67,7 +67,7 @@ export default {
       firebase.auth.createUserWithEmailAndPassword(this.email, this.password)
         .then(user => {
           firebase.firestore.collection('users').doc(user.uid).set({
-            email: user.email
+            email: user.email,
           })
             .then(() => {
               console.log('Added user', user.email)
@@ -78,8 +78,8 @@ export default {
                   title: 'text',
                   slogan: 'textarea',
                   description: 'richtext',
-                  image: 'image'
-                }
+                  image: 'image',
+                },
               })
 
               this.$store.dispatch('newProject', {
@@ -90,19 +90,19 @@ export default {
                     EDITOR: 'text',
                     NAME: 'Advanced Field',
                     DEFAULT: 'Hello World!',
-                    INFO: 'You can use NAME, DEFAULT and INFO properties with an object notation.'
+                    INFO: 'You can use NAME, DEFAULT and INFO properties with an object notation.',
                   },
                   nestedExample: {
                     NAME: 'Nested Fields Example',
                     title: 'text',
-                    description: 'textarea'
+                    description: 'textarea',
                   },
                   arrayExample: [{
                     NAME: 'Image Gallery Example',
                     image: 'image',
-                    caption: 'text'
-                  }]
-                }
+                    caption: 'text',
+                  }],
+                },
               })
             })
             .catch(error => {
@@ -144,13 +144,13 @@ export default {
 
     changeState (state) {
       this.state = state
-    }
+    },
 
   },
 
   created () {
     this.$store.dispatch('authState')
-  }
+  },
 
 }
 </script>

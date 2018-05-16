@@ -9,14 +9,41 @@ button,
   &.-active
     box-shadow: 0 0 1em 0 mix($color-black, transparent, 5%), 0 0 .4em 0 mix(black, transparent, 10%)
 
-  &.-danger
+  &.-red
     background-color: $color-red
 
-  &.-new
+    &:hover
+      background-color: mix($color-red, white, 95%)
+
+    &:active
+      background-color: mix($color-red, white, 90%)
+
+  &.-green
     background-color: $color-green
+
+    &:hover
+      background-color: mix($color-green, white, 95%)
+
+    &:active
+      background-color: mix($color-green, white, 90%)
 
   &.-blue
     background-color: $color-blue
+
+    &:hover
+      background-color: mix($color-blue, white, 95%)
+
+    &:active
+      background-color: mix($color-blue, white, 90%)
+
+  &.-gray
+    background-color: $color-gray
+
+    &:hover
+      background-color: mix($color-gray, white, 95%)
+
+    &:active
+      background-color: mix($color-gray, white, 90%)
 
   &.-circle
     border-radius: 50%

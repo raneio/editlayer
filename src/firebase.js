@@ -7,7 +7,7 @@ firebase.initializeApp({
   databaseURL: 'https://editlayerapp.firebaseio.com',
   projectId: 'editlayerapp',
   storageBucket: 'editlayerapp.appspot.com',
-  messagingSenderId: '859710668845'
+  messagingSenderId: '859710668845',
 })
 
 export default {
@@ -15,5 +15,5 @@ export default {
   firestoreDelete: firebase.firestore.FieldValue.delete(),
   firestoreTimestamp: firebase.firestore.FieldValue.serverTimestamp(),
   auth: firebase.auth(),
-  storage: firebase.storage()
+  storage: firebase.storage(),
 }

@@ -8,20 +8,20 @@ export default {
   name: 'SideItemsFromArray',
 
   props: {
-    selectItem: Function
+    selectItem: Function,
   },
 
   components: {
     SideItem,
-    BackButton
+    BackButton,
   },
 
   data () {
     return {
       movingArrayItem: {
         idx: null,
-        path: null
-      }
+        path: null,
+      },
     }
   },
 
@@ -76,7 +76,7 @@ export default {
 
     arrayItemsAmount () {
       return this.arrayItems.length
-    }
+    },
 
   },
 
@@ -84,7 +84,7 @@ export default {
 
     activeStructure (value) {
       this.findFirstItem()
-    }
+    },
 
   },
 
@@ -117,7 +117,7 @@ export default {
 
       let updateData = {}
       updateData[newPath] = {
-        ORDER: order
+        ORDER: order,
       }
 
       firebase.firestore
@@ -156,7 +156,7 @@ export default {
 
       this.movingArrayItem = {
         idx: arrayIdx,
-        path: arrayItem.PATH
+        path: arrayItem.PATH,
       }
     },
 
@@ -177,12 +177,12 @@ export default {
       this.$store.dispatch('updateContent', {
         projectId: this.projectId,
         path: `${this.movingArrayItem.path}.ORDER`,
-        content: newOrder
+        content: newOrder,
       })
 
       this.movingArrayItem = {
         idx: null,
-        path: null
+        path: null,
       }
     },
 
@@ -191,7 +191,7 @@ export default {
 
       this.movingArrayItem = {
         idx: null,
-        path: null
+        path: null,
       }
     },
 
@@ -224,13 +224,13 @@ export default {
           // }
         })
         .catch((error) => console.error('Error deleting item', error))
-    }
+    },
 
   },
 
   created () {
     this.findFirstItem()
-  }
+  },
 
 }
 </script>

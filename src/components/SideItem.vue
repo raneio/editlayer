@@ -1,12 +1,13 @@
 <script>
 import _ from 'lodash'
+import Color from 'color'
 
 export default {
   name: 'Item',
 
   props: {
     item: Object,
-    selectItem: Function
+    selectItem: Function,
   },
 
   computed: {
@@ -25,7 +26,8 @@ export default {
     },
 
     preview () {
-      if (_.includes(['image'], this.item.EDITOR)) {
+
+      if (this.item.EDITOR === 'image') {
         let imageUrl = this.item.CONTENT
 
         if (_.startsWith(imageUrl, 'https://cdn.editlayer.com/')) {
@@ -34,9 +36,48 @@ export default {
 
         return {
           type: 'image',
-          content: imageUrl
+          content: imageUrl,
         }
-      } else if (this.item.CONTENT) {
+      }
+      else if (this.item.EDITOR === 'code') {
+        let content = this.item.CONTENT
+
+        if (content && content.length > 60) {
+          content = content.substring(0, 57).trim() + '…'
+        }
+
+        return {
+          type: 'code',
+          content: content,
+        }
+      }
+      else if (this.item.EDITOR === 'color') {
+        let content = this.item.CONTENT
+        let color = Color(this.item.CONTENT)
+
+        return {
+          type: 'color',
+          content: content,
+          color: color,
+          isDark: color.isDark()
+        }
+      }
+      else if (this.item.EDITOR === 'switch') {
+        let content = 'ON'
+        let isOn = true
+
+        if (this.item.CONTENT === false) {
+          content = 'OFF'
+          isOn = false
+        }
+
+        return {
+          type: 'switch',
+          content: content,
+          isOn: isOn
+        }
+      }
+      else if (this.item.CONTENT) {
         let content = this.item.CONTENT
 
         let div = document.createElement('div')
@@ -45,19 +86,21 @@ export default {
         content = div.textContent || div.innerText || ''
 
         if (content && content.length > 70) {
-          content = content.substring(0, 70).trim() + '...'
+          content = content.substring(0, 67).trim() + '…'
         }
 
         return {
           type: 'text',
-          content: content
+          content: content,
         }
-      } else {
+      }
+      else {
         return {}
       }
-    }
 
-  }
+    },
+
+  },
 
 }
 </script>
@@ -93,6 +136,27 @@ export default {
   <div
     class="content -text"
     v-if="preview.type === 'text'"
+    v-text="preview.content"
+  />
+
+  <div
+    class="content -code"
+    v-if="preview.type === 'code'"
+    v-text="preview.content"
+  />
+
+  <div
+    class="content -color"
+    :class="{'-isDark': preview.isDark}"
+    :style="{'backgroundColor': preview.color}"
+    v-if="preview.type === 'color'"
+    v-text="preview.content"
+  />
+
+  <div
+    class="content -switch"
+    :class="{'-isOn': preview.isOn}"
+    v-if="preview.type === 'switch'"
     v-text="preview.content"
   />
 
@@ -142,13 +206,32 @@ export default {
     flex-grow: 1
 
   .content
+    font-size: .8em
     overflow: hidden
+    padding: .35rem 1rem
+    font-weight: 400
+    color: $color-gray
 
-    &.-text
-      font-size: .8em
-      color: $color-gray
-      font-weight: 400
-      padding: .35rem 1rem
+    &.-code
+      font-size: .7em
+      font-family: monospace
+      background-color: $color-gray
+      color: mix($color-gray, $color-white, 20%)
+
+    &.-color
+      font-family: monospace
+      color: $color-black
+
+      &.-isDark
+        color: $color-white
+
+    &.-switch
+      font-size: 1rem
+      font-weight: 900
+      color: $color-red
+
+      &.-isOn
+        color: $color-green
 
     &.-image
       position: relative
@@ -160,6 +243,7 @@ export default {
       display: flex
       justify-content: center
       align-items: center
+      padding: 0
 
       .image
         border-bottom-left-radius: $button-border-radius

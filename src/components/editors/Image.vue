@@ -6,7 +6,7 @@ export default {
 
   props: {
     editorData: Object,
-    saveFunction: Function
+    saveFunction: Function,
   },
 
   data () {
@@ -15,8 +15,8 @@ export default {
       uploading: {
         progress: 0,
         url: null,
-        filename: null
-      }
+        filename: null,
+      },
     }
   },
 
@@ -40,7 +40,7 @@ export default {
       } else {
         return null
       }
-    }
+    },
 
   },
 
@@ -52,7 +52,7 @@ export default {
 
     content () {
       this.saveFunction(this.editorData, this.content)
-    }
+    },
 
   },
 
@@ -67,11 +67,15 @@ export default {
         projectId: this.projectId,
         path: this.$route.params.path,
         image: image,
-        config: this.editorData.config
+        config: this.editorData.config,
       })
-    }
+    },
 
-  }
+  },
+
+  created () {
+    console.log('editorData', this.editorData)
+  },
 
 }
 </script>

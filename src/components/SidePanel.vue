@@ -9,7 +9,7 @@ export default {
 
   components: {
     SideItemsFromObject,
-    SideItemsFromArray
+    SideItemsFromArray,
   },
 
   computed: {
@@ -45,7 +45,7 @@ export default {
       } else {
         return 'object'
       }
-    }
+    },
 
   },
 
@@ -53,7 +53,7 @@ export default {
 
     activeStructure (value) {
       this.redirectToParentIfInvalidPath()
-    }
+    },
 
   },
 
@@ -79,7 +79,7 @@ export default {
           translateX: '-100%',
           opacity: 0,
           easing: 'linear',
-          duration: 100
+          duration: 100,
         })
         .add({
           targets: '.side-panel > .content',
@@ -91,14 +91,14 @@ export default {
             } else {
               this.$router.push({name: routeName, params: {projectId: projectId}})
             }
-          }
+          },
         })
         .add({
           targets: '.side-panel > .content',
           translateX: 0,
           opacity: 1,
           easing: 'linear',
-          duration: 100
+          duration: 100,
         })
     },
 
@@ -115,9 +115,9 @@ export default {
       } else {
         this.$router.replace({name: this.$route.name, params: {projectId: this.projectId}})
       }
-    }
+    },
 
-  }
+  },
 
 }
 </script>

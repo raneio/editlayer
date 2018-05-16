@@ -2,16 +2,16 @@
 import _ from 'lodash'
 
 export default {
-  name: 'InputEditors',
+  name: 'InputEditor',
 
   props: {
     editorData: Object,
-    saveFunction: Function
+    saveFunction: Function,
   },
 
   data () {
     return {
-      content: this.editorData.content
+      content: this.editorData.content,
     }
   },
 
@@ -24,7 +24,7 @@ export default {
 
     editorClass () {
       return `-${this.editorType}`
-    }
+    },
 
   },
 
@@ -42,13 +42,13 @@ export default {
       }
 
       this.saveFunction(this.editorData, content)
-    }, 500)
+    }, 500),
 
   },
 
   mounted () {
     this.$refs['input'].focus()
-  }
+  },
 
 }
 </script>

@@ -7,12 +7,12 @@ export default {
   name: 'SideItemsFromObject',
 
   props: {
-    selectItem: Function
+    selectItem: Function,
   },
 
   components: {
     SideItem,
-    BackButton
+    BackButton,
   },
 
   computed: {
@@ -41,7 +41,7 @@ export default {
           return value
         }
       })
-    }
+    },
 
   },
 
@@ -49,7 +49,7 @@ export default {
 
     activeStructure (value) {
       this.findFirstItem()
-    }
+    },
 
   },
 
@@ -73,13 +73,13 @@ export default {
 
     isActive (path) {
       return !!(path === _.replace(this.$route.params.path, />/g, '.'))
-    }
+    },
 
   },
 
   created () {
     this.findFirstItem()
-  }
+  },
 
 }
 </script>

@@ -36,15 +36,15 @@ export default {
             status: (file.published && _.isEqual(file.draft, file.published.draft) && file.structure === file.published.structure) ? 'published' : 'draft',
             users: {
               editors: roleEditors,
-              admins: roleAdmins
+              admins: roleAdmins,
             },
             role: myRole,
-            jsonUrl: `https://cdn.editlayer.com/${file.projectId}/${file.filename}.json`
+            jsonUrl: `https://cdn.editlayer.com/${file.projectId}/${file.filename}.json`,
           }
         })
         .orderBy('name')
         .value()
-    }
+    },
 
   },
 
@@ -55,7 +55,7 @@ export default {
 
       if (name !== null && name !== '') {
         this.$store.dispatch('newProject', {
-          name: name
+          name: name,
         })
       }
     },
@@ -64,9 +64,9 @@ export default {
       if (event.target.tagName !== 'A') {
         this.$router.push({name: 'Content', params: {projectId: project.projectId}})
       }
-    }
+    },
 
-  }
+  },
 
 }
 </script>
