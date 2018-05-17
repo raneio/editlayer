@@ -62,7 +62,6 @@ export default {
     </button>
   </div>
 
-
 </section>
 </template>
 

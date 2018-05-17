@@ -21,7 +21,7 @@ export default {
         theme: 'dracula',
         tabSize: 2,
         lineNumbers: true,
-        mode: null
+        mode: null,
       },
     }
   },
@@ -44,20 +44,15 @@ export default {
     if (_.get(this.editorData, 'config.language') === 'html' || !_.has(this.editorData, 'config.language')) {
       this.options.mode = 'xml'
       this.options.htmlMode = true
-    }
-    else if (_.get(this.editorData, 'config.language') === 'css') {
+    } else if (_.get(this.editorData, 'config.language') === 'css') {
       this.options.mode = 'text/css'
-    }
-    else if (_.get(this.editorData, 'config.language') === 'sass') {
+    } else if (_.get(this.editorData, 'config.language') === 'sass') {
       this.options.mode = 'text/x-sass'
-    }
-    else if (_.get(this.editorData, 'config.language') === 'json') {
+    } else if (_.get(this.editorData, 'config.language') === 'json') {
       this.options.mode = 'application/ld+json'
-    }
-    else if (_.get(this.editorData, 'config.language') === 'javascript') {
+    } else if (_.get(this.editorData, 'config.language') === 'javascript') {
       this.options.mode = 'application/javascript'
-    }
-    else if (_.get(this.editorData, 'config.language') === 'typescript') {
+    } else if (_.get(this.editorData, 'config.language') === 'typescript') {
       this.options.mode = 'application/typescript'
     }
   },

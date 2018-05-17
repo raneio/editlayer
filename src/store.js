@@ -420,7 +420,6 @@ export default new Vuex.Store({
             link: link,
             deleteTime: 20,
           })
-
         })
         .catch((error) => {
           console.warn('Try again', payload.versionCheck, error.message)

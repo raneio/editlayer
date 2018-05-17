@@ -25,7 +25,6 @@ const simpleToAdvance = (structure) => {
       if (_.isPlainObject(value)) {
         value = simpleToAdvance(value)
       }
-
     }
   })
 

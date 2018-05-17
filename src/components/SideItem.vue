@@ -26,7 +26,6 @@ export default {
     },
 
     preview () {
-
       if (this.item.EDITOR === 'image') {
         let imageUrl = this.item.CONTENT
 
@@ -38,8 +37,7 @@ export default {
           type: 'image',
           content: imageUrl,
         }
-      }
-      else if (this.item.EDITOR === 'code') {
+      } else if (this.item.EDITOR === 'code') {
         let content = this.item.CONTENT
 
         if (content && content.length > 60) {
@@ -50,8 +48,7 @@ export default {
           type: 'code',
           content: content,
         }
-      }
-      else if (this.item.EDITOR === 'color') {
+      } else if (this.item.EDITOR === 'color') {
         let content = this.item.CONTENT
         let color = Color(this.item.CONTENT)
 
@@ -59,16 +56,14 @@ export default {
           type: 'color',
           content: content,
           color: color,
-          isDark: color.isDark()
+          isDark: color.isDark(),
         }
-      }
-      else if (this.item.EDITOR === 'switch') {
+      } else if (this.item.EDITOR === 'switch') {
         let content = null
 
         if (this.item.CONTENT === true) {
           content = 'ON'
-        }
-        else if (this.item.CONTENT === false) {
+        } else if (this.item.CONTENT === false) {
           content = 'OFF'
         }
 
@@ -76,8 +71,7 @@ export default {
           type: 'switch',
           content: content,
         }
-      }
-      else if (this.item.CONTENT) {
+      } else if (this.item.CONTENT) {
         let content = this.item.CONTENT
 
         let div = document.createElement('div')
@@ -93,11 +87,9 @@ export default {
           type: 'text',
           content: content,
         }
-      }
-      else {
+      } else {
         return {}
       }
-
     },
 
   },
