@@ -146,7 +146,7 @@ export default {
     v-if="enabled !== false"
   >
     <li>You can use <a href="https://github.com/axios/axios#axios-api">Axios HTTP client API</a>.</li>
-    <li>Variable <i><span>{{</span>BASE64_CONTENT<span>}}</span></i> is published content encoded with <a href="https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding">Base64</a>.</li>
+    <li>Variable <i><span>{{</span>BASE64_CONTENT<span>}}</span></i> is published content encoded with <a href="https://github.com/dankogai/js-base64">Base64</a>.</li>
     <li>Variable <i><span>{{</span>VERSION_ID<span>}}</span></i> is version of published JSON.</li>
   </ul>
 

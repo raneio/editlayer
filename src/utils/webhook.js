@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import axios from 'axios'
+import { Base64 } from 'js-base64'
 
 const errorHandler = (message) => {
   console.error(message)
@@ -14,7 +15,7 @@ export default (configString, jsonUrl) => {
     .then((response) => {
       let publishedContent = response.data
       let config = {}
-      let base64Content = btoa(JSON.stringify(publishedContent))
+      let base64Content = Base64.encode(JSON.stringify(publishedContent))
 
       configString = _.replace(configString, '{{VERSION_ID}}', publishedContent.VERSION_ID)
       configString = _.replace(configString, '{{BASE64_CONTENT}}', base64Content)

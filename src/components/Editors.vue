@@ -6,6 +6,7 @@ import ImageEditor from '@/components/editors/Image'
 import SwitchEditor from '@/components/editors/Switch'
 import CKEditor5 from '@/components/editors/CKEditor5'
 import CodeMirror from '@/components/editors/CodeMirror'
+import Markdown from '@/components/editors/Markdown'
 
 export default {
   name: 'Editors',
@@ -17,6 +18,7 @@ export default {
     SwitchEditor,
     CKEditor5,
     CodeMirror,
+    Markdown,
   },
 
   data () {
@@ -103,6 +105,8 @@ export default {
           this.activeEditor = 'richtext'
         } else if (_.includes(['code', 'CodeMirror'], this.activeStructure.EDITOR)) {
           this.activeEditor = 'code'
+        } else if (_.includes(['markdown', 'EasyMDE'], this.activeStructure.EDITOR)) {
+          this.activeEditor = 'markdown'
         } else {
           this.activeEditor = null
         }
@@ -160,6 +164,12 @@ export default {
 
   <CodeMirror
     v-if="activeEditor === 'code'"
+    :editorData="editorData"
+    :saveFunction="saveContent"
+  />
+
+  <Markdown
+    v-if="activeEditor === 'markdown'"
     :editorData="editorData"
     :saveFunction="saveContent"
   />

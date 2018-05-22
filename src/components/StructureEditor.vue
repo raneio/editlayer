@@ -95,6 +95,7 @@ export default {
   </div>
 
   <codemirror
+    class="-dracula"
     v-model="structure"
     :options="{
       theme: 'dracula',

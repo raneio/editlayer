@@ -1,10 +1,12 @@
 .vue-codemirror
   padding: .5rem
-  background-color: #282A35
   border-radius: .5rem
-  box-shadow: 0 5px 12px 0 mix(transparent, $color-content, 90%), 0 2px 5px 0 mix(transparent, black, 93%)
-  transition: box-shadow .2s
-  font-size: .9rem
+
+  &.-dracula
+    font-size: .9rem
+    background-color: #282A35
+    transition: box-shadow .2s
+    box-shadow: 0 5px 12px 0 mix(transparent, $color-content, 90%), 0 2px 5px 0 mix(transparent, black, 93%)
 
   .CodeMirror
     height: auto

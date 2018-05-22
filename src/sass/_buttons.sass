@@ -62,13 +62,28 @@ button,
     color: $color-black
 
     &:hover
-      color: mix($color-black, white, 80%)
+      color: $button-background--hover
+      background-color: transparent
 
-    &.-new
+    &:active
+      color: $button-background--activ
+
+    &.-green
       color: $color-green
 
-    &.-danger
-      color: $color-red
+      &:hover
+        color: mix($color-green, white, 80%)
+
+      &:active
+        color: mix($color-green, white, 70%)
+
+    &.-red
+
+      &:hover
+        color: mix($color-red, white, 95%)
+
+      &:active
+        color: mix($color-red, white, 90%)
 
   &.-pill
     padding: .1em .75em

@@ -22,6 +22,7 @@ export default {
         idx: null,
         path: null,
       },
+      confirmDeleteIdx: null,
     }
   },
 
@@ -195,7 +196,11 @@ export default {
       }
     },
 
-    deleteArrayItem (arrayItem, arrayIdx) {
+    deleteArrayItem (arrayIdx) {
+      this.confirmDeleteIdx = arrayIdx
+    },
+
+    confirmDeleteYes (arrayItem, arrayIdx) {
       let updateData = {}
       updateData[`draft.${arrayItem.PATH}`] = firebase.firestoreDelete
 
@@ -226,6 +231,10 @@ export default {
         .catch((error) => console.error('Error deleting item', error))
     },
 
+    confirmDeleteNo (arrayIdx) {
+      this.confirmDeleteIdx = null
+    },
+
   },
 
   created () {
@@ -240,7 +249,7 @@ export default {
 
   <header class="header">
     <BackButton/>
-    <button class="button -link -new" @click="newItem()">
+    <button class="button -link -green" @click="newItem()">
       + New Item
     </button>
   </header>
@@ -264,8 +273,14 @@ export default {
     </button>
 
     <div class="tools">
-      <button @click="moveArrayItem(arrayItem, arrayIdx)" class="button -link -primary">Move</button>
-      <button @click="deleteArrayItem(arrayItem, arrayIdx)" class="button -link -primary -delete">Delete</button>
+      <button @click="moveArrayItem(arrayItem, arrayIdx)" v-if="confirmDeleteIdx !== arrayIdx" class="button -link">Move</button>
+      <button @click="deleteArrayItem(arrayIdx)" v-if="confirmDeleteIdx !== arrayIdx" class="button -link -red">Delete</button>
+
+      <div class="confirm" v-if="confirmDeleteIdx === arrayIdx">
+        <div>Are you sure?</div>
+        <button @click="confirmDeleteYes(arrayItem, arrayIdx)" class="button -link -red">Yes</button>
+        <button @click="confirmDeleteNo()" class="button -link">No</button>
+      </div>
     </div>
 
     <div
@@ -310,8 +325,9 @@ export default {
     transition: opacity .2s
     font-size: .8rem
 
-    .-delete:hover
-      color: $color-danger
+    .confirm
+      +chain(1rem)
+      align-items: center
 
   .move-here
     position: absolute

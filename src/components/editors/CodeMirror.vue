@@ -54,6 +54,8 @@ export default {
       this.options.mode = 'application/javascript'
     } else if (_.get(this.editorData, 'config.language') === 'typescript') {
       this.options.mode = 'application/typescript'
+    } else if (_.get(this.editorData, 'config.language') === 'markdown') {
+      this.options.mode = 'text/x-markdown'
     }
   },
 
@@ -64,6 +66,7 @@ export default {
 <section class="editor -textarea">
 
   <codemirror
+    class="-dracula"
     v-model="content"
     :options="options"
   />

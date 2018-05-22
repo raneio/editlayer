@@ -133,4 +133,9 @@ export default {
 .button
   +chain(.75rem)
 
+  &:hover
+
+    svg path
+      fill: $button-background--hover
+
 </style>

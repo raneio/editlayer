@@ -45,6 +45,7 @@ export default new Vuex.Store({
       'url',
       'code',
       'switch',
+      'markdown',
     ],
     windowSize: {
       width: window.innerWidth,
