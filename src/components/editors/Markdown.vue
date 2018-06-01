@@ -41,8 +41,6 @@ export default {
 
   },
 
-
-
   created () {
     // this.options.mode = 'text/x-sass'
   },
@@ -125,7 +123,6 @@ export default {
 
       &:hover
         color: $color-blue
-
 
     .cm-comment
       color: $color-blue

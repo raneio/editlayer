@@ -203,6 +203,8 @@ export default {
     padding: .35rem 1rem
     font-weight: 400
     color: $color-gray
+    opacity: .8
+    transition: opacity .2s
 
     &.-code
       font-size: .7em
@@ -246,5 +248,10 @@ export default {
         width: 100%
         object-fit: cover
         filter: brightness(93%)
+
+  &:hover
+
+    .content
+      opacity: 1
 
 </style>

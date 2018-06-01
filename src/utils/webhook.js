@@ -15,10 +15,15 @@ export default (configString, jsonUrl) => {
     .then((response) => {
       let publishedContent = response.data
       let config = {}
-      let base64Content = Base64.encode(JSON.stringify(publishedContent))
 
-      configString = _.replace(configString, '{{VERSION_ID}}', publishedContent.VERSION_ID)
-      configString = _.replace(configString, '{{BASE64_CONTENT}}', base64Content)
+      if (_.includes(configString, '{{VERSION_ID}}')) {
+        configString = _.replace(configString, '{{VERSION_ID}}', publishedContent.VERSION_ID)
+      }
+
+      if (_.includes(configString, '{{BASE64_CONTENT}}')) {
+        let base64Content = Base64.encode(JSON.stringify(publishedContent))
+        configString = _.replace(configString, '{{BASE64_CONTENT}}', base64Content)
+      }
 
       try {
         config = JSON.parse(configString)

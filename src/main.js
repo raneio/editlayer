@@ -14,6 +14,11 @@ import 'codemirror/theme/dracula.css'
 // import 'codemirror/theme/base16-dark.css'
 // import 'codemirror/theme/railscasts.css'
 
+// import ElementUI from 'element-ui'
+// import locale from 'element-ui/lib/locale/lang/en'
+// // import 'element-ui/lib/theme-chalk/index.css'
+// Vue.use(ElementUI, {locale})
+
 // import VueSimplemde from 'vue-simplemde'
 // Vue.use(VueSimplemde)
 

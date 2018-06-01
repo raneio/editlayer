@@ -153,6 +153,7 @@ export default {
   <codemirror
     v-if="enabled !== false"
     v-model="config"
+    class="-dracula"
     :options="{
       theme: 'dracula',
       tabSize: 2,

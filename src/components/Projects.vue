@@ -118,7 +118,7 @@ export default {
     </div>
 
     <div class="project -new">
-      <button class="button -new" @click="newProject()">
+      <button class="button -green" @click="newProject()">
         + New Project
       </button>
     </div>
@@ -172,7 +172,7 @@ export default {
 .my-role
   font-weight: 600
 
-.button.-new
+.project.-new .button
   font-size: 1.4rem
   padding-top: 2rem
   padding-bottom: 2rem
