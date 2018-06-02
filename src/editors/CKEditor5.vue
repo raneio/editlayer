@@ -75,7 +75,7 @@ export default {
 </template>
 
 <style lang="sass" scoped>
-@import '../../sass/features'
+@import '../sass/features'
 
 .editor.-ckeditor /deep/
 

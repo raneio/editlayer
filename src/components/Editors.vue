@@ -1,12 +1,12 @@
 <script>
 import _ from 'lodash'
-import Input from '@/components/editors/Input'
-import Textarea from '@/components/editors/Textarea'
-import ImageEditor from '@/components/editors/Image'
-import SwitchEditor from '@/components/editors/Switch'
-import CKEditor5 from '@/components/editors/CKEditor5'
-import CodeMirror from '@/components/editors/CodeMirror'
-import Markdown from '@/components/editors/Markdown'
+import Input from '@/editors/Input'
+import Textarea from '@/editors/Textarea'
+import ImageEditor from '@/editors/Image'
+import SwitchEditor from '@/editors/Switch'
+import CKEditor5 from '@/editors/CKEditor5'
+import CodeMirror from '@/editors/CodeMirror'
+import Markdown from '@/editors/Markdown'
 
 export default {
   name: 'Editors',

@@ -114,7 +114,7 @@ export default {
 <style lang="sass" scoped>
 
 // You can use variables, mixins and functions of Page Core
-@import '../../sass/features'
+@import '../sass/features'
 
 .editor
   +margin-to-childs(.75rem)
@@ -134,7 +134,7 @@ export default {
   text-align: center
 
 .preview
-  background-image: url('../../assets/image-background.png')
+  background-image: url('../assets/image-background.png')
   background-position: center
   box-shadow: 0 5px 12px 0 mix(transparent, $color-content, 90%), 0 2px 5px 0 mix(transparent, black, 93%)
   min-height: 10rem

@@ -2,9 +2,9 @@
 import _ from 'lodash'
 import Navigation from '@/components/Navigation'
 import SidePanel from '@/components/SidePanel'
-import Editors from '@/components/Editors'
 import Breadcrumb from '@/components/Breadcrumb'
 import BackButton from '@/components/BackButton'
+import Editors from '@/components/Editors'
 
 export default {
   name: 'Content',

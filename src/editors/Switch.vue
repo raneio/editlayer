@@ -66,7 +66,7 @@ export default {
 </template>
 
 <style lang="sass" scoped>
-@import '../../sass/features'
+@import '../sass/features'
 
 .button
   min-width: 6rem
