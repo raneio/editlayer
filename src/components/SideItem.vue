@@ -29,9 +29,9 @@ export default {
       if (this.item.EDITOR === 'image') {
         let imageUrl = this.item.CONTENT
 
-        if (_.startsWith(imageUrl, 'https://cdn.editlayer.com/')) {
-          imageUrl = _.replace(imageUrl, 'cdn', 'img') + '?w=360&h=110&fit=crop&crop=faces'
-        }
+        // if (_.startsWith(imageUrl, 'https://cdn.editlayer.com/')) {
+        //   imageUrl = _.replace(imageUrl, 'cdn', 'img') + '?w=360&h=110&fit=crop&crop=faces'
+        // }
 
         return {
           type: 'image',

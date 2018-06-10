@@ -50,7 +50,7 @@ export default {
           Editlayer
         </div>
       </div>
-      
+
       <div class="account">
         <span class="email" v-text="email"></span>
         <a class="button" @click="logout()">Logout</a>
