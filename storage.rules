@@ -5,6 +5,9 @@ service firebase.storage {
                     && resource == null
                     && request.resource.size < 1 * 1024 * 1024
                     && request.resource.contentType.matches('image/.*');
+
+      allow read: if request.auth != null
+                  && resource.contentType.matches('image/.*');
     }
   }
 }

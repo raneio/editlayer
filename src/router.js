@@ -35,23 +35,5 @@ export default new Router({
       path: '/:projectId/:path?',
       component: Content,
     },
-    // {
-    //   path: '*',
-    //   redirect: { name: 'Dashboard' }
-    // },
-    // {
-    //   path: '/:projectId',
-    //   redirect: to => {
-    //     console.log('to', to)
-    //   },
-    // },
-    // {
-    //   path: '/admin',
-    //   redirect: { name: 'Content' }
-    // },
-    // {
-    //   path: '/edit',
-    //   redirect: { name: 'Content' }
-    // },
   ],
 })

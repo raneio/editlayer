@@ -1,16 +1,9 @@
 <script>
 import validator from 'validator'
 import firebase from '@/firebase'
-// import Navigation from '@/components/Navigation'
-// import Webhook from '@/components/settings/Webhook'
 
 export default {
   name: 'Permissions',
-
-  components: {
-    // Navigation,
-    // Webhook,
-  },
 
   computed: {
 
@@ -26,15 +19,6 @@ export default {
       return this.activeProject.roles
     },
 
-    // jsonUrl () {
-    //   return this.$store.getters.jsonUrl
-    // },
-
-    // jsonTarget () {
-    //   if (!this.activeProject) return false
-    //   return this.activeProject.projectId
-    // },
-
   },
 
   methods: {
@@ -44,7 +28,8 @@ export default {
 
       if (email !== null && !validator.isEmail(email)) {
         console.error('Email is invalid', email)
-      } else if (email !== null) {
+      }
+      else if (email !== null) {
         let notificationId = Math.random().toString(36).slice(-8)
 
         this.$store.commit('setNotification', {
@@ -100,32 +85,6 @@ export default {
       }
     },
 
-    // deleteProject () {
-    //   let deleteConfirm = prompt(`Write "${this.activeProject.projectId}" if you really want to delete project permanently.`, '')
-    //
-    //   if (deleteConfirm !== null && deleteConfirm !== this.activeProject.projectId) {
-    //     console.error('Project Id is invalid', deleteConfirm)
-    //   } else if (deleteConfirm !== null) {
-    //     firebase.firestore
-    //       .collection('projects')
-    //       .doc(this.activeProject.projectId)
-    //       .collection('deleteJobs')
-    //       .add({
-    //         deleteProjectId: this.activeProject.projectId,
-    //       })
-    //       .then(() => {
-    //         this.$store.commit('setNotification', {
-    //           status: 'info',
-    //           message: `Deleting project "${this.activeProject.projectId}", please wait...`,
-    //         })
-    //
-    //         this.$router.push({ name: 'Dashboard' })
-    //         console.log('Project Deleted')
-    //       })
-    //       .catch((error) => console.error('Project deleting failed', error))
-    //   }
-    // },
-
   },
 
   created () {
@@ -139,7 +98,7 @@ export default {
 
 <template>
 <section class="permissions">
-  <h1 class="heading">
+  <h1 class="heading -feature">
     User permissions
   </h1>
 
@@ -184,19 +143,19 @@ export default {
       </button>
 
       <button
-        class="button -pill -danger -delete"
+        class="button -link -danger"
         @click="removePermission({
           roleId: roleId,
           email: role.email,
         })"
         >
-          <img src="@/assets/icon-delete.svg" alt="">
+          <icon name="trash"/>
       </button>
     </li>
   </ul>
 
   <button
-    class="button -link -green"
+    class="button -link -success"
     @click="newPermission()"
   >
     + New User
@@ -205,23 +164,18 @@ export default {
 </template>
 
 <style lang="sass" scoped>
-@import '../../sass/features'
-
-.main.-settings
-  background-image: linear-gradient(to left, mix($color-violet, transparent, 4%), mix($color-violet, transparent, 8%))
-  overflow-y: auto
-  padding: 2.5rem
-  +margin-to-childs(2rem)
+@import '../../sass/variables'
+@import '../../sass/mixins/all'
 
 .group
-  +margin-to-childs(.5rem)
+  +gap(.5rem)
   max-width: 45rem
 
   & + .group
     margin-top: 6rem
 
 .roles
-  +margin-to-childs(.5rem)
+  +gap(.5rem)
 
   .role
     +chain(.25rem)
@@ -246,7 +200,7 @@ export default {
   .spacer
     height: .8rem
     flex-grow: 1
-    background-image: linear-gradient(to right, $color-disabled 10%, transparent 0%)
+    background-image: linear-gradient(to right, $color-gray 10%, transparent 0%)
     background-position: bottom
     background-size: 10px 1px
     background-repeat: repeat-x

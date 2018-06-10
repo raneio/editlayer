@@ -1,7 +1,7 @@
 <script>
 import Auth from '@/Auth'
-import Notifications from '@/components/Notifications'
-import LoaderOverlay from '@/components/LoaderOverlay'
+import Notifications from '@/components/notification/Notifications'
+import LoaderOverlay from '@/components/utils/LoaderOverlay'
 
 export default {
   name: 'app',
@@ -27,6 +27,7 @@ export default {
   },
 
   created () {
+    // console.log('process', process.env)
     this.$store.dispatch('authState')
     this.$store.dispatch('resizeListener')
   },

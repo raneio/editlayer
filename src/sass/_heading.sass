@@ -1,20 +1,17 @@
 .heading
-  font-size: 1.5rem
 
   &.-main
-    letter-spacing: -.06em
-    font-size: 2.7rem
+    font-size: 2rem
 
   &.-feature
     text-transform: uppercase
-    font-size: 1.5rem
+    font-size: 1.2rem
     font-weight: 800
 
 .heading-group
 
   .tagline
-    color: $color-disabled
-    font-size: .9rem
+    color: $color-gray
 
   &.-main
     +container(700px, 6rem, 2rem)
@@ -24,13 +21,11 @@
       @extend .heading.-main
 
     .tagline
-      font-size: 1.3rem
-      font-weight: 300
+      font-size: 1.2rem
 
   &.-feature
     +hx
       @extend .heading.-feature
 
     .tagline
-      font-weight: 300
-      color: $color-disabled
+      font-weight: 400

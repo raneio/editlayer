@@ -27,7 +27,8 @@ export default (configString, jsonUrl) => {
 
       try {
         config = JSON.parse(configString)
-      } catch (e) {
+      }
+      catch (e) {
         return errorHandler('Syntax error: Webhook config is not valid JSON', configString)
       }
 

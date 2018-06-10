@@ -1,0 +1,45 @@
+$shadow-card--basic: 0 0 .1rem 0 mix($color-black, transparent, 15%), 0 0 2rem 0 mix($color-black, transparent, 5%)
+$shadow-card--hover: 0 0 .1rem 0 mix($color-black, transparent, 15%), 0 .25rem 2rem 0 mix($color-black, transparent, 15%)
+$shadow-card--activ: 0 0 .1rem 0 mix($color-black, transparent, 15%), 0 .25rem .5rem 0 mix($color-black, transparent, 15%)
+
+.card
+  background-color: $color-white
+  box-shadow: $shadow-card--basic
+  border-radius: $button-border-radius
+  transition: box-shadow .5s, transform 0s
+
+  &.-link:hover
+    cursor: pointer
+    box-shadow: $shadow-card--hover
+
+  &.-link:active
+    box-shadow: $shadow-card--activ
+    transform: translateY(.1rem)
+    transition: box-shadow 0s, transform 0s
+
+  .header
+    +chain(.25rem)
+    background-color: $color-gray--lightest
+    border-bottom: 1px solid $color-gray--lighter
+    padding: .5rem 1rem
+
+    > .spacer
+      flex-grow: 1
+
+  .heading
+    overflow: hidden
+    text-overflow: ellipsis
+    font-size: 1.25rem
+    font-weight: 600
+
+  .content
+    padding: .5rem 1rem
+    background-color: $color-white
+
+  > :first-child
+    border-top-left-radius: $button-border-radius
+    border-top-right-radius: $button-border-radius
+
+  > :last-child
+    border-bottom-left-radius: $button-border-radius
+    border-bottom-right-radius: $button-border-radius

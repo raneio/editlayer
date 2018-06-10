@@ -35,9 +35,11 @@ export default {
 
       if (this.state === 'login') {
         this.login()
-      } else if (this.state === 'register') {
+      }
+      else if (this.state === 'register') {
         this.register()
-      } else if (this.state === 'forget') {
+      }
+      else if (this.state === 'forget') {
         this.resetPassword()
       }
     },
@@ -57,7 +59,8 @@ export default {
 
           if (_.includes(['auth/invalid-email', 'auth/user-not-found'], error.code)) {
             this.error = 'email'
-          } else if (_.includes(['auth/wrong-password'], error.code)) {
+          }
+          else if (_.includes(['auth/wrong-password'], error.code)) {
             this.error = 'password'
           }
         })
@@ -116,10 +119,15 @@ export default {
 
           if (_.includes(['auth/invalid-email', 'auth/email-already-in-use'], error.code)) {
             this.error = 'email'
-          } else if (_.includes(['auth/weak-password'], error.code)) {
+          }
+          else if (_.includes(['auth/weak-password'], error.code)) {
             this.error = 'password'
-          } else {
-            alert('Unknown error! Try again later or contact us help@editlayer.com')
+          }
+          else if (_.includes(['auth/operation-not-allowed'], error.code)) {
+            alert(error.message)
+          }
+          else {
+            alert('Unknown error! Try again later or contact us editlayer@gmail.com')
           }
         })
     },
@@ -219,11 +227,12 @@ export default {
 </template>
 
 <style lang="sass" scoped>
-@import './sass/features'
+@import 'sass/variables'
+@import './sass/mixins/all'
 
 .auth
   height: 100vh
-  background-color: $color-light
+  background-color: mix($color-white, $color-black, 90%)
   display: flex
   justify-content: center
   align-items: center
@@ -232,20 +241,20 @@ export default {
     cursor: progress
 
   .content
-    +margin-to-childs()
+    +gap()
     text-align: center
     width: 30rem
 
   .form
-    box-shadow: 0 5px 12px 0 mix(transparent, $color-content, 90%), 0 2px 5px 0 mix(transparent, black, 93%)
-    background-color: $color-background
+    box-shadow: 0 5px 12px 0 mix(transparent, $color-black, 90%), 0 2px 5px 0 mix(transparent, black, 93%)
+    background-color: $color-white
     padding: 3rem 4rem
-    +margin-to-childs()
+    +gap()
 
   .field
     text-align: left
     font-weight: 600
-    +margin-to-childs(.25rem)
+    +gap(.25rem)
 
     &.-error
       color: $color-danger
@@ -262,7 +271,7 @@ export default {
 
   .forget
     font-size: .8rem
-    color: $color-disabled
+    color: $color-gray
     font-weight: 400
 
   .footer

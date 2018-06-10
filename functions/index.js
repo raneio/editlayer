@@ -1,20 +1,21 @@
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
 admin.initializeApp()
+
 const fs = require('fs')
+const url = require('url')
+
 const _ = require('lodash')
 const axios = require('axios')
 const sha1 = require('node-sha1')
-const url = require('url')
-const validator = require('validator')
 
 const firestore = admin.firestore()
-const bucket = admin.storage().bucket('editlayerapp.appspot.com')
-const bunnyCdnHeaders = {
-  'Content-Type': 'application/json',
-  Accept: 'application/json',
-  AccessKey: '3af506e7-573c-4563-9b62-a3ec872ba87ca6225606-efa0-427a-baf8-45b53319d0d5',
-}
+const bucket = admin.storage().bucket()
+// const bunnyCdnHeaders = {
+//   'Content-Type': 'application/json',
+//   Accept: 'application/json',
+//   AccessKey: '3af506e7-573c-4563-9b62-a3ec872ba87ca6225606-efa0-427a-baf8-45b53319d0d5',
+// }
 
 
 exports.publishJson = functions.firestore.document('projects/{projectId}/versions/{versionId}').onCreate((snap, context) => {
@@ -37,16 +38,23 @@ exports.publishJson = functions.firestore.document('projects/{projectId}/version
   fs.writeFileSync(tempFilePath, JSON.stringify(jsonFileContent, null, 2))
 
   return bucket
-    .upload(tempFilePath, { destination: destinationPath })
-    .then(() => {
-      const cdnUrl = encodeURI(`https://cdn.editlayer.com/${destinationPath}`)
-
-      return axios({
-        method: 'POST',
-        url: `https://bunnycdn.com/api/purge?url=${cdnUrl}`,
-        headers: bunnyCdnHeaders,
-      })
+    .upload(tempFilePath, {
+      destination: destinationPath,
+      metadata: {
+        metadata: {
+          firebaseStorageDownloadTokens: versionData.downloadToken,
+        },
+      },
     })
+    // .then(() => {
+    //   const cdnUrl = encodeURI(`https://cdn.editlayer.com/${destinationPath}`)
+    //
+    //   return axios({
+    //     method: 'POST',
+    //     url: `https://bunnycdn.com/api/purge?url=${cdnUrl}`,
+    //     headers: bunnyCdnHeaders,
+    //   })
+    // })
     .then(() => {
       console.log('JSON publishing done')
       return true
@@ -75,7 +83,8 @@ exports.attachRole = functions.firestore.document('projects/{projectId}/permissi
 
         if (storeData.role === false) {
           updateData[`roles.${userId}`] = admin.firestore.FieldValue.delete()
-        } else {
+        }
+        else {
           updateData[`roles.${userId}`] = {
             role: storeData.role,
             email: storeData.email,
@@ -173,12 +182,12 @@ exports.deleteProject = functions.firestore.document('projects/{projectId}/delet
 
         bucket.file(file.name).delete()
 
-        let cdnUrl = encodeURI(`https://cdn.editlayer.com/${file.name}`)
-        axios({
-          method: 'POST',
-          url: `https://bunnycdn.com/api/purge?url=${cdnUrl}`,
-          headers: bunnyCdnHeaders
-        })
+        // let cdnUrl = encodeURI(`https://cdn.editlayer.com/${file.name}`)
+        // axios({
+        //   method: 'POST',
+        //   url: `https://bunnycdn.com/api/purge?url=${cdnUrl}`,
+        //   headers: bunnyCdnHeaders
+        // })
 
       })
 

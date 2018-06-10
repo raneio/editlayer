@@ -1,0 +1,162 @@
+<script>
+import Breadcrumb from '@/components/navigate/Breadcrumb'
+import PublishButton from '@/components/navigate/PublishButton'
+
+export default {
+  name: 'Navigation',
+
+  components: {
+    Breadcrumb,
+    PublishButton,
+  },
+
+  computed: {
+
+    activeProject () {
+      return this.$store.getters.activeProject
+    },
+
+    activeRole () {
+      return this.$store.getters.activeRole
+    },
+
+    jsonUrl () {
+      return this.$store.getters.jsonUrl
+    },
+
+    jsonTarget () {
+      if (!this.activeProject) return false
+      return this.activeProject.projectId
+    },
+
+    neverPublished () {
+      if (!this.activeProject) return false
+      return this.activeProject.published === null
+    },
+
+  },
+
+  methods: {
+
+    // logout () {
+    //   firebase.auth.signOut().then(() => {
+    //     window.location.href = 'https://editlayer.com'
+    //   }).catch((error) => {
+    //     console.error('Logout failed', error)
+    //   })
+    // }
+
+  },
+
+}
+</script>
+
+<template>
+<nav class="navigation">
+
+  <template v-if="$route.params.projectId">
+
+    <PublishButton  class="publish-button"/>
+
+    <router-link
+      v-if="$route.params.projectId"
+      class="item"
+      :class="{ '-active': $route.name === 'Content' }"
+      :to="{ name: 'Content', params: { projectId: $route.params.projectId, path: $route.params.path }}"
+    >
+      <icon name="regular/edit"/>
+      <div class="text">Content</div>
+    </router-link>
+
+    <router-link
+      v-if="$route.params.projectId && activeRole === 'admin'"
+      class="item"
+      :class="{ '-active': $route.name === 'Structure' }"
+      :to="{ name: 'Structure', params: { projectId: $route.params.projectId, path: $route.params.path }}"
+    >
+      <icon name="structure"/>
+      <div class="text">Structure</div>
+    </router-link>
+
+    <router-link
+      v-if="$route.params.projectId && activeRole === 'admin'"
+      class="item"
+      :class="{ '-active': $route.name === 'Settings' }"
+      :to="{ name: 'Settings', params: { projectId: this.$route.params.projectId, path: this.$route.params.path }}"
+    >
+      <icon name="cogs"/>
+      <div class="text">Settings</div>
+    </router-link>
+
+    <div class="spacer"></div>
+
+    <router-link
+      class="item"
+      :to="{ name: 'Dashboard' }"
+    >
+      <icon name="home"/>
+      <div class="text">Dashboard</div>
+    </router-link>
+
+  </template>
+
+</nav>
+</template>
+
+<style lang="sass" scoped>
+@import '../../sass/variables'
+@import '../../sass/mixins/all'
+
+.navigation
+  +invert()
+  display: flex
+  flex-direction: column
+  background-color: $color-brand
+  background-image: linear-gradient(to right, $color-brand, mix($color-brand, $color-black, 85%))
+  padding-bottom: .5rem
+  overflow-y: auto
+
+  &:hover
+
+    .item .text
+      transition: opacity 0s
+      opacity: 1
+
+.publish-button
+  margin-bottom: 1rem
+
+.spacer
+  flex-grow: 1
+
+.item
+  +gap(.2rem)
+  display: flex
+  flex-direction: column
+  align-items: center
+  transition: opacity .2s
+  font-size: .65rem
+  font-weight: 700
+  opacity: .6
+  padding-top: 1rem
+  padding-bottom: 1rem
+
+  &:hover
+    opacity: 1
+
+  &.-active
+    filter: drop-shadow(0 0 10px mix($color-white, transparent, 60%))
+    opacity: 1
+
+    .text
+      // opacity: 1
+
+  .text
+    transition: opacity 1s
+    transition-delay: 1s
+    opacity: 0
+
+  .fa-icon
+    width: 1.7rem
+    fill: $color-white
+
+</style>

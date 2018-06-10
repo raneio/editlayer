@@ -1,67 +1,46 @@
-.input-group
-  +chain(0)
-
-
-  > button
-    border-radius: 0
-    border-right: 0
-    width: auto
-
-  > input,
-  > select
-    border-radius: 0
-    border-right: 0
-    width: auto
-
-    &:hover
-      // z-index: 1
-
-      &:last-child
-        border-right: $input-border--hover
-
-      + *
-        border-left: $input-border--hover
-
-    &:focus
-
-      &:last-child
-        border-right: $input-border--focus
-
-      + *
-        border-left: $input-border--focus
-
-  > input,
-  > select,
-  > button
-
-    &:first-child
-      border-top-left-radius: $button-border-radius
-      border-bottom-left-radius: $button-border-radius
-
-    &:last-child
-      border-right: $input-border--basic
-      border-top-right-radius: $button-border-radius
-      border-bottom-right-radius: $button-border-radius
-
-  .grow
-    flex-grow: 1
-
-// input[type="checkbox"]
-//   position: relative
-//   font-size: 1rem
+// .input-group
+//   +chain(0)
 //
-//   &::after
-//     content: ''
-//     position: absolute
-//     top: -.5em
-//     left: 0
-//     border: 2px solid red
-//     background-color: $color-white
-//     width: 4em
-//     height: 2em
-//     border-radius: 1em
 //
-//   &:checked
+//   > button
+//     border-radius: 0
+//     border-right: 0
+//     width: auto
 //
-//     &::after
-//       border: 2px solid blue
+//   > input,
+//   > select
+//     border-radius: 0
+//     border-right: 0
+//     width: auto
+//
+//     &:hover
+//
+//       &:last-child
+//         border-right: $input-border--hover
+//
+//       + *
+//         border-left: $input-border--hover
+//
+//     &:focus
+//
+//       &:last-child
+//         border-right: $input-border--focus
+//
+//       + *
+//         border-left: $input-border--focus
+//
+//   > input,
+//   > select,
+//   > button
+//
+//     &:first-child
+//       border-top-left-radius: $button-border-radius
+//       border-bottom-left-radius: $button-border-radius
+//
+//     &:last-child
+//       border-right: $input-border--basic
+//       border-top-right-radius: $button-border-radius
+//       border-bottom-right-radius: $button-border-radius
+//
+//   .grow
+//     flex-grow: 1

@@ -1,9 +1,10 @@
-import _ from 'lodash'
 import Vue from 'vue'
 import Vuex from 'vuex'
+import _ from 'lodash'
 import slugg from 'slugg'
 import axios from 'axios'
 import ImageCompressor from 'image-compressor.js'
+import uuid from 'uuid/v4'
 import firebase from '@/firebase'
 import router from '@/router'
 import buildStructure from '@/utils/buildStructure'
@@ -90,7 +91,8 @@ export default new Vuex.Store({
 
       try {
         structure = JSON.parse(getters.activeProject.structure)
-      } catch (err) {
+      }
+      catch (err) {
         return structure
       }
 
@@ -105,14 +107,16 @@ export default new Vuex.Store({
 
       if (_.has(getters.structure, path)) {
         return _.get(getters.structure, path)
-      } else {
+      }
+      else {
         return {}
       }
     },
 
     jsonUrl (state, getters) {
       if (!getters.activeProject) return false
-      return `https://cdn.editlayer.com/${getters.activeProject.projectId}/${getters.activeProject.filename}.json`
+      // return `https://cdn.editlayer.com/${getters.activeProject.projectId}/${getters.activeProject.filename}.json`
+      return `https://firebasestorage.googleapis.com/v0/b/${process.env.VUE_APP_PROJECT_ID}.appspot.com/o/${getters.activeProject.projectId}%2F${getters.activeProject.filename}.json?alt=media&token=${getters.activeProject.downloadToken}`
     },
 
     isMobile (state) {
@@ -145,6 +149,7 @@ export default new Vuex.Store({
           projectId: doc.id,
           roles: doc.data().roles,
           filename: doc.data().filename,
+          downloadToken: doc.data().downloadToken,
           name: (doc.data().name) ? doc.data().name : doc.data().filename,
           structure: (doc.data().structure) ? doc.data().structure : null,
           draft: (doc.data().draft) ? doc.data().draft : null,
@@ -235,7 +240,8 @@ export default new Vuex.Store({
           if (state.route.name === 'Register') {
             router.push({name: 'Dashboard'})
           }
-        } else {
+        }
+        else {
           commit('resetAll')
         }
       })
@@ -283,6 +289,7 @@ export default new Vuex.Store({
         name: payload.name,
         structure: JSON.stringify(structure, '', '\t'),
         roles: {},
+        downloadToken: uuid(),
       }
 
       newProject.roles[state.user.id] = {
@@ -304,7 +311,8 @@ export default new Vuex.Store({
           if (payload.tries < 5) {
             console.log('Retry', payload.tries)
             dispatch('newProject', payload)
-          } else {
+          }
+          else {
             console.error('File adding error:', error)
           }
         })
@@ -352,6 +360,7 @@ export default new Vuex.Store({
           publishedAt: firebase.firestoreTimestamp,
           content: payload.content,
           filename: payload.filename,
+          downloadToken: payload.downloadToken,
         })
         .then((docRef) => {
           let versionId = docRef.id
@@ -380,7 +389,7 @@ export default new Vuex.Store({
 
       axios({
         method: 'GET',
-        url: `https://cdn.editlayer.com/${payload.projectId}/${payload.filename}.json`,
+        url: payload.jsonUrl,
         responseType: 'json',
       })
         .then((response) => {
@@ -392,12 +401,15 @@ export default new Vuex.Store({
             .update({
               'published.draft': payload.draft,
               'published.structure': payload.structure,
+              'published.publishedAt': firebase.firestoreTimestamp,
+              'published.versionId': payload.versionId,
             })
         })
         .then(() => {
           console.log('Published successfully updated!', payload)
 
           // Webhook here
+          // TODO: remove getters
           if (_.get(getters, 'activeProject.settings.webhook.enabled') === true) {
             webhook(payload.webhookConfig, payload.jsonUrl)
           }
@@ -489,15 +501,15 @@ export default new Vuex.Store({
         uploadImage = optimizedImage
       }
 
-      if (uploadImage.size > 1 * 1024 * 1024) {
+      if (uploadImage.size > 2 * 1024 * 1024) {
         commit('setNotification', {
           id: `${payload.projectId}>${payload.path}>upload`,
           status: 'error',
-          message: 'Max image size 1 MB, try another image.',
+          message: 'Max image size 2 MB, try another image.',
           image: blobUrl,
         })
 
-        console.error('Max image size 1 MB, try another image.')
+        console.error('Max image size 2 MB, try another image.')
         return false
       }
 
@@ -505,13 +517,17 @@ export default new Vuex.Store({
 
       if (uploadImage.type === 'image/jpeg') {
         filename = `${filename}.jpg`
-      } else if (uploadImage.type === 'image/png') {
+      }
+      else if (uploadImage.type === 'image/png') {
         filename = `${filename}.png`
-      } else if (uploadImage.type === 'image/gif') {
+      }
+      else if (uploadImage.type === 'image/gif') {
         filename = `${filename}.gif`
-      } else if (uploadImage.type === 'image/svg+xml') {
+      }
+      else if (uploadImage.type === 'image/svg+xml') {
         filename = `${filename}.svg`
-      } else {
+      }
+      else {
         commit('setNotification', {
           id: `${payload.projectId}>${payload.path}>upload`,
           status: 'error',
@@ -540,16 +556,19 @@ export default new Vuex.Store({
         })
         console.error('Upload failed', error)
       }, () => {
-        console.log('Uploade done')
+        uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+          _.delay(() => {
+            commit('deleteNotification', `${payload.projectId}>${payload.path}>upload`)
+          }, 1000)
 
-        _.delay(() => {
-          commit('deleteNotification', `${payload.projectId}>${payload.path}>upload`)
-        }, 1000)
+          console.log('File available at', downloadURL)
 
-        dispatch('updateContent', {
-          projectId: payload.projectId,
-          path: _.replace(payload.path, />/g, '.'),
-          content: `https://cdn.editlayer.com/${payload.projectId}/${filename}`,
+          dispatch('updateContent', {
+            projectId: payload.projectId,
+            path: _.replace(payload.path, />/g, '.'),
+            // content: `https://cdn.editlayer.com/${payload.projectId}/${filename}`,
+            content: downloadURL,
+          })
         })
       })
     },

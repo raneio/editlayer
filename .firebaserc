@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "editlayerapp"
+    "development": "editlayer-development",
+    "production": "editlayer-production"
   }
 }

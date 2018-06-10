@@ -1,10 +1,11 @@
 <script>
 import _ from 'lodash'
-import Navigation from '@/components/Navigation'
-import SidePanel from '@/components/SidePanel'
-import Breadcrumb from '@/components/Breadcrumb'
-import BackButton from '@/components/BackButton'
-import Editors from '@/components/Editors'
+import Navigation from '@/components/navigate/Navigation'
+import SidePanel from '@/components/panel/Panel'
+import Breadcrumb from '@/components/navigate/Breadcrumb'
+import BackButton from '@/components/navigate/BackButton'
+import Editors from '@/components/editors/Editors'
+import License from '@/components/utils/License'
 
 export default {
   name: 'Content',
@@ -15,6 +16,7 @@ export default {
     Breadcrumb,
     Editors,
     BackButton,
+    License,
   },
 
   computed: {
@@ -63,26 +65,34 @@ export default {
 </script>
 
 <template>
-<section class="layout">
+<section class="app-layout">
   <Navigation v-show="!isMobile || mobileView === 'side'"/>
   <SidePanel v-show="!isMobile || mobileView === 'side'"/>
 
   <main class="main -content" v-if="!isMobile || mobileView === 'main'">
-    <Breadcrumb/>
-    <Editors/>
-    <button class="button -blue -close" @click="closeEditor()" v-if="isMobile">Close</button>
+
+    <header>
+      <Breadcrumb/>
+    </header>
+
+    <section class="content">
+      <Editors/>
+      <button class="button -info -close" @click="closeEditor()" v-if="isMobile">Close</button>
+    </section>
+
+    <License/>
   </main>
 </section>
 </template>
 
 <style lang="sass" scoped>
-@import '../sass/features'
+@import '../sass/variables'
+@import '../sass/mixins/all'
 
 .main.-content
-  overflow-y: auto
   padding: .25rem 1.5rem 1.5rem
 
-  +for-tablet-portrait
+  +breakpoint('medium')
     padding: .25rem 2.5rem 2.5rem
 
 .button.-close

@@ -1,6 +1,7 @@
 <script>
-import Navigation from '@/components/Navigation'
-import Projects from '@/components/Projects'
+import Navigation from '@/components/navigate/Navigation'
+import Projects from '@/components/dashboard/Projects'
+import License from '@/components/utils/License'
 import firebase from '@/firebase'
 
 export default {
@@ -9,6 +10,7 @@ export default {
   components: {
     Navigation,
     Projects,
+    License,
   },
 
   computed: {
@@ -39,41 +41,38 @@ export default {
 </script>
 
 <template>
-<section class="layout">
+<section class="app-layout">
   <Navigation class="navigation"/>
 
   <main class="main -dashboard">
     <header class="header">
-      <div class="logo">
-        <svg height="20" viewBox="0 0 28 20" width="28" xmlns="http://www.w3.org/2000/svg"><g fill="#6643ad" fill-rule="evenodd" transform=""><path d="m13.8461538 15.8859592 10.8869191-5.238444 2.9592348 1.2250892v1.1380841l-13.8461539 6.433133-13.8461538-6.433133v-1.1380841l2.86214193-1.2250892z"/><path d="m13.8461538 0 13.8461539 6.72571046v1.13808415l-13.8461539 6.43313299-13.8461538-6.43313299v-1.13808415z"/></g></svg>
-        <div class="text">
-          Editlayer
-        </div>
-      </div>
-      
+      <!-- <div class="logo">
+        <icon name="editlayer"/>
+        <div class="text">Editlayer</div>
+      </div> -->
+
       <div class="account">
         <span class="email" v-text="email"></span>
         <a class="button" @click="logout()">Logout</a>
       </div>
     </header>
-    <Projects/>
+    <Projects class="content"/>
+    <License/>
   </main>
 </section>
 </template>
 
 <style lang="sass" scoped>
-@import '../sass/features'
+@import '../sass/variables'
+@import '../sass/mixins/all'
 
 .main.-dashboard
-  background-image: linear-gradient(to left, mix($color-violet, transparent, 4%), mix($color-violet, transparent, 8%))
-  overflow-y: auto
-  padding: 2.5rem
-  +margin-to-childs(2rem)
+  background-image: linear-gradient(to right, $color-gray--lightest, $color-gray--lighter)
 
 .header
   +chain(1rem)
   align-items: center
-  justify-content: space-between
+  justify-content: flex-end
 
   .logo
     +chain(.5rem)
@@ -81,7 +80,10 @@ export default {
     font-size: 1.4rem
     font-weight: 900
     letter-spacing: -.05em
-    color: $color-violet
+    color: $color-brand
+
+    .fa-icon
+      height: 1.4rem
 
   .account
     +chain(1rem)
@@ -90,7 +92,7 @@ export default {
     .email
       display: none
 
-      +for-tablet-portrait
+      +breakpoint('medium')
         display: block
 
     .button
@@ -99,7 +101,7 @@ export default {
 .navigation
   max-width: 1rem
 
-  +for-tablet-portrait
+  +breakpoint('medium')
     max-width: none
 
 </style>

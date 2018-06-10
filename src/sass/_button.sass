@@ -1,0 +1,120 @@
+// @mixin colored-button()
+
+.button
+  @extend button
+  +chain(.5em)
+  display: inline-flex
+  box-shadow: 0 .5em 1em 0 mix($color-black, transparent, 5%), 0 0 .4em 0 mix(black, transparent, 10%)
+  text-transform: uppercase
+  transition: transform .2s, box-shadow .2s
+  justify-content: center
+
+  &.-active
+    box-shadow: 0 0 1em 0 mix($color-black, transparent, 5%), 0 0 .4em 0 mix(black, transparent, 10%)
+
+  &.-danger
+    background-color: $color-danger
+
+    &:hover
+      background-color: mix($color-danger, white, 95%)
+
+    &:active
+      background-color: mix($color-danger, white, 90%)
+
+  &.-success
+    background-color: $color-success
+
+    &:hover
+      background-color: mix($color-success, white, 95%)
+
+    &:active
+      background-color: mix($color-success, white, 90%)
+
+  &.-info
+    background-color: $color-info
+
+    &:hover
+      background-color: mix($color-info, white, 95%)
+
+    &:active
+      background-color: mix($color-info, white, 90%)
+
+  &.-circle
+    border-radius: 50%
+    width: 4em
+    height: 4em
+    padding: 0
+
+  &.-link,
+  &.-pill
+    background-color: transparent
+    border: none
+    box-shadow: none
+    font-weight: 600
+    padding-left: 0
+    padding-right: 0
+    color: $color-black
+    margin-top: -.75em
+    margin-bottom: -.75em
+
+    svg
+      height: .75rem
+      fill: $color-black
+
+    &:hover
+      color: $button-background--hover
+      background-color: transparent
+
+      svg
+        fill: $button-background--hover
+
+    &:active
+      color: $button-background--activ
+
+      svg
+        fill: $button-background--activ
+
+    &.-success
+      color: $color-success
+
+      svg
+        fill: $color-success
+
+      &:hover
+        color: mix($color-success, white, 80%)
+
+        svg
+          fill: mix($color-success, white, 80%)
+
+      &:active
+        color: mix($color-success, white, 70%)
+
+        svg
+          fill: mix($color-success, white, 70%)
+
+    &.-danger
+
+      &:hover
+        color: mix($color-danger, white, 95%)
+
+        svg
+          fill: mix($color-danger, white, 95%)
+
+      &:active
+        color: mix($color-danger, white, 90%)
+
+        svg
+          fill: mix($color-danger, white, 90%)
+
+  &.-pill
+    padding: .1em .75em
+    border-radius: 1em
+
+    &.-active
+      color: $color-white
+      background-color: $color-black
+      pointer-events: none
+
+  &[disabled]
+    opacity: .5
+    cursor: not-allowed

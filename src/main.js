@@ -1,26 +1,13 @@
-import '@/sass/index.sass'
 import Vue from 'vue'
+import { sync } from 'vuex-router-sync'
+import 'typeface-open-sans'
+
 import App from '@/App.vue'
 import router from '@/router'
 import store from '@/store'
-import { sync } from 'vuex-router-sync'
-import 'codemirror/mode/javascript/javascript.js'
-import 'codemirror/mode/xml/xml.js'
-import 'codemirror/mode/css/css.js'
-import 'codemirror/mode/sass/sass.js'
-import 'codemirror/mode/markdown/markdown.js'
-import 'codemirror/lib/codemirror.css'
-import 'codemirror/theme/dracula.css'
-// import 'codemirror/theme/base16-dark.css'
-// import 'codemirror/theme/railscasts.css'
-
-// import ElementUI from 'element-ui'
-// import locale from 'element-ui/lib/locale/lang/en'
-// // import 'element-ui/lib/theme-chalk/index.css'
-// Vue.use(ElementUI, {locale})
-
-// import VueSimplemde from 'vue-simplemde'
-// Vue.use(VueSimplemde)
+import '@/codemirror'
+import '@/icons'
+import '@/sass/index.sass'
 
 sync(store, router)
 

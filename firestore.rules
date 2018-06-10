@@ -20,9 +20,11 @@ service cloud.firestore {
 
       function allowPublished () {
       	return isRole(['admin', 'editor'])
-        		&& request.writeFields.size() == 2
-        		&& (request.writeFields[0] == 'published.structure' || request.writeFields[1] == 'published.structure')
-        		&& (request.writeFields[0] == 'published.draft' || request.writeFields[1] == 'published.draft');
+        		&& request.writeFields.size() == 4
+            && 'published.structure' in request.writeFields
+            && 'published.draft' in request.writeFields
+            && 'published.publishedAt' in request.writeFields
+            && 'published.versionId' in request.writeFields;
       }
 
       function allowWebhook () {

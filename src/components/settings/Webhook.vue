@@ -2,8 +2,8 @@
 import _ from 'lodash'
 import { codemirror } from 'vue-codemirror'
 import firebase from '@/firebase'
-import Breadcrumb from '@/components/Breadcrumb'
-import Navigation from '@/components/Navigation'
+import Breadcrumb from '@/components/navigate/Breadcrumb'
+import Navigation from '@/components/navigate/Navigation'
 import webhook from '@/utils/webhook'
 
 export default {
@@ -136,7 +136,7 @@ export default {
 <template>
 <section class="webhook">
 
-  <header class="heading-group">
+  <header class="heading-group -feature">
     <h1 class="heading">Webhook</h1>
     <p class="tagline">We will send a custom POST/GET request to the URL when publishing is done.</p>
   </header>
@@ -183,7 +183,7 @@ export default {
   </div>
 
   <div class="" v-if="enabled === false">
-    <a class="button" @click="enableWebhook()">Enable webhook</a>
+    <button class="button" @click="enableWebhook()">Enable webhook</button>
   </div>
 
   <!-- <div class="console">
@@ -200,10 +200,11 @@ export default {
 </template>
 
 <style lang="sass" scoped>
-@import '../../sass/features'
+@import '../../sass/variables'
+@import '../../sass/mixins/all'
 
 .webhook
-  +margin-to-childs()
+  +gap()
 
 .tools
   +chain()

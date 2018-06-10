@@ -65,9 +65,11 @@ const addData = (structure, draft) => {
 
       if (_.has(value, 'EDITOR')) {
         value.TYPE = 'value'
-      } else if (_.has(value, 'ARRAY')) {
+      }
+      else if (_.has(value, 'ARRAY')) {
         value.TYPE = 'array'
-      } else {
+      }
+      else {
         value.TYPE = 'object'
       }
 
@@ -78,9 +80,11 @@ const addData = (structure, draft) => {
 
         if (content !== null && content !== undefined) {
           value.CONTENT = content
-        } else if (_.has(value, 'DEFAULT')) {
+        }
+        else if (_.has(value, 'DEFAULT')) {
           value.CONTENT = value.DEFAULT
-        } else {
+        }
+        else {
           value.CONTENT = null
         }
       }

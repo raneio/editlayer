@@ -1,8 +1,9 @@
 <script>
-import Navigation from '@/components/Navigation'
-import SidePanel from '@/components/SidePanel'
-import Breadcrumb from '@/components/Breadcrumb'
-import StructureEditor from '@/components/StructureEditor'
+import Navigation from '@/components/navigate/Navigation'
+import SidePanel from '@/components/panel/Panel'
+import Breadcrumb from '@/components/navigate/Breadcrumb'
+import StructureEditor from '@/components/structure/StructureEditor'
+import License from '@/components/utils/License'
 
 export default {
   name: 'Structure',
@@ -12,6 +13,7 @@ export default {
     SidePanel,
     Breadcrumb,
     StructureEditor,
+    License,
   },
 
   computed: {
@@ -31,25 +33,33 @@ export default {
 </script>
 
 <template>
-<section class="layout">
+<section class="app-layout">
   <Navigation/>
   <SidePanel v-if="!isMobile"/>
 
   <main class="main -structure">
-    <Breadcrumb v-if="!isMobile"/>
-    <StructureEditor v-if="$route.params.projectId"/>
+    <header>
+      <Breadcrumb v-if="!isMobile"/>
+    </header>
+
+    <section class="content">
+      <StructureEditor v-if="$route.params.projectId"/>
+    </section>
+
+    <License/>
+
   </main>
 </section>
 </template>
 
 <style lang="sass" scoped>
-@import '../sass/features'
+@import '../sass/variables'
+@import '../sass/mixins/all'
 
 .main.-structure
-  overflow-y: auto
   padding: .25rem 1.5rem 1.5rem
 
-  +for-tablet-portrait
+  +breakpoint('medium')
     padding: .25rem 2.5rem 2.5rem
 
 </style>
