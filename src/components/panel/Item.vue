@@ -175,14 +175,15 @@ export default {
     left: 0
     top: 0
     bottom: 0
-    width: .45rem
-    border-top-left-radius: $button-border-radius
-    border-bottom-left-radius: $button-border-radius
+    right: 0
+    border-radius: $button-border-radius
+    // box-shadow: inset 0 .1rem .5rem .1rem mix($color-black, transparent, 10%)
+    border-left: .5rem solid $color-info
+    // background-color: mix($color-black, transparent, 1%)
     transition: opacity .2s
     opacity: 0
 
   &.-active::after
-    background-color: $color-info
     opacity: 1
 
   .heading

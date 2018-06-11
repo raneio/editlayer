@@ -73,7 +73,7 @@ export default {
             email: user.email,
           })
             .then(() => {
-              console.log('Added user', user.email)
+              // console.log('Added user', user.email)
 
               this.$store.dispatch('newProject', {
                 name: 'Simple Example',

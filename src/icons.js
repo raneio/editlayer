@@ -15,6 +15,7 @@ import 'vue-awesome/icons/trash'
 import 'vue-awesome/icons/regular/clock'
 import 'vue-awesome/icons/plus'
 import 'vue-awesome/icons/edit'
+import 'vue-awesome/icons/sign-out-alt'
 
 Icon.register({
   editlayer: {

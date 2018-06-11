@@ -40,7 +40,7 @@ export default {
   methods: {
 
     close () {
-      console.log('close', this.id)
+      // console.log('close', this.id)
       this.$store.commit('deleteNotification', this.id)
     },
 
@@ -48,9 +48,9 @@ export default {
 
   created () {
     if (this.progress === undefined && this.deleteTime !== false) {
-      console.log('created', this.id)
+      // console.log('created', this.id)
       _.delay(() => {
-        console.log('delay')
+        // console.log('delay')
         this.close()
       }, this.deleteTime * 1000)
     }

@@ -39,7 +39,7 @@ export default {
   },
 
   created () {
-    console.log('editorData', this.editorData)
+    // console.log('editorData', this.editorData)
 
     if (_.get(this.editorData, 'config.language') === 'html' || !_.has(this.editorData, 'config.language')) {
       this.options.mode = 'xml'

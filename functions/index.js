@@ -20,15 +20,15 @@ const bucket = admin.storage().bucket()
 
 exports.publishJson = functions.firestore.document('projects/{projectId}/versions/{versionId}').onCreate((snap, context) => {
 
-  console.log('snap', snap)
-  console.log('snap.data()', snap.data())
+  // console.log('snap', snap)
+  // console.log('snap.data()', snap.data())
 
   const tempFilePath = '/tmp/tempfile.json'
   // const bucket = admin.storage().bucket(bucketName)
   const versionData = snap.data()
   const destinationPath = `${context.params.projectId}/${versionData.filename}.json`
 
-  console.log('Upload JSON with versionId', context.params.versionId)
+  // console.log('Upload JSON with versionId', context.params.versionId)
 
   const jsonFileContent = _.merge(versionData.content, {
     PUBLISHED_AT: versionData.publishedAt,
@@ -121,7 +121,7 @@ exports.attachRolesAfterRegister = functions.auth.user().onCreate((userRecord, c
   // const firestore = admin.firestore()
 
   // console.log('userEventData', event.data)
-  console.log('userRecord', userRecord)
+  // console.log('userRecord', userRecord)
 
   const emailSha1 = sha1(userRecord.email)
 
@@ -132,7 +132,7 @@ exports.attachRolesAfterRegister = functions.auth.user().onCreate((userRecord, c
       querySnapshot.forEach((doc) => {
 
         if (_.has(doc.data().roles, emailSha1)) {
-          console.log('email', doc.data().roles[emailSha1])
+          // console.log('email', doc.data().roles[emailSha1])
           let permissionData = doc.data().roles[emailSha1]
 
           let updateData = {}
@@ -154,7 +154,7 @@ exports.attachRolesAfterRegister = functions.auth.user().onCreate((userRecord, c
 
         return true
       })
-      console.log('Role attach when register SUCCESS')
+      // console.log('Role attach when register success')
       // response.send('Role attach when register SUCCESS')
       return true
     })
@@ -178,7 +178,7 @@ exports.deleteProject = functions.firestore.document('projects/{projectId}/delet
       let files = result[0]
 
       files.forEach((file) => {
-        console.log('file', file.name)
+        // console.log('file', file.name)
 
         bucket.file(file.name).delete()
 

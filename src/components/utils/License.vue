@@ -24,7 +24,7 @@ export default {
 
   <div><a href="https://editlayer.com" class="button -link"><icon name="editlayer" class="logo"/></a></div>
   <div>Copyright &copy; 2018 <a href="https://twitter.com/raneio">Rane Ahonen</a></div>
-  <div>Licensed <a class="button -link">MIT</a>. Do you want to upgrade to <a class="button -link">Commercial</a> ?</div>
+  <div>Licensed <a class="button -link">MIT</a>. Do you want to upgrade to <a href="mailto:editlayer@gmail.com?subject=I'm interesting for the commercial license" class="button -link">Commercial</a> ?</div>
 
   <!-- <div class="colors">
     <div class="white"></div>
@@ -53,6 +53,7 @@ export default {
   flex-direction: column
   color: $color-gray--darker
   font-size: .9rem
+  text-align: center
 
   .logo
     height: 1.5rem

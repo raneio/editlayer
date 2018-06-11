@@ -74,9 +74,9 @@ export default {
 
   },
 
-  created () {
-    console.log('editorData', this.editorData)
-  },
+  // created () {
+  //   console.log('editorData', this.editorData)
+  // },
 
 }
 </script>

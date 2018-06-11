@@ -52,21 +52,8 @@ export default {
 
   methods: {
 
-    newProject () {
-      let name = prompt('Name', 'Project')
-
-      if (name !== null && name !== '') {
-        this.$store.dispatch('newProject', {
-          name: name,
-        })
-      }
-    },
-
     selectProject (project) {
       this.$router.push({name: 'Content', params: {projectId: project.projectId}})
-      // if (event.target.tagName !== 'A') {
-      //   this.$router.push({name: 'Content', params: {projectId: project.projectId}})
-      // }
     },
 
   },
@@ -86,12 +73,7 @@ export default {
         <header class="header">
           <h2 class="heading" v-text="project.name"></h2>
           <div class="spacer"/>
-          <div class="status">
-            <!-- <icon name="check" class="published" v-if="project.status === 'published'"/> -->
-            <div class="draft" v-if="project.status === 'draft'">
-              draft
-            </div>
-          </div>
+          <div class="draft" v-if="project.status === 'draft'">draft</div>
           <div class="select">
             <icon name="chevron-right"/>
           </div>
@@ -120,12 +102,6 @@ export default {
         </section>
       </div>
 
-    </div>
-
-    <div class="project -new">
-      <button class="button -success" @click="newProject()">
-        + New Project
-      </button>
     </div>
 
   </div>
@@ -189,19 +165,7 @@ export default {
 .my-role
   font-weight: 600
 
-.project.-new .button
-  font-size: 1.4rem
-  padding-top: 2rem
-  padding-bottom: 2rem
-
-.status
-  +center()
-
-  .published
-    width: 1.5rem
-    fill: $color-success
-
-  .draft
-    color: $color-warning
+.draft
+  color: $color-warning
 
 </style>

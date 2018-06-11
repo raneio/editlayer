@@ -189,7 +189,7 @@ export default new Vuex.Store({
         deleteTime: payload.deleteTime,
       })
 
-      console.log('setNotification', notification)
+      // console.log('setNotification', notification)
 
       Vue.set(state.notifications, payload.id, notification)
     },
@@ -213,7 +213,7 @@ export default new Vuex.Store({
     },
 
     deleteNotification (state, id) {
-      console.log('deleteNotification', id)
+      // console.log('deleteNotification', id)
       Vue.delete(state.notifications, id)
     },
 
@@ -303,13 +303,13 @@ export default new Vuex.Store({
         .doc(projectId)
         .set(newProject)
         .then((docRef) => {
-          console.log('File added:', projectId)
+          // console.log('File added:', projectId)
         })
         .catch(error => {
           payload.tries = (!payload.tries) ? 1 : payload.tries + 1
 
           if (payload.tries < 5) {
-            console.log('Retry', payload.tries)
+            // console.log('Retry', payload.tries)
             dispatch('newProject', payload)
           }
           else {
@@ -324,13 +324,13 @@ export default new Vuex.Store({
       let currentContent = _.get(getters.structure, `${payload.path}.CONTENT`)
 
       if (!_.isEqual(currentContent, payload.content)) {
-        console.log('updateContent', updateData)
+        // console.log('updateContent', updateData)
 
         firebase.firestore
           .collection('projects')
           .doc(payload.projectId)
           .update(updateData)
-          .then(() => console.log('Content successfully updated!'))
+          // .then(() => console.log('Content successfully updated!'))
           .catch((error) => console.error('Error updating content:', error))
       }
     },
@@ -340,7 +340,7 @@ export default new Vuex.Store({
       payload.versionCheck = 0
 
       if (payload.publishTries > 3) {
-        console.error('Publishing failed, try again.')
+        // console.error('Publishing failed, try again.')
         commit('updatePublishProcess', {
           projectId: payload.projectId,
           status: 'error',
@@ -406,11 +406,11 @@ export default new Vuex.Store({
             })
         })
         .then(() => {
-          console.log('Published successfully updated!', payload)
+          // console.log('Published successfully updated!', payload)
 
           // Webhook here
           // TODO: remove getters
-          if (_.get(getters, 'activeProject.settings.webhook.enabled') === true) {
+          if (payload.webhookEnabled === true) {
             webhook(payload.webhookConfig, payload.jsonUrl)
           }
 
@@ -446,7 +446,7 @@ export default new Vuex.Store({
     async uploadImage ({state, commit, dispatch}, payload) {
       if (!_.startsWith(payload.image.type, 'image/')) return false
 
-      console.log('payload', payload)
+      // console.log('payload', payload)
 
       let maxWidth = (_.has(payload, 'config.width')) ? payload.config.width : 800
       let maxHeight = (_.has(payload, 'config.height')) ? payload.config.height : 800
@@ -488,7 +488,7 @@ export default new Vuex.Store({
           maxHeight: maxHeight,
         })
           .then((result) => {
-            console.log('Image optimized')
+            // console.log('Image optimized')
             return result
           })
           .catch((error) => console.error('Image optimize failed', error.message))
@@ -547,7 +547,7 @@ export default new Vuex.Store({
           progress: percent,
         })
 
-        console.log('Upload is ' + percent + '% done')
+        // console.log('Upload is ' + percent + '% done')
       }, (error) => {
         commit('setNotification', {
           id: `${payload.projectId}>${payload.path}>upload`,
@@ -561,7 +561,7 @@ export default new Vuex.Store({
             commit('deleteNotification', `${payload.projectId}>${payload.path}>upload`)
           }, 1000)
 
-          console.log('File available at', downloadURL)
+          // console.log('File available at', downloadURL)
 
           dispatch('updateContent', {
             projectId: payload.projectId,

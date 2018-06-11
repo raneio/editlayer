@@ -46,12 +46,12 @@ const arrayToJson = (structure, result = {}, path = false) => {
 }
 
 export default (content) => {
-  console.log('buildJson')
+  // console.log('buildJson')
 
   content = basicToJson(content)
   content = _.merge(content, arrayToJson(content))
 
-  console.log('content', content)
+  // console.log('content', content)
 
   return content
 }

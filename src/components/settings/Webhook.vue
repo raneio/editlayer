@@ -76,7 +76,7 @@ export default {
         .collection('projects')
         .doc(this.activeProject.projectId)
         .update(updateData)
-        .then(() => console.log('Webhook enabled saved', updateData))
+        // .then(() => console.log('Webhook enabled saved', updateData))
         .catch((error) => console.error('Webhook enabling failed', error))
     },
 

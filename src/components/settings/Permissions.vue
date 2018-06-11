@@ -24,42 +24,48 @@ export default {
   methods: {
 
     newPermission () {
-      let email = prompt('Email address', 'name@example.com')
+      let email = prompt('Email address', '')
 
-      if (email !== null && !validator.isEmail(email)) {
+      if (email === null) return false
+
+      if (!validator.isEmail(email)) {
         console.error('Email is invalid', email)
-      }
-      else if (email !== null) {
-        let notificationId = Math.random().toString(36).slice(-8)
-
         this.$store.commit('setNotification', {
-          id: notificationId,
-          status: 'info',
-          message: `Adding user "${email}", please wait...`,
+          status: 'error',
+          message: `Email ${email} is invalid`,
         })
-
-        firebase.firestore
-          .collection('projects')
-          .doc(this.activeProject.projectId)
-          .collection('permissionJobs')
-          .add({
-            role: 'editor',
-            email: email,
-          })
-          .then(() => {
-            console.log('Permission job added')
-          })
-          .catch(error => {
-            console.error('Permission job adding failed', error)
-          })
+        return false
       }
+
+      let notificationId = Math.random().toString(36).slice(-8)
+
+      this.$store.commit('setNotification', {
+        id: notificationId,
+        status: 'info',
+        message: `Adding user "${email}", please wait...`,
+      })
+
+      firebase.firestore
+        .collection('projects')
+        .doc(this.activeProject.projectId)
+        .collection('permissionJobs')
+        .add({
+          role: 'editor',
+          email: email,
+        })
+        .then(() => {
+          // console.log('Permission job added')
+        })
+        .catch(error => {
+          console.error('Permission job adding failed', error)
+        })
     },
 
     updatePermission (payload) {
       let updateData = {}
       updateData[`roles.${payload.roleId}.role`] = payload.role
 
-      console.log('updatePermission', updateData)
+      // console.log('updatePermission', updateData)
 
       firebase.firestore
         .collection('projects')
@@ -102,63 +108,64 @@ export default {
     User permissions
   </h1>
 
-  <ul class="roles">
-    <li class="role -me">
-      <div class="email" :title="user.email" v-text="user.email"></div>
-      <div class="spacer"></div>
-      <button class="button -pill -active">Admin</button>
-    </li>
-    <li
-      v-for="(role, roleId) in roles"
-      :key="roleId"
-      v-if="roleId !== user.id"
-      class="role"
-    >
-      <div class="email" :title="role.email" v-text="role.email"></div>
+  <div class="card">
 
-      <div class="spacer"></div>
+    <ul class="roles">
+      <li class="role">
 
-      <button
-        class="button -pill"
-        :class="{ '-active': role.role === 'editor'}"
-        @click="updatePermission({
-          roleId, roleId,
-          role: 'editor',
-          email: role.email,
-        })"
-        >
-        Editor
-      </button>
+        <div class="email" :title="user.email" v-text="user.email"></div>
 
-      <button
-        class="button -pill"
-        :class="{ '-active': role.role === 'admin'}"
-        @click="updatePermission({
-          roleId: roleId,
-          role: 'admin',
-          email: role.email,
-        })"
-        >
-        Admin
-      </button>
+        <div class="spacer"></div>
 
-      <button
-        class="button -link -danger"
-        @click="removePermission({
-          roleId: roleId,
-          email: role.email,
-        })"
-        >
-          <icon name="trash"/>
-      </button>
-    </li>
-  </ul>
+        <div class="permission">
+          <select class="select" disabled>
+            <option>Admin</option>
+          </select>
+        </div>
 
-  <button
-    class="button -link -success"
-    @click="newPermission()"
-  >
-    + New User
+        <div class="remove">
+          <button class="button -link -danger" disabled>
+              <icon name="trash"/>
+          </button>
+        </div>
+
+      </li>
+
+      <li
+        v-for="(role, roleId) in roles"
+        :key="roleId"
+        v-if="roleId !== user.id"
+        class="role"
+      >
+        <div class="email" :title="role.email" v-text="role.email"></div>
+
+        <div class="spacer"></div>
+
+        <div class="permission">
+          <select
+            class="select"
+            v-model="role.role"
+            @change="updatePermission({roleId, roleId, role: role.role})"
+          >
+            <option value="admin">Admin</option>
+            <option value="editor">Editor</option>
+          </select>
+        </div>
+
+        <div class="remove">
+          <button class="button -link -danger" @click="removePermission({roleId: roleId, email: role.email})">
+              <icon name="trash"/>
+          </button>
+        </div>
+
+      </li>
+    </ul>
+
+  </div>
+
+  <button class="button" @click="newPermission()">
+    <icon name="plus"/>
+    <span>New User</span>
   </button>
 </section>
 </template>
@@ -167,57 +174,44 @@ export default {
 @import '../../sass/variables'
 @import '../../sass/mixins/all'
 
-.group
-  +gap(.5rem)
-  max-width: 45rem
+.permissions
+  +gap(1rem)
 
-  & + .group
-    margin-top: 6rem
+.card
+  padding: 1rem 2rem
 
 .roles
   +gap(.5rem)
 
   .role
-    +chain(.25rem)
-    align-items: center
+    +chain(.5rem)
+
+    +breakpoint('small')
+      +chain(2rem)
+
+    &:hover
+      .email
+        color: $color-gray--dark
 
     .email
-      flex-shrink: 1
       min-width: 4rem
       overflow-x: hidden
       text-overflow: ellipsis
 
-    .button.-pill
-      font-size: .8rem
+    .spacer
+      flex-grow: 1
 
-      &.-delete
-        width: 2.5rem
-        flex-shrink: 0
+    .select
+      padding-top: .25rem
+      padding-bottom: .25rem
 
-    &.-me
-      padding-right: 2.75rem
+    .permission
+      flex-shrink: 0
 
-  .spacer
-    height: .8rem
-    flex-grow: 1
-    background-image: linear-gradient(to right, $color-gray 10%, transparent 0%)
-    background-position: bottom
-    background-size: 10px 1px
-    background-repeat: repeat-x
+    .remove
+      flex-shrink: 0
 
-.danger
-  color: $color-danger
-
-.delete-project
-  font-size: .8rem
-
-.select-method
-  font-size: .9rem
-
-.file-location
-  +chain(1.5rem)
-
-  a
-    font-weight: 700
+    .fa-icon
+      height: 1rem
 
 </style>

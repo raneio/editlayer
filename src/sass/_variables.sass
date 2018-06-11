@@ -11,7 +11,7 @@ $color-danger: #F56064
 $color-black: #252525
 $color-white: #FFFFFF
 
-$color-gray--lightest: mix($color-brand, mix($color-black, $color-white, 2%), 2%)
+$color-gray--lightest: mix($color-brand, mix($color-black, $color-white, 1%), 1%)
 $color-gray--lighter: mix($color-brand, mix($color-black, $color-white, 6%), 2%)
 $color-gray--light: mix($color-brand, mix($color-black, $color-white, 20%), 2%)
 $color-gray: mix($color-brand, mix($color-black, $color-white, 50%), 2.5%)
@@ -118,14 +118,17 @@ $button-padding: .75em 1.5em
 $button-background--basic: $color-brand
 $button-background--hover: mix($color-brand, $color-white, 90%)
 $button-background--activ: mix($color-brand, $color-white, 80%)
+$button-background--disab: $color-gray
 
 $button-border--basic: none
 $button-border--hover: none
 $button-border--activ: none
+$button-border--disab: none
 
 $button-text-color--basic: $color-white
 $button-text-color--hover: $color-white
 $button-text-color--activ: $color-white
+$button-text-color--disab: $color-white
 
 
 //
@@ -142,18 +145,22 @@ $input-placeholder-color: $color-gray--dark
 $input-background--basic: $color-gray--lightest
 $input-background--hover: $color-gray--lightest
 $input-background--focus: $color-gray--lightest
+$input-background--disab: $color-gray--lighter
 
 $input-border--basic: 1px solid $color-gray--light
 $input-border--hover: 1px solid $color-gray
 $input-border--focus: 1px solid mix($color-gray, $color-brand, 50%)
+$input-border--disab: 1px solid $color-gray--light
 
 $input-select-arrow-color--basic: $color-gray
 $input-select-arrow-color--hover: $color-gray--dark
 $input-select-arrow-color--focus: mix($color-gray, $color-brand, 50%)
+$input-select-arrow-color--disab: $color-gray--light
 
 $input-text-color--basic: $color-black
 $input-text-color--hover: $color-black
 $input-text-color--focus: $color-black
+$input-text-color--disab: $color-gray
 
 
 //

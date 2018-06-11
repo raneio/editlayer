@@ -14,8 +14,11 @@ $shadow-card--activ: 0 0 .1rem 0 mix($color-black, transparent, 15%), 0 .25rem .
 
   &.-link:active
     box-shadow: $shadow-card--activ
-    transform: translateY(.1rem)
+    transform: translateY(2px)
     transition: box-shadow 0s, transform 0s
+
+  &.-link.-active
+    transform: translateY(1px)
 
   .header
     +chain(.25rem)

@@ -125,7 +125,7 @@ export default {
         .doc(this.projectId)
         .update(updateData)
         .then(() => {
-          console.log('New item added!')
+          // console.log('New item added!')
           let pathUrl = _.replace(`${itemPath}.${randomKey}`, /\./g, '>')
           this.$router.push({name: 'Content', params: {projectId: this.projectId, path: pathUrl}})
         })
@@ -219,7 +219,7 @@ export default {
         .doc(this.projectId)
         .update(updateData)
         .then(() => {
-          console.log('Item successfully deleted!')
+          // console.log('Item successfully deleted!')
         })
         .catch((error) => console.error('Error deleting item', error))
 

@@ -14,9 +14,7 @@ export default {
 <template>
 <div class="loader-overlay">
 
-  <div class="icon">
-    <LoaderIcon/>
-  </div>
+  <LoaderIcon class="icon"/>
 
   <div class="text">
     Loading
@@ -52,5 +50,7 @@ export default {
     width: 4rem
     justify-content: center
     align-items: center
+    fill: $color-white
+    padding: 1rem
 
 </style>

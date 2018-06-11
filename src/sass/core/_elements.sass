@@ -121,6 +121,12 @@ input[type="submit"]
     border: $button-border--activ
     color: $button-text-color--activ
 
+  &[disabled]
+    background: $button-background--disab
+    border: $button-border--disab
+    color: $button-text-color--disab
+    cursor: not-allowed
+
 
 //
 // Form
@@ -165,6 +171,11 @@ select
     border: $input-border--focus
     color: $input-text-color--focus
 
+  &[disabled]
+    background: $input-background--disab
+    border: $input-border--disab
+    color: $input-text-color--disab
+
   &::placeholder
     color: $input-placeholder-color
 
@@ -177,19 +188,24 @@ select
 
 select,
 select:hover,
-select:focus
+select:focus,
+select[disabled],
   background-repeat: no-repeat
   background-position: right 12px center
   padding-right: 36px
 
 select
-  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' width='12' height='14' %3E %3Cpolygon points='0,6 6,0 12,6' fill='#{svg-safe-hex($input-select-arrow-color--basic)}'/%3E %3Cpolygon points='0,8 12,8 6,14' fill='#{svg-safe-hex($input-select-arrow-color--basic)}'/%3E %3C/svg%3E")
+  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' width='12' height='14' fill='#{svg-safe-hex($input-select-arrow-color--basic)}' %3E %3Cpolygon points='0,6 6,0 12,6'/%3E %3Cpolygon points='0,8 12,8 6,14' /%3E %3C/svg%3E")
 
 select:hover
-  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' width='12' height='14' %3E %3Cpolygon points='0,6 6,0 12,6' fill='#{svg-safe-hex($input-select-arrow-color--hover)}'/%3E %3Cpolygon points='0,8 12,8 6,14' fill='#{svg-safe-hex($input-select-arrow-color--hover)}'/%3E %3C/svg%3E")
+  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' width='12' height='14' fill='#{svg-safe-hex($input-select-arrow-color--hover)}' %3E %3Cpolygon points='0,6 6,0 12,6' /%3E %3Cpolygon points='0,8 12,8 6,14' /%3E %3C/svg%3E")
 
 select:focus
-  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' width='12' height='14' %3E %3Cpolygon points='0,6 6,0 12,6' fill='#{svg-safe-hex($input-select-arrow-color--focus)}'/%3E %3Cpolygon points='0,8 12,8 6,14' fill='#{svg-safe-hex($input-select-arrow-color--focus)}'/%3E %3C/svg%3E")
+  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' width='12' height='14' fill='#{svg-safe-hex($input-select-arrow-color--focus)}' %3E %3Cpolygon points='0,6 6,0 12,6' /%3E %3Cpolygon points='0,8 12,8 6,14' /%3E %3C/svg%3E")
+
+select[disabled]
+  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' width='12' height='14' fill='#{svg-safe-hex($input-select-arrow-color--disab)}' %3E %3Cpolygon points='0,6 6,0 12,6' /%3E %3Cpolygon points='0,8 12,8 6,14' /%3E %3C/svg%3E")
+  cursor: not-allowed
 
 input[type="checkbox"],
 input[type="radio"]

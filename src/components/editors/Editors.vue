@@ -123,7 +123,7 @@ export default {
   },
 
   mounted () {
-    console.log('config', this.editorData.config)
+    // console.log('config', this.editorData.config)
     this.selectEditor()
   },
 
