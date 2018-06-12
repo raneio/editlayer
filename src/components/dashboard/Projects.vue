@@ -74,16 +74,16 @@ export default {
           <h2 class="heading" v-text="project.name"></h2>
           <div class="spacer"/>
           <div class="draft" v-if="project.status === 'draft'">draft</div>
-          <div class="select">
+          <!-- <div class="select">
             <icon name="chevron-right"/>
-          </div>
+          </div> -->
         </header>
 
         <section class="content">
 
           <div class="info">
             <icon name="regular/user"/>
-            <div>
+            <div class="text">
               <span v-if="project.users.admins > 0" :class="{'my-role': project.role === 'admin'}">
                 {{project.users.admins}} admin<span v-if="project.users.admins > 1">s</span>
               </span>
@@ -96,7 +96,7 @@ export default {
 
           <div class="info">
             <icon name="regular/clock"/>
-            <div v-text="project.publishedAgo"/>
+            <div class="text" v-text="project.publishedAgo"/>
           </div>
 
         </section>
@@ -139,28 +139,35 @@ export default {
 .card
 
   .content
-    +gap(.25rem)
+    +gap(.75rem)
     padding: 1rem 1.25rem
+    color: $color-gray--dark
 
   .info
-    +chain(.5rem)
+    +chain(.75rem)
 
-  .fa-icon
-    height: 1rem
-    fill: $color-gray
+    .text
+      overflow: hidden
+      text-overflow: ellipsis
+      white-space: nowrap
 
-  .select
-    width: 0
-    opacity: 0
-    overflow: hidden
-    transition: width .2s, opacity .2s
+    .fa-icon
+      height: 1.2rem
+      fill: $color-gray--dark
 
-  &:hover
-
-    .select
-      +center()
-      width: 2rem
-      opacity: 1
+  // .select
+  //   width: 0
+  //   opacity: 0
+  //   overflow: hidden
+  //   transition: width 0s, opacity 0s
+  //
+  // &:hover
+  //
+  //   .select
+  //     +center()
+  //     width: 2rem
+  //     opacity: 1
+  //     transition: width .2s, opacity .2s
 
 .my-role
   font-weight: 600

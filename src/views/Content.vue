@@ -90,10 +90,9 @@ export default {
 @import '../sass/mixins/all'
 
 .main.-content
-  padding: .25rem 1.5rem 1.5rem
-
-  +breakpoint('medium')
-    padding: .25rem 2.5rem 2.5rem
+  background-color: $background-color
+  padding-top: 0
+  padding-bottom: 0
 
 .button.-close
   display: block

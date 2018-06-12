@@ -43,34 +43,38 @@ export default {
 </script>
 
 <template>
-<section class="app-layout">
-  <Navigation class="navigation"/>
+<section class="dashboard-layout">
 
-  <main class="main -dashboard">
-    <header class="header">
+  <header class="header">
 
-      <div class="account">
-        <span class="email" v-text="email"></span>
-        <button class="button -link" @click="logout()">
-          <span>Logout</span>
-          <icon class="icon -logout" name="sign-out-alt"/>
-        </button>
-      </div>
+    <a class="button -link -invert logo" href="https://editlayer.com">
+      <icon name="editlayer"/>
+      <span>Editlayer</span>
+    </a>
 
-      <h1 class="heading -main">My Projects</h1>
+    <!-- <span class="email" v-text="email"></span> -->
 
-      <NewProjectButton class="new-project-button"/>
+    <button class="button -link -invert logout" @click="logout()">
+      <span>Logout</span>
+      <icon class="icon -logout" name="sign-out-alt"/>
+    </button>
 
-      <div class="spacer"/>
+    <!-- <h1 class="heading -main">My Projects</h1> -->
 
-    </header>
+    <!-- <NewProjectButton/> -->
 
-    <hr/>
+    <!-- <div class="spacer"/> -->
 
-    <Projects class="content"/>
+  </header>
 
-    <License/>
+  <main class="main">
+    <h1 class="heading -main">My Projects</h1>
+    <span class="email" v-text="email"></span>
+    <Projects/>
+    <NewProjectButton/>
   </main>
+
+  <License/>
 </section>
 </template>
 
@@ -78,78 +82,82 @@ export default {
 @import '../sass/variables'
 @import '../sass/mixins/all'
 
-.main.-dashboard
-  +gap(2rem)
-  background-image: linear-gradient(to right, $color-gray--lightest, $color-gray--lighter)
-  padding: 1.25rem
-
-  +breakpoint('small')
-    padding: 2rem 2.5rem
+.dashboard-layout
+  display: flex
+  flex-direction: column
+  height: 100%
 
 .header
   +center()
   +chain()
   +gap(2rem)
+  +invert()
   width: 100%
-  flex-wrap: wrap
-  align-items: center
-
-  .heading.-main,
-  .spacer
-    display: none
-
-  .account
-    +chain(1rem)
-    justify-content: space-between
-    align-items: center
-    width: 100%
-
-    .email
-      overflow: hidden
-      text-overflow: ellipsis
-
-    .icon.-logout
-      height: 1.3rem
-
-  .new-project-button
-    white-space: nowrap
-    margin-right: 2rem
+  background: linear-gradient(to bottom, $color-brand, mix($color-brand, $color-black, 85%))
+  padding: 1.25rem
+  justify-content: space-between
 
   +breakpoint('small')
-    +gap(0)
-    +chain()
-    flex-wrap: nowrap
+    padding: 1.5rem 2.5rem
 
-    .spacer
-      display: block
-      flex-grow: 1
-
-    .account
-      width: auto
-      order: 1
-
-  +breakpoint('medium')
-
-    .heading.-main
-      display: block
-      margin-right: 2rem
-      white-space: nowrap
-
-  // .logo
-  //   +chain(.5rem)
+  // .account
+  //   +chain(1rem)
+  //   justify-content: space-between
   //   align-items: center
-  //   font-size: 1.4rem
-  //   font-weight: 900
-  //   letter-spacing: -.05em
-  //   color: $color-brand
+  //   width: 100%
   //
-  //   .fa-icon
-  //     height: 1.4rem
+  //   .email
+  //     overflow: hidden
+  //     text-overflow: ellipsis
+  //     font-size: .8rem
+  //
+  //   .icon.-logout
+  //     height: 1.3rem
 
-// .navigation
-//   max-width: 1rem
-//
-//   +breakpoint('medium')
-//     max-width: none
+  .logo
+    +chain(.5rem)
+    font-weight: 900
+    font-size: 1.5rem
+
+    .link
+      +center()
+
+    .fa-icon
+      flex-shrink: 0
+      height: 1.5rem
+
+  .logout
+
+    .fa-icon
+      flex-shrink: 0
+      height: 1.5rem
+
+  // +breakpoint('small')
+  //   +gap(0)
+  //   +chain()
+  //   flex-wrap: nowrap
+  //
+  //   .spacer
+  //     display: block
+  //     flex-grow: 1
+  //
+  //   .account
+  //     width: auto
+  //     order: 1
+  //
+  // +breakpoint('medium')
+  //
+  //   .heading.-main
+  //     display: block
+  //     margin-right: 2rem
+  //     white-space: nowrap
+
+.main
+  flex-grow: 1
+  padding: 2rem 1.25rem
+  +gap(2rem)
+
+  +breakpoint('small')
+    padding: 3rem 2.5rem
 
 </style>

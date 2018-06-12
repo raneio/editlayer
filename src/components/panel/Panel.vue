@@ -148,18 +148,18 @@ export default {
 
 .panel /deep/
 
-  > .header
-    +chain(1rem)
-    justify-content: space-between
-    align-items: center
-    transition: opacity .2s
-    margin-top: -1rem
-    font-size: .9rem
-    border-bottom: 1px solid mix($color-white, $color-black, 90%)
-    height: 3rem
+  .items-from
+    +gap(1.5rem)
 
-  .items
-    +gap(1rem)
+    > .header
+      +chain(1rem)
+      justify-content: space-between
+      align-items: center
+      transition: opacity .2s
+      margin-top: -1rem
+      font-size: .9rem
+      border-bottom: 1px solid $hr-color
+      height: 3rem
 
     .item
       max-width: 28rem

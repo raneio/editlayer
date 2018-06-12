@@ -163,7 +163,7 @@ export default {
 
   </div>
 
-  <button class="button" @click="newPermission()">
+  <button class="button -success -small" @click="newPermission()">
     <icon name="plus"/>
     <span>New User</span>
   </button>
@@ -178,13 +178,17 @@ export default {
   +gap(1rem)
 
 .card
-  padding: 1rem 2rem
+  padding: 1rem 1rem
+
+  +breakpoint('small')
+    padding-left: 2rem
+    padding-right: 2rem
 
 .roles
   +gap(.5rem)
 
   .role
-    +chain(.5rem)
+    +chain(1rem)
 
     +breakpoint('small')
       +chain(2rem)

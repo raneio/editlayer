@@ -39,6 +39,12 @@
     &:active
       background-color: mix($color-info, $color-white, 90%)
 
+  &.-small
+    font-size: .8rem
+
+  &.-large
+    font-size: 1.25rem
+
   &.-circle
     border-radius: 50%
     width: 4em
@@ -104,6 +110,24 @@
 
         svg
           fill: mix($color-danger, $color-white, 90%)
+
+    &.-invert
+      color: $content-color--invert
+
+      svg
+        fill: $content-color--invert
+
+      &:hover
+        color: mix($content-color--invert, $color-black, 90%)
+
+        svg
+          fill: mix($content-color--invert, $color-black, 90%)
+
+      &:active
+        color: mix($content-color--invert, $color-black, 80%)
+
+        svg
+          fill: mix($content-color--invert, $color-black, 80%)
 
     &[disabled],
     &[disabled]:hover

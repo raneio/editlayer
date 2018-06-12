@@ -79,6 +79,8 @@ export default {
 
   <main class="main -settings" v-if="activeProject">
 
+    <h1 class="heading -main">Project settings</h1>
+
     <section class="content">
 
       <section class="group">
@@ -87,7 +89,7 @@ export default {
           <p class="tagline">You can always find latest published JSON file from this URL address</p>
         </header>
         <div class="file-location">
-          <a :href="jsonUrl" :target="jsonTarget" v-text="jsonUrl"></a>
+          <a class="link" :href="jsonUrl" :target="jsonTarget" v-text="jsonUrl"></a>
         </div>
       </section>
 
@@ -120,11 +122,14 @@ export default {
 @import '../sass/mixins/all'
 
 .main.-settings
-  background-image: linear-gradient(to right, $color-gray--lightest, $color-gray--lighter)
+  padding-top: 2rem
+  +gap(5rem)
+
+.content
+  max-width: $breakpoint--medium
 
 .group
   +gap(.5rem)
-  max-width: 45rem
 
   & + .group
     margin-top: 6rem
@@ -166,7 +171,9 @@ export default {
 .file-location
   +chain(1.5rem)
 
-  a
+  .link
     font-weight: 700
+    overflow: hidden
+    text-overflow: ellipsis
 
 </style>

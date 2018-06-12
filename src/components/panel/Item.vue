@@ -177,9 +177,7 @@ export default {
     bottom: 0
     right: 0
     border-radius: $button-border-radius
-    // box-shadow: inset 0 .1rem .5rem .1rem mix($color-black, transparent, 10%)
     border-left: .5rem solid $color-info
-    // background-color: mix($color-black, transparent, 1%)
     transition: opacity .2s
     opacity: 0
 
@@ -203,11 +201,6 @@ export default {
   .content
     font-size: .8em
     overflow: hidden
-    padding: .35rem 1rem
-    font-weight: 400
-    color: $color-gray
-    opacity: .8
-    transition: opacity .2s
 
     &.-code
       font-size: .7em
@@ -251,10 +244,5 @@ export default {
         width: 100%
         object-fit: cover
         filter: brightness(93%)
-
-  &:hover
-
-    .content
-      opacity: 1
 
 </style>

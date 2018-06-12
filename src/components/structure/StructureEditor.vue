@@ -114,13 +114,11 @@ export default {
 </template>
 
 <style lang="sass" scoped>
-
-// You can use variables, mixins and functions of Page Core
 @import '../../sass/variables'
 @import '../../sass/mixins/all'
 
 .structure
-  padding: 2rem .5rem
+  padding-top: 2rem
   +gap()
 
   .error-message
@@ -139,6 +137,6 @@ export default {
 .structure /deep/
 
   &.-syntax-error .vue-codemirror
-    box-shadow: 0 5px 12px 0 mix(transparent, $color-black, 90%), 0 2px 5px 0 mix(transparent, black, 93%), inset 0 0 0 .2rem $color-danger, 0 0 0 .2rem $color-danger
+    box-shadow: 0 5px 12px 0 mix(transparent, $color-black, 90%), 0 2px 5px 0 mix(transparent, $color-black, 93%), inset 0 0 0 .2rem $color-danger, 0 0 0 .2rem $color-danger
 
 </style>

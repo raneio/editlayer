@@ -173,13 +173,9 @@ export default {
   </div> -->
 
   <div class="tools" v-if="enabled !== false">
-    <div class="tool -test">
-      <button class="button -link" @click="testWebhook()">Test webhook</button>
-      <span class="debug" :class="{'-hidden': !openDevtoolInfo}">- open web console to debug</span>
-    </div>
-    <div class="tool -remove">
-      <button class="button -link -danger" @click="disableWebhook()">Disable webhook</button>
-    </div>
+    <button class="button -small" @click="disableWebhook()">Disable webhook</button>
+    <button class="button -small" @click="testWebhook()">Test webhook</button>
+    <span class="debug" :class="{'-hidden': !openDevtoolInfo}">Open web console to debug</span>
   </div>
 
   <div class="" v-if="enabled === false">
@@ -207,9 +203,9 @@ export default {
   +gap()
 
 .tools
-  +chain()
+  +chain(1rem)
   font-size: .8rem
-  justify-content: space-between
+  // justify-content: space-between
 
   .debug
     transition: opacity .5s

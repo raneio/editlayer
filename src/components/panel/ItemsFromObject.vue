@@ -87,7 +87,7 @@ export default {
 </script>
 
 <template>
-<section class="items -object">
+<section class="items-from -object">
 
   <header class="header">
     <BackButton/>

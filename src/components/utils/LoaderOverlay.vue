@@ -15,10 +15,7 @@ export default {
 <div class="loader-overlay">
 
   <LoaderIcon class="icon"/>
-
-  <div class="text">
-    Loading
-  </div>
+  <div class="text">Loading</div>
 
 </div>
 </template>

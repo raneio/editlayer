@@ -20,7 +20,7 @@ export default {
 </script>
 
 <template>
-  <button class="button -success" @click="newProject()">
+  <button class="button -success -large" @click="newProject()">
     <icon name="plus"/>
     <span>New Project</span>
   </button>

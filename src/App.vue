@@ -36,9 +36,22 @@ export default {
 
 <template>
 <div id="app">
-  <LoaderOverlay v-if="showLoaderOverlay"/>
+
+  <transition name="fade">
+    <LoaderOverlay v-if="showLoaderOverlay"/>
+  </transition>
   <Auth v-if="$store.state.user.isLoggedIn === false"/>
   <router-view v-if="routerViewIsReady"/>
   <Notifications/>
 </div>
 </template>
+
+<style lang="sass" scoped>
+.fade-enter-active,
+.fade-leave-active
+  transition: opacity .2s
+
+.fade-enter,
+.fade-leave-to
+  opacity: 0
+</style>

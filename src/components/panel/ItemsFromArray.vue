@@ -240,11 +240,11 @@ export default {
 </script>
 
 <template>
-<section class="items -array" :class="{ '-moving': movingArrayItem.path !== null}">
+<section class="items-from -array" :class="{ '-moving': movingArrayItem.path !== null}">
 
   <header class="header">
     <BackButton/>
-    <button class="button -link -success" @click="newItem()">
+    <button class="button -success -small" @click="newItem()">
       <icon name="plus"/>
       <span>New Item</span>
     </button>
@@ -314,7 +314,7 @@ export default {
 @import '../../sass/variables'
 @import '../../sass/mixins/all'
 
-.items.-array
+.items-from.-array
 
   > .header
     +chain()
@@ -325,7 +325,7 @@ export default {
     justify-content: flex-end
     transition: opacity .2s
     font-size: .8rem
-    margin-bottom: .25rem
+    margin-bottom: .5rem
 
     .confirm
       +chain(1rem)
@@ -333,7 +333,7 @@ export default {
 
   .move-here
     position: absolute
-    top: .25rem
+    top: -2rem
     left: 0
     right: 0
     transform: translateY(-50%)
@@ -346,28 +346,22 @@ export default {
     margin-top: 1rem
 
   .array-item
-    padding-top: .5rem
     position: relative
 
     & + .array-item
-      border-top: 1px solid mix($color-white, $color-black, 90%)
-      margin-top: 2rem
+      margin-top: 6.5rem
 
   .items
-    +gap(.6rem)
+    +gap(1rem)
     position: relative
     transition: transform .2s
 
     .item
-      font-size: 1rem
       border-radius: 0
 
       &::after
         border-top-left-radius: 0
         border-bottom-left-radius: 0
-
-      .image
-        border-radius: 0
 
       &:first-of-type
         border-top-left-radius: $button-border-radius
@@ -382,10 +376,6 @@ export default {
 
         &::after
           border-bottom-left-radius: $button-border-radius
-
-        .image
-          border-bottom-left-radius: $button-border-radius
-          border-bottom-right-radius: $button-border-radius
 
   &.-moving
 
@@ -427,12 +417,12 @@ export default {
     font-style: italic
     text-align: center
 
-.items.-array /deep/
+.items-from.-array /deep/
 
-  .item .preview.-image .image
+  .item .content.-image
     border-radius: 0
 
-  .item:last-of-type .preview.-image .image
+  .item:last-of-type .content.-image
     border-bottom-left-radius: $button-border-radius
     border-bottom-right-radius: $button-border-radius
 

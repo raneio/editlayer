@@ -116,7 +116,7 @@ export default new Vuex.Store({
     jsonUrl (state, getters) {
       if (!getters.activeProject) return false
       // return `https://cdn.editlayer.com/${getters.activeProject.projectId}/${getters.activeProject.filename}.json`
-      return `https://firebasestorage.googleapis.com/v0/b/${process.env.VUE_APP_PROJECT_ID}.appspot.com/o/${getters.activeProject.projectId}%2F${getters.activeProject.filename}.json?alt=media&token=${getters.activeProject.downloadToken}`
+      return `https://firebasestorage.googleapis.com/v0/b/${process.env.VUE_APP__FIREBASE_PROJECT_ID}.appspot.com/o/${getters.activeProject.projectId}%2F${getters.activeProject.filename}.json?alt=media&token=${getters.activeProject.downloadToken}`
     },
 
     isMobile (state) {
@@ -424,7 +424,7 @@ export default new Vuex.Store({
           if (payload.activeRole === 'admin') {
             link.url = payload.jsonUrl
             link.target = payload.projectId
-            link.text = 'Open file'
+            link.text = 'Open JSON'
           }
 
           commit('setNotification', {
