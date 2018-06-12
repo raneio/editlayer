@@ -4,11 +4,13 @@ import _ from 'lodash'
 import slugg from 'slugg'
 import axios from 'axios'
 import ImageCompressor from 'image-compressor.js'
-import uuid from 'uuid/v4'
+import UIDGenerator from 'uid-generator'
 import firebase from '@/firebase'
 import router from '@/router'
 import buildStructure from '@/utils/buildStructure'
 import webhook from '@/utils/webhook'
+
+const uidgen = new UIDGenerator()
 
 Vue.use(Vuex)
 Vue.use(firebase)
@@ -289,7 +291,7 @@ export default new Vuex.Store({
         name: payload.name,
         structure: JSON.stringify(structure, '', '\t'),
         roles: {},
-        downloadToken: uuid(),
+        downloadToken: uidgen.generateSync(),
       }
 
       newProject.roles[state.user.id] = {
