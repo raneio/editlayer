@@ -45,8 +45,9 @@ export default {
         firebase.firestore
           .collection('projects')
           .doc(this.activeProject.projectId)
-          .collection('deleteJobs')
+          .collection('jobs')
           .add({
+            job: 'deleteProject',
             deleteProjectId: this.activeProject.projectId,
           })
           .then(() => {
@@ -84,7 +85,7 @@ export default {
     <section class="content">
 
       <section class="group">
-        <header class="heading-group -feature">
+        <header class="heading -feature">
           <h1 class="heading">File location</h1>
           <p class="tagline">You can always find latest published JSON file from this URL address</p>
         </header>
@@ -99,7 +100,7 @@ export default {
 
       <section class="group">
 
-        <header class="heading-group -feature">
+        <header class="heading -feature">
           <h1 class="heading">Delete project</h1>
           <p class="tagline danger">Your project will be deleted permanently and you can’t undo this.</p>
         </header>

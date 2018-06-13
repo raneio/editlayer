@@ -136,7 +136,7 @@ export default {
 <template>
 <section class="webhook">
 
-  <header class="heading-group -feature">
+  <header class="heading -feature">
     <h1 class="heading">Webhook</h1>
     <p class="tagline">We will send a custom POST/GET request to the URL when publishing is done.</p>
   </header>

@@ -5,7 +5,7 @@ export default {
   methods: {
 
     newProject () {
-      let name = prompt('Name', 'Project')
+      let name = prompt('Name of Project', '')
 
       if (name !== null && name !== '') {
         this.$store.dispatch('newProject', {
@@ -20,7 +20,7 @@ export default {
 </script>
 
 <template>
-  <button class="button -success -large" @click="newProject()">
+  <button class="button -success" @click="newProject()">
     <icon name="plus"/>
     <span>New Project</span>
   </button>

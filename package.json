@@ -4,12 +4,14 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build:hosting": "vue-cli-service build",
+    "build:functions": "cd functions && npm run build && cd ..",
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
-    "deploy:development": "firebase use development && firebase deploy --only functions,firestore,storage",
-    "deploy:production": "npm run lint && npm run build && firebase use production && firebase deploy && firebase use development"
+    "deploy:only-functions": "npm run build:functions && firebase use development && firebase deploy --only functions",
+    "deploy:development": "npm run build:functions && firebase use development && firebase deploy --only functions,firestore,storage",
+    "deploy:production": "npm run lint && npm run build:hosting && npm run build:functions && firebase use production && firebase deploy && firebase use development"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-build-balloon": "^10.0.1",

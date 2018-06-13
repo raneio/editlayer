@@ -27,7 +27,7 @@ export default {
     <span>Copyright &copy; 2018 <a href="https://twitter.com/raneio">Rane Ahonen</a></span>
     <!-- <a href="https://editlayer.com" class="button -link"><icon name="editlayer" class="logo"/></a> -->
   </div>
-  <div class="licensed">Licensed <a class="button -link">MIT</a>. Do you want to upgrade to <a href="mailto:editlayer@gmail.com?subject=I'm interesting for the commercial license" class="button -link">Commercial</a> ?</div>
+  <div class="licensed">Licensed <a class="button -link">MIT</a>. Do you want to upgrade to <a href="https://editlayer.com/pro" class="button -link">Editlayer PRO</a> ?</div>
 
   <!-- <div class="colors">
     <div class="white"></div>

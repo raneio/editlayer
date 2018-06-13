@@ -411,7 +411,6 @@ export default new Vuex.Store({
           // console.log('Published successfully updated!', payload)
 
           // Webhook here
-          // TODO: remove getters
           if (payload.webhookEnabled === true) {
             webhook(payload.webhookConfig, payload.jsonUrl)
           }

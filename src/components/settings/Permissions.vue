@@ -48,8 +48,9 @@ export default {
       firebase.firestore
         .collection('projects')
         .doc(this.activeProject.projectId)
-        .collection('permissionJobs')
+        .collection('jobs')
         .add({
+          job: 'attachRole',
           role: 'editor',
           email: email,
         })

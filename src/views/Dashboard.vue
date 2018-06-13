@@ -45,33 +45,24 @@ export default {
 <template>
 <section class="dashboard-layout">
 
-  <header class="header">
-
+  <nav class="navigation">
     <a class="button -link -invert logo" href="https://editlayer.com">
       <icon name="editlayer"/>
       <span>Editlayer</span>
     </a>
 
-    <!-- <span class="email" v-text="email"></span> -->
-
     <button class="button -link -invert logout" @click="logout()">
       <span>Logout</span>
       <icon class="icon -logout" name="sign-out-alt"/>
     </button>
-
-    <!-- <h1 class="heading -main">My Projects</h1> -->
-
-    <!-- <NewProjectButton/> -->
-
-    <!-- <div class="spacer"/> -->
-
-  </header>
+  </nav>
 
   <main class="main">
-    <h1 class="heading -main">My Projects</h1>
-    <span class="email" v-text="email"></span>
+    <div class="tools">
+      <h1 class="heading -main">My Projects</h1>
+      <NewProjectButton/>
+    </div>
     <Projects/>
-    <NewProjectButton/>
   </main>
 
   <License/>
@@ -87,32 +78,17 @@ export default {
   flex-direction: column
   height: 100%
 
-.header
-  +center()
+.navigation
   +chain()
   +gap(2rem)
   +invert()
   width: 100%
   background: linear-gradient(to bottom, $color-brand, mix($color-brand, $color-black, 85%))
-  padding: 1.25rem
+  padding: 2rem 1.25rem
   justify-content: space-between
 
   +breakpoint('small')
     padding: 1.5rem 2.5rem
-
-  // .account
-  //   +chain(1rem)
-  //   justify-content: space-between
-  //   align-items: center
-  //   width: 100%
-  //
-  //   .email
-  //     overflow: hidden
-  //     text-overflow: ellipsis
-  //     font-size: .8rem
-  //
-  //   .icon.-logout
-  //     height: 1.3rem
 
   .logo
     +chain(.5rem)
@@ -132,26 +108,6 @@ export default {
       flex-shrink: 0
       height: 1.5rem
 
-  // +breakpoint('small')
-  //   +gap(0)
-  //   +chain()
-  //   flex-wrap: nowrap
-  //
-  //   .spacer
-  //     display: block
-  //     flex-grow: 1
-  //
-  //   .account
-  //     width: auto
-  //     order: 1
-  //
-  // +breakpoint('medium')
-  //
-  //   .heading.-main
-  //     display: block
-  //     margin-right: 2rem
-  //     white-space: nowrap
-
 .main
   flex-grow: 1
   padding: 2rem 1.25rem
@@ -159,5 +115,12 @@ export default {
 
   +breakpoint('small')
     padding: 3rem 2.5rem
+
+  .tools
+    +chain()
+    justify-content: space-between
+
+    +breakpoint('small')
+      font-size: 1.5rem
 
 </style>
