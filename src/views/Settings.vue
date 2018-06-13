@@ -79,41 +79,43 @@ export default {
   <Navigation/>
 
   <main class="main -settings" v-if="activeProject">
-
     <h1 class="heading -main">Project settings</h1>
 
-    <section class="content">
+    <section class="group">
+      <header class="heading -feature">
+        <h2 class="heading">File location</h2>
+        <p class="tagline">You can always find latest published JSON file from this URL address</p>
+      </header>
 
-      <section class="group">
-        <header class="heading -feature">
-          <h1 class="heading">File location</h1>
-          <p class="tagline">You can always find latest published JSON file from this URL address</p>
-        </header>
-        <div class="file-location">
-          <a class="link" :href="jsonUrl" :target="jsonTarget" v-text="jsonUrl"></a>
-        </div>
-      </section>
+      <a class="file-link" :href="jsonUrl" :target="jsonTarget" v-text="jsonUrl"></a>
+    </section>
 
-      <Permissions class="group"/>
+    <section class="group">
+      <h2 class="heading -feature">User permissions</h2>
+      <Permissions/>
+    </section>
+
+    <section class="group">
+      <header class="heading -feature">
+        <h1 class="heading">Webhook</h1>
+        <p class="tagline">We will send a custom POST/GET request to the URL when publishing is done.</p>
+      </header>
 
       <Webhook class="group"/>
+    </section>
 
-      <section class="group">
+    <section class="group">
+      <header class="heading -feature">
+        <h2 class="heading">Delete project</h2>
+        <p class="tagline">Your project will be deleted permanently and you can’t undo this.</p>
+      </header>
 
-        <header class="heading -feature">
-          <h1 class="heading">Delete project</h1>
-          <p class="tagline danger">Your project will be deleted permanently and you can’t undo this.</p>
-        </header>
-
-        <button class="button -danger" @click="deleteProject()">
-          Delete Project Permamently
-        </button>
-      </section>
-
+      <button class="button -danger" @click="deleteProject()">
+        Delete Project Permamently
+      </button>
     </section>
 
     <License/>
-
   </main>
 </section>
 </template>
@@ -124,57 +126,16 @@ export default {
 
 .main.-settings
   padding-top: 2rem
-  +gap(5rem)
-
-.content
-  max-width: $breakpoint--medium
+  +gap(6rem)
 
 .group
   +gap(.5rem)
+  max-width: $breakpoint--medium
 
-  & + .group
-    margin-top: 6rem
-
-.roles
-  +gap(.5rem)
-
-  .role
-    +chain(.25rem)
-    align-items: center
-
-    .email
-      flex-shrink: 1
-      min-width: 4rem
-      overflow-x: hidden
-      text-overflow: ellipsis
-
-    .button.-pill
-      font-size: .8rem
-
-      &.-delete
-        width: 2.5rem
-        flex-shrink: 0
-
-    &.-me
-      padding-right: 2.75rem
-
-  .spacer
-    height: .8rem
-    flex-grow: 1
-    background-image: linear-gradient(to right, $color-gray 10%, transparent 0%)
-    background-position: bottom
-    background-size: 10px 1px
-    background-repeat: repeat-x
-
-.danger
-  color: $color-danger
-
-.file-location
-  +chain(1.5rem)
-
-  .link
-    font-weight: 700
-    overflow: hidden
-    text-overflow: ellipsis
+.file-link
+  display: block
+  font-weight: 700
+  overflow: hidden
+  text-overflow: ellipsis
 
 </style>

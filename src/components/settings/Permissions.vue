@@ -105,9 +105,6 @@ export default {
 
 <template>
 <section class="permissions">
-  <h1 class="heading -feature">
-    User permissions
-  </h1>
 
   <div class="card">
 

@@ -82,13 +82,10 @@ export default {
   +chain()
   +gap(2rem)
   +invert()
+  +container($breakpoint--extra-large, 2rem)
   width: 100%
   background: linear-gradient(to bottom, $color-brand, mix($color-brand, $color-black, 85%))
-  padding: 2rem 1.25rem
   justify-content: space-between
-
-  +breakpoint('small')
-    padding: 1.5rem 2.5rem
 
   .logo
     +chain(.5rem)
@@ -110,11 +107,12 @@ export default {
 
 .main
   flex-grow: 1
-  padding: 2rem 1.25rem
+  // padding: 2rem 1.25rem
   +gap(2rem)
+  +container($breakpoint--extra-large)
 
   +breakpoint('small')
-    padding: 3rem 2.5rem
+    // padding: 3rem 2.5rem
 
   .tools
     +chain()
