@@ -1,50 +1,55 @@
 {
   "name": "editlayer-cms",
-  "version": "0.4.0",
+  "description": "Editlayer is headless CMS that saves content as JSON",
+  "version": "0.4.1",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
+    "build:functions": "./node_modules/.bin/babel functions/src --out-dir functions/dist",
     "build:hosting": "vue-cli-service build",
-    "build:functions": "cd functions && npm run build && cd ..",
-    "lint": "vue-cli-service lint",
-    "test:unit": "vue-cli-service test:unit",
-    "test:e2e": "vue-cli-service test:e2e",
+    "lint": "vue-cli-service lint && eslint ./functions/src",
     "deploy:only-functions": "npm run build:functions && firebase use development && firebase deploy --only functions",
     "deploy:development": "npm run build:functions && firebase use development && firebase deploy --only functions,firestore,storage",
     "deploy:production": "npm run lint && npm run build:hosting && npm run build:functions && firebase use production && firebase deploy && firebase use development"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-build-balloon": "^10.0.1",
+    "@ckeditor/ckeditor5-build-classic": "^10.0.1",
     "animejs": "^2.2.0",
     "autosize": "^4.0.2",
     "axios": "^0.18.0",
+    "caret-pos": "^1.0.1",
+    "ckeditor5-simple-upload": "^1.0.3",
+    "codemirror": "^5.38.0",
     "firebase": "^5.0.4",
     "image-compressor.js": "^1.1.3",
+    "js-base64": "^2.4.5",
+    "lodash": "^4.17.10",
     "moment": "^2.22.2",
+    "shortid": "^2.2.8",
     "slugg": "^1.2.1",
     "title-case": "^2.1.1",
     "typeface-open-sans": "0.0.54",
-    "uid-generator": "^1.0.0",
     "validator": "^10.3.0",
     "vue": "^2.5.16",
     "vue-awesome": "^3.0.2",
     "vue-codemirror": "^4.0.5",
+    "vue-quill-editor": "^3.0.6",
     "vue-router": "^3.0.1",
+    "vue2-editor": "^2.5.0",
     "vuex": "^3.0.1",
     "vuex-router-sync": "^5.0.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.0-beta.15",
-    "@vue/cli-plugin-e2e-cypress": "^3.0.0-beta.15",
     "@vue/cli-plugin-eslint": "^3.0.0-beta.15",
-    "@vue/cli-plugin-unit-jest": "^3.0.0-beta.15",
     "@vue/cli-service": "^3.0.0-beta.15",
     "@vue/eslint-config-standard": "^3.0.0-beta.15",
-    "@vue/test-utils": "^1.0.0-beta.16",
+    "babel-cli": "^6.26.0",
     "babel-core": "7.0.0-bridge.0",
-    "babel-jest": "^22.4.3",
+    "babel-preset-env": "^1.7.0",
     "node-sass": "^4.9.0",
-    "sass-loader": "^7.0.1",
+    "sass-loader": "^7.0.3",
     "vue-template-compiler": "^2.5.16"
   },
   "babel": {
@@ -84,27 +89,5 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ],
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "jsx",
-      "json",
-      "vue"
-    ],
-    "transform": {
-      "^.+\\.vue$": "vue-jest",
-      ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "jest-transform-stub",
-      "^.+\\.jsx?$": "babel-jest"
-    },
-    "moduleNameMapper": {
-      "^@/(.*)$": "<rootDir>/src/$1"
-    },
-    "snapshotSerializers": [
-      "jest-serializer-vue"
-    ],
-    "testMatch": [
-      "<rootDir>/(tests/unit/**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx))"
-    ]
-  }
+  ]
 }

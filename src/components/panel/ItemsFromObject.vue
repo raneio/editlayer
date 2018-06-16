@@ -26,7 +26,7 @@ export default {
       let parentPath = _.chain(path).split('.').dropRight().join('.').value()
       let activeItem = _.get(this.structure, path)
 
-      if (_.get(activeItem, 'TYPE') === 'object') {
+      if (_.get(activeItem, '_type') === 'object') {
         return activeItem
       }
       else if (!path || !parentPath) {
@@ -63,12 +63,12 @@ export default {
       if (this.$store.getters.isMobile) return false
 
       let path = _.replace(this.$route.params.path, />/g, '.')
-      if (path !== '' && path !== this.activeStructure.PATH) return false
+      if (path !== '' && path !== this.activeStructure._path) return false
 
-      let firstItem = _.find(this.activeStructure, { TYPE: 'value' })
+      let firstItem = _.find(this.activeStructure, { _type: 'value' })
 
-      if (firstItem && this.activeStructure.TYPE !== 'value') {
-        let firstItemPath = _.replace(firstItem.PATH, /\./g, '>')
+      if (firstItem && this.activeStructure._type !== 'value') {
+        let firstItemPath = _.replace(firstItem._path, /\./g, '>')
         this.$router.replace({name: 'Content', params: {projectId: this.$route.params.projectId, path: firstItemPath}})
       }
     },

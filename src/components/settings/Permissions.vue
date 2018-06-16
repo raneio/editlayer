@@ -1,6 +1,7 @@
 <script>
 import validator from 'validator'
-import firebase from '@/firebase'
+import shortid from 'shortid'
+import firebase from '@/utils/firebase'
 
 export default {
   name: 'Permissions',
@@ -37,7 +38,7 @@ export default {
         return false
       }
 
-      let notificationId = Math.random().toString(36).slice(-8)
+      let notificationId = shortid.generate()
 
       this.$store.commit('setNotification', {
         id: notificationId,

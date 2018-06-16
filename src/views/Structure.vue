@@ -1,4 +1,5 @@
 <script>
+import 'codemirror/mode/javascript/javascript'
 import Navigation from '@/components/navigate/Navigation'
 import SidePanel from '@/components/panel/Panel'
 import Breadcrumb from '@/components/navigate/Breadcrumb'

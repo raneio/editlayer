@@ -36,9 +36,9 @@ export default {
         let path = _.join(breadcrumbItems, '.')
         let item = _.get(this.structure, path)
 
-        if (item && !_.has(item, 'ORDER')) {
+        if (item && !_.has(item, '_order')) {
           breadcrumb.unshift({
-            name: titleCase(item.NAME),
+            name: titleCase(item.TITLE),
             path: path,
             projectId: this.$route.params.projectId,
           })

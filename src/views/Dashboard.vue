@@ -3,7 +3,7 @@ import Navigation from '@/components/navigate/Navigation'
 import Projects from '@/components/dashboard/Projects'
 import NewProjectButton from '@/components/dashboard/NewProjectButton'
 import License from '@/components/utils/License'
-import firebase from '@/firebase'
+import firebase from '@/utils/firebase'
 
 export default {
   name: 'Dashboard',

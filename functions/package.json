@@ -1,15 +1,6 @@
 {
-  "name": "EditlayerFunctions",
-  "description": "Cloud Functions for Editlayer",
-  "scripts": {
-    "lint": "eslint ./src",
-    "serve": "firebase serve --only functions",
-    "shell": "firebase functions:shell",
-    "start": "npm run shell",
-    "deploy": "firebase deploy --only functions",
-    "logs": "firebase functions:log",
-    "build": "./node_modules/.bin/babel src --out-dir dist"
-  },
+  "name": "editlayer-functions",
+  "description": "Firebase cloud functions for Editlayer",
   "main": "dist/index.js",
   "dependencies": {
     "axios": "^0.18.0",
@@ -18,19 +9,9 @@
     "lodash": "^4.17.10",
     "node-sha1": "^1.0.1"
   },
-  "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "eslint": "^4.12.0",
-    "eslint-plugin-promise": "^3.6.0"
-  },
   "babel": {
     "presets": [
-      ["env", {
-        "targets": {
-          "node": "6.14.0"
-        }
-      }]
+      ["env", {"targets": {"node": "6.14.0"}}]
     ]
   },
   "private": true

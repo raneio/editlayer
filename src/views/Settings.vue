@@ -1,6 +1,6 @@
 <script>
 // import validator from 'validator'
-import firebase from '@/firebase'
+import firebase from '@/utils/firebase'
 import Navigation from '@/components/navigate/Navigation'
 import Webhook from '@/components/settings/Webhook'
 import Permissions from '@/components/settings/Permissions'
@@ -84,7 +84,7 @@ export default {
     <section class="group">
       <header class="heading -feature">
         <h2 class="heading">File location</h2>
-        <p class="tagline">You can always find latest published JSON file from this URL address</p>
+        <p class="tagline">You can find latest published JSON file from following URL address</p>
       </header>
 
       <a class="file-link" :href="jsonUrl" :target="jsonTarget" v-text="jsonUrl"></a>
@@ -98,7 +98,7 @@ export default {
     <section class="group">
       <header class="heading -feature">
         <h1 class="heading">Webhook</h1>
-        <p class="tagline">We will send a custom POST/GET request to the URL when publishing is done.</p>
+        <p class="tagline">We will send a custom POST/GET request when publishing is done.</p>
       </header>
 
       <Webhook class="group"/>

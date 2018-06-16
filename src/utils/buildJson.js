@@ -2,17 +2,13 @@ import _ from 'lodash'
 
 const basicToJson = (structure, result = {}) => {
   _.each(structure, (value, key) => {
-    if (_.has(value, 'CONTENT') && _.has(value, 'PATH')) {
-      _.set(result, value.PATH, value.CONTENT)
+    if (_.has(value, '_content') && _.has(value, '_path')) {
+      _.set(result, value._path, value._content)
     }
 
-    if (_.has(value, 'ORDER') && _.has(value, 'PATH')) {
-      _.set(result, `${value.PATH}.ORDER`, value.ORDER)
+    if (_.has(value, '_order') && _.has(value, '_path')) {
+      _.set(result, `${value._path}._order`, value._order)
     }
-
-    // if (_.has(value, 'DELETED') && _.has(value, 'PATH')) {
-    //   _.set(result, `${value.PATH}.DELETED`, value.DELETED)
-    // }
 
     if (_.isPlainObject(value)) {
       basicToJson(value, result)
@@ -25,10 +21,10 @@ const basicToJson = (structure, result = {}) => {
 const arrayToJson = (structure, result = {}, path = false) => {
   if (_.isPlainObject(structure) && _.startsWith(_.findKey(structure), '-')) {
     let array = []
-    structure = _.sortBy(structure, 'ORDER')
+    structure = _.sortBy(structure, '_order')
 
     _.each(structure, (value, key) => {
-      value = _.omit(value, ['ORDER'])
+      value = _.omit(value, ['_order'])
       array.push(value)
     })
 
@@ -46,12 +42,8 @@ const arrayToJson = (structure, result = {}, path = false) => {
 }
 
 export default (content) => {
-  // console.log('buildJson')
-
   content = basicToJson(content)
   content = _.merge(content, arrayToJson(content))
-
-  // console.log('content', content)
 
   return content
 }

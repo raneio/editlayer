@@ -1,15 +1,14 @@
 <script>
 import _ from 'lodash'
-// import CodeMirror from 'codemirror'
 import { codemirror } from 'vue-codemirror'
-// import 'codemirror/mode/javascript/javascript.js'
-// import 'codemirror/lib/codemirror.css'
-// import 'codemirror/theme/material.css'
-// import 'codemirror/theme/icecoder.css'
-// import 'codemirror/theme/dracula.css'
-// import 'codemirror/theme/base16-dark.css'
-// import 'codemirror/theme/railscasts.css'
-import firebase from '@/firebase'
+import firebase from '@/utils/firebase'
+import editorConfig from '@/editors/editorConfig'
+
+let editors = []
+
+_.each(editorConfig, configItem => {
+  editors.push(configItem.schemaName)
+})
 
 export default {
   name: 'StructureEditor',
@@ -22,6 +21,7 @@ export default {
     return {
       structure: '',
       syntaxError: false,
+      editors: editors,
     }
   },
 
@@ -107,7 +107,8 @@ export default {
   />
 
   <div class="alert -info">
-    <strong>Supported editors:</strong> <i>{{$store.state.editors.join(', ')}}</i>
+    <strong>Supported editors:</strong>
+    <i>{{editors.join(', ')}}</i>
   </div>
 
 </section>
@@ -138,5 +139,8 @@ export default {
 
   &.-syntax-error .vue-codemirror
     box-shadow: 0 5px 12px 0 mix(transparent, $color-black, 90%), 0 2px 5px 0 mix(transparent, $color-black, 93%), inset 0 0 0 .2rem $color-danger, 0 0 0 .2rem $color-danger
+
+.alert
+  +chain(.25rem)
 
 </style>

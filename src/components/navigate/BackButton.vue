@@ -39,7 +39,7 @@ export default {
         let path = _.join(breadcrumbItems, '.')
         let item = _.get(this.structure, path)
 
-        if (item && !_.has(item, 'ORDER')) {
+        if (item && !_.has(item, '_order')) {
           breadcrumb.unshift({
             path: path,
             projectId: this.$route.params.projectId,
@@ -125,7 +125,7 @@ export default {
 
 .button
   .fa-icon
-    height: 1rem
+    height: 1.15rem
     width: auto
 
 </style>

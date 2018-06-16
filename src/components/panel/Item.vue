@@ -1,6 +1,14 @@
 <script>
 import _ from 'lodash'
-import Color from 'color'
+import editorConfig from '@/editors/editorConfig'
+
+let components = {}
+let editors = []
+
+_.each(editorConfig, configItem => {
+  components[configItem.preview.name] = configItem.preview
+  editors.push(configItem.schemaName)
+})
 
 export default {
   name: 'Item',
@@ -10,92 +18,26 @@ export default {
     selectItem: Function,
   },
 
+  components,
+
   computed: {
 
     isActive () {
       if (this.$route.name !== 'Content') return false
-      return !!(this.item.PATH === _.replace(this.$route.params.path, />/g, '.'))
+      return !!(this.item._path === _.replace(this.$route.params.path, />/g, '.'))
     },
 
     isParent () {
-      return this.item.TYPE === 'object' || this.item.TYPE === 'array'
+      return this.item._type === 'object' || this.item._type === 'array'
     },
 
     isDraft () {
-      return this.item.STATUS === 'draft'
+      return this.item._status === 'draft'
     },
 
-    preview () {
-      if (this.item.EDITOR === 'image') {
-        let imageUrl = this.item.CONTENT
-
-        if (_.startsWith(imageUrl, 'https://cdn.editlayer.com/')) {
-          imageUrl = _.replace(imageUrl, 'cdn', 'img') + '?w=360&h=110&fit=crop&crop=faces'
-        }
-
-        return {
-          type: 'image',
-          content: imageUrl,
-        }
-      }
-      else if (this.item.EDITOR === 'code') {
-        let content = this.item.CONTENT
-
-        if (content && content.length > 60) {
-          content = content.substring(0, 57).trim() + '…'
-        }
-
-        return {
-          type: 'code',
-          content: content,
-        }
-      }
-      else if (this.item.EDITOR === 'color') {
-        let content = this.item.CONTENT
-        let color = Color(this.item.CONTENT)
-
-        return {
-          type: 'color',
-          content: content,
-          color: color,
-          isDark: color.isDark(),
-        }
-      }
-      else if (this.item.EDITOR === 'switch') {
-        let content = null
-
-        if (this.item.CONTENT === true) {
-          content = 'ON'
-        }
-        else if (this.item.CONTENT === false) {
-          content = 'OFF'
-        }
-
-        return {
-          type: 'switch',
-          content: content,
-        }
-      }
-      else if (this.item.CONTENT) {
-        let content = this.item.CONTENT
-
-        let div = document.createElement('div')
-        div.innerHTML = content
-
-        content = div.textContent || div.innerText || ''
-
-        if (content && content.length > 70) {
-          content = content.substring(0, 67).trim() + '…'
-        }
-
-        return {
-          type: 'text',
-          content: content,
-        }
-      }
-      else {
-        return {}
-      }
+    activePreviewComponentName () {
+      let configItem = _.find(editorConfig, {'schemaName': this.item.EDITOR})
+      return configItem ? configItem.preview.name : false
     },
 
   },
@@ -116,7 +58,7 @@ export default {
 
   <header class="header">
 
-    <h2 class="heading" v-text="item.NAME"/>
+    <h2 class="heading" v-text="item.TITLE"/>
 
     <div v-if="isDraft" class="draft">draft</div>
 
@@ -125,7 +67,11 @@ export default {
 
   </header>
 
-  <div
+  <component :is="activePreviewComponentName" :item="item"/>
+
+  <!-- <Preview :item="item"/> -->
+
+  <!-- <div
     class="content -text"
     v-if="preview.type === 'text'"
     v-text="preview.content"
@@ -157,7 +103,7 @@ export default {
     v-if="preview.type === 'image'"
   >
     <img class="image" :src="preview.content" alt="" v-if="preview.content !== null">
-  </div>
+  </div> -->
 
 </section>
 </template>
@@ -238,8 +184,6 @@ export default {
       padding: 0
 
       .image
-        border-bottom-left-radius: $button-border-radius
-        border-bottom-right-radius: $button-border-radius
         height: 6em
         width: 100%
         object-fit: cover

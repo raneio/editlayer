@@ -1,5 +1,5 @@
 <script>
-import Auth from '@/Auth'
+import Auth from '@/components/auth/Auth'
 import Notifications from '@/components/notification/Notifications'
 import LoaderOverlay from '@/components/utils/LoaderOverlay'
 
@@ -27,7 +27,6 @@ export default {
   },
 
   created () {
-    // console.log('process', process.env)
     this.$store.dispatch('authState')
     this.$store.dispatch('resizeListener')
   },
@@ -36,7 +35,6 @@ export default {
 
 <template>
 <div id="app">
-
   <transition name="fade">
     <LoaderOverlay v-if="showLoaderOverlay"/>
   </transition>

@@ -1,7 +1,7 @@
 <script>
 import _ from 'lodash'
 import { codemirror } from 'vue-codemirror'
-import firebase from '@/firebase'
+import firebase from '@/utils/firebase'
 import Breadcrumb from '@/components/navigate/Breadcrumb'
 import Navigation from '@/components/navigate/Navigation'
 import webhook from '@/utils/webhook'
@@ -140,9 +140,9 @@ export default {
     class="alert -info"
     v-if="enabled !== false"
   >
-    <li>You can use <a href="https://github.com/axios/axios#axios-api">Axios HTTP client API</a>.</li>
-    <li>Variable <i><span>{{</span>BASE64_CONTENT<span>}}</span></i> is published content encoded with <a href="https://github.com/dankogai/js-base64">Base64</a>.</li>
-    <li>Variable <i><span>{{</span>VERSION_ID<span>}}</span></i> is version of published JSON.</li>
+    <li>You can use API of <a href="https://github.com/axios/axios#axios-api">Axios HTTP client</a>.</li>
+    <li>Variable <strong><span>{{</span>BASE64_CONTENT<span>}}</span></strong> is published content encoded with <a href="https://github.com/dankogai/js-base64">Base64</a>.</li>
+    <li>Variable <strong><span>{{</span>VERSION_ID<span>}}</span></strong> is version of published JSON.</li>
   </ul>
 
   <codemirror

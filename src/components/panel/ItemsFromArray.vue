@@ -1,6 +1,7 @@
 <script>
 import _ from 'lodash'
-import firebase from '@/firebase'
+import shortid from 'shortid'
+import firebase from '@/utils/firebase'
 import Item from '@/components/panel/Item'
 import BackButton from '@/components/navigate/BackButton'
 
@@ -36,7 +37,7 @@ export default {
       let path = _.replace(this.$route.params.path, />/g, '.')
       let parentPath = _.chain(path).split('.').dropRight().dropRight().join('.').value()
       let activeItem = _.get(this.structure, path)
-      if (_.get(activeItem, 'TYPE') === 'array') {
+      if (_.get(activeItem, '_type') === 'array') {
         return activeItem
       }
       else {
@@ -63,10 +64,10 @@ export default {
         }
       })
 
-      source = _.sortBy(source, ['ORDER'])
+      source = _.sortBy(source, ['_order'])
 
       _.each(source, (arrayItemValue, arrayItemIdx) => {
-        if (_.isPlainObject(arrayItemValue) && arrayItemIdx !== 'ARRAY') {
+        if (_.isPlainObject(arrayItemValue) && arrayItemIdx !== '_array') {
           _.each(arrayItemValue, (itemValue, itemKey) => {
             _.set(arrayItems, `${arrayItemIdx}.${itemKey}`, itemValue)
           })
@@ -95,11 +96,11 @@ export default {
     newItem () {
       let itemPath = _.replace(this.$route.params.path, />/g, '.')
 
-      if (itemPath !== this.activeStructure.PATH && _.includes(itemPath, '.-')) {
+      if (itemPath !== this.activeStructure._path && _.includes(itemPath, '.-')) {
         itemPath = _.chain(itemPath).split('.-').slice(0, -1).join('.-').value()
       }
 
-      let randomKey = `-${Math.random().toString(36).slice(-4)}`
+      let randomKey = `-${shortid.generate()}`
       let path = `draft.${itemPath}`
       let newPath = `${path}.${randomKey}`
       let order = 0
@@ -110,14 +111,14 @@ export default {
       }
 
       _.each(this.arrayItems, (item, key) => {
-        if (order >= item.ORDER) {
-          order = item.ORDER - 1
+        if (order >= item._order) {
+          order = item._order - 1
         }
       })
 
       let updateData = {}
       updateData[newPath] = {
-        ORDER: order,
+        _order: order,
       }
 
       firebase.firestore
@@ -135,14 +136,14 @@ export default {
     findFirstItem () {
       let path = _.replace(this.$route.params.path, />/g, '.')
 
-      if (path !== this.activeStructure.PATH) return false
+      if (path !== this.activeStructure._path) return false
       if (this.$route.name !== 'Content') return false
       if (this.$store.getters.isMobile) return false
 
-      let firstItem = _.find(this.arrayItems[0], { TYPE: 'value' })
+      let firstItem = _.find(this.arrayItems[0], { _type: 'value' })
 
-      if (firstItem && this.activeStructure.TYPE === 'array') {
-        let firstItemPath = _.replace(firstItem.PATH, /\./g, '>')
+      if (firstItem && this.activeStructure._type === 'array') {
+        let firstItemPath = _.replace(firstItem._path, /\./g, '>')
         this.$router.replace({name: 'Content', params: {projectId: this.projectId, path: firstItemPath}})
       }
     },
@@ -156,7 +157,7 @@ export default {
 
       this.movingArrayItem = {
         idx: arrayIdx,
-        path: arrayItem.PATH,
+        path: arrayItem._path,
       }
     },
 
@@ -165,21 +166,21 @@ export default {
       let newOrder = null
 
       if (arrayItem === 'first') {
-        newOrder = this.arrayItems[0].ORDER - 1
+        newOrder = this.arrayItems[0]._order - 1
       }
       else if (arrayItem === 'last') {
-        newOrder = this.arrayItems[this.arrayItems.length - 1].ORDER + 1
+        newOrder = this.arrayItems[this.arrayItems.length - 1]._order + 1
       }
       else if (arrayIdx === 0) {
-        newOrder = arrayItem.ORDER - 1
+        newOrder = arrayItem._order - 1
       }
       else {
-        newOrder = (this.arrayItems[arrayIdx - 1].ORDER + arrayItem.ORDER) / 2
+        newOrder = (this.arrayItems[arrayIdx - 1]._order + arrayItem._order) / 2
       }
 
-      this.$store.dispatch('updateContent', {
+      this.$store.dispatch('saveContent', {
         projectId: this.projectId,
-        path: `${this.movingArrayItem.path}.ORDER`,
+        path: `${this.movingArrayItem.path}._order`,
         content: newOrder,
       })
 
@@ -190,7 +191,7 @@ export default {
     },
 
     moveCancel (arrayItem) {
-      if (arrayItem.PATH !== this.movingArrayItem.path) return false
+      if (arrayItem._path !== this.movingArrayItem.path) return false
 
       this.movingArrayItem = {
         idx: null,
@@ -204,13 +205,13 @@ export default {
 
     confirmDeleteYes (arrayItem, arrayIdx) {
       let updateData = {}
-      updateData[`draft.${arrayItem.PATH}`] = firebase.firestoreDelete
+      updateData[`draft.${arrayItem._path}`] = firebase.firestoreDelete
 
       let redirectIdx = (arrayIdx > 0) ? arrayIdx - 1 : 1
-      let redirectPath = _.get(this.arrayItems, `${redirectIdx}.PATH`)
+      let redirectPath = _.get(this.arrayItems, `${redirectIdx}._path`)
       let parentPath = _.chain(this.$route.params.path).split('>').slice(0, -1).join('.').value()
 
-      if (redirectPath && arrayItem.PATH === parentPath) {
+      if (redirectPath && arrayItem._path === parentPath) {
         this.$router.replace({name: this.$route.name, params: {projectId: this.projectId, path: redirectPath}})
       }
 
@@ -262,7 +263,7 @@ export default {
 
     <button
       class="move-here button -primary"
-      v-if="movingArrayItem.path !== null && movingArrayItem.path !== arrayItem.PATH && movingArrayItem.idx !== arrayIdx - 1"
+      v-if="movingArrayItem.path !== null && movingArrayItem.path !== arrayItem._path && movingArrayItem.idx !== arrayIdx - 1"
       @click="moveHere(arrayItem, arrayIdx)"
     >
       Move Here
@@ -274,14 +275,14 @@ export default {
 
       <div class="confirm" v-if="confirmDeleteIdx === arrayIdx">
         <div>Are you sure?</div>
-        <button @click="confirmDeleteYes(arrayItem, arrayIdx)" class="button -link -danger">Yes</button>
         <button @click="confirmDeleteNo()" class="button -link">No</button>
+        <button @click="confirmDeleteYes(arrayItem, arrayIdx)" class="button -link -danger">Yes</button>
       </div>
     </div>
 
     <div
       class="items"
-      :class="{ '-moving': movingArrayItem.path === arrayItem.PATH}"
+      :class="{ '-moving': movingArrayItem.path === arrayItem._path}"
       @click="moveCancel(arrayItem)"
     >
 
@@ -290,7 +291,7 @@ export default {
         v-if="typeof item === 'object'"
         :item="item"
         :selectItem="selectItem"
-        :key="item.PATH"
+        :key="item._path"
       />
 
     </div>
@@ -322,10 +323,10 @@ export default {
 
   .tools
     +chain(.5rem)
-    justify-content: flex-end
+    // justify-content: flex-end
     transition: opacity .2s
-    font-size: .8rem
-    margin-bottom: .5rem
+    // font-size: .9rem
+    margin-bottom: .75rem
 
     .confirm
       +chain(1rem)
@@ -363,6 +364,10 @@ export default {
         border-top-left-radius: 0
         border-bottom-left-radius: 0
 
+      & > :last-child
+        border-bottom-left-radius: 0
+        border-bottom-right-radius: 0
+
       &:first-of-type
         border-top-left-radius: $button-border-radius
         border-top-right-radius: $button-border-radius
@@ -376,6 +381,10 @@ export default {
 
         &::after
           border-bottom-left-radius: $button-border-radius
+
+        & > :last-child
+          border-bottom-left-radius: $button-border-radius
+          border-bottom-right-radius: $button-border-radius
 
   &.-moving
 
@@ -416,14 +425,5 @@ export default {
     font-size: .9rem
     font-style: italic
     text-align: center
-
-.items-from.-array /deep/
-
-  .item .content.-image
-    border-radius: 0
-
-  .item:last-of-type .content.-image
-    border-bottom-left-radius: $button-border-radius
-    border-bottom-right-radius: $button-border-radius
 
 </style>

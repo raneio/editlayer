@@ -4,8 +4,8 @@ import Navigation from '@/components/navigate/Navigation'
 import SidePanel from '@/components/panel/Panel'
 import Breadcrumb from '@/components/navigate/Breadcrumb'
 import BackButton from '@/components/navigate/BackButton'
-import Editors from '@/components/editors/Editors'
 import License from '@/components/utils/License'
+import Editor from '@/components/content/Editor'
 
 export default {
   name: 'Content',
@@ -14,9 +14,9 @@ export default {
     Navigation,
     SidePanel,
     Breadcrumb,
-    Editors,
     BackButton,
     License,
+    Editor,
   },
 
   computed: {
@@ -34,7 +34,7 @@ export default {
     },
 
     mobileView () {
-      return this.activeStructure.TYPE === 'value' ? 'main' : 'side'
+      return this.activeStructure._type === 'value' ? 'main' : 'side'
     },
 
   },
@@ -48,8 +48,8 @@ export default {
         let path = _.join(pathItems, '.')
         let item = _.get(this.structure, path)
 
-        if (item && !_.has(item, 'ORDER')) {
-          this.$router.push({name: 'Content', params: {projectId: this.$store.getters.activeProject.projectId, path: item.PATH}})
+        if (item && !_.has(item, '_order')) {
+          this.$router.push({name: 'Content', params: {projectId: this.$store.getters.activeProject.projectId, path: item._path}})
           return false
         }
 
@@ -76,11 +76,15 @@ export default {
     </header>
 
     <section class="content">
-      <Editors/>
+      <h1 class="heading -main" v-text="activeStructure.TITLE"/>
+
+      <Editor/>
+
       <button class="button -info -close" @click="closeEditor()" v-if="isMobile">Close</button>
     </section>
 
     <License/>
+
   </main>
 </section>
 </template>
@@ -93,6 +97,13 @@ export default {
   background-color: $background-color
   padding-top: 0
   padding-bottom: 0
+  +gap(2rem)
+
+  > *
+    max-width: $breakpoint--large
+
+.content
+  +gap()
 
 .button.-close
   display: block

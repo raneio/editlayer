@@ -40,10 +40,10 @@ export default {
       if (!this.projectId) {
         return 'project'
       }
-      else if (this.activeStructure && this.activeStructure.TYPE === 'array') {
+      else if (this.activeStructure && this.activeStructure._type === 'array') {
         return 'array'
       }
-      else if (grandparent && this.activeStructure && grandparent.TYPE === 'array' && this.activeStructure.TYPE === 'value') {
+      else if (grandparent && this.activeStructure && grandparent._type === 'array' && this.activeStructure._type === 'value') {
         return 'array'
       }
       else {
@@ -65,10 +65,10 @@ export default {
 
     selectItem (item) {
       let projectId = (item.FILE_ID) ? item.FILE_ID : this.projectId
-      let routeName = (item.TYPE === 'value') ? 'Content' : this.$route.name
-      let path = _.replace(item.PATH, /\./g, '>')
+      let routeName = (item._type === 'value') ? 'Content' : this.$route.name
+      let path = _.replace(item._path, /\./g, '>')
 
-      if (item.TYPE === 'value') {
+      if (item._type === 'value') {
         this.$router.push({name: routeName, params: {projectId: projectId, path: path}})
         return false
       }
@@ -157,7 +157,7 @@ export default {
       align-items: center
       transition: opacity .2s
       margin-top: -1rem
-      font-size: .9rem
+      // font-size: .9rem
       border-bottom: 1px solid $hr-color
       height: 3rem
 
