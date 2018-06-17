@@ -1,9 +1,9 @@
 <script>
-// import validator from 'validator'
-import firebase from '@/utils/firebase'
 import Navigation from '@/components/navigate/Navigation'
+import FileLocation from '@/components/settings/FileLocation'
 import Webhook from '@/components/settings/Webhook'
 import Permissions from '@/components/settings/Permissions'
+import DeleteProject from '@/components/settings/DeleteProject'
 import License from '@/components/utils/License'
 
 export default {
@@ -11,8 +11,10 @@ export default {
 
   components: {
     Navigation,
+    FileLocation,
     Webhook,
     Permissions,
+    DeleteProject,
     License,
   },
 
@@ -22,52 +24,11 @@ export default {
       return this.$store.getters.activeProject
     },
 
-    jsonUrl () {
-      return this.$store.getters.jsonUrl
-    },
-
-    jsonTarget () {
-      if (!this.activeProject) return false
-      return this.activeProject.projectId
-    },
-
-  },
-
-  methods: {
-
-    deleteProject () {
-      let deleteConfirm = prompt(`Write "${this.activeProject.projectId}" if you really want to delete project permanently.`, '')
-
-      if (deleteConfirm !== null && deleteConfirm !== this.activeProject.projectId) {
-        console.error('Project Id is invalid', deleteConfirm)
-      }
-      else if (deleteConfirm !== null) {
-        firebase.firestore
-          .collection('projects')
-          .doc(this.activeProject.projectId)
-          .collection('jobs')
-          .add({
-            job: 'deleteProject',
-            deleteProjectId: this.activeProject.projectId,
-          })
-          .then(() => {
-            this.$store.commit('setNotification', {
-              status: 'info',
-              message: `Deleting project "${this.activeProject.projectId}", please wait...`,
-            })
-
-            this.$router.push({ name: 'Dashboard' })
-            console.log('Project Deleted')
-          })
-          .catch((error) => console.error('Project deleting failed', error))
-      }
-    },
-
   },
 
   created () {
     if (this.$store.getters.activeRole !== 'admin') {
-      this.$router.replace({name: 'Content', params: {projectId: this.$store.getters.activeProject.projectId}})
+      this.$router.replace({name: 'Content', params: {projectId: this.activeProject.projectId}})
     }
   },
 
@@ -79,43 +40,26 @@ export default {
   <Navigation/>
 
   <main class="main -settings" v-if="activeProject">
+    <div class="container">
     <h1 class="heading -main">Project settings</h1>
 
-    <section class="group">
-      <header class="heading -feature">
-        <h2 class="heading">File location</h2>
-        <p class="tagline">You can find latest published JSON file from following URL address</p>
-      </header>
+    <FileLocation class="group"/>
 
-      <a class="file-link" :href="jsonUrl" :target="jsonTarget" v-text="jsonUrl"></a>
-    </section>
+    <hr>
 
-    <section class="group">
-      <h2 class="heading -feature">User permissions</h2>
-      <Permissions/>
-    </section>
+    <Permissions class="group"/>
 
-    <section class="group">
-      <header class="heading -feature">
-        <h1 class="heading">Webhook</h1>
-        <p class="tagline">We will send a custom POST/GET request when publishing is done.</p>
-      </header>
+    <hr>
 
-      <Webhook class="group"/>
-    </section>
+    <Webhook class="group"/>
 
-    <section class="group">
-      <header class="heading -feature">
-        <h2 class="heading">Delete project</h2>
-        <p class="tagline">Your project will be deleted permanently and you can’t undo this.</p>
-      </header>
+    <hr>
 
-      <button class="button -danger" @click="deleteProject()">
-        Delete Project Permamently
-      </button>
-    </section>
+    <DeleteProject class="group"/>
 
     <License/>
+
+    </div>
   </main>
 </section>
 </template>
@@ -126,16 +70,14 @@ export default {
 
 .main.-settings
   padding-top: 2rem
-  +gap(6rem)
 
-.group
-  +gap(.5rem)
+.container
   max-width: $breakpoint--medium
+  +gap(3rem)
 
-.file-link
-  display: block
-  font-weight: 700
-  overflow: hidden
-  text-overflow: ellipsis
+.main.-settings /deep/
+
+  .group
+    +gap(.5rem)
 
 </style>

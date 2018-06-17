@@ -21,6 +21,20 @@ const simpleToAdvance = (schema) => {
       schema[key] = {
         EDITOR: value,
       }
+
+      // Shorten syntax with options "radio[one,two,three]"
+      if (_.includes(value, '[') && _.includes(value, ']')) {
+        schema[key].EDITOR = value.split('[')[0].trim()
+        schema[key].OPTIONS = []
+
+        let options = value.match(/\[(.*?)\]/)[1].split(',')
+
+        _.each(options, option => {
+          schema[key].OPTIONS.push({
+            VALUE: option.trim(),
+          })
+        })
+      }
     }
 
     if (_.isPlainObject(value)) {

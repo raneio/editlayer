@@ -105,7 +105,8 @@ export default {
 </script>
 
 <template>
-<section class="permissions">
+<section class="group -permission">
+  <h2 class="heading -feature">User permissions</h2>
 
   <div class="card">
 
@@ -172,9 +173,6 @@ export default {
 <style lang="sass" scoped>
 @import '../../sass/variables'
 @import '../../sass/mixins/all'
-
-.permissions
-  +gap(1rem)
 
 .card
   padding: 1rem 1rem

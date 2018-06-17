@@ -6,13 +6,16 @@ export default {
   extends: EditorBase,
   // this.content - Content (read-only)
   // this.config - Config data from the schema (read-only)
-  name: 'CodePreview',
+  name: 'OptionPreview',
 
   computed: {
 
     previewText () {
-      let content = _.toString(this.content)
-      return (content && content.length <= 70) ? content : content.substring(0, 67) + '…'
+      let selectedOption = _.find(this.config.OPTIONS, {VALUE: this.content})
+      if (!selectedOption) return '…'
+      let previewText = selectedOption.LABEL ? selectedOption.LABEL : selectedOption.VALUE
+      if (!previewText) return '…'
+      return (previewText.length <= 70) ? previewText : previewText.substring(0, 67) + '…'
     },
 
   },
@@ -21,20 +24,17 @@ export default {
 </script>
 
 <template>
-<div class="preview -text" v-text="previewText"></div>
+<div class="preview -option" v-text="previewText"></div>
 </template>
 
 <style lang="sass" scoped>
 @import '../../sass/variables'
 @import '../../sass/mixins/all'
 
-.preview.-text
-  +invert()
-  background-color: $color-gray--darker
+.preview.-option
   padding: .3rem 1rem
   font-size: .8rem
   overflow: hidden
   text-overflow: ellipsis
-  font-family: monospace
 
 </style>

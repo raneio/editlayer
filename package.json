@@ -33,6 +33,7 @@
     "validator": "^10.3.0",
     "vue": "^2.5.16",
     "vue-awesome": "^3.0.2",
+    "vue-clipboard2": "^0.2.0",
     "vue-codemirror": "^4.0.5",
     "vue-quill-editor": "^3.0.6",
     "vue-router": "^3.0.1",

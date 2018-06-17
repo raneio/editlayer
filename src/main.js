@@ -16,6 +16,10 @@ import '@/sass/index.sass'
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/theme/dracula.css'
 
+import VueClipboard from 'vue-clipboard2'
+
+Vue.use(VueClipboard)
+
 // Register editor components globally
 // Source: https://vuejs.org/v2/guide/components-registration.html
 // const requireComponent = require.context('@/editors', false, /[A-Z]\w+\.vue$/)

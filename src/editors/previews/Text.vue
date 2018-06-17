@@ -6,17 +6,17 @@ export default {
   extends: EditorBase,
   // this.content - Content (read-only)
   // this.config - Config data from the schema (read-only)
-
   name: 'TextPreview',
 
   computed: {
 
     previewText () {
-      let content = _.toString(this.content)
+      let previewText = _.toString(this.content)
       let div = document.createElement('div')
-      div.innerHTML = content
-      content = div.innerText || ''
-      return (content && content.length <= 70) ? content : content.substring(0, 67) + '…'
+      div.innerHTML = previewText
+      previewText = div.innerText || ''
+      if (!previewText) return '…'
+      return (previewText.length <= 70) ? previewText : previewText.substring(0, 67) + '…'
     },
 
   },

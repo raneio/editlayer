@@ -80,13 +80,11 @@ export default {
       let updateData = {}
       updateData['settings.webhook.enabled'] = !this.enabled
 
-      console.log('switchEnabled', updateData)
-
       firebase.firestore
         .collection('projects')
         .doc(this.projectId)
         .update(updateData)
-        .then(() => console.log('Webhook enabled saved', updateData))
+        // .then(() => console.log('Webhook enabled saved', updateData))
         .catch((error) => console.error('Webhook enabling failed', error))
     },
 
@@ -107,7 +105,11 @@ export default {
 </script>
 
 <template>
-<section class="webhook">
+<section class="group -webhook">
+  <header class="heading -feature">
+    <h1 class="heading">Webhook</h1>
+    <p class="tagline">We will send a custom POST/GET request when publishing is done.</p>
+  </header>
 
   <ul
     class="alert -info"
@@ -140,7 +142,7 @@ export default {
   </div>
 
   <div class="" v-if="enabled === false">
-    <button class="button" @click="switchEnabled()">Enable webhook</button>
+    <button class="button -link" @click="switchEnabled()">Enable webhook</button>
   </div>
 
 </section>
@@ -149,9 +151,6 @@ export default {
 <style lang="sass" scoped>
 @import '../../sass/variables'
 @import '../../sass/mixins/all'
-
-.webhook
-  +gap()
 
 .tools
   +chain(1rem)

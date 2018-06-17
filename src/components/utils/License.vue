@@ -11,7 +11,7 @@ export default {
   </div>
 
   <div class="licensed">
-    Licensed <a class="button -link">MIT</a>. Do you want to upgrade to <a href="https://editlayer.com/pro" class="button -link">Editlayer PRO</a> ?
+    Licensed <a class="button -link">???</a>. Do you want to upgrade to <a href="https://editlayer.com/pro" class="button -link">Editlayer PRO</a> ?
   </div>
 </section>
 </template>
