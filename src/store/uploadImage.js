@@ -79,7 +79,10 @@ export default {
         return false
       }
 
-      let uploadTask = firebase.storage.ref().child(`${payload.projectId}/${filename}`).put(uploadImage)
+      let uploadTask = firebase.storage
+        .ref()
+        .child(`${payload.projectId}/${filename}`)
+        .put(uploadImage)
 
       uploadTask.on('state_changed', (snapshot) => {
         commit('setNotification', {

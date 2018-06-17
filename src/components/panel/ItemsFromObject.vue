@@ -17,28 +17,28 @@ export default {
 
   computed: {
 
-    structure () {
-      return this.$store.getters.structure
+    schema () {
+      return this.$store.getters.schema
     },
 
-    activeStructure () {
+    activeSchema () {
       let path = _.replace(this.$route.params.path, />/g, '.')
       let parentPath = _.chain(path).split('.').dropRight().join('.').value()
-      let activeItem = _.get(this.structure, path)
+      let activeItem = _.get(this.schema, path)
 
       if (_.get(activeItem, '_type') === 'object') {
         return activeItem
       }
       else if (!path || !parentPath) {
-        return this.structure
+        return this.schema
       }
       else {
-        return _.get(this.structure, parentPath)
+        return _.get(this.schema, parentPath)
       }
     },
 
     items () {
-      return _.filter(this.activeStructure, (value) => {
+      return _.filter(this.activeSchema, (value) => {
         if (_.isPlainObject(value)) {
           return value
         }
@@ -49,7 +49,7 @@ export default {
 
   watch: {
 
-    activeStructure (value) {
+    activeSchema (value) {
       this.findFirstItem()
     },
 
@@ -58,16 +58,16 @@ export default {
   methods: {
 
     findFirstItem () {
-      if (!this.activeStructure) return false
+      if (!this.activeSchema) return false
       if (this.$route.name !== 'Content') return false
       if (this.$store.getters.isMobile) return false
 
       let path = _.replace(this.$route.params.path, />/g, '.')
-      if (path !== '' && path !== this.activeStructure._path) return false
+      if (path !== '' && path !== this.activeSchema._path) return false
 
-      let firstItem = _.find(this.activeStructure, { _type: 'value' })
+      let firstItem = _.find(this.activeSchema, { _type: 'value' })
 
-      if (firstItem && this.activeStructure._type !== 'value') {
+      if (firstItem && this.activeSchema._type !== 'value') {
         let firstItemPath = _.replace(firstItem._path, /\./g, '>')
         this.$router.replace({name: 'Content', params: {projectId: this.$route.params.projectId, path: firstItemPath}})
       }

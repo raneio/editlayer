@@ -78,7 +78,7 @@ export default {
 
               this.$store.dispatch('newProject', {
                 name: 'Simple Example',
-                structure: {
+                schema: {
                   title: 'text',
                   slogan: 'textarea',
                   description: 'richtext',
@@ -88,7 +88,7 @@ export default {
 
               this.$store.dispatch('newProject', {
                 name: 'Advanced Example',
-                structure: {
+                schema: {
                   simpleField: 'text',
                   anotherField: {
                     EDITOR: 'text',

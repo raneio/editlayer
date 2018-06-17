@@ -6,7 +6,7 @@ import _ from 'lodash'
 export default {
   extends: EditorBase,
   // this.content - Content saves automatically when changing  it
-  // this.config - Config data from the structure (read-only)
+  // this.config - Config data from the schema (read-only)
   name: 'CK5Editor',
 
   data () {

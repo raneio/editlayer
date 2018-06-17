@@ -95,7 +95,7 @@ export default {
             .doc(payload.projectId)
             .update({
               'published.draft': payload.draft,
-              'published.structure': payload.structure,
+              'published.schema': payload.schema,
               'published.publishedAt': firebase.firestoreTimestamp,
               'published.versionId': payload.versionId,
             })
@@ -105,7 +105,7 @@ export default {
 
           // Webhook here
           if (payload.webhookEnabled === true) {
-            webhook(payload.webhookConfig, payload.jsonUrl)
+            webhook(payload.webhookConfig, payload.jsonUrl, payload.email)
           }
 
           commit('updatePublishProcess', {

@@ -5,17 +5,17 @@ export default {
 
   data () {
     return {
-      content: this.$store.getters.activeStructure._content,
+      content: this.$store.getters.activeSchema._content,
     }
   },
 
   computed: {
 
     config () {
-      if (!_.has(this.$store, 'getters.activeStructure')) return {}
+      if (!_.has(this.$store, 'getters.activeSchema')) return {}
       let config = {}
 
-      _.each(this.$store.getters.activeStructure, (value, key) => {
+      _.each(this.$store.getters.activeSchema, (value, key) => {
         if (!_.startsWith(key, '_')) config[key] = value
       })
 
@@ -40,12 +40,12 @@ export default {
 
   watch: {
 
-    // '$store.getters.activeStructure._content' (value) {
+    // '$store.getters.activeSchema._content' (value) {
     //   this.content = value
     // },
 
-    // '$store.getters.activeStructure._path' (value) {
-    //   this.content = this.$store.getters.activeStructure._content
+    // '$store.getters.activeSchema._path' (value) {
+    //   this.content = this.$store.getters.activeSchema._content
     //   this.$store.commit('setEditorContentValid', true)
     // },
 
@@ -67,7 +67,7 @@ export default {
     saveContent: _.throttle(function (content) {
       this.$store.dispatch('saveContent', {
         projectId: this.$route.params.projectId,
-        path: this.$store.getters.activeStructure._path,
+        path: this.$store.getters.activeSchema._path,
         content: content,
       })
     }, 500),

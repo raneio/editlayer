@@ -18,15 +18,15 @@ export default {
       return this.$route.params.projectId
     },
 
-    structure () {
-      return this.$store.getters.structure
+    schema () {
+      return this.$store.getters.schema
     },
 
-    activeStructure () {
+    activeSchema () {
       let path = _.replace(this.$route.params.path, />/g, '.')
 
-      if (_.has(this.structure, path)) {
-        return _.get(this.structure, path)
+      if (_.has(this.schema, path)) {
+        return _.get(this.schema, path)
       }
       else {
         return {}
@@ -35,15 +35,15 @@ export default {
 
     activeType () {
       let path = _.replace(this.$route.params.path, />/g, '.')
-      let grandparent = _.get(this.structure, _.chain(path).split('.').dropRight(2).join('.').value())
+      let grandparent = _.get(this.schema, _.chain(path).split('.').dropRight(2).join('.').value())
 
       if (!this.projectId) {
         return 'project'
       }
-      else if (this.activeStructure && this.activeStructure._type === 'array') {
+      else if (this.activeSchema && this.activeSchema._type === 'array') {
         return 'array'
       }
-      else if (grandparent && this.activeStructure && grandparent._type === 'array' && this.activeStructure._type === 'value') {
+      else if (grandparent && this.activeSchema && grandparent._type === 'array' && this.activeSchema._type === 'value') {
         return 'array'
       }
       else {
@@ -55,7 +55,7 @@ export default {
 
   watch: {
 
-    activeStructure (value) {
+    activeSchema (value) {
       this.redirectToParentIfInvalidPath()
     },
 
@@ -74,7 +74,7 @@ export default {
       }
 
       if (routeName === 'Dashboard') {
-        routeName = (this.$route.params.view === 'structure') ? 'Structure' : 'Content'
+        routeName = (this.$route.params.view === 'schema') ? 'Schema' : 'Content'
       }
 
       anime.timeline()
@@ -109,9 +109,9 @@ export default {
 
     redirectToParentIfInvalidPath () {
       let path = _.replace(this.$route.params.path, />/g, '.')
-      let pathExist = _.has(this.structure, path)
+      let pathExist = _.has(this.schema, path)
 
-      if (_.isEmpty(this.structure) || pathExist === true) return false
+      if (_.isEmpty(this.schema) || pathExist === true) return false
 
       let parentPath = _.chain(this.$route.params.path).split('>').slice(0, -1).join('>').value()
 

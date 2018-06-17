@@ -45,7 +45,7 @@ export default {
           filename: doc.data().filename,
           downloadToken: doc.data().downloadToken,
           name: (doc.data().name) ? doc.data().name : doc.data().filename,
-          structure: (doc.data().structure) ? doc.data().structure : null,
+          schema: (doc.data().schema) ? doc.data().schema : null,
           draft: (doc.data().draft) ? doc.data().draft : null,
           published: (doc.data().published) ? doc.data().published : null,
           settings: (doc.data().settings) ? doc.data().settings : null,
@@ -88,18 +88,18 @@ export default {
         projectId = `${projectId}-${shortid.generate()}`
       }
 
-      let defaultStructure = {
+      let defaultSchema = {
         title: 'text',
         description: 'textarea',
         photo: 'image',
       }
 
-      let structure = (payload.structure) ? payload.structure : defaultStructure
+      let schema = (payload.schema) ? payload.schema : defaultSchema
 
       let newProject = {
         filename: 'content',
         name: payload.name,
-        structure: JSON.stringify(structure, '', '\t'),
+        schema: JSON.stringify(schema, '', '\t'),
         roles: {},
         downloadToken: shortid.generate(),
       }

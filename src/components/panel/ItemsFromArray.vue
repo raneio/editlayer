@@ -29,19 +29,19 @@ export default {
 
   computed: {
 
-    structure () {
-      return this.$store.getters.structure
+    schema () {
+      return this.$store.getters.schema
     },
 
-    activeStructure () {
+    activeSchema () {
       let path = _.replace(this.$route.params.path, />/g, '.')
       let parentPath = _.chain(path).split('.').dropRight().dropRight().join('.').value()
-      let activeItem = _.get(this.structure, path)
+      let activeItem = _.get(this.schema, path)
       if (_.get(activeItem, '_type') === 'array') {
         return activeItem
       }
       else {
-        return _.get(this.structure, parentPath)
+        return _.get(this.schema, parentPath)
       }
     },
 
@@ -58,7 +58,7 @@ export default {
       let source = []
       // let lastItem = null
 
-      _.each(this.activeStructure, (value, key) => {
+      _.each(this.activeSchema, (value, key) => {
         if (_.startsWith(key, '-')) {
           source.push(value)
         }
@@ -85,7 +85,7 @@ export default {
 
   watch: {
 
-    activeStructure (value) {
+    activeSchema (value) {
       this.findFirstItem()
     },
 
@@ -96,7 +96,7 @@ export default {
     newItem () {
       let itemPath = _.replace(this.$route.params.path, />/g, '.')
 
-      if (itemPath !== this.activeStructure._path && _.includes(itemPath, '.-')) {
+      if (itemPath !== this.activeSchema._path && _.includes(itemPath, '.-')) {
         itemPath = _.chain(itemPath).split('.-').slice(0, -1).join('.-').value()
       }
 
@@ -136,13 +136,13 @@ export default {
     findFirstItem () {
       let path = _.replace(this.$route.params.path, />/g, '.')
 
-      if (path !== this.activeStructure._path) return false
+      if (path !== this.activeSchema._path) return false
       if (this.$route.name !== 'Content') return false
       if (this.$store.getters.isMobile) return false
 
       let firstItem = _.find(this.arrayItems[0], { _type: 'value' })
 
-      if (firstItem && this.activeStructure._type === 'array') {
+      if (firstItem && this.activeSchema._type === 'array') {
         let firstItemPath = _.replace(firstItem._path, /\./g, '>')
         this.$router.replace({name: 'Content', params: {projectId: this.projectId, path: firstItemPath}})
       }

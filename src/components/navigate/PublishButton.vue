@@ -13,8 +13,8 @@ export default {
 
   computed: {
 
-    structure () {
-      return this.$store.getters.structure
+    schema () {
+      return this.$store.getters.schema
     },
 
     activeProject () {
@@ -24,7 +24,7 @@ export default {
     isDraft () {
       if (!this.activeProject) return false
       if (!this.activeProject.published) return true
-      return !_.isEqual(this.activeProject.draft, this.activeProject.published.draft) || this.activeProject.structure !== this.activeProject.published.structure
+      return !_.isEqual(this.activeProject.draft, this.activeProject.published.draft) || this.activeProject.schema !== this.activeProject.published.schema
     },
 
     neverPublished () {
@@ -59,7 +59,7 @@ export default {
   methods: {
 
     publishJson () {
-      let content = buildJson(this.structure)
+      let content = buildJson(this.schema)
 
       let webhookConfig = _.has(this.$store.getters.activeProject, 'settings.webhook.config') ? this.$store.getters.activeProject.settings.webhook.config : null
       let webhookEnabled = _.has(this.$store.getters.activeProject, 'settings.webhook.enabled') ? this.$store.getters.activeProject.settings.webhook.enabled : null
@@ -72,11 +72,12 @@ export default {
         filename: this.activeProject.filename,
         downloadToken: this.activeProject.downloadToken,
         draft: this.activeProject.draft,
-        structure: this.activeProject.structure,
+        schema: this.activeProject.schema,
         jsonUrl: this.$store.getters.jsonUrl,
         activeRole: this.$store.getters.activeRole,
         webhookConfig: webhookConfig,
         webhookEnabled: webhookEnabled,
+        email: this.$store.state.user.email,
       })
     },
 

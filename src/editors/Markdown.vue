@@ -7,7 +7,7 @@ import titleCase from 'title-case'
 export default {
   extends: EditorBase,
   // this.content - Content saves automatically when changing  it
-  // this.config - Config data from the structure (read-only)
+  // this.config - Config data from the schema (read-only)
   name: 'MarkdownEditor',
 
   components: {
@@ -115,7 +115,7 @@ export default {
   />
 
   <button
-    class="button -circle -success add-button"
+    class="button -circle -secondary add-button"
     :style="{top: addButton.top}"
     ref="addButton"
     @click="$refs.fileInput.click()"
@@ -202,8 +202,8 @@ export default {
     position: absolute
     padding: 0
     top: 0
-    left: -1rem
-    transform: translateY(-1.25rem)
+    left: 0
+    transform: translate(-50%, -65%)
 
   .tools
     +chain()
@@ -224,6 +224,7 @@ export default {
     padding: $input-padding
     padding-left: 1.5rem
     padding-right: 1.5rem
+    min-height: 15rem
 
     &:hover
       border: $input-border--hover

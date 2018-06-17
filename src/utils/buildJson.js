@@ -1,7 +1,7 @@
 import _ from 'lodash'
 
-const basicToJson = (structure, result = {}) => {
-  _.each(structure, (value, key) => {
+const basicToJson = (schema, result = {}) => {
+  _.each(schema, (value, key) => {
     if (_.has(value, '_content') && _.has(value, '_path')) {
       _.set(result, value._path, value._content)
     }
@@ -18,12 +18,12 @@ const basicToJson = (structure, result = {}) => {
   return result
 }
 
-const arrayToJson = (structure, result = {}, path = false) => {
-  if (_.isPlainObject(structure) && _.startsWith(_.findKey(structure), '-')) {
+const arrayToJson = (schema, result = {}, path = false) => {
+  if (_.isPlainObject(schema) && _.startsWith(_.findKey(schema), '-')) {
     let array = []
-    structure = _.sortBy(structure, '_order')
+    schema = _.sortBy(schema, '_order')
 
-    _.each(structure, (value, key) => {
+    _.each(schema, (value, key) => {
       value = _.omit(value, ['_order'])
       array.push(value)
     })
@@ -31,7 +31,7 @@ const arrayToJson = (structure, result = {}, path = false) => {
     _.set(result, path, array)
   }
 
-  _.each(structure, (value, key) => {
+  _.each(schema, (value, key) => {
     if (_.isPlainObject(value)) {
       let newPath = (!path) ? key : `${path}.${key}`
       arrayToJson(value, result, newPath)

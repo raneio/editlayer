@@ -35,7 +35,7 @@ export default {
           return {
             name: file.name,
             projectId: file.projectId,
-            status: (file.published && _.isEqual(file.draft, file.published.draft) && file.structure === file.published.structure) ? 'published' : 'draft',
+            status: (file.published && _.isEqual(file.draft, file.published.draft) && file.schema === file.published.schema) ? 'published' : 'draft',
             users: {
               editors: roleEditors,
               admins: roleAdmins,

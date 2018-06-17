@@ -21,12 +21,12 @@ export default {
 
   computed: {
 
-    structure () {
-      return this.$store.getters.structure
+    schema () {
+      return this.$store.getters.schema
     },
 
-    activeStructure () {
-      return this.$store.getters.activeStructure
+    activeSchema () {
+      return this.$store.getters.activeSchema
     },
 
     isMobile () {
@@ -34,7 +34,7 @@ export default {
     },
 
     mobileView () {
-      return this.activeStructure._type === 'value' ? 'main' : 'side'
+      return this.activeSchema._type === 'value' ? 'main' : 'side'
     },
 
   },
@@ -46,7 +46,7 @@ export default {
 
       while (pathItems.length > 0) {
         let path = _.join(pathItems, '.')
-        let item = _.get(this.structure, path)
+        let item = _.get(this.schema, path)
 
         if (item && !_.has(item, '_order')) {
           this.$router.push({name: 'Content', params: {projectId: this.$store.getters.activeProject.projectId, path: item._path}})
@@ -76,7 +76,7 @@ export default {
     </header>
 
     <section class="content">
-      <h1 class="heading -main" v-text="activeStructure.TITLE"/>
+      <h1 class="heading -main" v-text="activeSchema.TITLE"/>
 
       <Editor/>
 

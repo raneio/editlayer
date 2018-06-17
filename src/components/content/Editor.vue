@@ -24,17 +24,17 @@ export default {
 
   computed: {
 
-    activeStructure () {
-      return this.$store.getters.activeStructure
+    activeSchema () {
+      return this.$store.getters.activeSchema
     },
 
     activeComponentName () {
-      let configItem = _.find(editorConfig, {'schemaName': this.activeStructure.EDITOR})
+      let configItem = _.find(editorConfig, {'schemaName': this.activeSchema.EDITOR})
       return configItem.editor.name
     },
 
     isSupported () {
-      return _.includes(this.editors, this.activeStructure.EDITOR)
+      return _.includes(this.editors, this.activeSchema.EDITOR)
     },
 
     editorContentIsValid () {
@@ -44,7 +44,7 @@ export default {
 
   watch: {
 
-    'activeStructure._path' (value) {
+    'activeSchema._path' (value) {
       this.forceEditorReload = true
       this.$nextTick(() => {
         this.forceEditorReload = false
@@ -59,12 +59,12 @@ export default {
 <template>
 <section class="editor">
 
-  <div class="alert -info" v-if="activeStructure.INFO" v-text="activeStructure.INFO"></div>
+  <div class="alert -info" v-if="activeSchema.INFO" v-text="activeSchema.INFO"></div>
 
   <component :is="activeComponentName" v-if="isSupported && !forceEditorReload"/>
 
   <div class="alert -warning" v-if="!isSupported">
-    Editor "<strong>{{activeStructure.EDITOR}}</strong>" is not supported, please change editor in the structure. Following editors are supported: <i>{{editors.join(', ')}}</i>
+    Editor "<strong>{{activeSchema.EDITOR}}</strong>" is not supported, please change editor in the schema. Following editors are supported: <i>{{editors.join(', ')}}</i>
   </div>
 
   <div class="error" v-if="!editorContentIsValid">

@@ -11,7 +11,7 @@ _.each(editorConfig, configItem => {
 })
 
 export default {
-  name: 'StructureEditor',
+  name: 'SchemaEditor',
 
   components: {
     codemirror,
@@ -19,7 +19,7 @@ export default {
 
   data () {
     return {
-      structure: '',
+      schema: '',
       syntaxError: false,
       editors: editors,
     }
@@ -35,24 +35,24 @@ export default {
 
   watch: {
 
-    'activeProject.structure' (value) {
-      this.setStructure()
+    'activeProject.schema' (value) {
+      this.setSchema()
     },
 
-    structure: _.debounce(function () {
-      this.saveStructure()
+    schema: _.debounce(function () {
+      this.saveSchema()
     }, 500),
 
   },
 
   methods: {
 
-    saveStructure () {
-      // console.log('saveStructure')
+    saveSchema () {
+      // console.log('saveSchema')
       this.syntaxError = false
 
       try {
-        JSON.parse(this.structure)
+        JSON.parse(this.schema)
       }
       catch (err) {
         console.warn('Syntax Error')
@@ -60,35 +60,41 @@ export default {
         return false
       }
 
-      if (this.structure !== this.activeProject.structure) {
+      // if (_.isEmpty(JSON.parse(this.schema))) {
+      //   console.warn('Schema can\'t be empty')
+      //   this.syntaxError = true
+      //   return false
+      // }
+
+      if (this.schema !== this.activeProject.schema) {
         firebase.firestore.collection('projects').doc(this.activeProject.projectId).update({
-          structure: this.structure,
+          schema: this.schema,
         })
-          .then(() => console.log('Structure successfully written!'))
-          .catch((error) => console.error('Error writing structure:', error))
+          .then(() => console.log('Schema successfully written!'))
+          .catch((error) => console.error('Error writing schema:', error))
       }
     },
 
-    setStructure () {
-      if (_.has(this.activeProject, 'structure')) {
-        this.structure = this.activeProject.structure
+    setSchema () {
+      if (_.has(this.activeProject, 'schema')) {
+        this.schema = this.activeProject.schema
       }
     },
 
   },
 
   created () {
-    this.setStructure()
+    this.setSchema()
   },
 
 }
 </script>
 
 <template>
-<section class="structure" :class="{'-syntax-error': syntaxError}">
+<section class="schema" :class="{'-syntax-error': syntaxError}">
 
   <h1 class="heading -main">
-    Content structure
+    Content schema
   </h1>
 
   <div class="error-message">
@@ -97,7 +103,7 @@ export default {
 
   <codemirror
     class="-dracula"
-    v-model="structure"
+    v-model="schema"
     :options="{
       theme: 'dracula',
       tabSize: 2,
@@ -118,7 +124,7 @@ export default {
 @import '../../sass/variables'
 @import '../../sass/mixins/all'
 
-.structure
+.schema
   padding-top: 2rem
   +gap()
 
@@ -135,7 +141,7 @@ export default {
   &.-syntax-error .error-message
     opacity: 1
 
-.structure /deep/
+.schema /deep/
 
   &.-syntax-error .vue-codemirror
     box-shadow: 0 5px 12px 0 mix(transparent, $color-black, 90%), 0 2px 5px 0 mix(transparent, $color-black, 93%), inset 0 0 0 .2rem $color-danger, 0 0 0 .2rem $color-danger

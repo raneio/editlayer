@@ -71,11 +71,11 @@ export default {
     <router-link
       v-if="$route.params.projectId && activeRole === 'admin'"
       class="item"
-      :class="{ '-active': $route.name === 'Structure' }"
-      :to="{ name: 'Structure', params: { projectId: $route.params.projectId, path: $route.params.path }}"
+      :class="{ '-active': $route.name === 'Schema' }"
+      :to="{ name: 'Schema', params: { projectId: $route.params.projectId, path: $route.params.path }}"
     >
-      <icon name="structure"/>
-      <div class="text">Structure</div>
+      <icon name="schema"/>
+      <div class="text">Schema</div>
     </router-link>
 
     <router-link

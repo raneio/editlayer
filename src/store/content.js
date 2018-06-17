@@ -8,7 +8,7 @@ export default {
     saveContent ({state, getters}, payload) {
       let updateData = {}
       updateData[`draft.${payload.path}`] = payload.content
-      let currentContent = _.get(getters.structure, `${payload.path}._content`)
+      let currentContent = _.get(getters.schema, `${payload.path}._content`)
 
       if (!_.isEqual(currentContent, payload.content)) {
         firebase.firestore

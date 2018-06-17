@@ -21,7 +21,7 @@ service cloud.firestore {
       function allowPublished () {
       	return isRole(['admin', 'editor'])
         		&& request.writeFields.size() == 4
-            && 'published.structure' in request.writeFields
+            && 'published.schema' in request.writeFields
             && 'published.draft' in request.writeFields
             && 'published.publishedAt' in request.writeFields
             && 'published.versionId' in request.writeFields;
@@ -33,10 +33,10 @@ service cloud.firestore {
         		&& (request.writeFields[0] == 'settings.webhook.config' || request.writeFields[0] == 'settings.webhook.enabled');
       }
 
-      function allowStructure () {
+      function allowSchema () {
       	return isRole(['admin'])
         		&& request.writeFields.size() == 1
-        		&& request.writeFields[0] == 'structure';
+        		&& request.writeFields[0] == 'schema';
       }
 
       function allowRoles () {
@@ -53,7 +53,7 @@ service cloud.firestore {
                     && projectId != 'index'
                     && projectId != 'edit'
       							&& projectId != 'content'
-      							&& projectId != 'structure'
+      							&& projectId != 'schema'
       							&& projectId != 'settings'
       							&& projectId != 'simple-example'
       							&& projectId != 'advanced-example'
@@ -63,7 +63,7 @@ service cloud.firestore {
       							|| allowPublished()
       							|| allowWebhook()
                     || allowRoles()
-                    || allowStructure();
+                    || allowSchema();
 
       match /versions/{versionId} {
         function isRole(roles) {

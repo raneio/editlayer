@@ -17,16 +17,20 @@ export default {
 
   data () {
     return {
-      enabled: false,
-      config: false,
-      openDevtoolInfo: false,
+      config: _.has(this.$store.getters.activeProject, 'settings.webhook.config') ? this.$store.getters.activeProject.settings.webhook.config : '',
+      devtoolInfo: false,
     }
   },
 
   computed: {
 
-    activeProject () {
-      return this.$store.getters.activeProject
+    projectId () {
+      return this.$store.getters.activeProject.projectId
+    },
+
+    enabled () {
+      if (!_.has(this.$store.getters.activeProject, 'settings.webhook.enabled')) return false
+      return this.$store.getters.activeProject.settings.webhook.enabled
     },
 
     jsonUrl () {
@@ -37,97 +41,66 @@ export default {
 
   watch: {
 
-    activeProject () {
-      this.updateData()
-    },
-
     config: _.debounce(function () {
       this.saveConfig()
     }, 500),
-
-    enabled () {
-      this.saveEnabled()
-    },
 
   },
 
   methods: {
 
     saveConfig () {
-      console.log('saveConfig')
+      if (!this.config) {
+        this.resetConfig()
+        return null
+      }
+
       let updateData = {}
       updateData['settings.webhook.config'] = this.config
-      // updateData['webhook.url'] = this.webhook.url
 
       firebase.firestore
         .collection('projects')
-        .doc(this.activeProject.projectId)
+        .doc(this.projectId)
         .update(updateData)
-        .then(() => console.log('Webhook config saved', updateData))
+        // .then(() => console.log('Webhook config saved', updateData))
         .catch((error) => console.error('Webhook config saving failed', error))
     },
 
-    saveEnabled () {
-      console.log('saveEnabled')
+    testWebhook () {
+      webhook(this.config, this.jsonUrl, this.$store.state.user.email)
+      this.devtoolInfo = true
+      this.closeDevtoolInfo()
+    },
+
+    closeDevtoolInfo: _.debounce(function () {
+      this.devtoolInfo = false
+    }, 10000),
+
+    switchEnabled () {
       let updateData = {}
-      updateData['settings.webhook.enabled'] = this.enabled
+      updateData['settings.webhook.enabled'] = !this.enabled
+
+      console.log('switchEnabled', updateData)
 
       firebase.firestore
         .collection('projects')
-        .doc(this.activeProject.projectId)
+        .doc(this.projectId)
         .update(updateData)
-        // .then(() => console.log('Webhook enabled saved', updateData))
+        .then(() => console.log('Webhook enabled saved', updateData))
         .catch((error) => console.error('Webhook enabling failed', error))
-    },
-
-    updateData () {
-      if (_.has(this.activeProject, 'settings.webhook.config')) {
-        this.config = this.activeProject.settings.webhook.config
-      }
-      if (_.has(this.activeProject, 'settings.webhook.enabled')) {
-        this.enabled = this.activeProject.settings.webhook.enabled
-      }
-    },
-
-    testWebhook () {
-      webhook(this.config, this.jsonUrl)
-      this.openDevtoolInfo = true
-
-      _.delay(() => {
-        this.openDevtoolInfo = false
-      }, 10000)
-    },
-
-    enableWebhook () {
-      this.enabled = true
-
-      if (!this.config) {
-        this.resetConfig()
-      }
-    },
-
-    disableWebhook () {
-      this.enabled = false
     },
 
     resetConfig () {
       this.config = `{
   "url": "https://example.com",
-  "method": "post",
-  "header": {
-    "content-type": "application/json"
-  },
-  "data": {
+  "method": "get",
+  "params": {
     "content": "{{BASE64_CONTENT}}",
     "versionId": "{{VERSION_ID}}"
   }
 }`
     },
 
-  },
-
-  mounted () {
-    this.updateData()
   },
 
 }
@@ -140,9 +113,10 @@ export default {
     class="alert -info"
     v-if="enabled !== false"
   >
-    <li>You can use API of <a href="https://github.com/axios/axios#axios-api">Axios HTTP client</a>.</li>
-    <li>Variable <strong><span>{{</span>BASE64_CONTENT<span>}}</span></strong> is published content encoded with <a href="https://github.com/dankogai/js-base64">Base64</a>.</li>
+    <!-- <li>You can use API of <a href="https://github.com/axios/axios#axios-api">Axios HTTP client</a>.</li> -->
+    <li>Variable <strong><span>{{</span>BASE64_CONTENT<span>}}</span></strong> is published content encoded with <a href="https://github.com/dankogai/js-base64" target="Base64">Base64</a>.</li>
     <li>Variable <strong><span>{{</span>VERSION_ID<span>}}</span></strong> is version of published JSON.</li>
+    <li>Variable <strong><span>{{</span>PUBLISHER_EMAIL<span>}}</span></strong> is email of publisher.</li>
   </ul>
 
   <codemirror
@@ -157,35 +131,17 @@ export default {
     }"
   />
 
-  <!-- <div class="input-group">
-    <select v-model="method" class="select-method">
-      <option value="post">POST</option>
-      <option value="get">GET</option>
-    </select>
-    <input class="grow" type="text" v-model="url" placeholder="https://example.com/folder/?foo=bar">
-    <textarea name="name" rows="14" cols="80" v-model="config"></textarea>
-    <button class="button" name="button" @click="testWebhook()">Test</button>
-  </div> -->
-
   <div class="tools" v-if="enabled !== false">
-    <button class="button -small" @click="disableWebhook()">Disable webhook</button>
+    <button class="button -small" @click="switchEnabled()">Disable webhook</button>
     <button class="button -small" @click="testWebhook()">Test webhook</button>
-    <span class="debug" :class="{'-hidden': !openDevtoolInfo}">Open web console to debug</span>
+    <span class="debug" :class="{'-hidden': !devtoolInfo}">Open web console to debug</span>
+    <span class="spacer"></span>
+    <div><a href="https://github.com/axios/axios#axios-api" target="AxiosDocs">Axios API</a></div>
   </div>
 
   <div class="" v-if="enabled === false">
-    <button class="button" @click="enableWebhook()">Enable webhook</button>
+    <button class="button" @click="switchEnabled()">Enable webhook</button>
   </div>
-
-  <!-- <div class="console">
-    POST https://cdn.editlayer.com/marketing-example/content.json
-  </div> -->
-
-  <!-- <div class="">
-    Fetch options. Check documents <a href="https://github.github.io/fetch/">https://github.github.io/fetch/</a>
-  </div>
-
-  <textarea v-model="config" rows="10"></textarea> -->
 
 </section>
 </template>
@@ -199,14 +155,22 @@ export default {
 
 .tools
   +chain(1rem)
-  font-size: .8rem
+  width: 100%
   // justify-content: space-between
 
   .debug
+    display: none
     transition: opacity .5s
+    font-size: .8rem
 
     &.-hidden
       opacity: 0
+
+    +breakpoint('small')
+      display: block
+
+  .spacer
+    flex-grow: 1
 
 .link.-danger
   color: $color-danger

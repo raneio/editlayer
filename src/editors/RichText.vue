@@ -11,7 +11,7 @@ import 'quill/dist/quill.bubble.css'
 export default {
   extends: EditorBase,
   // this.content - Content saves automatically when changing  it
-  // this.config - Config data from the structure (read-only)
+  // this.config - Config data from the schema (read-only)
   name: 'RichTextEditor',
 
   components: {
@@ -24,9 +24,20 @@ export default {
         top: null,
         index: null,
       },
-      options: {
+    }
+  },
+
+  computed: {
+
+    quill () {
+      return this.$refs.quillEditor.quill
+    },
+
+    options () {
+      return {
         theme: 'bubble',
         bounds: '.main.-content',
+        placeholder: _.has(this.config, 'PLACEHOLDER') ? this.config.PLACEHOLDER : '',
         modules: {
           toolbar: {
             container: [
@@ -44,6 +55,9 @@ export default {
                 {list: 'ordered'},
                 {list: 'bullet'},
               ],
+              [
+                'clean',
+              ],
             ],
             handlers: {
               image: () => {
@@ -52,16 +66,8 @@ export default {
             },
           },
         },
-      },
-    }
-  },
-
-  computed: {
-
-    quill () {
-      return this.$refs.quillEditor.quill
+      }
     },
-
   },
 
   methods: {
@@ -129,7 +135,7 @@ export default {
   />
 
   <button
-    class="button -circle -success add-button"
+    class="button -circle -secondary add-button"
     :style="{top: addButton.top}"
     ref="addButton"
     @click="$refs['fileInput'].click()"
@@ -160,8 +166,7 @@ export default {
     position: absolute
     padding: 0
     top: 0
-    left: -1rem
-    transform: translateY(-.25rem)
+    transform: translate(-50%, -17%)
 
 .editor.-rich-text /deep/
 
@@ -178,6 +183,11 @@ export default {
     padding-right: 1.5rem
     +gap(1.5rem)
     min-height: 15rem
+
+    &::before
+      left: 1.5rem
+      color: $input-placeholder-color
+      font-style: normal
 
     +hx
       font-weight: 600

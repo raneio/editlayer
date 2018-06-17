@@ -1,24 +1,24 @@
 import _ from 'lodash'
 import titleCase from 'title-case'
 
-const simpleToAdvance = (structure) => {
-  _.each(structure, (value, key) => {
+const simpleToAdvance = (schema) => {
+  _.each(schema, (value, key) => {
     if (key === _.upperCase(key) || _.startsWith(key, '_')) return true
 
     if (_.isArray(value)) {
-      structure[key] = {
+      schema[key] = {
         _array: value[0],
       }
 
       if (_.has(value[0], 'TITLE')) {
-        structure[key].TITLE = value[0].TITLE
+        schema[key].TITLE = value[0].TITLE
       }
 
       value = simpleToAdvance(value)
     }
 
     if (_.isString(value)) {
-      structure[key] = {
+      schema[key] = {
         EDITOR: value,
       }
     }
@@ -28,11 +28,11 @@ const simpleToAdvance = (structure) => {
     }
   })
 
-  return structure
+  return schema
 }
 
-const addArraysAndPaths = (structure, draft, parentPath = false) => {
-  _.each(structure, (value, key) => {
+const addArraysAndPaths = (schema, draft, parentPath = false) => {
+  _.each(schema, (value, key) => {
     let path = (!parentPath) ? key : `${parentPath}.${key}`
 
     if (_.has(value, '_array')) {
@@ -53,11 +53,11 @@ const addArraysAndPaths = (structure, draft, parentPath = false) => {
     }
   })
 
-  return structure
+  return schema
 }
 
-const addData = (structure, draft) => {
-  _.each(structure, (value, key) => {
+const addData = (schema, draft) => {
+  _.each(schema, (value, key) => {
     if (!_.isPlainObject(value) || key === _.upperCase(key) || _.startsWith(key, '_')) return true
 
     if (!_.has(value, 'TITLE')) {
@@ -91,25 +91,25 @@ const addData = (structure, draft) => {
     value = addData(value, draft)
   })
 
-  return structure
+  return schema
 }
 
-const addStatus = (structure, draft, published) => {
-  _.each(structure, (value, key) => {
+const addStatus = (schema, draft, published) => {
+  _.each(schema, (value, key) => {
     if (!_.isPlainObject(value) || key === _.upperCase(key) || _.startsWith(key, '_')) return true
 
     value._status = _.isEqual(_.get(draft, value._path), _.get(published, value._path)) ? 'published' : 'draft'
     value = addStatus(value, draft, published)
   })
 
-  return structure
+  return schema
 }
 
-export default (structure, draft, published) => {
-  structure = simpleToAdvance(structure)
-  structure = addArraysAndPaths(structure, draft)
-  structure = addData(structure, draft)
-  structure = addStatus(structure, draft, published)
+export default (schema, draft, published) => {
+  schema = simpleToAdvance(schema)
+  schema = addArraysAndPaths(schema, draft)
+  schema = addData(schema, draft)
+  schema = addStatus(schema, draft, published)
 
-  return structure
+  return schema
 }

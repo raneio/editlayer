@@ -4,7 +4,7 @@ import _ from 'lodash'
 import firebase from '@/utils/firebase'
 import projects from '@/store/projects'
 import publishProcess from '@/store/publishProcess'
-import structure from '@/store/structure'
+import schema from '@/store/schema'
 import notifications from '@/store/notifications'
 import auth from '@/store/auth'
 import uploadImage from '@/store/uploadImage'
@@ -59,7 +59,7 @@ let store = {
 
 _.merge(store, projects)
 _.merge(store, publishProcess)
-_.merge(store, structure)
+_.merge(store, schema)
 _.merge(store, notifications)
 _.merge(store, auth)
 _.merge(store, uploadImage)

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Content from '@/views/Content.vue'
-import Structure from '@/views/Structure.vue'
+import Schema from '@/views/Schema.vue'
 import Settings from '@/views/Settings.vue'
 import Dashboard from '@/views/Dashboard.vue'
 
@@ -21,9 +21,9 @@ export default new Router({
       path: '/register',
     },
     {
-      name: 'Structure',
-      path: '/:projectId/structure/:path?',
-      component: Structure,
+      name: 'Schema',
+      path: '/:projectId/schema/:path?',
+      component: Schema,
     },
     {
       name: 'Settings',

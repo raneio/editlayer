@@ -3,17 +3,17 @@ import 'codemirror/mode/javascript/javascript'
 import Navigation from '@/components/navigate/Navigation'
 import SidePanel from '@/components/panel/Panel'
 import Breadcrumb from '@/components/navigate/Breadcrumb'
-import StructureEditor from '@/components/structure/StructureEditor'
+import SchemaEditor from '@/components/schema/SchemaEditor'
 import License from '@/components/utils/License'
 
 export default {
-  name: 'Structure',
+  name: 'Schema',
 
   components: {
     Navigation,
     SidePanel,
     Breadcrumb,
-    StructureEditor,
+    SchemaEditor,
     License,
   },
 
@@ -38,13 +38,13 @@ export default {
   <Navigation/>
   <SidePanel v-if="!isMobile"/>
 
-  <main class="main -structure">
+  <main class="main -schema">
     <header>
       <Breadcrumb v-if="!isMobile"/>
     </header>
 
     <section class="content">
-      <StructureEditor v-if="$route.params.projectId"/>
+      <SchemaEditor v-if="$route.params.projectId"/>
     </section>
 
     <License/>
@@ -57,7 +57,7 @@ export default {
 @import '../sass/variables'
 @import '../sass/mixins/all'
 
-.main.-structure
+.main.-schema
   background-color: $background-color
   // padding-top: 0
   // padding-bottom: 0

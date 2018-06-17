@@ -34,7 +34,7 @@ export default {
   },
 
   mounted () {
-    if (this.$route.params.view && this.$route.params.view !== 'structure') {
+    if (this.$route.params.view && this.$route.params.view !== 'schema') {
       this.$router.push({ name: 'Content', params: { projectId: this.$route.params.view } })
     }
   },

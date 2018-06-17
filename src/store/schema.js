@@ -1,33 +1,33 @@
 import _ from 'lodash'
-import buildStructure from '@/utils/buildStructure'
+import buildSchema from '@/utils/buildSchema'
 
 export default {
 
   getters: {
 
-    structure (state, getters) {
+    schema (state, getters) {
       if (!state.route.params.projectId || !getters.activeProject) return {}
 
-      let structure = {}
+      let schema = {}
 
       try {
-        structure = JSON.parse(getters.activeProject.structure)
+        schema = JSON.parse(getters.activeProject.schema)
       }
       catch (err) {
-        return structure
+        return schema
       }
 
       let draft = getters.activeProject.draft
       let published = _.has(getters, 'activeProject.published.draft') ? getters.activeProject.published.draft : {}
 
-      return buildStructure(structure, draft, published)
+      return buildSchema(schema, draft, published)
     },
 
-    activeStructure (state, getters) {
+    activeSchema (state, getters) {
       let path = _.replace(state.route.params.path, />/g, '.')
 
-      if (_.has(getters.structure, path)) {
-        return _.get(getters.structure, path)
+      if (_.has(getters.schema, path)) {
+        return _.get(getters.schema, path)
       }
       else {
         return {}
