@@ -106,6 +106,10 @@ export default {
 
   },
 
+  mounted () {
+    this.moveAddButton()
+  },
+
 }
 </script>
 

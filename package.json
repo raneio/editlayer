@@ -15,6 +15,7 @@
   "dependencies": {
     "@ckeditor/ckeditor5-build-balloon": "^10.0.1",
     "@ckeditor/ckeditor5-build-classic": "^10.0.1",
+    "@jaames/iro": "^3.4.1",
     "animejs": "^2.2.0",
     "autosize": "^4.0.2",
     "axios": "^0.18.0",

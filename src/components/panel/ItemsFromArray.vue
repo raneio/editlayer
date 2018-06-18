@@ -251,60 +251,64 @@ export default {
     </button>
   </header>
 
-  <div class="no-items" v-if="arrayItems.length === 0">
-    <div>No items - add first item</div>
-  </div>
+  <section class="content">
 
-  <div
-    class="array-item"
-    v-for="(arrayItem, arrayIdx) in arrayItems"
-    :key="arrayIdx"
-  >
+    <div class="no-items" v-if="arrayItems.length === 0">
+      <div>No items - add first item</div>
+    </div>
+
+    <div
+      class="array-item"
+      v-for="(arrayItem, arrayIdx) in arrayItems"
+      :key="arrayIdx"
+    >
+
+      <button
+        class="move-here button -primary"
+        v-if="movingArrayItem.path !== null && movingArrayItem.path !== arrayItem._path && movingArrayItem.idx !== arrayIdx - 1"
+        @click="moveHere(arrayItem, arrayIdx)"
+      >
+        Move Here
+      </button>
+
+      <div class="tools">
+        <button @click="moveArrayItem(arrayItem, arrayIdx)" v-if="confirmDeleteIdx !== arrayIdx" class="button -link">Move</button>
+        <button @click="deleteArrayItem(arrayIdx)" v-if="confirmDeleteIdx !== arrayIdx" class="button -link -danger">Delete</button>
+
+        <div class="confirm" v-if="confirmDeleteIdx === arrayIdx">
+          <div>Are you sure?</div>
+          <button @click="confirmDeleteNo()" class="button -link">No</button>
+          <button @click="confirmDeleteYes(arrayItem, arrayIdx)" class="button -link -danger">Yes</button>
+        </div>
+      </div>
+
+      <div
+        class="items"
+        :class="{ '-moving': movingArrayItem.path === arrayItem._path}"
+        @click="moveCancel(arrayItem)"
+      >
+
+        <Item
+          v-for="item in arrayItem"
+          v-if="typeof item === 'object'"
+          :item="item"
+          :selectItem="selectItem"
+          :key="item._path"
+        />
+
+      </div>
+
+    </div>
 
     <button
-      class="move-here button -primary"
-      v-if="movingArrayItem.path !== null && movingArrayItem.path !== arrayItem._path && movingArrayItem.idx !== arrayIdx - 1"
-      @click="moveHere(arrayItem, arrayIdx)"
+      class="move-last button -primary"
+      v-if="movingArrayItem.path !== null && movingArrayItem.idx !== arrayItems.length-1"
+      @click="moveHere('last')"
     >
       Move Here
     </button>
 
-    <div class="tools">
-      <button @click="moveArrayItem(arrayItem, arrayIdx)" v-if="confirmDeleteIdx !== arrayIdx" class="button -link">Move</button>
-      <button @click="deleteArrayItem(arrayIdx)" v-if="confirmDeleteIdx !== arrayIdx" class="button -link -danger">Delete</button>
-
-      <div class="confirm" v-if="confirmDeleteIdx === arrayIdx">
-        <div>Are you sure?</div>
-        <button @click="confirmDeleteNo()" class="button -link">No</button>
-        <button @click="confirmDeleteYes(arrayItem, arrayIdx)" class="button -link -danger">Yes</button>
-      </div>
-    </div>
-
-    <div
-      class="items"
-      :class="{ '-moving': movingArrayItem.path === arrayItem._path}"
-      @click="moveCancel(arrayItem)"
-    >
-
-      <Item
-        v-for="item in arrayItem"
-        v-if="typeof item === 'object'"
-        :item="item"
-        :selectItem="selectItem"
-        :key="item._path"
-      />
-
-    </div>
-
-  </div>
-
-  <button
-    class="move-last button -primary"
-    v-if="movingArrayItem.path !== null && movingArrayItem.idx !== arrayItems.length-1"
-    @click="moveHere('last')"
-  >
-    Move Here
-  </button>
+  </section>
 
 </section>
 </template>
@@ -350,7 +354,7 @@ export default {
     position: relative
 
     & + .array-item
-      margin-top: 6.5rem
+      margin-top: 5rem
 
   .items
     +gap(1rem)

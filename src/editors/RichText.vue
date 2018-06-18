@@ -126,7 +126,7 @@ export default {
 
   mounted () {
     this.quill.focus()
-
+    this.moveAddButton()
     this.quill.on('editor-change', () => this.moveAddButton())
     window.addEventListener('resize', () => this.moveAddButton())
   },

@@ -70,7 +70,7 @@ export default {
         firebase.firestore.collection('projects').doc(this.activeProject.projectId).update({
           schema: this.schema,
         })
-          .then(() => console.log('Schema successfully written!'))
+          // .then(() => console.log('Schema successfully written!'))
           .catch((error) => console.error('Error writing schema:', error))
       }
     },

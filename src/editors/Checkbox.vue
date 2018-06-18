@@ -50,7 +50,7 @@ export default {
 
     initValues () {
       if (_.has(this.config, 'OPTIONS')) {
-        this.values = this.content ? this.content : []
+        this.values = _.isArray(this.content) ? this.content : [this.content]
       }
       else {
         this.values = this.content === this.options[0].VALUE ? [this.content] : []

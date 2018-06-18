@@ -93,12 +93,16 @@ export default {
     <BackButton/>
   </header>
 
-  <Item
-    v-for="item in items"
-    :item="item"
-    :selectItem="selectItem"
-    :key="item.path"
-  />
+  <section class="content">
+
+    <Item
+      v-for="item in items"
+      :item="item"
+      :selectItem="selectItem"
+      :key="item.path"
+    />
+
+  </section>
 
 </section>
 </template>

@@ -130,10 +130,8 @@ export default {
 
 <template>
 <aside class="panel">
-  <div class="content">
-    <ItemsFromObject :selectItem="selectItem" v-if="activeType === 'object'"/>
-    <ItemsFromArray :selectItem="selectItem" v-if="activeType === 'array'"/>
-  </div>
+  <ItemsFromObject :selectItem="selectItem" v-if="activeType === 'object'"/>
+  <ItemsFromArray :selectItem="selectItem" v-if="activeType === 'array'"/>
 </aside>
 </template>
 
@@ -143,27 +141,48 @@ export default {
 
 .panel
   background-image: linear-gradient(to right, $color-gray--lightest, $color-gray--lighter)
-  padding: 1.25rem
-  overflow-y: auto
+  //
 
 .panel /deep/
 
   .items-from
-    +gap(1.5rem)
+    display: flex
+    flex-direction: column
+    height: 100%
 
     > .header
       +chain(1rem)
       justify-content: space-between
       align-items: center
       transition: opacity .2s
-      margin-top: -1rem
-      // font-size: .9rem
       border-bottom: 1px solid $hr-color
       height: 3rem
+      padding: 1.25rem
 
-    .item
-      max-width: 28rem
-      margin-left: auto
-      margin-right: auto
+    > .content
+      +gap(1.5rem)
+      display: flex
+      flex-direction: column
+      overflow-y: auto
+      padding: 2rem 1.25rem
+
+      // &::before,
+      // &::after
+      //   content: ''
+      //   position: absolute
+      //   left: 0
+      //   width: 100%
+      //   height: .5rem
+      //   z-index: 1
+      //
+      // &::before
+      //   top: 0
+      //   background-image: linear-gradient(to bottom, $color-gray--lighter, transparent)
+      //
+      // &::after
+      //   bottom: 0
+      //   background-image: linear-gradient(to top, $color-gray--lighter, transparent)
+      //
+      // > .content-scroll
 
 </style>
