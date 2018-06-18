@@ -64,9 +64,10 @@ export default {
         maxHeight: this.config.MAX_HEIGHT,
       })
         .then((image) => {
+          console.log('uploaded', image)
           this.$store.dispatch('saveContent', {
-            projectId: this.projectId,
-            path: _.replace(this.$route.params.path, />/g, '.'),
+            projectId: image.projectId,
+            path: image.path,
             content: image.downloadURL,
           })
           this.uploading = false

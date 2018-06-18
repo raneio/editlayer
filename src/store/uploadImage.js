@@ -104,6 +104,8 @@ export default {
       return {
         downloadURL: downloadURL,
         filename: filenameWithoutExt,
+        projectId: payload.projectId,
+        path: payload.path,
       }
 
       // let downloadURL = uploadTask.on('state_changed', (snapshot) => {

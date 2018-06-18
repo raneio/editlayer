@@ -101,7 +101,7 @@ export default {
     <input type="text" v-model="color">
     <input type="color" ref="colorInput" v-model="color" v-show="false">
   </div>
-  
+
 </section>
 </template>
 
