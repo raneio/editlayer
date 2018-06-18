@@ -101,15 +101,7 @@ export default {
     <input type="text" v-model="color">
     <input type="color" ref="colorInput" v-model="color" v-show="false">
   </div>
-
-  <!-- {{drag}} -->
-
-  <!-- <button @click="changeSize()">Size</button> -->
-
-  <!-- <div class="color" @mousedown="drag = true" @mouseup="drag = false"></div> -->
-  <!-- <div class="color-area" :style="{backgroundImage: this.colorGradient}"></div> -->
-
-  <!-- <Sketch v-model="colors" /> -->
+  
 </section>
 </template>
 
@@ -152,31 +144,4 @@ export default {
 
   +breakpoint('large')
     width: auto
-
-//   input
-//     padding: .2rem
-//     height: 4rem
-//
-// .color
-//   height: 4rem
-//   background-image: linear-gradient(to right, red, yellow, lime, aqua, blue, magenta, red)
-//
-// .color-area
-//   padding-bottom: 100%
-//   position: relative
-//   // background-image: linear-gradient(to right, #ffffff, #ff0000)
-//
-//   &::after
-//     content: ''
-//     background-image: linear-gradient(to bottom, transparent, #000000)
-//     position: absolute
-//     top: 0
-//     left: 0
-//     right: 0
-//     bottom: 0
-//
-// .editor.-color /deep/
-//   svg
-//     // border: 2px solid red
-
 </style>

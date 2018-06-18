@@ -74,5 +74,9 @@ export default {
 
   },
 
+  mounted () {
+    this.$store.commit('setEditorContentValid', true)
+  },
+
 }
 </script>
