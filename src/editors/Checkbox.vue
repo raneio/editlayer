@@ -53,7 +53,7 @@ export default {
         this.values = this.content ? this.content : []
       }
       else {
-        this.values = this.content === this.config.VALUE ? [this.content] : []
+        this.values = this.content === this.options[0].VALUE ? [this.content] : []
       }
     },
 
