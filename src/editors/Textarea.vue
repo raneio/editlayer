@@ -6,7 +6,6 @@ export default {
   extends: EditorBase,
   // this.content - Content saves automatically when changing  it
   // this.config - Config data from the schema (read-only)
-
   name: 'TextareaEditor',
 
   mounted () {

@@ -50,7 +50,7 @@ export default {
     // },
 
     content (newContent, oldContent) {
-      if (oldContent === null) return null
+      // if (oldContent === null) return null
       if (this.isValid === false) {
         this.$store.commit('setEditorContentValid', false)
         return null

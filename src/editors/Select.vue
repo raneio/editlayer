@@ -6,7 +6,7 @@ export default {
   extends: EditorBase,
   // this.content - Content saves automatically when changing  it
   // this.config - Config data from the schema (read-only)
-  name: 'RadioEditor',
+  name: 'SelectEditor',
 
   computed: {
 
@@ -28,17 +28,15 @@ export default {
 </script>
 
 <template>
-<section class="editor -radio">
+<section class="editor -select">
 
-  <label class="radio" v-for="(option, index) in options" :key="index">
-    <input
-      class="input"
-      type="radio"
-      v-model="content"
+  <select class="select" v-model="content">
+    <option
       :value="option.VALUE"
-    >
-    <span v-text="label(option)"></span>
-  </label>
+      v-text="label(option)"
+      v-for="(option, index) in options" :key="index"
+    />
+  </select>
 
 </section>
 </template>
@@ -46,14 +44,4 @@ export default {
 <style lang="sass" scoped>
 @import '../sass/variables'
 @import '../sass/mixins/all'
-
-.editor.-radio
-  +gap(.5rem)
-
-.radio
-  +chain(.5rem)
-
-  .input
-    transform: scale(1.25)
-
 </style>

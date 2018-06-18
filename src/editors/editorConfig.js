@@ -7,7 +7,9 @@ import Input from './Input'
 import Markdown from './Markdown'
 import Radio from './Radio'
 import RichText from './RichText'
+import Select from './Select'
 import Textarea from './Textarea'
+import Video from './Video'
 
 // Previews
 import CodePreview from './previews/Code'
@@ -15,6 +17,7 @@ import ColorPreview from './previews/Color'
 import ImagePreview from './previews/Image'
 import OptionPreview from './previews/Option'
 import TextPreview from './previews/Text'
+import VideoPreview from './previews/Video'
 
 export default [
   {
@@ -58,8 +61,18 @@ export default [
     'preview': TextPreview,
   },
   {
+    'schemaName': 'select',
+    'editor': Select,
+    'preview': OptionPreview,
+  },
+  {
     'schemaName': 'textarea',
     'editor': Textarea,
     'preview': TextPreview,
+  },
+  {
+    'schemaName': 'video',
+    'editor': Video,
+    'preview': VideoPreview,
   },
 ]
