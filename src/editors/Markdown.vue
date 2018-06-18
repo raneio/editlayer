@@ -1,4 +1,14 @@
 <script>
+/**
+ * Markdown Editor
+ * @param {string} content - Content saves automatically when changing
+ * @param {string} config.EDITOR - Name of editor
+ * @param {string} config.TITLE
+ * @param {string} config.PLACEHOLDER
+ * @param {string} config.IMAGE_MAX_WIDTH
+ * @param {string} config.IMAGE_MAX_HEIGHT
+ */
+
 import EditorBase from '@/editors/common/BaseEditor'
 import { codemirror } from 'vue-codemirror'
 import _ from 'lodash'
@@ -6,8 +16,7 @@ import titleCase from 'title-case'
 
 export default {
   extends: EditorBase,
-  // this.content - Content saves automatically when changing  it
-  // this.config - Config data from the schema (read-only)
+
   name: 'MarkdownEditor',
 
   components: {
@@ -21,7 +30,6 @@ export default {
         line: null,
       },
       options: {
-        // theme: 'dracula',
         tabSize: 2,
         lineNumbers: false,
         lineWrapping: true,
@@ -141,53 +149,6 @@ export default {
     v-show="false"
   >
 
-  <!-- <section class="help">
-    <h2 class="heading -feature">Markdown help</h2>
-
-    <h3 class="heading">Heading</h3>
-    <div>
-      <div># Heaging One</div>
-      <div>## Heading Two</div>
-      <div>### Heading Three</div>
-    </div>
-
-    <h3 class="heading">Bold</h3>
-    <strong>**bold text**</strong>
-
-    <h3 class="heading">Italic</h3>
-    <em>*italicized text*</em>
-
-    <h3 class="heading">Blockquote</h3>
-    <blockquote>> blockquote</blockquote>
-
-    <h3 class="heading">Ordered List</h3>
-    <ol>
-      <li>First item</li>
-      <li>Second item</li>
-      <li>Third item</li>
-    </ol>
-
-    <h3 class="heading">Unordered List</h3>
-    <ul>
-      <li>First item</li>
-      <li>Second item</li>
-      <li>Third item</li>
-    </ul>
-
-    <h3 class="heading">Code</h3>
-    <code>`code`</code>
-
-    <h3 class="heading">Horizontal Rule</h3>
-    <div>---</div>
-
-    <h3 class="heading">Link</h3>
-    <div>[title](https://www.example.com)</div>
-
-    <h3 class="heading">Image</h3>
-    <div>![alt text](image.jpg)</div>
-
-  </section> -->
-
 </section>
 </template>
 
@@ -209,11 +170,6 @@ export default {
     +chain()
     width: 100%
     justify-content: flex-end
-  // .help
-  //   +gap(2rem)
-  //
-  //   .heading + *
-  //     margin-top: .25rem
 
 .editor.-markdown /deep/
 
@@ -235,7 +191,6 @@ export default {
       background-color: $input-background--focus
 
     .CodeMirror
-      // font-family: $font-family
       font-size: 1rem
       background-color: transparent
 
@@ -281,8 +236,6 @@ export default {
     .cm-image-alt-text:hover
       color: $content-color
       text-decoration: none
-      // font-weight: 600
-      // font-style: italic
 
     .cm-image-marker,
     .cm-image-alt-text
@@ -301,6 +254,5 @@ export default {
     .cm-variable-2,
     .cm-variable-3
       color: mix($color-info, $color-black, 50%)
-      // background-color: mix($color-gray, white, 15%)
 
 </style>

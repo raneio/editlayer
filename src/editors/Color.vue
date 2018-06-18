@@ -1,10 +1,16 @@
 <script>
+/**
+ * Color Editor
+ * @param {string} content - Content saves automatically when changing
+ * @param {string} config.EDITOR - Name of editor
+ * @param {string} config.TITLE
+ */
+
 import EditorBase from '@/editors/common/BaseEditor'
 
 export default {
   extends: EditorBase,
-  // this.content - Content saves automatically when changing  it
-  // this.config - Config data from the schema (read-only)
+
   name: 'ColorEditor',
 
   mounted () {

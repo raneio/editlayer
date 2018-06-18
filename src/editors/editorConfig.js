@@ -12,18 +12,18 @@ import Textarea from './Textarea'
 import Video from './Video'
 
 // Previews
+import ArrayPreview from './previews/Array'
 import CodePreview from './previews/Code'
 import ColorPreview from './previews/Color'
 import ImagePreview from './previews/Image'
 import OptionPreview from './previews/Option'
 import TextPreview from './previews/Text'
-import VideoPreview from './previews/Video'
 
 export default [
   {
     'schemaName': 'checkbox',
     'editor': Checkbox,
-    'preview': TextPreview,
+    'preview': ArrayPreview,
   },
   {
     'schemaName': 'code',
@@ -73,6 +73,6 @@ export default [
   {
     'schemaName': 'video',
     'editor': Video,
-    'preview': VideoPreview,
+    'preview': ImagePreview,
   },
 ]

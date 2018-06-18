@@ -1,13 +1,20 @@
 <script>
+/**
+ * Video Editor
+ * @param {object} content - Content saves automatically when changing
+ * @param {string} config.EDITOR - Name of editor
+ * @param {string} config.TITLE
+ * @param {string} config.PLACEHOLDER
+ */
+
 import EditorBase from '@/editors/common/BaseEditor'
-import getVideoId from 'get-video-id'
+import urlParser from 'js-video-url-parser'
 import _ from 'lodash'
 import axios from 'axios'
 
 export default {
   extends: EditorBase,
-  // this.content - Content saves automatically when changing  it
-  // this.config - Config data from the schema (read-only)
+
   name: 'VideoEditor',
 
   data () {
@@ -31,16 +38,16 @@ export default {
       return this.content.id
     },
 
-    service () {
+    provider () {
       if (!this.content) return false
-      return this.content.service
+      return this.content.provider
     },
 
     videoSrc () {
-      if (this.service === 'youtube') {
+      if (this.provider === 'youtube') {
         return `https://www.youtube-nocookie.com/embed/${this.videoId}?rel=0`
       }
-      else if (this.service === 'vimeo') {
+      else if (this.provider === 'vimeo') {
         return `https://player.vimeo.com/video/${this.videoId}?portrait=0`
       }
       else {
@@ -49,46 +56,67 @@ export default {
     },
 
     placeholder () {
-      return this.config.PLACEHOLDER ? this.config.PLACEHOLDER : 'e.g. https://www.youtube.com/watch?v=mN0zPOpADL4  OR  https://vimeo.com/265010648'
+      return this.config.PLACEHOLDER ? this.config.PLACEHOLDER : 'e.g. https://www.youtube.com/watch?v=mN0zPOpADL4'
     },
 
   },
 
   methods: {
 
-    setInput () {
-      if (this.service === 'youtube') {
-        this.input = `https://www.youtube.com/watch?v=${this.videoId}`
+    initInput () {
+      if (!this.content) {
+        this.input = ''
+        return null
       }
-      else if (this.service === 'vimeo') {
-        this.input = `https://vimeo.com/${this.videoId}`
+
+      let videoInfo = {
+        provider: this.content.provider,
+        id: this.content.id,
+        mediaType: 'video',
       }
+      this.input = urlParser.create({videoInfo: videoInfo})
     },
 
     saveVideo: async function () {
-      let videoObj = getVideoId(this.input)
+      let videoObj = urlParser.parse(this.input)
 
-      if (videoObj.service === 'youtube') {
-        videoObj.thumbnail = `http://img.youtube.com/vi/${videoObj.id}/hqdefault.jpg`
+      if (!videoObj) {
+        this.content = null
+        return null
       }
 
-      if (videoObj.service === 'vimeo') {
+      let video = {
+        id: videoObj.id,
+        provider: videoObj.provider,
+      }
+
+      video.thumbnail = await this.getThumbnail(video)
+      this.content = video
+    },
+
+    getThumbnail: async function (video) {
+      let thumbnail = null
+
+      if (video.provider === 'youtube') {
+        thumbnail = `http://img.youtube.com/vi/${video.id}/hqdefault.jpg`
+      }
+      else if (video.provider === 'vimeo') {
         try {
-          let videoData = await axios.get(`https://vimeo.com/api/v2/video/${videoObj.id}.json`)
-          videoObj.thumbnail = videoData.data[0].thumbnail_large
+          let vimeoData = await axios.get(`https://vimeo.com/api/v2/video/${video.id}.json`)
+          thumbnail = vimeoData.data[0].thumbnail_large
         }
         catch (error) {
-          videoObj.thumbnail = null
+          console.warn('Can\'t fetch Vimeo thumbnail')
         }
       }
 
-      this.content = videoObj
+      return thumbnail
     },
 
   },
 
   mounted () {
-    this.setInput()
+    this.initInput()
   },
 
   // getVideoId('https://www.youtube.com/watch?v=8rSH8-pbHZ0')

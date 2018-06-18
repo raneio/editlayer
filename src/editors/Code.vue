@@ -1,11 +1,17 @@
 <script>
+/**
+ * Code Editor
+ * @param {string} content - Content saves automatically when changing
+ * @param {string} config.EDITOR - Name of editor
+ * @param {string} config.TITLE
+ * @param {string} config.MODE
+ */
+
 import EditorBase from '@/editors/common/BaseEditor'
 import { codemirror } from 'vue-codemirror'
 
 export default {
   extends: EditorBase,
-  // this.content - Content saves automatically when changing  it
-  // this.config - Config data from the schema (read-only)
 
   name: 'CodeEditor',
 
@@ -25,7 +31,7 @@ export default {
   },
 
   created () {
-    switch (this.config.LANGUAGE) {
+    switch (this.config.MODE) {
       case 'css':
         this.options.mode = 'text/css'
         break

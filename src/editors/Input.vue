@@ -1,11 +1,25 @@
 <script>
+/**
+ * Input Editor
+ * @param {string} content - Content saves automatically when changing
+ * @param {string} config.EDITOR - Name of editor
+ * @param {string} config.TITLE
+ * @param {string} config.MODE
+ * @param {string} config.PLACEHOLDER
+ * @param {string} config.MIN
+ * @param {string} config.MAX
+ * @param {string} config.MINLENGTH
+ * @param {string} config.MAXLENGTH
+ * @param {string} config.STEP
+ * @param {string} config.MULTIPLE
+ * @param {array} config.DATALIST
+ */
+
 import EditorBase from '@/editors/common/BaseEditor'
 import _ from 'lodash'
 
 export default {
   extends: EditorBase,
-  // this.content - Content saves automatically when changing it
-  // this.config - Config data from the schema (read-only)
 
   name: 'InputEditor',
 
@@ -16,7 +30,7 @@ export default {
     },
 
     inputType () {
-      return ['date', 'datetime-local', 'email', 'month', 'number', 'password', 'tel', 'time', 'url', 'week'].includes(this.config.TYPE) ? this.config.TYPE : 'text'
+      return ['date', 'datetime-local', 'email', 'month', 'number', 'password', 'tel', 'time', 'url', 'week'].includes(this.config.MODE) ? this.config.MODE : 'text'
     },
 
     isDatalist () {

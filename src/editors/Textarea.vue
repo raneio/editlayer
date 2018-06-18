@@ -1,11 +1,18 @@
 <script>
+/**
+ * Textarea Editor
+ * @param {string} content - Content saves automatically when changing
+ * @param {string} config.EDITOR - Name of editor
+ * @param {string} config.TITLE
+ * @param {string} config.PLACEHOLDER
+ */
+
 import EditorBase from '@/editors/common/BaseEditor'
 import autosize from 'autosize'
 
 export default {
   extends: EditorBase,
-  // this.content - Content saves automatically when changing  it
-  // this.config - Config data from the schema (read-only)
+
   name: 'TextareaEditor',
 
   mounted () {

@@ -35,6 +35,12 @@ const simpleToAdvance = (schema) => {
           })
         })
       }
+
+      // Shorten syntax with mode "input:email"
+      if (_.includes(value, ':')) {
+        schema[key].EDITOR = value.split(':')[0].trim()
+        schema[key].MODE = value.split(':')[1].trim()
+      }
     }
 
     if (_.isPlainObject(value)) {
@@ -100,6 +106,15 @@ const addData = (schema, draft) => {
       else {
         value._content = null
       }
+    }
+
+    // OPTIONS item require VALUE data
+    if (_.has(value, 'OPTIONS')) {
+      _.each(value.OPTIONS, (option, index) => {
+        if (!_.has(option, 'VALUE')) {
+          value.OPTIONS[index].VALUE = null
+        }
+      })
     }
 
     value = addData(value, draft)
