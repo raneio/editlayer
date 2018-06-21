@@ -1,6 +1,6 @@
 <script>
 import _ from 'lodash'
-import editorConfig from '@/editors/editorConfig'
+import editorConfig from '@/editors'
 
 let components = {}
 let editors = []
@@ -46,23 +46,26 @@ export default {
 </script>
 
 <template>
-<section
-  class="card -link item"
+<card-core
+  size="small"
+  link
+  class="item"
   :class="{
     '-parent': isParent,
     '-active': isActive,
     '-draft': isDraft,
   }"
-  @click="selectItem(item)"
+  @click.native="selectItem(item)"
 >
 
   <header class="header">
 
     <h2 class="heading" v-text="item.TITLE"/>
 
-    <div v-if="isDraft" class="draft">draft</div>
+    <span v-if="isDraft" class="draft">draft</span>
 
-    <div v-if="isParent" class="spacer"/>
+    <span class="spacer"></span>
+
     <icon v-if="isParent" name="chevron-right"/>
 
   </header>
@@ -105,15 +108,16 @@ export default {
     <img class="image" :src="preview.content" alt="" v-if="preview.content !== null">
   </div> -->
 
-</section>
+</card-core>
 </template>
 
 <style lang="sass" scoped>
 @import '../../sass/variables'
-@import '../../sass/mixins/all'
+@import '../../core/sass/mixins'
 
 .item
   position: relative
+  overflow: hidden
 
   &::after
     content: ''
@@ -122,17 +126,12 @@ export default {
     top: 0
     bottom: 0
     right: 0
-    border-radius: $button-border-radius
     border-left: .5rem solid $color-info
     transition: opacity .2s
     opacity: 0
 
   &.-active::after
     opacity: 1
-
-  .heading
-    font-size: 1rem
-    font-weight: 600
 
     .text
       +chain(.25rem)
@@ -141,11 +140,11 @@ export default {
     color: $color-warning
     font-size: .75rem
 
-  .content
+  .spacer
     flex-grow: 1
 
   .content
-    font-size: .8em
+    flex-grow: 1
     overflow: hidden
 
     &.-code

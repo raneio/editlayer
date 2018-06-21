@@ -143,15 +143,17 @@ export default {
     :options='options'
   />
 
-  <button
-    class="button -circle -secondary add-button"
+  <button-core
+    circle
+    size="small"
+    class="add-button"
     :style="{top: addButton.top}"
     ref="addButton"
-    @click="$refs['fileInput'].click()"
+    @click.native="$refs['fileInput'].click()"
     v-if="addButton.top !== null"
   >
     <icon name="plus"/>
-  </button>
+  </button-core>
 
   <input
     class="file-input"
@@ -167,7 +169,7 @@ export default {
 
 <style lang="sass" scoped>
 @import '../sass/variables'
-@import '../sass/mixins/all'
+@import '../core/sass/mixins'
 
 .editor.-rich-text
 
@@ -180,10 +182,10 @@ export default {
 .editor.-rich-text /deep/
 
   .ql-editor
-    background: $input-background--basic
-    border: $input-border--basic
+    background: $input-background
+    border: $input-border
     border-radius: $input-border-radius
-    color: $input-text-color--basic
+    color: $input-text-color
     font-family: $input-font-family
     font-size: $input-font-size
     font-weight: $input-font-weight

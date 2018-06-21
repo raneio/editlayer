@@ -18,10 +18,10 @@ export default {
 
         if (storeData.role === false) {
           // Delete user if role is false
-          updateData[`roles.${userId}`] = admin.firestore.FieldValue.delete()
+          updateData[`users.${userId}`] = admin.firestore.FieldValue.delete()
         }
         else {
-          updateData[`roles.${userId}`] = {
+          updateData[`users.${userId}`] = {
             role: storeData.role,
             email: storeData.email,
             userExist: true,
@@ -39,7 +39,7 @@ export default {
           const emailSha1 = sha1(storeData.email)
           let updateData = {}
 
-          updateData[`roles.${emailSha1}`] = {
+          updateData[`users.${emailSha1}`] = {
             role: storeData.role,
             email: storeData.email,
             userExist: false,
@@ -65,17 +65,17 @@ export default {
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach((doc) => {
-          if (_.has(doc.data().roles, emailSha1)) {
-            let permissionData = doc.data().roles[emailSha1]
+          if (_.has(doc.data().users, emailSha1)) {
+            let permissionData = doc.data().users[emailSha1]
             let updateData = {}
 
-            updateData[`roles.${userRecord.uid}`] = {
+            updateData[`users.${userRecord.uid}`] = {
               role: permissionData.role,
               email: userRecord.email,
               userExist: true,
             }
 
-            updateData[`roles.${emailSha1}`] = admin.firestore.FieldValue.delete()
+            updateData[`users.${emailSha1}`] = admin.firestore.FieldValue.delete()
 
             firestore
               .collection('projects')

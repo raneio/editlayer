@@ -1,6 +1,6 @@
 <script>
 import _ from 'lodash'
-import editorConfig from '@/editors/editorConfig'
+import editorConfig from '@/editors'
 
 let components = {}
 let editors = []
@@ -23,7 +23,6 @@ export default {
   components,
 
   computed: {
-
     activeSchema () {
       return this.$store.getters.activeSchema
     },
@@ -38,19 +37,37 @@ export default {
     },
 
     editorContentIsValid () {
-      return this.$store.state.editorContentIsValid
+      return this.$store.state.utils.editorContentIsValid
     },
   },
 
   watch: {
-
     'activeSchema._path' (value) {
       this.forceEditorReload = true
       this.$nextTick(() => {
         this.forceEditorReload = false
       })
     },
+  },
 
+  methods: {
+    closeEditor () {
+      let pathItems = _.chain(this.$route.params.path).split('>').dropRight().value()
+
+      while (pathItems.length > 0) {
+        let path = _.join(pathItems, '.')
+        let item = _.get(this.schema, path)
+
+        if (item && !_.has(item, '_order')) {
+          this.$router.push({name: 'Content', params: {projectId: this.$store.getters.activeProject.id, path: item._path}})
+          return false
+        }
+
+        pathItems = _.dropRight(pathItems)
+      }
+
+      this.$router.push({name: 'Content', params: {projectId: this.$store.getters.activeProject.id}})
+    },
   },
 
 }
@@ -59,24 +76,24 @@ export default {
 <template>
 <section class="editor">
 
-  <div class="alert -info" v-if="activeSchema.INFO" v-text="activeSchema.INFO"></div>
-
   <component :is="activeComponentName" v-if="isSupported && !forceEditorReload"/>
 
-  <div class="alert -warning" v-if="!isSupported">
+  <alert-core mode="warning" v-if="!isSupported && activeSchema.EDITOR">
     Editor "<strong>{{activeSchema.EDITOR}}</strong>" is not supported, please change editor in the schema. Following editors are supported: <i>{{editors.join(', ')}}</i>
-  </div>
+  </alert-core>
 
   <div class="error" v-if="!editorContentIsValid">
     <div class="message">Invalid Content</div>
   </div>
+
+  <!-- <button-core class="close-button" @click.native="closeEditor()" v-if="isMobile">Close</button-core> -->
 
 </section>
 </template>
 
 <style lang="sass" scoped>
 @import '../../sass/variables'
-@import '../../sass/mixins/all'
+@import '../../core/sass/mixins'
 
 .editor
   position: relative
@@ -98,5 +115,10 @@ export default {
     top: -2rem
     font-weight: 800
     color: $color-danger
+
+.close-button
+  display: block
+  margin-left: auto
+  margin-right: auto
 
 </style>

@@ -1,9 +1,11 @@
 <script>
 import _ from 'lodash'
-import shortid from 'shortid'
+import Chance from 'chance'
 import firebase from '@/utils/firebase'
 import Item from '@/components/panel/Item'
-import BackButton from '@/components/navigate/BackButton'
+import BackButton from '@/components/navigation/BackButton'
+
+const chance = new Chance()
 
 export default {
   name: 'ItemsFromArray',
@@ -100,7 +102,8 @@ export default {
         itemPath = _.chain(itemPath).split('.-').slice(0, -1).join('.-').value()
       }
 
-      let randomKey = `-${shortid.generate()}`
+      // TODO: Change hass to random string
+      let randomKey = `-${chance.hash({length: 4})}`
       let path = `draft.${itemPath}`
       let newPath = `${path}.${randomKey}`
       let order = 0
@@ -138,7 +141,7 @@ export default {
 
       if (path !== this.activeSchema._path) return false
       if (this.$route.name !== 'Content') return false
-      if (this.$store.getters.isMobile) return false
+      // if (this.$store.getters.isMobile) return false
 
       let firstItem = _.find(this.arrayItems[0], { _type: 'value' })
 
@@ -178,7 +181,7 @@ export default {
         newOrder = (this.arrayItems[arrayIdx - 1]._order + arrayItem._order) / 2
       }
 
-      this.$store.dispatch('saveContent', {
+      this.$store.dispatch('updateContent', {
         projectId: this.projectId,
         path: `${this.movingArrayItem.path}._order`,
         content: newOrder,
@@ -245,10 +248,10 @@ export default {
 
   <header class="header">
     <BackButton/>
-    <button class="button -success -small" @click="newItem()">
+    <button-core mode="success" size="small" @click.native="newItem()">
       <icon name="plus"/>
       <span>New Item</span>
-    </button>
+    </button-core>
   </header>
 
   <section class="content">
@@ -263,22 +266,23 @@ export default {
       :key="arrayIdx"
     >
 
-      <button
-        class="move-here button -primary"
+      <button-core
+        mode="primary"
+        class="move-here"
         v-if="movingArrayItem.path !== null && movingArrayItem.path !== arrayItem._path && movingArrayItem.idx !== arrayIdx - 1"
-        @click="moveHere(arrayItem, arrayIdx)"
+        @click.native="moveHere(arrayItem, arrayIdx)"
       >
         Move Here
-      </button>
+      </button-core>
 
       <div class="tools">
-        <button @click="moveArrayItem(arrayItem, arrayIdx)" v-if="confirmDeleteIdx !== arrayIdx" class="button -link">Move</button>
-        <button @click="deleteArrayItem(arrayIdx)" v-if="confirmDeleteIdx !== arrayIdx" class="button -link -danger">Delete</button>
+        <button-core light @click.native="moveArrayItem(arrayItem, arrayIdx)" v-if="confirmDeleteIdx !== arrayIdx">Move</button-core>
+        <button-core light @click.native="deleteArrayItem(arrayIdx)" v-if="confirmDeleteIdx !== arrayIdx">Delete</button-core>
 
         <div class="confirm" v-if="confirmDeleteIdx === arrayIdx">
           <div>Are you sure?</div>
-          <button @click="confirmDeleteNo()" class="button -link">No</button>
-          <button @click="confirmDeleteYes(arrayItem, arrayIdx)" class="button -link -danger">Yes</button>
+          <button-core light @click.native="confirmDeleteNo()">No</button-core>
+          <button-core mode="danger" light @click.native="confirmDeleteYes(arrayItem, arrayIdx)">Yes</button-core>
         </div>
       </div>
 
@@ -300,13 +304,14 @@ export default {
 
     </div>
 
-    <button
-      class="move-last button -primary"
+    <button-core
+      mode="primary"
+      class="move-last"
       v-if="movingArrayItem.path !== null && movingArrayItem.idx !== arrayItems.length-1"
-      @click="moveHere('last')"
+      @click.native="moveHere('last')"
     >
       Move Here
-    </button>
+    </button-core>
 
   </section>
 
@@ -317,7 +322,7 @@ export default {
 
 // You can use variables, mixins and functions of Page Core
 @import '../../sass/variables'
-@import '../../sass/mixins/all'
+@import '../../core/sass/mixins'
 
 .items-from.-array
 
@@ -338,7 +343,7 @@ export default {
 
   .move-here
     position: absolute
-    top: -2rem
+    top: 0
     left: 0
     right: 0
     transform: translateY(-50%)
@@ -349,6 +354,7 @@ export default {
     display: block
     width: 100%
     margin-top: 1rem
+    flex-shrink: 0
 
   .array-item
     position: relative
@@ -417,7 +423,7 @@ export default {
           bottom: -2rem
           left: -.75rem
           right: -.75rem
-          border: 3px dashed $color-brand
+          border: 3px dashed $color-primary
           border-radius: $button-border-radius
 
         .item

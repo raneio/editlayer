@@ -26,7 +26,7 @@ export default {
 
 <style lang="sass" scoped>
 @import '../../sass/variables'
-@import '../../sass/mixins/all'
+@import '../../core/sass/mixins'
 
 .preview.-text
   +invert()

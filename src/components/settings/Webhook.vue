@@ -1,10 +1,15 @@
 <script>
 import _ from 'lodash'
-import { codemirror } from 'vue-codemirror'
 import firebase from '@/utils/firebase'
-import Breadcrumb from '@/components/navigate/Breadcrumb'
-import Navigation from '@/components/navigate/Navigation'
+import Breadcrumb from '@/components/navigation/Breadcrumb'
+import Navigation from '@/components/navigation/Navigation'
 import webhook from '@/utils/webhook'
+
+// Codemirror
+import { codemirror } from 'vue-codemirror'
+import 'codemirror/mode/javascript/javascript'
+import 'codemirror/lib/codemirror.css'
+import 'codemirror/theme/dracula.css'
 
 export default {
   name: 'Webhook',
@@ -25,7 +30,7 @@ export default {
   computed: {
 
     projectId () {
-      return this.$store.getters.activeProject.projectId
+      return this.$store.getters.activeProject.id
     },
 
     enabled () {
@@ -67,7 +72,7 @@ export default {
     },
 
     testWebhook () {
-      webhook(this.config, this.jsonUrl, this.$store.state.user.email)
+      webhook(this.config, this.jsonUrl, this.$store.state.auth.email)
       this.devtoolInfo = true
       this.closeDevtoolInfo()
     },
@@ -105,21 +110,18 @@ export default {
 </script>
 
 <template>
-<section class="group -webhook">
-  <header class="heading -feature">
-    <h1 class="heading">Webhook</h1>
-    <p class="tagline">We will send a custom POST/GET request when publishing is done.</p>
-  </header>
+<section class="webhook">
+  <heading-core mode="secondary">
+    <h2>Webhook</h2>
+    <p>We will send a custom POST/GET request when publishing is done.</p>
+  </heading-core>
 
-  <ul
-    class="alert -info"
-    v-if="enabled !== false"
-  >
+  <alert-core mode="info" size="small" v-if="enabled !== false">
     <!-- <li>You can use API of <a href="https://github.com/axios/axios#axios-api">Axios HTTP client</a>.</li> -->
-    <li>Variable <strong><span>{{</span>BASE64_CONTENT<span>}}</span></strong> is published content encoded with <a href="https://github.com/dankogai/js-base64" target="Base64">Base64</a>.</li>
-    <li>Variable <strong><span>{{</span>VERSION_ID<span>}}</span></strong> is version of published JSON.</li>
-    <li>Variable <strong><span>{{</span>PUBLISHER_EMAIL<span>}}</span></strong> is email of publisher.</li>
-  </ul>
+    <div>Variable <code><strong><span>{{</span>BASE64_CONTENT<span>}}</span></strong></code> is published content encoded with <a href="https://github.com/dankogai/js-base64" target="Base64">Base64</a>.</div>
+    <div>Variable <code><strong><span>{{</span>VERSION_ID<span>}}</span></strong></code> is version of published JSON.</div>
+    <div>Variable <code><strong><span>{{</span>PUBLISHER_EMAIL<span>}}</span></strong></code> is email of publisher.</div>
+  </alert-core>
 
   <codemirror
     v-if="enabled !== false"
@@ -134,15 +136,17 @@ export default {
   />
 
   <div class="tools" v-if="enabled !== false">
-    <button class="button -small" @click="switchEnabled()">Disable webhook</button>
-    <button class="button -small" @click="testWebhook()">Test webhook</button>
-    <span class="debug" :class="{'-hidden': !devtoolInfo}">Open web console to debug</span>
+    <button-core size="small" @click.native="switchEnabled()">Disable webhook</button-core>
+    <button-core size="small" @click.native="testWebhook()">Test webhook</button-core>
+    <transition name="fade">
+      <span class="debug" v-show="devtoolInfo">Open web console to debug</span>
+    </transition>
     <span class="spacer"></span>
-    <div><a href="https://github.com/axios/axios#axios-api" target="AxiosDocs">Axios API</a></div>
+    <button-core mode="info" light href="https://github.com/axios/axios#axios-api" target="AxiosDocs">Axios API</button-core>
   </div>
 
   <div class="" v-if="enabled === false">
-    <button class="button -link" @click="switchEnabled()">Enable webhook</button>
+    <button-core @click.native="switchEnabled()">Enable webhook</button-core>
   </div>
 
 </section>
@@ -150,20 +154,18 @@ export default {
 
 <style lang="sass" scoped>
 @import '../../sass/variables'
-@import '../../sass/mixins/all'
+@import '../../core/sass/mixins'
+
+.webhook
+  +gap(.5rem)
 
 .tools
   +chain(1rem)
   width: 100%
-  // justify-content: space-between
 
   .debug
     display: none
-    transition: opacity .5s
     font-size: .8rem
-
-    &.-hidden
-      opacity: 0
 
     +breakpoint('small')
       display: block

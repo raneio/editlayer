@@ -1,20 +1,13 @@
 <script>
-import LoaderIcon from '@/components/utils/LoaderIcon'
-
 export default {
   name: 'LoaderOverlay',
-
-  components: {
-    LoaderIcon,
-  },
-
 }
 </script>
 
 <template>
 <div class="loader-overlay">
 
-  <LoaderIcon class="icon"/>
+  <icon name="spinner" spin/>
   <div class="text">Loading</div>
 
 </div>
@@ -22,7 +15,7 @@ export default {
 
 <style lang="sass" scoped>
 @import '../../sass/variables'
-@import '../../sass/mixins/all'
+@import '../../core/sass/mixins'
 
 .loader-overlay
   position: absolute
@@ -36,12 +29,12 @@ export default {
   justify-content: center
   align-items: center
   background-image: linear-gradient(to right, $color-gray--lightest, $color-gray--lighter)
-  color: $color-brand
+  color: $color-primary
   +gap(.5rem)
 
-  .icon
+  .fa-icon
     display: flex
-    background-color: $color-brand
+    background-color: $color-primary
     border-radius: 50%
     height: 4rem
     width: 4rem

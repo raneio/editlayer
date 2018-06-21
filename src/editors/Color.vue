@@ -107,7 +107,7 @@ export default {
 
 <style lang="sass" scoped>
 @import '../sass/variables'
-@import '../sass/mixins/all'
+@import '../core/sass/mixins'
 
 .editor.-color
   display: flex
@@ -136,7 +136,7 @@ export default {
 .tools
   +gap(1rem)
   +center()
-  background-color: $color-gray--lighter
+  background-color: $color-gray--lightest
   padding: 2rem
   border-radius: $input-border-radius
   width: 100%

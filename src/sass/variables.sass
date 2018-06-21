@@ -1,0 +1,193 @@
+//
+// Base sizes
+// --------------------------------------------------
+// $rem is font size and others is relative to it
+
+$rem: 15px
+$rem--small: 16px
+$rem--medium: 16px
+$rem--large: 17px
+$rem--huge: 17px
+
+//
+// Breakpoints
+// --------------------------------------------------
+// $rem is font size and others is relative to it
+
+$breakpoint--small: 600px
+$breakpoint--medium: 900px
+$breakpoint--large: 1200px
+$breakpoint--huge: 1800px
+
+//
+// Colors
+// --------------------------------------------------
+// You can add new colors
+
+// $color-primary: #EB242D
+$color-primary: #372ddd
+// $color-primary: #6643AD
+$color-secondary: #565656
+$color-info: #3D84D5
+$color-success: #3FB143
+$color-warning: #EABE00
+$color-danger: #F56064
+$color-black: #252525
+$color-white: #FFFFFF
+
+$color-gray--lightest: mix($color-primary, $color-white, 2%)
+$color-gray--lighter: mix($color-primary, mix($color-black, $color-white, 3%), 5%)
+$color-gray--light: mix($color-primary, mix($color-black, $color-white, 20%), 3%)
+$color-gray: mix($color-primary, mix($color-black, $color-white, 50%), 2.5%)
+$color-gray--dark: mix($color-primary, mix($color-black, $color-white, 70%), 3.5%)
+$color-gray--darker: mix($color-primary, mix($color-black, $color-white, 80%), 3.5%)
+$color-gray--darkest: mix($color-primary, mix($color-black, $color-white, 90%), 3.5%)
+$color-gray--gradient: linear-gradient(to right, mix($color-primary, mix($color-black, $color-white, 1%), 5%), mix($color-primary, mix($color-black, $color-white, 3%), 7%))
+
+//
+// Fonts
+// --------------------------------------------------
+// You can add new fonts
+
+$font-family: 'Open Sans', sans-serif
+
+//
+// Shadows
+// --------------------------------------------------
+// You can add new shadows
+
+$shadow--small: 0 .5em 1em 0 mix($color-black, transparent, 5%), 0 0 .4em 0 mix($color-black, transparent, 10%)
+$shadow: 0 .5em 1.5em 0 mix($color-black, transparent, 15%)
+$shadow--large: 0 .5em 2.5em 0 mix($color-black, transparent, 20%)
+
+//
+// Times
+// --------------------------------------------------
+// You can add new times
+
+$time--small: .2s
+$time: .6s
+$time--large: 1.2s
+
+//
+// Radius
+// --------------------------------------------------
+
+$radius--small: .2rem
+$radius: .4rem
+$radius--large: .7rem
+
+//
+// Background
+// --------------------------------------------------
+
+$background-color: $color-white
+
+//
+// Buttons
+// --------------------------------------------------
+
+$button-background: $color-secondary
+$button-background--hover: mix($color-secondary, $color-white, 90%)
+$button-background--active: mix($color-secondary, $color-white, 85%)
+$button-background--disabled: $color-gray
+$button-border: none
+$button-border--hover: none
+$button-border--active: none
+$button-border--disabled: none
+$button-border-radius: $radius--small
+$button-font-family: $font-family
+$button-font-size: 1em
+$button-font-weight: 700
+$button-padding: .75em 1.5em
+$button-text-color: $color-white
+$button-text-color--hover: $color-white
+$button-text-color--active: $color-white
+$button-text-color--disabled: $color-white
+$button-text-transform: uppercase
+
+//
+// Containers
+// --------------------------------------------------
+
+$container-max-width: 1200px
+$container-position: 'center'
+$container-vertical-padding: 5rem
+
+//
+// Contents
+// --------------------------------------------------
+
+$content-color: $color-black
+$content-font-family: $font-family
+$content-font-weight: 400
+$content-line-height: 1.5
+
+//
+// Headings
+// --------------------------------------------------
+
+$heading-color: $color-black
+$heading-font-family: $font-family
+$heading-font-size: 1rem
+$heading-font-weight: 300
+
+//
+// Horizontal rules
+// --------------------------------------------------
+
+$hr-color: mix($color-gray, transparent, 25%)
+$hr-height: 1px
+
+//
+// Inputs
+// --------------------------------------------------
+
+$input-background: $color-gray--lightest
+$input-background--hover: $color-gray--lightest
+$input-background--focus: $color-gray--lightest
+$input-background--disabled: $color-gray--lighter
+$input-border: 1px solid $color-gray--light
+$input-border--hover: 1px solid mix($color-gray--light, $color-gray, 70%)
+$input-border--focus: 1px solid mix($color-gray--light, $color-primary, 70%)
+$input-border--disabled: 1px solid $color-gray--light
+$input-border-radius: $radius--small
+$input-font-family: $font-family
+$input-font-size: 1rem
+$input-font-weight: 400
+$input-padding: 1.2em 1em
+$input-placeholder-color: mix($color-gray--light, $color-gray, 30%)
+$input-select-arrow-color: $color-gray
+$input-select-arrow-color--hover: $color-gray--dark
+$input-select-arrow-color--focus: mix($color-gray, $color-primary, 50%)
+$input-select-arrow-color--disabled: $color-gray--light
+$input-text-color: $color-black
+$input-text-color--hover: $color-black
+$input-text-color--focus: $color-black
+$input-text-color--disabled: $color-gray
+
+//
+// Links
+// --------------------------------------------------
+
+$link-color: $color-primary
+$link-color--hover: mix($color-primary, $color-white, 80%)
+$link-color--active: mix($color-primary, $color-white, 70%)
+$link-text-decoration: none
+$link-text-decoration--hover: none
+$link-text-decoration--active: none
+
+//
+// Inverts
+// --------------------------------------------------
+// Invert color for mixin invert()
+
+$invert-background-color: $color-black
+$invert-content-color: $color-white
+$invert-content-font-weight: 400
+$invert-heading-color: $invert-content-color
+$invert-heading-font-weight: 300
+$invert-hr-color: mix($color-gray--light, transparent, 25%)
+$invert-link-color: mix($color-white, $color-primary, 70%)
+$invert-link-color--hover: mix($color-white, $color-primary, 80%)
+$invert-link-color--active: mix($color-white, $color-primary, 90%)

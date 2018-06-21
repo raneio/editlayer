@@ -1,0 +1,51 @@
+// @import "../core/sass/mixins"
+//
+// $shadow--card: 0 .1rem .2rem 0 mix($color-black, transparent, 15%), 0 .5rem 2rem 0 mix($color-black, transparent, 10%)
+// $shadow--card--hover: 0 .1rem .2rem 0 mix($color-black, transparent, 15%), 0 .75rem 3rem 0 mix($color-black, transparent, 11%)
+// $shadow--card--active: 0 0 .1rem 0 mix($color-black, transparent, 15%), 0 0 1rem 0 mix($color-black, transparent, 10%)
+//
+// .card
+//   background-color: $color-white
+//   box-shadow: $shadow--card
+//   border-radius: $button-border-radius
+//   transition: box-shadow .2s, transform .2s
+//
+//   &.-link:hover
+//     cursor: pointer
+//     box-shadow: $shadow--card--hover
+//     transform: scale(1.01)
+//
+//   &.-link:active,
+//   &.-link.-active,
+//   &.-link.-active:hover,
+//   &.-link.-active:active
+//     box-shadow: $shadow--card--active
+//     transform: translateY(1px)
+//     transition: box-shadow .1s, transform .1s
+//
+//   .header
+//     +chain(.25rem)
+//     background-color: $color-gray--lightest
+//     border-bottom: 1px solid $color-gray--lighter
+//     padding: .5rem 1rem
+//
+//     > .spacer
+//       flex-grow: 1
+//
+//   .heading
+//     overflow: hidden
+//     text-overflow: ellipsis
+//     font-size: 1.25rem
+//     font-weight: 400
+//
+//   .content
+//     padding: .5rem 1rem
+//     background-color: $color-white
+//
+//   > :first-child
+//     border-top-left-radius: $button-border-radius
+//     border-top-right-radius: $button-border-radius
+//
+//   > :last-child
+//     border-bottom-left-radius: $button-border-radius
+//     border-bottom-right-radius: $button-border-radius

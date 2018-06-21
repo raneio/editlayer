@@ -65,11 +65,12 @@ export default {
       })
         .then((image) => {
           console.log('uploaded', image)
-          this.$store.dispatch('saveContent', {
-            projectId: image.projectId,
-            path: image.path,
-            content: image.downloadURL,
-          })
+          // this.$store.dispatch('updateContent', {
+          //   projectId: image.projectId,
+          //   path: image.path,
+          //   content: image.downloadURL,
+          // })
+          this.content = image.downloadURL
           this.uploading = false
         })
     },
@@ -88,13 +89,14 @@ export default {
 
   <div class="tools">
 
-    <button
-      @click="$refs['file-input'].click()"
-      class="button -large"
+    <button-core
+      size="large"
+      mode="primary"
+      @click.native="$refs['file-input'].click()"
       :disabled="uploading"
     >
       Upload Image
-    </button>
+    </button-core>
 
   </div>
 
@@ -112,7 +114,7 @@ export default {
 
 <style lang="sass" scoped>
 @import '../sass/variables'
-@import '../sass/mixins/all'
+@import '../core/sass/mixins'
 
 .editor
   +gap(.75rem)

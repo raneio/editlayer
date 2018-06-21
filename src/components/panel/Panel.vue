@@ -137,10 +137,10 @@ export default {
 
 <style lang="sass" scoped>
 @import '../../sass/variables'
-@import '../../sass/mixins/all'
+@import '../../core/sass/mixins'
 
 .panel
-  background-image: linear-gradient(to right, $color-gray--lightest, $color-gray--lighter)
+  background-image: $color-gray--gradient
   //
 
 .panel /deep/

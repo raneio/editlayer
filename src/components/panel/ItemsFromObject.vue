@@ -1,7 +1,7 @@
 <script>
 import _ from 'lodash'
 import Item from '@/components/panel/Item'
-import BackButton from '@/components/navigate/BackButton'
+import BackButton from '@/components/navigation/BackButton'
 
 export default {
   name: 'ItemsFromObject',
@@ -60,7 +60,7 @@ export default {
     findFirstItem () {
       if (!this.activeSchema) return false
       if (this.$route.name !== 'Content') return false
-      if (this.$store.getters.isMobile) return false
+      // if (this.$store.getters.isMobile) return false
 
       let path = _.replace(this.$route.params.path, />/g, '.')
       if (path !== '' && path !== this.activeSchema._path) return false

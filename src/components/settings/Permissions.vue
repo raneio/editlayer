@@ -1,7 +1,5 @@
 <script>
 import validator from 'validator'
-import shortid from 'shortid'
-import firebase from '@/utils/firebase'
 
 export default {
   name: 'Permissions',
@@ -12,12 +10,8 @@ export default {
       return this.$store.getters.activeProject
     },
 
-    user () {
-      return this.$store.state.user
-    },
-
-    roles () {
-      return this.activeProject.roles
+    auth () {
+      return this.$store.state.auth
     },
 
   },
@@ -26,78 +20,40 @@ export default {
 
     newPermission () {
       let email = prompt('Email address', '')
-
       if (email === null) return false
 
       if (!validator.isEmail(email)) {
         console.error('Email is invalid', email)
         this.$store.commit('setNotification', {
-          status: 'error',
+          mode: 'danger',
           message: `Email ${email} is invalid`,
         })
         return false
       }
 
-      let notificationId = shortid.generate()
-
-      this.$store.commit('setNotification', {
-        id: notificationId,
-        status: 'info',
-        message: `Adding user "${email}", please wait...`,
+      this.$store.dispatch('newPermission', {
+        email,
+        projectId: this.activeProject.id,
       })
-
-      firebase.firestore
-        .collection('projects')
-        .doc(this.activeProject.projectId)
-        .collection('jobs')
-        .add({
-          job: 'attachRole',
-          role: 'editor',
-          email: email,
-        })
-        .then(() => {
-          // console.log('Permission job added')
-        })
-        .catch(error => {
-          console.error('Permission job adding failed', error)
-        })
     },
 
     updatePermission (payload) {
-      let updateData = {}
-      updateData[`roles.${payload.roleId}.role`] = payload.role
-
-      // console.log('updatePermission', updateData)
-
-      firebase.firestore
-        .collection('projects')
-        .doc(this.activeProject.projectId)
-        .update(updateData)
-        .then(() => console.log('Permission updated!'))
-        .catch((error) => console.error('Permission updating failed', error))
+      this.$store.dispatch('updatePermission', payload)
     },
 
     removePermission (payload) {
       let deleteConfirm = confirm(`You want to remove "${payload.email}". Are you sure?`)
 
       if (deleteConfirm === true) {
-        let updateData = {}
-        updateData[`roles.${payload.roleId}`] = firebase.firestoreDelete
-
-        firebase.firestore
-          .collection('projects')
-          .doc(this.activeProject.projectId)
-          .update(updateData)
-          .then(() => console.log('Permission deleted'))
-          .catch((error) => console.error('Permission deleting failed', error))
+        this.$store.dispatch('removePermission', payload)
       }
     },
 
   },
 
   created () {
-    if (this.$store.getters.activeRole !== 'admin') {
-      this.$router.replace({name: 'Content', params: {projectId: this.$store.getters.activeProject.projectId}})
+    if (this.$store.getters.activeProject.role !== 'admin') {
+      this.$router.replace({name: 'Content', params: {projectId: this.activeProject.id}})
     }
   },
 
@@ -105,74 +61,81 @@ export default {
 </script>
 
 <template>
-<section class="group -permission">
-  <h2 class="heading -feature">User permissions</h2>
+<section class="permission">
+  <heading-core mode="secondary">
+    <h2>User permissions</h2>
+  </heading-core>
 
-  <div class="card">
+  <card-core>
+    <main class="main">
 
-    <ul class="roles">
-      <li class="role">
+      <ul class="users">
+        <li class="user">
 
-        <div class="email" :title="user.email" v-text="user.email"></div>
+          <div class="email" :title="auth.email" v-text="auth.email"></div>
 
-        <div class="spacer"></div>
+          <div class="spacer"></div>
 
-        <div class="permission">
-          <select class="select" disabled>
-            <option>Admin</option>
-          </select>
-        </div>
+          <div class="permission">
+            <select class="select" disabled>
+              <option>Admin</option>
+            </select>
+          </div>
 
-        <div class="remove">
-          <button class="button -link -danger" disabled>
-              <icon name="trash"/>
-          </button>
-        </div>
+          <div class="remove">
+            <button-core light disabled>
+                <icon name="trash"/>
+            </button-core>
+          </div>
 
-      </li>
+        </li>
 
-      <li
-        v-for="(role, roleId) in roles"
-        :key="roleId"
-        v-if="roleId !== user.id"
-        class="role"
-      >
-        <div class="email" :title="role.email" v-text="role.email"></div>
+        <li
+          v-for="(user, userId) in activeProject.users"
+          :key="userId"
+          v-if="userId !== auth.id"
+          class="user"
+        >
+          <div class="email" :title="user.email" v-text="user.email"></div>
 
-        <div class="spacer"></div>
+          <div class="spacer"></div>
 
-        <div class="permission">
-          <select
-            class="select"
-            v-model="role.role"
-            @change="updatePermission({roleId, roleId, role: role.role})"
-          >
-            <option value="admin">Admin</option>
-            <option value="editor">Editor</option>
-          </select>
-        </div>
+          <div class="permission">
+            <select
+              class="select"
+              v-model="user.role"
+              @change="updatePermission({userId, role: user.role})"
+            >
+              <option value="admin">Admin</option>
+              <option value="editor">Editor</option>
+            </select>
+          </div>
 
-        <div class="remove">
-          <button class="button -link -danger" @click="removePermission({roleId: roleId, email: role.email})">
-              <icon name="trash"/>
-          </button>
-        </div>
+          <div class="remove">
+            <button-core light @click.native="removePermission({userId, email: user.email})">
+                <icon name="trash"/>
+            </button-core>
+          </div>
 
-      </li>
-    </ul>
+        </li>
+      </ul>
 
-  </div>
+    </main>
+  </card-core>
 
-  <button class="button -success -small" @click="newPermission()">
+  <button-core mode="success" @click.native="newPermission()">
     <icon name="plus"/>
     <span>New User</span>
-  </button>
+  </button-core>
 </section>
 </template>
 
 <style lang="sass" scoped>
 @import '../../sass/variables'
-@import '../../sass/mixins/all'
+@import '../../core/sass/mixins'
+
+.permission
+  +gap()
 
 .card
   padding: 1rem 1rem
@@ -181,10 +144,10 @@ export default {
     padding-left: 2rem
     padding-right: 2rem
 
-.roles
+.users
   +gap(.5rem)
 
-  .role
+  .user
     +chain(1rem)
 
     +breakpoint('small')

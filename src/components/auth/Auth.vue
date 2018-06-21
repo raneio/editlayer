@@ -1,6 +1,5 @@
 <script>
 import _ from 'lodash'
-import shortid from 'shortid'
 import firebase from '@/utils/firebase'
 
 export default {
@@ -47,14 +46,13 @@ export default {
 
     login () {
       firebase.auth.signInWithEmailAndPassword(this.email, this.password)
-        .then(user => console.log('Logged in', user.email))
+        // .then(user => console.log('Logged in', user.email))
         .catch((error) => {
           console.error('Logged in faild', error)
           this.progress = false
 
           this.$store.commit('setNotification', {
-            id: shortid.generate(),
-            status: 'error',
+            mode: 'danger',
             message: error.message,
           })
 
@@ -144,13 +142,6 @@ export default {
       })
     },
 
-    // register () {
-    //   this.$store.dispatch('authRegister', {
-    //     email: this.email,
-    //     password: this.password
-    //   })
-    // },
-
     changeState (state) {
       this.state = state
     },
@@ -198,11 +189,11 @@ export default {
         </div>
       </label>
 
-      <button class="button" :disabled="progress" type="submit">
+      <button-core mode="primary" :disabled="progress" type="submit">
         <span v-if="state === 'login'">Login</span>
         <span v-if="state === 'register'">Register</span>
         <span v-if="state === 'forget'">Send reset link</span>
-      </button>
+      </button-core>
 
       <div v-if="state === 'forget'" class="forget">
         <a @click="changeState('login')">Back</a>
@@ -229,14 +220,20 @@ export default {
 
 <style lang="sass" scoped>
 @import '../../sass/variables'
-@import '../../sass/mixins/all'
+@import '../../core/sass/mixins'
 
 .auth
+  position: absolute
+  left: 0
+  right: 0
+  top: 0
+  bottom: 0
   height: 100vh
   background-color: mix($color-white, $color-black, 90%)
   display: flex
   justify-content: center
   align-items: center
+  width: 100%
 
   &.-progress
     cursor: progress

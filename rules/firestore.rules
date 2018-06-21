@@ -8,8 +8,8 @@ service cloud.firestore {
     }
 
     match /projects/{projectId} {
-    	function isRole(roles) {
-      	return resource.data.roles[request.auth.uid].role in roles;
+    	function isRole(users) {
+      	return resource.data.users[request.auth.uid].role in users;
       }
 
       function allowDraft () {
@@ -42,14 +42,14 @@ service cloud.firestore {
       function allowRoles () {
       	return isRole(['admin'])
         		&& request.writeFields.size() == 1
-        		&& request.writeFields[0].matches('^roles\\..*');
+        		&& request.writeFields[0].matches('^users\\..*');
       }
 
     	allow list: if isRole(['admin', 'editor']);
 
       allow create: if request.auth != null
-      							&& request.resource.data.roles[request.auth.uid].role == 'admin'
-      							&& request.resource.data.roles[request.auth.uid].email == request.auth.token.email
+      							&& request.resource.data.users[request.auth.uid].role == 'admin'
+      							&& request.resource.data.users[request.auth.uid].email == request.auth.token.email
                     && projectId != 'index'
                     && projectId != 'edit'
       							&& projectId != 'content'
@@ -66,16 +66,16 @@ service cloud.firestore {
                     || allowSchema();
 
       match /versions/{versionId} {
-        function isRole(roles) {
-          return get(/databases/$(database)/documents/projects/$(projectId)).data.roles[request.auth.uid].role in roles;
+        function isRole(users) {
+          return get(/databases/$(database)/documents/projects/$(projectId)).data.users[request.auth.uid].role in users;
         }
 
         allow create: if isRole(['admin', 'editor']);
       }
 
       match /jobs/{jobId} {
-        function isRole(roles) {
-          return get(/databases/$(database)/documents/projects/$(projectId)).data.roles[request.auth.uid].role in roles;
+        function isRole(users) {
+          return get(/databases/$(database)/documents/projects/$(projectId)).data.users[request.auth.uid].role in users;
         }
 
         allow create: if isRole(['admin']);

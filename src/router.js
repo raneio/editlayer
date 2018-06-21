@@ -3,7 +3,6 @@ import Router from 'vue-router'
 import Content from '@/views/Content.vue'
 import Schema from '@/views/Schema.vue'
 import Settings from '@/views/Settings.vue'
-import Dashboard from '@/views/Dashboard.vue'
 
 Vue.use(Router)
 
@@ -14,7 +13,6 @@ export default new Router({
     {
       name: 'Dashboard',
       path: '/',
-      component: Dashboard,
     },
     {
       name: 'Register',

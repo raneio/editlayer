@@ -1,32 +1,54 @@
 <script>
+import NewProjectModal from '@/components/dashboard/NewProjectModal'
+
 export default {
   name: 'NewProjectButton',
 
-  methods: {
+  components: {
+    NewProjectModal,
+  },
 
-    newProject () {
-      let name = prompt('Name of Project', '')
+  data () {
+    return {
+      name: '',
+    }
+  },
 
-      if (name !== null && name !== '') {
-        this.$store.dispatch('newProject', {
-          name: name,
-        })
-      }
+  computed: {
+
+    activeModal () {
+      return this.$store.state.utils.activeModal
     },
 
+  },
+
+  methods: {
+    openModal () {
+      this.$store.commit('setActiveModal', 'new-project')
+    },
   },
 
 }
 </script>
 
 <template>
-  <button class="button -success" @click="newProject()">
+<section class="new-project">
+  <button-core
+    size="large"
+    mode="success"
+    @click.native="openModal()"
+  >
     <icon name="plus"/>
     <span>New Project</span>
-  </button>
+  </button-core>
+
+  <transition name="fade--fast">
+    <NewProjectModal v-if="activeModal === 'new-project'"/>
+  </transition>
+</section>
 </template>
 
 <style lang="sass" scoped>
 @import '../../sass/variables'
-@import '../../sass/mixins/all'
+@import '../../core/sass/mixins'
 </style>

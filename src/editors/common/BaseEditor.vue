@@ -57,15 +57,15 @@ export default {
       }
 
       this.$store.commit('setEditorContentValid', true)
-      this.saveContent(newContent)
+      this.updateContent(newContent)
     },
 
   },
 
   methods: {
 
-    saveContent: _.throttle(function (content) {
-      this.$store.dispatch('saveContent', {
+    updateContent: _.throttle(function (content) {
+      this.$store.dispatch('updateContent', {
         projectId: this.$route.params.projectId,
         path: this.$store.getters.activeSchema._path,
         content: content,

@@ -126,22 +126,20 @@ export default {
     :class="{'-focus': focus}"
   />
 
-  <button
-    class="button -circle -secondary add-button"
+  <button-core
+    circle
+    size="small"
+    class="add-button"
     :style="{top: addButton.top}"
     ref="addButton"
-    @click="$refs.fileInput.click()"
+    @click.native="$refs.fileInput.click()"
     v-if="addButton.top !== null"
   >
     <icon name="plus"/>
-  </button>
+  </button-core>
 
   <div class="tools">
-    <!-- <button class="button -small" @click="$refs.fileInput.click()">Upload image</button> -->
-
-    <div>
-      <a href="https://www.markdownguide.org/cheat-sheet" target="markdown-cheat-sheet">Markdown Cheat Sheet</a>
-    </div>
+    <button-core mode="info" light href="https://www.markdownguide.org/cheat-sheet" target="markdown-cheat-sheet">Markdown Cheat Sheet</button-core>
   </div>
 
   <input
@@ -158,14 +156,13 @@ export default {
 
 <style lang="sass" scoped>
 @import '../sass/variables'
-@import '../sass/mixins/all'
+@import '../core/sass/mixins'
 
 .editor.-markdown
   +gap()
 
   .add-button
     position: absolute
-    padding: 0
     top: 0
     left: 0
     transform: translate(-50%, -65%)
@@ -179,8 +176,8 @@ export default {
 
   .vue-codemirror
     // padding: .5rem
-    border: $input-border--basic
-    background-color: $input-background--basic
+    border: $input-border
+    background-color: $input-background
     padding: $input-padding
     padding-left: 1.5rem
     padding-right: 1.5rem
@@ -225,14 +222,14 @@ export default {
       color: $color-gray
 
     .cm-link
-      background-color: mix($link-color--basic, transparent, 7%)
-      color: $link-color--basic
+      background-color: mix($link-color, transparent, 7%)
+      color: $link-color
 
       &:hover
         color: $link-color--hover
 
       + .cm-url
-        background-color: mix($link-color--basic, transparent, 7%)
+        background-color: mix($link-color, transparent, 7%)
 
     .cm-image-marker,
     .cm-image-alt-text,

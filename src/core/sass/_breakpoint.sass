@@ -1,0 +1,27 @@
+//
+// Breakpoints
+// https://medium.freecodecamp.org/the-100-correct-way-to-do-css-breakpoints-88d6a5ba1862
+// --------------------------------------------------
+// .my-element
+//   padding: 10px
+//   +breakpoint('large')
+//     padding: 20px
+//   +breakpoint(1300px)
+//     padding: 25px
+
+@mixin breakpoint($min-width: 0)
+
+  @if $min-width == 'small'
+    $min-width: $breakpoint--small
+
+  @if $min-width == 'medium'
+    $min-width: $breakpoint--medium
+
+  @if $min-width == 'large'
+    $min-width: $breakpoint--large
+
+  @if $min-width == 'huge'
+    $min-width: $breakpoint--huge
+
+  @media (min-width: $min-width)
+    @content

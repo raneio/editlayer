@@ -1,21 +1,17 @@
 <script>
-import Navigation from '@/components/navigate/Navigation'
 import FileLocation from '@/components/settings/FileLocation'
 import Webhook from '@/components/settings/Webhook'
 import Permissions from '@/components/settings/Permissions'
 import DeleteProject from '@/components/settings/DeleteProject'
-import License from '@/components/utils/License'
 
 export default {
   name: 'Settings',
 
   components: {
-    Navigation,
     FileLocation,
     Webhook,
     Permissions,
     DeleteProject,
-    License,
   },
 
   computed: {
@@ -27,8 +23,8 @@ export default {
   },
 
   created () {
-    if (this.$store.getters.activeRole !== 'admin') {
-      this.$router.replace({name: 'Content', params: {projectId: this.activeProject.projectId}})
+    if (this.activeProject.role !== 'admin') {
+      this.$router.replace({name: 'Content', params: {projectId: this.activeProject.id}})
     }
   },
 
@@ -36,48 +32,33 @@ export default {
 </script>
 
 <template>
-<section class="app-layout">
-  <Navigation/>
+<section class="settings">
+  <heading-core mode="primary">
+    <h1>Project settings</h1>
+  </heading-core>
 
-  <main class="main -settings" v-if="activeProject">
-    <div class="container">
-    <h1 class="heading -main">Project settings</h1>
+  <FileLocation class="section"/>
 
-    <FileLocation class="group"/>
+  <Permissions class="section"/>
 
-    <hr>
+  <Webhook class="section"/>
 
-    <Permissions class="group"/>
-
-    <hr>
-
-    <Webhook class="group"/>
-
-    <hr>
-
-    <DeleteProject class="group"/>
-
-    <License/>
-
-    </div>
-  </main>
+  <DeleteProject class="section"/>
 </section>
 </template>
 
 <style lang="sass" scoped>
 @import '../sass/variables'
-@import '../sass/mixins/all'
+@import '../core/sass/mixins'
 
-.main.-settings
-  padding-top: 2rem
+.settings
+  padding: 2rem
+  background-image: $color-gray--gradient
 
-.container
-  max-width: $breakpoint--medium
-  +gap(3rem)
-
-.main.-settings /deep/
-
-  .group
-    +gap(.5rem)
+.section
+  padding-top: 5rem
+  padding-bottom: 5rem
+  padding-right: calc(100% - #{$breakpoint--medium})
+  border-bottom: 1px solid $hr-color
 
 </style>

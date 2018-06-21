@@ -1,0 +1,21 @@
+@import "variables"
+
+.fade-enter-active,
+.fade-leave-active,
+  transition: opacity $time
+
+.fade--fast-enter-active,
+.fade--fast-leave-active
+  transition: opacity $time--small
+
+.fade--slow-enter-active,
+.fade--slow-leave-active
+  transition: opacity $time--large
+
+.fade-enter,
+.fade-leave-to,
+.fade--fast-enter,
+.fade--fast-leave-to,
+.fade--slow-enter,
+.fade--slow-leave-to
+  opacity: 0

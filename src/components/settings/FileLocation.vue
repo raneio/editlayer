@@ -1,5 +1,6 @@
 <script>
 import _ from 'lodash'
+import copy from 'copy-to-clipboard'
 
 export default {
   name: 'FileLocation',
@@ -16,24 +17,16 @@ export default {
       return this.$store.getters.activeProject
     },
 
-    jsonUrl () {
-      return this.$store.getters.jsonUrl
-    },
-
     jsonTarget () {
-      if (!this.activeProject) return false
-      return this.activeProject.projectId
+      return `json-${this.activeProject.id}`
     },
-
-    // copyText () {
-    //   return (this.copied === false) ? 'Copy URL' : 'Copied to the clipboard'
-    // },
 
   },
 
   methods: {
 
-    onCopyUrl () {
+    copyUrl () {
+      copy(this.jsonUrl)
       this.copied = true
       this.quitCopied()
     },
@@ -42,10 +35,6 @@ export default {
       this.copied = false
     }, 4000),
 
-    onCopyUrlError () {
-
-    },
-
   },
 
 }
@@ -53,43 +42,57 @@ export default {
 
 <template>
 <section class="group -file-location">
-  <header class="heading -feature">
-    <h2 class="heading">File location</h2>
-    <p class="tagline">You can find latest published JSON file from following URL address</p>
-  </header>
+  <heading-core mode="secondary">
+    <h2>File location</h2>
+    <p>You can find latest published JSON file from following URL address</p>
+  </heading-core>
 
-  <a class="link" :href="jsonUrl" :target="jsonTarget" v-text="jsonUrl"></a>
+  <!-- <a class="link" :href="jsonUrl" :target="jsonTarget" v-text="jsonUrl"></a> -->
 
-  <button class="button -link"
-    :disabled="copied"
-    v-clipboard:copy="jsonUrl"
-    v-clipboard:success="onCopyUrl"
-    v-clipboard:error="onCopyUrlError"
+  <button-core
+    :href="activeProject.jsonUrl"
+    :target="jsonTarget"
+    light
+    class="json-link"
+    mode="primary"
   >
-    <span v-if="copied === false"><icon name="regular/copy"/> Copy URL</span>
-    <span v-if="copied === true"><icon name="regular/thumbs-up"/> Copied to the clipboard</span>
-  </button>
+    {{activeProject.jsonUrl}}
+  </button-core>
+
+  <section class="tools">
+
+    <button-core light @click.native="copyUrl">
+      <icon name="regular/copy"/>
+      <span>Copy URL</span>
+    </button-core>
+
+    <transition name="fade--fast">
+      <span class="copied" v-show="copied === true">
+        Copied to the clipboard
+      </span>
+    </transition>
+
+  </section>
+
 </section>
 </template>
 
 <style lang="sass" scoped>
 @import '../../sass/variables'
-@import '../../sass/mixins/all'
+@import '../../core/sass/mixins'
 
-.link
-  display: block
-  font-weight: 700
+.json-link
   overflow: hidden
   text-overflow: ellipsis
+  text-transform: none
+  padding: 0
+  text-align: left
 
-.button
+.tools
+  +chain(1rem)
 
-  .fa-icon
-    height: 1rem
-
-  &:disabled
-    cursor: default
-    text-transform: none
-    font-weight: $content-font-weight
+  .copied
+    color: $color-success
+    font-size: .8rem
 
 </style>

@@ -1,14 +1,14 @@
 <script>
 import _ from 'lodash'
+// import firebase from '@/utils/firebase'
+import editorConfig from '@/editors'
+
+// Codemirror
 import { codemirror } from 'vue-codemirror'
-import firebase from '@/utils/firebase'
-import editorConfig from '@/editors/editorConfig'
-
-let editors = []
-
-_.each(editorConfig, configItem => {
-  editors.push(configItem.schemaName)
-})
+import 'codemirror/mode/javascript/javascript'
+import 'codemirror/lib/codemirror.css'
+import 'codemirror/theme/dracula.css'
+import '@/sass/codemirror.sass'
 
 export default {
   name: 'SchemaEditor',
@@ -21,7 +21,6 @@ export default {
     return {
       schema: '',
       syntaxError: false,
-      editors: editors,
     }
   },
 
@@ -29,6 +28,14 @@ export default {
 
     activeProject () {
       return this.$store.getters.activeProject
+    },
+
+    editors () {
+      let editors = []
+      _.each(editorConfig, configItem => {
+        editors.push(configItem.schemaName)
+      })
+      return editors
     },
 
   },
@@ -60,18 +67,8 @@ export default {
         return false
       }
 
-      // if (_.isEmpty(JSON.parse(this.schema))) {
-      //   console.warn('Schema can\'t be empty')
-      //   this.syntaxError = true
-      //   return false
-      // }
-
       if (this.schema !== this.activeProject.schema) {
-        firebase.firestore.collection('projects').doc(this.activeProject.projectId).update({
-          schema: this.schema,
-        })
-          // .then(() => console.log('Schema successfully written!'))
-          .catch((error) => console.error('Error writing schema:', error))
+        this.$store.dispatch('updateSchema', this.schema)
       }
     },
 
@@ -91,62 +88,55 @@ export default {
 </script>
 
 <template>
-<section class="schema" :class="{'-syntax-error': syntaxError}">
+<section class="schema-editor" :class="{'-error': syntaxError}">
+  <section class="editor">
+    <transition name="fade">
+      <div class="error-message" v-if="syntaxError">Invalid JSON Syntax</div>
+    </transition>
 
-  <h1 class="heading -main">
-    Content schema
-  </h1>
+    <codemirror
+      class="-dracula"
+      v-model="schema"
+      :options="{
+        theme: 'dracula',
+        tabSize: 2,
+        lineNumbers: true,
+        mode: 'application/ld+json',
+      }"
+    />
+  </section>
 
-  <div class="error-message">
-    Invalid JSON Syntax
-  </div>
-
-  <codemirror
-    class="-dracula"
-    v-model="schema"
-    :options="{
-      theme: 'dracula',
-      tabSize: 2,
-      lineNumbers: true,
-      mode: 'application/ld+json',
-    }"
-  />
-
-  <div class="alert -info">
-    <strong>Supported editors:</strong>
+  <alert-core mode="info" size="small">
+    <strong>Supported editors: </strong>
     <i>{{editors.join(', ')}}</i>
-  </div>
+  </alert-core>
 
 </section>
 </template>
 
 <style lang="sass" scoped>
 @import '../../sass/variables'
-@import '../../sass/mixins/all'
+@import '../../core/sass/mixins'
 
-.schema
-  padding-top: 2rem
+.schema-editor
   +gap()
 
-  .error-message
-    margin-top: -.75rem
-    margin-bottom: .2rem
-    opacity: 0
-    color: $color-danger
-    text-align: right
-    font-weight: 800
-    font-size: .9rem
-    transition: opacity .2s
+.editor
+  position: relative
+  border-radius: .5rem
+  transition: box-shadow $time
 
-  &.-syntax-error .error-message
-    opacity: 1
+.error-message
+  position: absolute
+  right: 0
+  top: -2rem
+  color: $color-danger
+  font-weight: 800
+  font-size: .9rem
 
-.schema /deep/
+.schema-editor /deep/
 
-  &.-syntax-error .vue-codemirror
-    box-shadow: 0 5px 12px 0 mix(transparent, $color-black, 90%), 0 2px 5px 0 mix(transparent, $color-black, 93%), inset 0 0 0 .2rem $color-danger, 0 0 0 .2rem $color-danger
-
-.alert
-  +chain(.25rem)
+  &.-error .editor
+    box-shadow: 0 0 0 .4rem $color-danger
 
 </style>

@@ -9,6 +9,13 @@
 
 import EditorBase from '@/editors/common/BaseEditor'
 import { codemirror } from 'vue-codemirror'
+import 'codemirror/lib/codemirror.css'
+import 'codemirror/theme/dracula.css'
+import 'codemirror/mode/javascript/javascript'
+import 'codemirror/mode/xml/xml'
+import 'codemirror/mode/css/css'
+import 'codemirror/mode/sass/sass'
+import 'codemirror/mode/markdown/markdown'
 
 export default {
   extends: EditorBase,
@@ -79,5 +86,5 @@ export default {
 
 <style lang="sass" scoped>
 @import '../sass/variables'
-@import '../sass/mixins/all'
+@import '../core/sass/mixins'
 </style>

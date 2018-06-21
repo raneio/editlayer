@@ -105,7 +105,7 @@ export default {
 
   <div ref="textarea" v-html="content"/>
 
-  <button class="button -small" @click="$refs['file-input'].click()">Upload image</button>
+  <button-core size="small" @click.native="$refs['file-input'].click()">Upload image</button-core>
 
   <input
     class="file-input"
@@ -121,7 +121,7 @@ export default {
 
 <style lang="sass" scoped>
 @import '../sass/variables'
-@import '../sass/mixins/all'
+@import '../core/sass/mixins'
 
 .editor.-richtext
   +gap(1em)
@@ -134,8 +134,8 @@ export default {
     border-radius: $input-border-radius
 
     &.ck-blurred
-      border: $input-border--basic
-      background-color: $input-background--basic
+      border: $input-border
+      background-color: $input-background
 
       &:hover
         border: $input-border--hover

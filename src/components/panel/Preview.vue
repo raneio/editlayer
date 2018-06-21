@@ -1,4 +1,4 @@
-// <script>
+<!-- // <script>
 // import _ from 'lodash'
 // // import Color from 'color'
 //
@@ -91,7 +91,7 @@
 //
 // <style lang="sass" scoped>
 // @import '../../sass/variables'
-// @import '../../sass/mixins/all'
+// @import '../../core/sass/mixins'
 //
 // .item
 //   position: relative
@@ -172,4 +172,4 @@
 //         object-fit: cover
 //         filter: brightness(93%)
 //
-// </style>
+// </style> -->
