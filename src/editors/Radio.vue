@@ -1,6 +1,6 @@
 <script>
 /**
- * Video Editor
+ * Radio button Editor
  * @param {string} content - Content saves automatically when changing
  * @param {string} config.EDITOR - Name of editor
  * @param {string} config.TITLE
@@ -16,14 +16,6 @@ export default {
 
   name: 'RadioEditor',
 
-  computed: {
-
-    options () {
-      return this.config.OPTIONS
-    },
-
-  },
-
   methods: {
 
     label (option) {
@@ -38,7 +30,7 @@ export default {
 <template>
 <section class="editor -radio">
 
-  <label class="radio" v-for="(option, index) in options" :key="index">
+  <label class="radio" v-for="(option, index) in config.OPTIONS" :key="index">
     <input
       class="input"
       type="radio"

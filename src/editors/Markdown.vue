@@ -164,8 +164,8 @@ export default {
   .add-button
     position: absolute
     top: 0
-    left: 0
-    transform: translate(-50%, -65%)
+    right: 0
+    transform: translate(50%, -65%)
 
   .tools
     +chain()

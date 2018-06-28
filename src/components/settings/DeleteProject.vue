@@ -4,7 +4,7 @@ import FileLocation from '@/components/settings/FileLocation'
 import Webhook from '@/components/settings/Webhook'
 import Permissions from '@/components/settings/Permissions'
 import DeleteProject from '@/components/settings/DeleteProject'
-import License from '@/components/utils/License'
+import Footer from '@/components/utils/Footer'
 
 export default {
   name: 'Settings',
@@ -15,7 +15,7 @@ export default {
     Webhook,
     Permissions,
     DeleteProject,
-    License,
+    Footer,
   },
 
   computed: {

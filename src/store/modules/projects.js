@@ -50,15 +50,15 @@ export default {
           draft: value.draft || {},
           fetchedAt: value.fetchedAt || null,
           id: key,
-          jsonUrl: `https://firebasestorage.googleapis.com/v0/b/${process.env.VUE_APP__FIREBASE_PROJECT_ID}.appspot.com/o/${key}%2F${value.filename}.json?alt=media&token=${value.downloadToken}`,
+          jsonUrl: `https://firebasestorage.googleapis.com/v0/b/${process.env.VUE_APP__FIREBASE_PROJECT_ID}.appspot.com/o/${key}.json?alt=media`,
           name: value.name || null,
           published: value.published || {},
           role: value.users[rootState.auth.id].role || null,
           users: value.users || {},
           schema: value.schema || null,
           settings: value.settings || {},
-          filename: value.filename || null,
-          downloadToken: value.downloadToken || null,
+          // filename: value.filename || null,
+          // downloadToken: value.downloadToken || null,
           status: value.published && _.isEqual(value.draft, value.published.draft) && value.schema === value.published.schema ? 'published' : 'draft',
         }
       })
@@ -77,7 +77,7 @@ export default {
     newProject ({state, dispatch, rootState}, payload) {
       payload.name = payload.name ? payload.name : `Project ${chance.first()}`
       payload.id = payload.id ? payload.id : slugg(payload.name)
-      payload.filename = payload.filename ? payload.filename : 'content'
+      // payload.filename = payload.filename ? payload.filename : 'content'
       payload.schema = payload.schema ? payload.schema : {
         title: 'input',
         description: 'rich-text',
@@ -85,11 +85,11 @@ export default {
       }
 
       let newProject = {
-        filename: payload.filename,
+        // filename: payload.filename,
         name: payload.name,
         schema: JSON.stringify(payload.schema, '', '\t'),
         users: {},
-        downloadToken: chance.guid(),
+        // downloadToken: chance.guid(),
       }
 
       newProject.users[rootState.auth.id] = {
@@ -118,8 +118,8 @@ export default {
         publishedBy: payload.publishedBy,
         publishedAt: firebase.firestoreTimestamp,
         content: payload.content,
-        filename: payload.filename,
-        downloadToken: payload.downloadToken,
+        // filename: payload.filename,
+        // downloadToken: payload.downloadToken,
       })
 
       payload.versionId = docRef.id
@@ -133,29 +133,17 @@ export default {
     },
 
     async isPublishReady ({state, commit, dispatch}, payload) {
-      payload.versionCheck = !payload.versionCheck ? 0 : payload.versionCheck + 1
+      payload.versionCheck = payload.versionCheck === undefined ? 1 : payload.versionCheck + 1
 
       let response = await axios({
         method: 'GET',
         url: payload.jsonUrl,
         responseType: 'json',
       })
+        .catch(() => false)
 
-      if (payload.versionId !== response.data.VERSION_ID) {
-        console.warn(`Publishing not ready, please wait...`)
-
-        if (payload.versionCheck > 10) {
-          commit('setNotification', {
-            mode: 'danger',
-            message: `Publishing failed. Try again.`,
-          })
-          return null
-        }
-
-        _.delay(() => {
-          dispatch('isPublishReady', payload)
-        }, 1000)
-
+      if (response === false || payload.versionId !== response.data.VERSION_ID) {
+        dispatch('tryPublishAgain', payload)
         return null
       }
 
@@ -183,6 +171,29 @@ export default {
         message: `Project "${payload.projectName}" is published.`,
         link: link,
       })
+    },
+
+    tryPublishAgain ({commit, dispatch}, payload) {
+      if (payload.versionCheck > 10) {
+        commit('setNotification', {
+          mode: 'danger',
+          message: `Publishing "${payload.projectName}" failed. Try again.`,
+        })
+
+        commit('updatePublishProcess', {
+          projectId: payload.projectId,
+          status: 'done',
+        })
+        return null
+      }
+
+      console.warn(`Publishing not ready, please wait...`, payload.versionCheck)
+
+      _.delay(() => {
+        dispatch('isPublishReady', payload)
+      }, 1000)
+
+      return null
     },
 
     newPermission ({commit, dispatch}, payload) {

@@ -1,6 +1,29 @@
 import _ from 'lodash'
 import titleCase from 'title-case'
 
+const setTemplates = (schema, templates) => {
+  if (!templates) return schema
+
+  _.each(schema, (value, key) => {
+    if (key === _.upperCase(key) || _.startsWith(key, '_')) return true
+
+    if (_.has(value, 'TEMPLATE')) {
+      let templateValue = _.cloneDeep(templates[value.TEMPLATE])
+      schema[key] = _.merge(templateValue, value)
+    }
+
+    if (_.isObject(value)) {
+      value = setTemplates(value, templates)
+    }
+  })
+
+  if (_.has(schema, 'TEMPLATES')) {
+    delete schema.TEMPLATES
+  }
+
+  return schema
+}
+
 const simpleToAdvance = (schema) => {
   _.each(schema, (value, key) => {
     if (key === _.upperCase(key) || _.startsWith(key, '_')) return true
@@ -13,8 +36,6 @@ const simpleToAdvance = (schema) => {
       if (_.has(value[0], 'TITLE')) {
         schema[key].TITLE = value[0].TITLE
       }
-
-      value = simpleToAdvance(value)
     }
 
     if (_.isString(value)) {
@@ -43,7 +64,7 @@ const simpleToAdvance = (schema) => {
       }
     }
 
-    if (_.isPlainObject(value)) {
+    if (_.isObject(value)) {
       value = simpleToAdvance(value)
     }
   })
@@ -123,6 +144,48 @@ const addData = (schema, draft) => {
   return schema
 }
 
+const removeIfNot = (schema) => {
+  _.each(schema, (value, key) => {
+    if (_.has(value, 'IF')) {
+      let path = value.IF.split('=')[0].trim().replace('@', '')
+      let content = _.get(schema, `${path}._content`)
+      let condition = value.IF.split('=')[1].trim()
+
+      if (_.includes(condition, '|')) {
+        condition = condition.split('|')
+      }
+
+      if ((_.isString(condition) && condition !== content) || (_.isArray(condition) && !_.includes(condition, content))) {
+        delete schema[key]
+      }
+    }
+
+    if (_.isObject(value)) {
+      value = removeIfNot(value)
+    }
+  })
+
+  return schema
+}
+
+const getDataFromPath = (schema) => {
+  _.each(schema, (value, key) => {
+    if (_.startsWith(value, '@')) {
+      let path = value.replace('@', '')
+      let valueFromPath = _.get(schema, `${path}._content`)
+      if (value) {
+        schema[key] = valueFromPath
+      }
+    }
+
+    if (_.isObject(value)) {
+      value = getDataFromPath(value)
+    }
+  })
+
+  return schema
+}
+
 const addStatus = (schema, draft, published) => {
   _.each(schema, (value, key) => {
     if (!_.isPlainObject(value) || key === _.upperCase(key) || _.startsWith(key, '_')) return true
@@ -135,9 +198,12 @@ const addStatus = (schema, draft, published) => {
 }
 
 export default (schema, draft, published) => {
+  schema = setTemplates(schema, schema.TEMPLATES)
   schema = simpleToAdvance(schema)
   schema = addArraysAndPaths(schema, draft)
   schema = addData(schema, draft)
+  schema = removeIfNot(schema)
+  schema = getDataFromPath(schema)
   schema = addStatus(schema, draft, published)
 
   return schema

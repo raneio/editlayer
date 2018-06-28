@@ -2,11 +2,11 @@
 import Navigation from '@/components/navigation/Navigation'
 import Panel from '@/components/panel/Panel'
 import Breadcrumb from '@/components/navigation/Breadcrumb'
-import License from '@/components/utils/License'
-import Auth from '@/components/auth/Auth'
+import Footer from '@/components/utils/Footer'
 import Notifications from '@/components/utils/Notifications'
 import LoaderOverlay from '@/components/utils/LoaderOverlay'
 import Dashboard from '@/views/Dashboard'
+import Auth from '@/views/Auth'
 
 export default {
   name: 'App',
@@ -15,7 +15,7 @@ export default {
     Navigation,
     Panel,
     Breadcrumb,
-    License,
+    Footer,
     Auth,
     Notifications,
     LoaderOverlay,
@@ -65,6 +65,10 @@ export default {
         this.$store.state.route.name === 'Dashboard'
     },
 
+    showFooter () {
+      return !!this.activeProject
+    },
+
     // isMobile () {
     //   return this.$store.getters.isMobile
     // },
@@ -95,8 +99,8 @@ export default {
 
     <router-view class="router-view" v-if="showRouterView"/>
 
-    <footer class="footer">
-      <License/>
+    <footer class="footer" v-if="showFooter">
+      <Footer/>
     </footer>
   </section>
 

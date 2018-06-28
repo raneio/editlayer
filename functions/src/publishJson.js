@@ -6,7 +6,7 @@ export default (snap, context) => {
   const bucket = admin.storage().bucket()
   const tempFilePath = '/tmp/tempfile.json'
   const versionData = snap.data()
-  const destinationPath = `${context.params.projectId}/${versionData.filename}.json`
+  const destinationPath = `${context.params.projectId}.json`
 
   const jsonFileContent = _.merge(versionData.content, {
     PUBLISHED_AT: versionData.publishedAt,
@@ -18,11 +18,11 @@ export default (snap, context) => {
   return bucket
     .upload(tempFilePath, {
       destination: destinationPath,
-      metadata: {
-        metadata: {
-          firebaseStorageDownloadTokens: versionData.downloadToken,
-        },
-      },
+      // metadata: {
+      //   metadata: {
+      //     firebaseStorageDownloadTokens: versionData.downloadToken,
+      //   },
+      // },
     })
     .then(() => {
       console.log('JSON publishing done')

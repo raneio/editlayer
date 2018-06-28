@@ -8,6 +8,7 @@ import Markdown from '@/editors/Markdown'
 import Radio from '@/editors/Radio'
 import RichText from '@/editors/RichText'
 import Select from '@/editors/Select'
+import SelectImage from '@/editors/SelectImage'
 import Textarea from '@/editors/Textarea'
 import Video from '@/editors/Video'
 
@@ -64,6 +65,11 @@ export default [
     'schemaName': 'select',
     'editor': Select,
     'preview': OptionPreview,
+  },
+  {
+    'schemaName': 'select-image',
+    'editor': SelectImage,
+    'preview': ImagePreview,
   },
   {
     'schemaName': 'textarea',

@@ -24,9 +24,12 @@ $breakpoint--huge: 1800px
 // --------------------------------------------------
 // You can add new colors
 
+$color-primary: #6643AD
 // $color-primary: #EB242D
-$color-primary: #372ddd
-// $color-primary: #6643AD
+// $color-primary: #372ddd
+// $color-primary: #0088B6
+// $color-primary: #0FC3EC
+// $color-primary: #ED1B35
 $color-secondary: #565656
 $color-info: #3D84D5
 $color-success: #3FB143
@@ -35,14 +38,14 @@ $color-danger: #F56064
 $color-black: #252525
 $color-white: #FFFFFF
 
-$color-gray--lightest: mix($color-primary, $color-white, 2%)
-$color-gray--lighter: mix($color-primary, mix($color-black, $color-white, 3%), 5%)
-$color-gray--light: mix($color-primary, mix($color-black, $color-white, 20%), 3%)
-$color-gray: mix($color-primary, mix($color-black, $color-white, 50%), 2.5%)
-$color-gray--dark: mix($color-primary, mix($color-black, $color-white, 70%), 3.5%)
-$color-gray--darker: mix($color-primary, mix($color-black, $color-white, 80%), 3.5%)
-$color-gray--darkest: mix($color-primary, mix($color-black, $color-white, 90%), 3.5%)
-$color-gray--gradient: linear-gradient(to right, mix($color-primary, mix($color-black, $color-white, 1%), 5%), mix($color-primary, mix($color-black, $color-white, 3%), 7%))
+$color-gray--lightest: mix($color-primary, mix($color-black, $color-white, 1%), 1%)
+$color-gray--lighter: mix($color-primary, mix($color-black, $color-white, 3%), 1%)
+$color-gray--light: mix($color-primary, mix($color-black, $color-white, 20%), 1%)
+$color-gray: mix($color-primary, mix($color-black, $color-white, 50%), 3%)
+$color-gray--dark: mix($color-primary, mix($color-black, $color-white, 70%), 3%)
+$color-gray--darker: mix($color-primary, mix($color-black, $color-white, 80%), 3%)
+$color-gray--darkest: mix($color-primary, mix($color-black, $color-white, 90%), 3%)
+$color-gray--gradient: linear-gradient(to right, mix($color-primary, mix($color-black, $color-white, 5%), 1%), mix($color-primary, mix($color-black, $color-white, 7%), 1%))
 
 //
 // Fonts
@@ -56,9 +59,9 @@ $font-family: 'Open Sans', sans-serif
 // --------------------------------------------------
 // You can add new shadows
 
-$shadow--small: 0 .5em 1em 0 mix($color-black, transparent, 5%), 0 0 .4em 0 mix($color-black, transparent, 10%)
-$shadow: 0 .5em 1.5em 0 mix($color-black, transparent, 15%)
-$shadow--large: 0 .5em 2.5em 0 mix($color-black, transparent, 20%)
+$shadow--small: 0 0 .4em 0 mix($color-black, transparent, 10%), 0 .5em 1em 0 mix($color-black, transparent, 5%)
+$shadow: 0 0 .4em 0 mix($color-black, transparent, 10%), 0 .5em 1.5em 0 mix($color-black, transparent, 15%)
+$shadow--large: 0 0 .4em 0 mix($color-black, transparent, 10%), 0 .5em 2.5em 0 mix($color-black, transparent, 20%)
 
 //
 // Times
@@ -121,7 +124,7 @@ $container-vertical-padding: 5rem
 $content-color: $color-black
 $content-font-family: $font-family
 $content-font-weight: 400
-$content-line-height: 1.5
+$content-line-height: 1.5em
 
 //
 // Headings
@@ -131,6 +134,7 @@ $heading-color: $color-black
 $heading-font-family: $font-family
 $heading-font-size: 1rem
 $heading-font-weight: 300
+$heading-line-height: 1.25em
 
 //
 // Horizontal rules

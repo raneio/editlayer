@@ -10,9 +10,9 @@ const chance = new Chance()
 export default {
   name: 'ItemsFromArray',
 
-  props: {
-    selectItem: Function,
-  },
+  // props: {
+  //   selectItem: Function,
+  // },
 
   components: {
     Item,
@@ -21,6 +21,7 @@ export default {
 
   data () {
     return {
+      manageItems: false,
       movingArrayItem: {
         idx: null,
         path: null,
@@ -88,7 +89,7 @@ export default {
   watch: {
 
     activeSchema (value) {
-      this.findFirstItem()
+      this.selectFirstItem()
     },
 
   },
@@ -128,15 +129,10 @@ export default {
         .collection('projects')
         .doc(this.projectId)
         .update(updateData)
-        .then(() => {
-          // console.log('New item added!')
-          let pathUrl = _.replace(`${itemPath}.${randomKey}`, /\./g, '>')
-          this.$router.push({name: 'Content', params: {projectId: this.projectId, path: pathUrl}})
-        })
         .catch((error) => console.error('Error new item:', error))
     },
 
-    findFirstItem () {
+    selectFirstItem () {
       let path = _.replace(this.$route.params.path, />/g, '.')
 
       if (path !== this.activeSchema._path) return false
@@ -237,7 +233,7 @@ export default {
   },
 
   created () {
-    this.findFirstItem()
+    this.selectFirstItem()
   },
 
 }
@@ -248,19 +244,30 @@ export default {
 
   <header class="header">
     <BackButton/>
-    <button-core mode="success" size="small" @click.native="newItem()">
-      <icon name="plus"/>
-      <span>New Item</span>
+
+    <button-core size="small" light @click.native="manageItems = true" v-if="!manageItems">
+      <span>Manage items</span>
+    </button-core>
+
+    <button-core size="small" light @click.native="manageItems = false" v-if="manageItems">
+      <span>Done</span>
     </button-core>
   </header>
 
-  <section class="content">
+  <main class="main">
+
+    <header class="header">
+      <button-core mode="success" @click.native="newItem()">
+        <icon name="plus"/>
+        <span>New Item</span>
+      </button-core>
+    </header>
 
     <div class="no-items" v-if="arrayItems.length === 0">
       <div>No items - add first item</div>
     </div>
 
-    <div
+    <section
       class="array-item"
       v-for="(arrayItem, arrayIdx) in arrayItems"
       :key="arrayIdx"
@@ -275,14 +282,14 @@ export default {
         Move Here
       </button-core>
 
-      <div class="tools">
-        <button-core light @click.native="moveArrayItem(arrayItem, arrayIdx)" v-if="confirmDeleteIdx !== arrayIdx">Move</button-core>
-        <button-core light @click.native="deleteArrayItem(arrayIdx)" v-if="confirmDeleteIdx !== arrayIdx">Delete</button-core>
+      <div class="tools" v-if="manageItems">
+        <button-core size="small" light @click.native="moveArrayItem(arrayItem, arrayIdx)" v-if="confirmDeleteIdx !== arrayIdx">Move</button-core>
+        <button-core size="small" light @click.native="deleteArrayItem(arrayIdx)" v-if="confirmDeleteIdx !== arrayIdx">Delete</button-core>
 
         <div class="confirm" v-if="confirmDeleteIdx === arrayIdx">
           <div>Are you sure?</div>
-          <button-core light @click.native="confirmDeleteNo()">No</button-core>
-          <button-core mode="danger" light @click.native="confirmDeleteYes(arrayItem, arrayIdx)">Yes</button-core>
+          <button-core size="small" light @click.native="confirmDeleteNo()">No</button-core>
+          <button-core size="small" mode="danger" light @click.native="confirmDeleteYes(arrayItem, arrayIdx)">Yes</button-core>
         </div>
       </div>
 
@@ -296,13 +303,13 @@ export default {
           v-for="item in arrayItem"
           v-if="typeof item === 'object'"
           :item="item"
-          :selectItem="selectItem"
+          :parentItems="arrayItem"
           :key="item._path"
         />
 
       </div>
 
-    </div>
+    </section>
 
     <button-core
       mode="primary"
@@ -313,7 +320,7 @@ export default {
       Move Here
     </button-core>
 
-  </section>
+  </main>
 
 </section>
 </template>
@@ -330,40 +337,37 @@ export default {
     +chain()
     justify-content: space-between
 
+  .main > .header
+    margin-top: -1rem
+    +center()
+
   .tools
     +chain(.5rem)
-    // justify-content: flex-end
     transition: opacity .2s
-    // font-size: .9rem
-    margin-bottom: .75rem
+    justify-content: flex-end
 
     .confirm
       +chain(1rem)
       align-items: center
 
   .move-here
-    position: absolute
-    top: 0
-    left: 0
-    right: 0
-    transform: translateY(-50%)
-    z-index: 1
+    +center()
+    margin-bottom: 2rem
     width: 100%
 
   .move-last
     display: block
     width: 100%
-    margin-top: 1rem
+    margin-top: 2rem
     flex-shrink: 0
 
   .array-item
     position: relative
-
-    & + .array-item
-      margin-top: 5rem
+    // background-color: $color-gray--gradient
+    // border-radius: $radius
 
   .items
-    +gap(1rem)
+    +gap(.5rem)
     position: relative
     transition: transform .2s
 
@@ -379,32 +383,31 @@ export default {
         border-bottom-right-radius: 0
 
       &:first-of-type
-        border-top-left-radius: $button-border-radius
-        border-top-right-radius: $button-border-radius
+        border-top-left-radius: $radius
+        border-top-right-radius: $radius
 
         &::after
-          border-top-left-radius: $button-border-radius
+          border-top-left-radius: $radius
 
       &:last-of-type
-        border-bottom-left-radius: $button-border-radius
-        border-bottom-right-radius: $button-border-radius
+        border-bottom-left-radius: $radius
+        border-bottom-right-radius: $radius
 
         &::after
-          border-bottom-left-radius: $button-border-radius
+          border-bottom-left-radius: $radius
 
         & > :last-child
-          border-bottom-left-radius: $button-border-radius
-          border-bottom-right-radius: $button-border-radius
+          border-bottom-left-radius: $radius
+          border-bottom-right-radius: $radius
 
   &.-moving
 
-    .header,
-    .tools
+    .header
       opacity: 0
       pointer-events: none
 
-    .array-item
-      border-top-color: transparent
+    .tools
+      display: none
 
     .items
 
@@ -419,12 +422,12 @@ export default {
         &::after
           content: ''
           position: absolute
-          top: -2rem
-          bottom: -2rem
+          top: -1rem
+          bottom: -1rem
           left: -.75rem
           right: -.75rem
           border: 3px dashed $color-primary
-          border-radius: $button-border-radius
+          border-radius: $radius
 
         .item
           opacity: 1

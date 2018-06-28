@@ -6,9 +6,9 @@ import BackButton from '@/components/navigation/BackButton'
 export default {
   name: 'ItemsFromObject',
 
-  props: {
-    selectItem: Function,
-  },
+  // props: {
+  //   selectItem: Function,
+  // },
 
   components: {
     Item,
@@ -38,11 +38,15 @@ export default {
     },
 
     items () {
-      return _.filter(this.activeSchema, (value) => {
+      let items = {}
+
+      _.each(this.activeSchema, (value, key) => {
         if (_.isPlainObject(value)) {
-          return value
+          items[key] = value
         }
       })
+
+      return items
     },
 
   },
@@ -60,7 +64,6 @@ export default {
     findFirstItem () {
       if (!this.activeSchema) return false
       if (this.$route.name !== 'Content') return false
-      // if (this.$store.getters.isMobile) return false
 
       let path = _.replace(this.$route.params.path, />/g, '.')
       if (path !== '' && path !== this.activeSchema._path) return false
@@ -93,16 +96,16 @@ export default {
     <BackButton/>
   </header>
 
-  <section class="content">
+  <main class="main">
 
     <Item
       v-for="item in items"
       :item="item"
-      :selectItem="selectItem"
+      :parentItems="items"
       :key="item.path"
     />
 
-  </section>
+  </main>
 
 </section>
 </template>

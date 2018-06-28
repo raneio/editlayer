@@ -24,6 +24,8 @@ export default {
   <button-core mode="invert" light class="logo" href="https://editlayer.com">
     <icon name="editlayer"/>
     <span>Editlayer</span>
+    <!-- <span class="light">Store</span> -->
+    <!-- <span>visio</span> -->
   </button-core>
 
   <button-core mode="invert" light class="logout" @click.native="logout()">
@@ -40,8 +42,8 @@ export default {
 .navigation
   +chain()
   +container('huge')
-  padding-top: 1rem
-  padding-bottom: 1rem
+  padding-top: .5rem
+  padding-bottom: .5rem
   width: 100%
   background: linear-gradient(to bottom, $color-primary, mix($color-primary, $color-black, 85%))
   justify-content: space-between
@@ -50,6 +52,10 @@ export default {
   .logo
     +chain(.5rem)
     font-weight: 900
-    font-size: 1.5rem
+    font-size: 1.7rem
+    text-transform: none
+
+    .light
+      font-weight: 300
 
 </style>

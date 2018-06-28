@@ -78,14 +78,14 @@ export default {
 
       anime.timeline()
         .add({
-          targets: '.panel > .content',
+          targets: '.js-panel',
           translateX: '100%',
           opacity: 0,
           easing: 'linear',
-          duration: 100,
+          duration: 150,
         })
         .add({
-          targets: '.panel > .content',
+          targets: '.js-panel',
           translateX: '-100%',
           duration: 0,
           complete: (anim) => {
@@ -98,11 +98,11 @@ export default {
           },
         })
         .add({
-          targets: '.panel > .content',
+          targets: '.js-panel',
           translateX: 0,
           opacity: 1,
           easing: 'linear',
-          duration: 100,
+          duration: 150,
         })
     },
 

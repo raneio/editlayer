@@ -63,6 +63,9 @@ export default {
       text-overflow: ellipsis
       white-space: nowrap
 
+    &:last-child
+      border-bottom: 0
+
   .main
     padding: 1em 1.5rem
 

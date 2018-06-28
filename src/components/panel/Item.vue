@@ -1,6 +1,7 @@
 <script>
 import _ from 'lodash'
-import editorConfig from '@/editors'
+import anime from 'animejs'
+import editorConfig from '@/editors/config'
 
 let components = {}
 let editors = []
@@ -15,12 +16,17 @@ export default {
 
   props: {
     item: Object,
-    selectItem: Function,
+    parentItems: Object,
+    // selectItem: Function,
   },
 
   components,
 
   computed: {
+
+    projectId () {
+      return this.$route.params.projectId
+    },
 
     isActive () {
       if (this.$route.name !== 'Content') return false
@@ -38,6 +44,59 @@ export default {
     activePreviewComponentName () {
       let configItem = _.find(editorConfig, {'schemaName': this.item.EDITOR})
       return configItem ? configItem.preview.name : false
+    },
+
+    title () {
+      if (!this.item.TITLE) return '…'
+      return this.item.TITLE
+    },
+
+  },
+
+  methods: {
+
+    selectItem (item) {
+      let projectId = (item.FILE_ID) ? item.FILE_ID : this.projectId
+      let routeName = (item._type === 'value') ? 'Content' : this.$route.name
+      let path = _.replace(item._path, /\./g, '>')
+
+      if (item._type === 'value') {
+        this.$router.push({name: routeName, params: {projectId: projectId, path: path}})
+        return false
+      }
+
+      if (routeName === 'Dashboard') {
+        routeName = (this.$route.params.view === 'schema') ? 'Schema' : 'Content'
+      }
+
+      anime.timeline()
+        .add({
+          targets: '.js-panel',
+          translateX: '-100%',
+          opacity: 0,
+          easing: 'linear',
+          duration: 150,
+        })
+        .add({
+          targets: '.js-panel',
+          translateX: '100%',
+          duration: 0,
+          complete: (anim) => {
+            if (path) {
+              this.$router.push({name: routeName, params: {projectId: projectId, path: path}})
+            }
+            else {
+              this.$router.push({name: routeName, params: {projectId: projectId}})
+            }
+          },
+        })
+        .add({
+          targets: '.js-panel',
+          translateX: 0,
+          opacity: 1,
+          easing: 'linear',
+          duration: 150,
+        })
     },
 
   },
@@ -60,7 +119,7 @@ export default {
 
   <header class="header">
 
-    <h2 class="heading" v-text="item.TITLE"/>
+    <h2 class="heading" v-text="title"/>
 
     <span v-if="isDraft" class="draft">draft</span>
 
@@ -72,42 +131,6 @@ export default {
 
   <component :is="activePreviewComponentName" :item="item"/>
 
-  <!-- <Preview :item="item"/> -->
-
-  <!-- <div
-    class="content -text"
-    v-if="preview.type === 'text'"
-    v-text="preview.content"
-  />
-
-  <div
-    class="content -code"
-    v-if="preview.type === 'code'"
-    v-text="preview.content"
-  />
-
-  <div
-    class="content -color"
-    :class="{'-isDark': preview.isDark}"
-    :style="{'backgroundColor': preview.color}"
-    v-if="preview.type === 'color'"
-    v-text="preview.content"
-  />
-
-  <div
-    class="content -switch"
-    :class="{'-isOn': preview.content === 'ON', '-isOff': preview.content === 'OFF'}"
-    v-if="preview.type === 'switch'"
-    v-text="preview.content"
-  />
-
-  <div
-    class="content -image"
-    v-if="preview.type === 'image'"
-  >
-    <img class="image" :src="preview.content" alt="" v-if="preview.content !== null">
-  </div> -->
-
 </card-core>
 </template>
 
@@ -118,6 +141,7 @@ export default {
 .item
   position: relative
   overflow: hidden
+  flex-shrink: 0
 
   &::after
     content: ''
@@ -135,6 +159,15 @@ export default {
 
     .text
       +chain(.25rem)
+
+  &.-parent
+
+    .header
+      padding-top: 1.5em
+      padding-bottom: 1.5em
+
+    .heading
+      white-space: normal
 
   .draft
     color: $color-warning

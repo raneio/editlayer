@@ -219,8 +219,8 @@ export default {
 </template>
 
 <style lang="sass" scoped>
-@import '../../sass/variables'
-@import '../../core/sass/mixins'
+@import '../sass/variables'
+@import '../core/sass/mixins'
 
 .auth
   position: absolute

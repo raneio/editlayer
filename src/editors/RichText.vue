@@ -45,7 +45,7 @@ export default {
     options () {
       return {
         theme: 'bubble',
-        bounds: '.main.-content',
+        bounds: '.main-panel',
         placeholder: _.has(this.config, 'PLACEHOLDER') ? this.config.PLACEHOLDER : '',
         modules: {
           toolbar: {
@@ -177,7 +177,8 @@ export default {
     position: absolute
     padding: 0
     top: 0
-    transform: translate(-50%, -17%)
+    right: 0
+    transform: translate(50%, -17%)
 
 .editor.-rich-text /deep/
 

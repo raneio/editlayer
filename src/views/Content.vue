@@ -18,15 +18,11 @@ export default {
 
 <template>
 <main class="content">
-  <heading-core mode="primary">
-    <h1>{{activeSchema.TITLE}}</h1>
-  </heading-core>
+  <div class="no-content" v-if="activeSchema._type !== 'value'">
+    <icon class="icon" name="regular/times-circle"/>
+  </div>
 
-  <alert-core mode="info" v-if="activeSchema.INFO">
-    {{activeSchema.INFO}}
-  </alert-core>
-
-  <Editor/>
+  <Editor v-if="activeSchema._type === 'value'"/>
 </main>
 </template>
 
@@ -35,7 +31,19 @@ export default {
 @import '../core/sass/mixins'
 
 .content
+  display: flex
   +gap()
-  padding: 2rem
+  padding: 2rem 3rem
+
+.no-content
+  align-self: stretch
+  width: 100%
+  +center()
+
+  .icon
+    width: 50%
+    max-height: 50%
+    min-height: 5rem
+    color: $color-gray--lighter
 
 </style>

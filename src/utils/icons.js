@@ -19,6 +19,7 @@ import 'vue-awesome/icons/sign-out-alt'
 import 'vue-awesome/icons/regular/copy'
 import 'vue-awesome/icons/regular/thumbs-up'
 import 'vue-awesome/icons/times'
+import 'vue-awesome/icons/regular/times-circle'
 
 Icon.register({
   editlayer: {

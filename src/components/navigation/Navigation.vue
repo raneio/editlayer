@@ -1,6 +1,6 @@
 <script>
 import Breadcrumb from '@/components/navigation/Breadcrumb'
-import PublishButton from '@/components/navigation/PublishButton'
+import PublishButton from '@/components/content/PublishButton'
 
 export default {
   name: 'Navigation',

@@ -39,7 +39,8 @@ export default {
 @import '../core/sass/mixins'
 
 .schema
+  +gap()
   background-color: $background-color
-  padding: 2rem
+  padding: 2rem 3rem
 
 </style>

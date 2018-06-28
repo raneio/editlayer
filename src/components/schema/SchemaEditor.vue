@@ -1,7 +1,7 @@
 <script>
 import _ from 'lodash'
 // import firebase from '@/utils/firebase'
-import editorConfig from '@/editors'
+import editorConfig from '@/editors/config'
 
 // Codemirror
 import { codemirror } from 'vue-codemirror'

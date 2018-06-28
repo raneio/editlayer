@@ -2,7 +2,7 @@
 import Projects from '@/components/dashboard/Projects'
 import NewProjectButton from '@/components/dashboard/NewProjectButton'
 import Navigation from '@/components/dashboard/Navigation'
-import License from '@/components/utils/License'
+import Footer from '@/components/utils/Footer'
 
 export default {
   name: 'Dashboard',
@@ -11,7 +11,7 @@ export default {
     Navigation,
     Projects,
     NewProjectButton,
-    License,
+    Footer,
   },
 
   mounted () {
@@ -40,7 +40,7 @@ export default {
   </main>
 
   <footer class="footer">
-    <License/>
+    <Footer/>
   </footer>
 </section>
 </template>

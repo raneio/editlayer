@@ -1,6 +1,6 @@
 <script>
 import _ from 'lodash'
-import editorConfig from '@/editors'
+import editorConfig from '@/editors/config'
 
 let components = {}
 let editors = []
@@ -75,6 +75,13 @@ export default {
 
 <template>
 <section class="editor">
+  <heading-core mode="primary">
+    <h1>{{activeSchema.TITLE}}</h1>
+  </heading-core>
+
+  <alert-core mode="info" v-if="activeSchema.INFO">
+    {{activeSchema.INFO}}
+  </alert-core>
 
   <component :is="activeComponentName" v-if="isSupported && !forceEditorReload"/>
 
@@ -97,6 +104,7 @@ export default {
 
 .editor
   position: relative
+  width: 100%
   +gap()
 
 .error

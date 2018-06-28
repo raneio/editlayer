@@ -94,8 +94,8 @@ export default {
           publishedBy: payload.publishedBy,
           publishedAt: firebase.firestoreTimestamp,
           content: payload.content,
-          filename: payload.filename,
-          downloadToken: payload.downloadToken,
+          // filename: payload.filename,
+          // downloadToken: payload.downloadToken,
         })
         .catch((error) => console.error('Error adding version:', error))
     },

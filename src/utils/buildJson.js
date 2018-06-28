@@ -8,6 +8,7 @@ const basicToJson = (schema, result = {}) => {
 
     if (_.has(value, '_order') && _.has(value, '_path')) {
       _.set(result, `${value._path}._order`, value._order)
+      _.set(result, `${value._path}._key`, key)
     }
 
     if (_.isPlainObject(value)) {

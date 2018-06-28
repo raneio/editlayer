@@ -1,10 +1,11 @@
 <script>
 /**
- * Video Editor
+ * Video editor
  * @param {object} content - Content saves automatically when changing
  * @param {string} config.EDITOR - Name of editor
  * @param {string} config.TITLE
  * @param {string} config.PLACEHOLDER
+ * @param {string} input - Video URL of Youtube or Vimeo
  */
 
 import EditorBase from '@/editors/common/BaseEditor'

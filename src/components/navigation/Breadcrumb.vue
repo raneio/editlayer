@@ -1,7 +1,6 @@
 <script>
 import _ from 'lodash'
 import anime from 'animejs'
-import titleCase from 'title-case'
 
 export default {
   name: 'Breadcrumb',
@@ -38,7 +37,7 @@ export default {
 
         if (item && !_.has(item, '_order')) {
           breadcrumb.unshift({
-            name: titleCase(item.TITLE),
+            name: item.TITLE,
             path: path,
             projectId: this.$route.params.projectId,
           })
@@ -70,14 +69,14 @@ export default {
 
       anime.timeline()
         .add({
-          targets: '.panel > .content',
+          targets: '.js-panel',
           translateX: '100%',
           opacity: 0,
           easing: 'linear',
-          duration: 100,
+          duration: 150,
         })
         .add({
-          targets: '.panel > .content',
+          targets: '.js-panel',
           translateX: '-100%',
           duration: 0,
           complete: (anim) => {
@@ -90,11 +89,11 @@ export default {
           },
         })
         .add({
-          targets: '.panel > .content',
+          targets: '.js-panel',
           translateX: 0,
           opacity: 1,
           easing: 'linear',
-          duration: 100,
+          duration: 150,
         })
     },
 
@@ -115,7 +114,7 @@ export default {
     <icon name="chevron-right" v-if="idx > 0"/>
 
     <button-core
-      link
+      light
       v-if="idx < breadcrumb.length-1"
       @click.native="selectItem(item)"
     >
