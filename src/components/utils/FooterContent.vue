@@ -1,11 +1,11 @@
 <script>
 export default {
-  name: 'Footer',
+  name: 'FooterContent',
 }
 </script>
 
 <template>
-<section class="footer">
+<section class="footer-content">
   <a class="badge" href="https://editlayer.com">
     <img class="image" src="/powered-by-editlayer.svg" alt="">
   </a>
@@ -35,13 +35,20 @@ export default {
 @import '../../sass/variables'
 @import '../../core/sass/mixins'
 
-.footer
+.footer-content
   font-size: .8rem
-  // text-align: center
-  opacity: .5
+  text-align: center
+  opacity: .4
   transition: opacity $time
-  +chain(1rem)
   +center()
+  flex-direction: column
+  +gap()
+
+  +breakpoint('large')
+    +gap(0)
+    +chain(1rem)
+    flex-direction: row
+    text-align: left
 
   &:hover
     opacity: 1
@@ -50,16 +57,15 @@ export default {
     padding-top: .25em
     padding-bottom: .25em
 
-  .badge
-    +center()
+  .badge .image
+    height: 3.5rem
+    filter: grayscale(1)
+    transition: filter $time, opacity $time
     box-shadow: $shadow
+    opacity: .6
 
-    .image
-      height: 3rem
-      filter: grayscale(1)
-      transition: filter $time
-
-    &:hover .image
+    &:hover
       filter: none
+      opacity: 1
 
 </style>

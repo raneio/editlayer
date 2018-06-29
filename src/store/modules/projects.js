@@ -40,15 +40,14 @@ export default {
 
     projects (state, getters, rootState) {
       if (rootState.firestore.editorProjects === null || rootState.firestore.adminProjects === null) return null
-
-      let firestoreProjects = _.merge(rootState.firestore.editorProjects, rootState.firestore.adminProjects)
+      const editorProjects = _.cloneDeep(rootState.firestore.editorProjects)
+      const adminProjects = _.cloneDeep(rootState.firestore.adminProjects)
+      const firestoreProjects = _.merge(editorProjects, adminProjects)
       let projects = {}
 
       _.each(firestoreProjects, (value, key) => {
-        // TODO: publishedAt to the better format
         projects[key] = {
           draft: value.draft || {},
-          fetchedAt: value.fetchedAt || null,
           id: key,
           jsonUrl: `https://firebasestorage.googleapis.com/v0/b/${process.env.VUE_APP__FIREBASE_PROJECT_ID}.appspot.com/o/${key}.json?alt=media`,
           name: value.name || null,
@@ -57,13 +56,11 @@ export default {
           users: value.users || {},
           schema: value.schema || null,
           settings: value.settings || {},
-          // filename: value.filename || null,
-          // downloadToken: value.downloadToken || null,
           status: value.published && _.isEqual(value.draft, value.published.draft) && value.schema === value.published.schema ? 'published' : 'draft',
         }
       })
 
-      return _.orderBy(projects, 'name')
+      return projects
     },
 
     activeProject (state, getters, rootState) {

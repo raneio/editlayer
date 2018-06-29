@@ -1,4 +1,5 @@
-import Vue from 'vue'
+// import Vue from 'vue'
+import _ from 'lodash'
 import firebase from '@/utils/firebase'
 import Chance from 'chance'
 
@@ -13,15 +14,12 @@ export default {
 
   mutations: {
 
-    setProjects (state, payload) {
-      let projects = {}
+    setAdminProjects (state, projects) {
+      state.adminProjects = projects
+    },
 
-      payload.querySnapshot.forEach((doc) => {
-        projects[doc.id] = doc.data()
-        projects[doc.id].fetchedAt = Date.now()
-      })
-
-      Vue.set(state, payload.group, projects)
+    setEditorProjects (state, projects) {
+      state.editorProjects = projects
     },
 
   },
@@ -32,21 +30,23 @@ export default {
       firebase.firestore
         .collection('projects')
         .where(`users.${rootState.auth.id}.role`, '==', 'admin')
-        .onSnapshot((querySnapshot) => {
-          commit('setProjects', {
-            group: 'adminProjects',
-            querySnapshot: querySnapshot,
+        .onSnapshot(querySnapshot => {
+          let projects = {}
+          querySnapshot.forEach(doc => {
+            projects[doc.id] = doc.data()
           })
+          commit('setAdminProjects', projects)
         })
 
       firebase.firestore
         .collection('projects')
         .where(`users.${rootState.auth.id}.role`, '==', 'editor')
-        .onSnapshot((querySnapshot) => {
-          commit('setProjects', {
-            group: 'editorProjects',
-            querySnapshot: querySnapshot,
+        .onSnapshot(querySnapshot => {
+          let projects = {}
+          querySnapshot.forEach(doc => {
+            projects[doc.id] = doc.data()
           })
+          commit('setEditorProjects', projects)
         })
     },
 

@@ -19,7 +19,7 @@ export default {
 <template>
 <main class="content">
   <div class="no-content" v-if="activeSchema._type !== 'value'">
-    <icon class="icon" name="regular/times-circle"/>
+    <icon class="icon" name="kiwi-bird"/>
   </div>
 
   <Editor v-if="activeSchema._type === 'value'"/>
@@ -41,8 +41,8 @@ export default {
   +center()
 
   .icon
-    width: 50%
-    max-height: 50%
+    width: 40%
+    max-height: 40%
     min-height: 5rem
     color: $color-gray--lighter
 

@@ -2,7 +2,7 @@
 import Navigation from '@/components/navigation/Navigation'
 import Panel from '@/components/panel/Panel'
 import Breadcrumb from '@/components/navigation/Breadcrumb'
-import Footer from '@/components/utils/Footer'
+import FooterContent from '@/components/utils/FooterContent'
 import Notifications from '@/components/utils/Notifications'
 import LoaderOverlay from '@/components/utils/LoaderOverlay'
 import Dashboard from '@/views/Dashboard'
@@ -15,7 +15,7 @@ export default {
     Navigation,
     Panel,
     Breadcrumb,
-    Footer,
+    FooterContent,
     Auth,
     Notifications,
     LoaderOverlay,
@@ -65,7 +65,7 @@ export default {
         this.$store.state.route.name === 'Dashboard'
     },
 
-    showFooter () {
+    showFooterContent () {
       return !!this.activeProject
     },
 
@@ -99,8 +99,8 @@ export default {
 
     <router-view class="router-view" v-if="showRouterView"/>
 
-    <footer class="footer" v-if="showFooter">
-      <Footer/>
+    <footer class="footer" v-if="showFooterContent">
+      <FooterContent/>
     </footer>
   </section>
 
@@ -137,10 +137,9 @@ export default {
 
 .side-panel
   flex-shrink: 0
-  width: 100%
+  flex-basis: auto
 
-  +breakpoint(900px)
-    flex-shrink: 0
+  +breakpoint('medium')
     width: 22rem
 
 .main-panel

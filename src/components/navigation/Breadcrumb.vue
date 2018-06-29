@@ -141,7 +141,7 @@ export default {
   height: 3rem
   color: $color-gray
 
-.button.-link
+.button-core
   text-transform: none
 
 .crumb
@@ -149,6 +149,6 @@ export default {
 
 .fa-icon
   width: .4rem
-  fill: mix($content-color, $background-color, 30%)
+  color: $color-gray--light
 
 </style>
