@@ -37,6 +37,20 @@ export default {
     <h1>Project settings</h1>
   </heading-core>
 
+  <!-- <section class="section">
+    <label>
+      Project Name
+      <input type="text" name="" value="">
+    </label>
+
+    <label>
+      Published content JSON
+      <input type="text" name="" value="https://firebasestorage.googleapis.com/v0/b/editlayer-development.appspot.com/o/xdev%2Fcontent.json?alt=media&token=hgai3jgal2lp2z">
+      <button-core>Copy</button-core>
+      <button-core>Open</button-core>
+    </label>
+  </section> -->
+
   <FileLocation class="section"/>
 
   <Permissions class="section"/>

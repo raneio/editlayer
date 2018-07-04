@@ -85,6 +85,10 @@ export default {
       let updateData = {}
       updateData['settings.webhook.enabled'] = !this.enabled
 
+      if (!this.config) {
+        this.resetConfig()
+      }
+
       firebase.firestore
         .collection('projects')
         .doc(this.projectId)
@@ -117,7 +121,6 @@ export default {
   </heading-core>
 
   <alert-core mode="info" size="small" v-if="enabled !== false">
-    <!-- <li>You can use API of <a href="https://github.com/axios/axios#axios-api">Axios HTTP client</a>.</li> -->
     <div>Variable <code><strong><span>{{</span>BASE64_CONTENT<span>}}</span></strong></code> is published content encoded with <a href="https://github.com/dankogai/js-base64" target="Base64">Base64</a>.</div>
     <div>Variable <code><strong><span>{{</span>VERSION_ID<span>}}</span></strong></code> is version of published JSON.</div>
     <div>Variable <code><strong><span>{{</span>PUBLISHER_EMAIL<span>}}</span></strong></code> is email of publisher.</div>

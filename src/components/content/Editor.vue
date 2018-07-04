@@ -23,17 +23,17 @@ export default {
   components,
 
   computed: {
-    activeSchema () {
-      return this.$store.getters.activeSchema
+    activeStructure () {
+      return this.$store.getters.activeStructure
     },
 
     activeComponentName () {
-      let configItem = _.find(editorConfig, {'schemaName': this.activeSchema.EDITOR})
+      let configItem = _.find(editorConfig, {'schemaName': this.activeStructure.EDITOR})
       return configItem.editor.name
     },
 
     isSupported () {
-      return _.includes(this.editors, this.activeSchema.EDITOR)
+      return _.includes(this.editors, this.activeStructure.EDITOR)
     },
 
     editorContentIsValid () {
@@ -42,7 +42,7 @@ export default {
   },
 
   watch: {
-    'activeSchema._path' (value) {
+    'activeStructure._path' (value) {
       this.forceEditorReload = true
       this.$nextTick(() => {
         this.forceEditorReload = false
@@ -76,17 +76,17 @@ export default {
 <template>
 <section class="editor">
   <heading-core mode="primary">
-    <h1>{{activeSchema.TITLE}}</h1>
+    <h1>{{activeStructure.TITLE}}</h1>
   </heading-core>
 
-  <alert-core mode="info" v-if="activeSchema.INFO">
-    {{activeSchema.INFO}}
+  <alert-core mode="info" v-if="activeStructure.INFO">
+    {{activeStructure.INFO}}
   </alert-core>
 
   <component :is="activeComponentName" v-if="isSupported && !forceEditorReload"/>
 
-  <alert-core mode="warning" v-if="!isSupported && activeSchema.EDITOR">
-    Editor "<strong>{{activeSchema.EDITOR}}</strong>" is not supported, please change editor in the schema. Following editors are supported: <i>{{editors.join(', ')}}</i>
+  <alert-core mode="warning" v-if="!isSupported && activeStructure.EDITOR">
+    Editor "<strong>{{activeStructure.EDITOR}}</strong>" is not supported, please change editor in the schema. Following editors are supported: <i>{{editors.join(', ')}}</i>
   </alert-core>
 
   <div class="error" v-if="!editorContentIsValid">
@@ -105,6 +105,7 @@ export default {
 .editor
   position: relative
   width: 100%
+  flex-shrink: 0
   +gap()
 
 .error

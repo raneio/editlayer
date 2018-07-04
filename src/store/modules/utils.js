@@ -8,6 +8,7 @@ export default {
     editorContentIsValid: true,
     windowHeight: window.innerWidth,
     windowWidth: window.innerHeight,
+    invalidSchemas: {},
   },
 
   mutations: {
@@ -23,6 +24,17 @@ export default {
 
     setActiveModal (state, modal) {
       Vue.set(state, 'activeModal', modal)
+    },
+
+    setInvalidSchema (state, payload) {
+      state.invalidSchemas[payload.projectId] = payload.schema
+      // Vue.set(state, 'invalidSchemas', payload.schema)
+    },
+
+    removeInvalidSchema (state, projectId) {
+      let invalidSchemas = state.invalidSchemas
+      delete invalidSchemas[projectId]
+      state.invalidSchemas = invalidSchemas
     },
 
   },

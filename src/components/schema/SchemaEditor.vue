@@ -42,9 +42,9 @@ export default {
 
   watch: {
 
-    'activeProject.schema' (value) {
-      this.setSchema()
-    },
+    // 'activeProject.schema' (value) {
+    //   this.setSchema()
+    // },
 
     schema: _.debounce(function () {
       this.saveSchema()
@@ -58,11 +58,19 @@ export default {
       // console.log('saveSchema')
       this.syntaxError = false
 
+      // TODO: Change JSON.parse to parseJSON
       try {
         JSON.parse(this.schema)
+        this.$store.commit('removeInvalidSchema', this.activeProject.id)
       }
       catch (err) {
         console.warn('Syntax Error')
+
+        this.$store.commit('setInvalidSchema', {
+          projectId: this.activeProject.id,
+          schema: this.schema,
+        })
+
         this.syntaxError = true
         return false
       }
@@ -73,7 +81,10 @@ export default {
     },
 
     setSchema () {
-      if (_.has(this.activeProject, 'schema')) {
+      if (_.has(this.$store.state.utils.invalidSchemas, this.activeProject.id)) {
+        this.schema = this.$store.state.utils.invalidSchemas[this.activeProject.id]
+      }
+      else {
         this.schema = this.activeProject.schema
       }
     },
@@ -123,7 +134,7 @@ export default {
 
 .editor
   position: relative
-  border-radius: .5rem
+  border-radius: $radius--large
   transition: box-shadow $time
 
 .error-message

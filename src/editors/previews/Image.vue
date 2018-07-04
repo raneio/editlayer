@@ -11,10 +11,10 @@ export default {
   computed: {
 
     previewImage () {
-      let selectedOption = _.find(this.config.OPTIONS, {VALUE: this.content})
+      let selectedOption = _.find(this.config.OPTIONS, {value: this.content})
 
-      if (_.has(selectedOption, 'IMAGE')) {
-        return selectedOption.IMAGE
+      if (_.has(selectedOption, 'image')) {
+        return selectedOption.image
       }
       else if (_.isString(this.content)) {
         return this.content

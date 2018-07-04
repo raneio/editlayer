@@ -18,22 +18,22 @@ export default {
       return this.$route.params.projectId
     },
 
-    schema () {
-      return this.$store.getters.schema
+    structure () {
+      return this.$store.getters.structure
     },
 
-    activeSchema () {
-      return this.$store.getters.activeSchema
+    activeStructure () {
+      return this.$store.getters.activeStructure
     },
 
     activeType () {
       let path = _.replace(this.$route.params.path, />/g, '.')
-      let grandparent = _.get(this.schema, _.chain(path).split('.').dropRight(2).join('.').value())
+      let grandparent = _.get(this.structure, _.chain(path).split('.').dropRight(2).join('.').value())
 
-      if (this.activeSchema && this.activeSchema._type === 'array') {
+      if (this.activeStructure && this.activeStructure._type === 'array') {
         return 'array'
       }
-      else if (grandparent && this.activeSchema && grandparent._type === 'array' && this.activeSchema._type === 'value') {
+      else if (grandparent && this.activeStructure && grandparent._type === 'array' && this.activeStructure._type === 'item') {
         return 'array'
       }
       else {
@@ -45,7 +45,7 @@ export default {
 
   watch: {
 
-    activeSchema (value) {
+    activeStructure (value) {
       this.redirectToParentIfInvalidPath()
     },
 
@@ -55,9 +55,9 @@ export default {
 
     redirectToParentIfInvalidPath () {
       let path = _.replace(this.$route.params.path, />/g, '.')
-      let pathExist = _.has(this.schema, path)
+      let pathExist = _.has(this.structure, path)
 
-      if (_.isEmpty(this.schema) || pathExist === true) return false
+      if (_.isEmpty(this.structure) || pathExist === true) return false
 
       let parentPath = _.chain(this.$route.params.path).split('>').slice(0, -1).join('>').value()
 

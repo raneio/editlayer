@@ -1,8 +1,6 @@
 import Vue from 'vue'
 import _ from 'lodash'
-import Chance from 'chance'
-
-const chance = new Chance()
+import nanoid from 'nanoid'
 
 export default {
 
@@ -14,7 +12,7 @@ export default {
 
     setNotification (state, payload) {
       let notification = {}
-      payload.id = payload.id ? payload.id : chance.guid()
+      payload.id = payload.id || nanoid()
 
       if (_.has(state.items, payload.id)) {
         notification = _.get(state.items, payload.id)

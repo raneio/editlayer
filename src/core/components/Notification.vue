@@ -54,8 +54,8 @@ export default {
         if (this.progressPrecent >= 100) {
           _.delay(() => {
             this.close()
-            return null
           }, 1000)
+          return null
         }
 
         this.runProgress()

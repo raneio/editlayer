@@ -9,8 +9,8 @@ export default {
   },
 
   computed: {
-    activeSchema () {
-      return this.$store.getters.activeSchema
+    activeStructure () {
+      return this.$store.getters.activeStructure
     },
   },
 }
@@ -18,11 +18,11 @@ export default {
 
 <template>
 <main class="content">
-  <div class="no-content" v-if="activeSchema._type !== 'value'">
+  <div class="no-content" v-if="activeStructure._type !== 'item'">
     <icon class="icon" name="kiwi-bird"/>
   </div>
 
-  <Editor v-if="activeSchema._type === 'value'"/>
+  <Editor v-if="activeStructure._type === 'item'"/>
 </main>
 </template>
 

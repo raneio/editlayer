@@ -6,13 +6,14 @@ import firestore from '@/store/modules/firestore'
 import notifications from '@/store/modules/notifications'
 import projects from '@/store/modules/projects'
 import schema from '@/store/modules/schema'
+import structure from '@/store/modules/structure'
 import uploader from '@/store/modules/uploader'
 import utils from '@/store/modules/utils'
 
 Vue.use(Vuex)
 
 let store = {
-
+  strict: true,
   modules: {
     auth,
     content,
@@ -20,6 +21,7 @@ let store = {
     notifications,
     projects,
     schema,
+    structure,
     uploader,
     utils,
   },

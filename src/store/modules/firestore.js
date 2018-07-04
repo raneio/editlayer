@@ -1,9 +1,7 @@
 // import Vue from 'vue'
-import _ from 'lodash'
+// import _ from 'lodash'
 import firebase from '@/utils/firebase'
-import Chance from 'chance'
-
-const chance = new Chance()
+import generate from 'nanoid/generate'
 
 export default {
 
@@ -26,7 +24,7 @@ export default {
 
   actions: {
 
-    getProjectsFromFirestore ({state, commit, dispatch, rootState}) {
+    getProjectsFromFirestore ({state, commit, rootState}) {
       firebase.firestore
         .collection('projects')
         .where(`users.${rootState.auth.id}.role`, '==', 'admin')
@@ -50,9 +48,11 @@ export default {
         })
     },
 
-    newProjectToFirestore ({state, dispatch, rootState}, payload) {
+    newProjectToFirestore ({state, dispatch}, payload) {
       let newProject = payload.newProject
       payload = payload.payload
+
+      console.log('newProject', newProject)
 
       firebase.firestore
         .collection('projects')
@@ -63,8 +63,8 @@ export default {
           payload.tries = !payload.tries ? 1 : payload.tries + 1
 
           if (payload.tries < 5) {
-            // TODO: Change hash to random string
-            payload.id = `${payload.id}-${chance.hash({length: 4})}`
+            const randomId = generate('abcdefghijklmnopqrstuvwxyz', 4)
+            payload.id = `${payload.id}-${randomId}`
             dispatch('newProject', payload)
           }
           else {
@@ -95,7 +95,7 @@ export default {
           publishedAt: firebase.firestoreTimestamp,
           content: payload.content,
           // filename: payload.filename,
-          // downloadToken: payload.downloadToken,
+          token: payload.token,
         })
         .catch((error) => console.error('Error adding version:', error))
     },

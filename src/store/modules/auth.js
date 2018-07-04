@@ -9,12 +9,6 @@ export default {
     email: null,
   },
 
-  getters: {
-    isLoggedIn (state) {
-      return !!(state.id && state.email)
-    },
-  },
-
   mutations: {
     setUser (state, user) {
       Vue.set(state, 'id', user.id)
@@ -26,7 +20,6 @@ export default {
     //   // state.projects.admin = null
     //   // state.projects.editor = null
     //   // state.processes = {}
-    //   // state.isLoggedIn = false
     //   state.id = null
     //   state.email = null
     // },
@@ -39,7 +32,6 @@ export default {
           commit('setUser', {
             id: firebaseUser.uid,
             email: firebaseUser.email,
-            // isLoggedIn: true,
           })
 
           dispatch('getProjectsFromFirestore')

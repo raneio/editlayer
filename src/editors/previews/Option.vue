@@ -11,9 +11,9 @@ export default {
   computed: {
 
     previewText () {
-      let selectedOption = _.find(this.config.OPTIONS, {VALUE: this.content})
+      let selectedOption = _.find(this.config.OPTIONS, {value: this.content})
       if (!selectedOption) return '…'
-      let previewText = selectedOption.LABEL ? selectedOption.LABEL : selectedOption.VALUE
+      let previewText = selectedOption.label ? selectedOption.label : selectedOption.value
       if (!previewText) return '…'
       return (previewText.length <= 70) ? previewText : previewText.substring(0, 67) + '…'
     },

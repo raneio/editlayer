@@ -4,7 +4,7 @@ export default {
 
   actions: {
     updateContent ({getters, dispatch}, payload) {
-      let currentContent = _.get(getters.schema, `${payload.path}._content`)
+      let currentContent = _.get(getters.structure, `${payload.path}._content`)
 
       if (!_.isEqual(currentContent, payload.content)) {
         dispatch('updateContentToFirestore', payload)

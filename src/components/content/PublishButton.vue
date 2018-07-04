@@ -8,8 +8,8 @@ export default {
 
   computed: {
 
-    schema () {
-      return this.$store.getters.schema
+    structure () {
+      return this.$store.getters.structure
     },
 
     activeProject () {
@@ -51,7 +51,7 @@ export default {
   methods: {
 
     publish () {
-      let content = buildJson(this.schema)
+      let content = buildJson(this.structure)
 
       let webhookConfig = _.has(this.$store.getters.activeProject, 'settings.webhook.config') ? this.$store.getters.activeProject.settings.webhook.config : null
       let webhookEnabled = _.has(this.$store.getters.activeProject, 'settings.webhook.enabled') ? this.$store.getters.activeProject.settings.webhook.enabled : null
@@ -62,7 +62,7 @@ export default {
         publishedBy: this.$store.state.auth.id,
         content: content,
         // filename: this.activeProject.filename,
-        // downloadToken: this.activeProject.downloadToken,
+        token: this.activeProject.token,
         draft: this.activeProject.draft,
         schema: this.activeProject.schema,
         jsonUrl: this.activeProject.jsonUrl,

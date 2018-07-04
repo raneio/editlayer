@@ -24,8 +24,7 @@ export default {
   <button-core mode="invert" light class="logo" href="https://editlayer.com">
     <icon name="editlayer"/>
     <span>Editlayer</span>
-    <!-- <span class="light">Store</span> -->
-    <!-- <span>visio</span> -->
+    <!-- <span class="light">Tietokeskus</span><span>TV</span> -->
   </button-core>
 
   <button-core mode="invert" light class="logout" @click.native="logout()">

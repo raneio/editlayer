@@ -24,7 +24,7 @@ export default {
 
   watch: {
 
-    '$store.getters.activeSchema._content' (value) {
+    '$store.getters.activeStructure._content' (value) {
       this.content = value
     },
 
@@ -54,7 +54,6 @@ export default {
       if (!image) return false
 
       this.uploading = true
-      // this.uploadPreview = URL.createObjectURL(image)
 
       this.$store.dispatch('uploadImage', {
         projectId: this.projectId,
@@ -65,12 +64,7 @@ export default {
       })
         .then((image) => {
           console.log('uploaded', image)
-          // this.$store.dispatch('updateContent', {
-          //   projectId: image.projectId,
-          //   path: image.path,
-          //   content: image.downloadURL,
-          // })
-          this.content = image.downloadURL
+          // this.content = image.downloadURL
           this.uploading = false
         })
     },

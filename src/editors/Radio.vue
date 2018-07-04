@@ -4,8 +4,8 @@
  * @param {string} content - Content saves automatically when changing
  * @param {string} config.EDITOR - Name of editor
  * @param {string} config.TITLE
- * @param {string} config.OPTIONS[].VALUE
- * @param {string} config.OPTIONS[].LABEL
+ * @param {string} config.OPTIONS[].value
+ * @param {string} config.OPTIONS[].label
  */
 
 import EditorBase from '@/editors/common/BaseEditor'
@@ -16,10 +16,19 @@ export default {
 
   name: 'RadioEditor',
 
+  computed: {
+
+    options () {
+      if (!_.isObject(this.config.OPTIONS)) return false
+      return this.config.OPTIONS
+    },
+
+  },
+
   methods: {
 
     label (option) {
-      return option.LABEL ? option.LABEL : option.VALUE
+      return option.label ? option.label : option.value
     },
 
   },
@@ -30,12 +39,16 @@ export default {
 <template>
 <section class="editor -radio">
 
-  <label class="radio" v-for="(option, index) in config.OPTIONS" :key="index">
+  <alert-core mode="warning" v-if="!options">
+    OPTIONS is required with "radio" editor. Fix your schema.
+  </alert-core>
+
+  <label class="radio" v-for="(option, index) in options" :key="index">
     <input
       class="input"
       type="radio"
       v-model="content"
-      :value="option.VALUE"
+      :value="option.value"
     >
     <span v-text="label(option)"></span>
   </label>

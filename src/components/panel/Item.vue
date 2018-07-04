@@ -57,10 +57,10 @@ export default {
 
     selectItem (item) {
       let projectId = (item.FILE_ID) ? item.FILE_ID : this.projectId
-      let routeName = (item._type === 'value') ? 'Content' : this.$route.name
+      let routeName = (item._type === 'item') ? 'Content' : this.$route.name
       let path = _.replace(item._path, /\./g, '>')
 
-      if (item._type === 'value') {
+      if (item._type === 'item') {
         this.$router.push({name: routeName, params: {projectId: projectId, path: path}})
         return false
       }

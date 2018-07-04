@@ -17,30 +17,30 @@ export default {
 
   computed: {
 
-    schema () {
-      return this.$store.getters.schema
+    structure () {
+      return this.$store.getters.structure
     },
 
-    activeSchema () {
+    activeStructure () {
       let path = _.replace(this.$route.params.path, />/g, '.')
       let parentPath = _.chain(path).split('.').dropRight().join('.').value()
-      let activeItem = _.get(this.schema, path)
+      let activeItem = _.get(this.structure, path)
 
       if (_.get(activeItem, '_type') === 'object') {
         return activeItem
       }
       else if (!path || !parentPath) {
-        return this.schema
+        return this.structure
       }
       else {
-        return _.get(this.schema, parentPath)
+        return _.get(this.structure, parentPath)
       }
     },
 
     items () {
       let items = {}
 
-      _.each(this.activeSchema, (value, key) => {
+      _.each(this.activeStructure, (value, key) => {
         if (_.isPlainObject(value)) {
           items[key] = value
         }
@@ -53,7 +53,7 @@ export default {
 
   watch: {
 
-    activeSchema (value) {
+    activeStructure (value) {
       this.findFirstItem()
     },
 
@@ -62,15 +62,15 @@ export default {
   methods: {
 
     findFirstItem () {
-      if (!this.activeSchema) return false
+      if (!this.activeStructure) return false
       if (this.$route.name !== 'Content') return false
 
       let path = _.replace(this.$route.params.path, />/g, '.')
-      if (path !== '' && path !== this.activeSchema._path) return false
+      if (path !== '' && path !== this.activeStructure._path) return false
 
-      let firstItem = _.find(this.activeSchema, { _type: 'value' })
+      let firstItem = _.find(this.activeStructure, { _type: 'item' })
 
-      if (firstItem && this.activeSchema._type !== 'value') {
+      if (firstItem && this.activeStructure._type !== 'item') {
         let firstItemPath = _.replace(firstItem._path, /\./g, '>')
         this.$router.replace({name: 'Content', params: {projectId: this.$route.params.projectId, path: firstItemPath}})
       }

@@ -2,11 +2,10 @@ import Vue from 'vue'
 import _ from 'lodash'
 import slugg from 'slugg'
 import axios from 'axios'
-import Chance from 'chance'
+import generate from 'nanoid/generate'
+// import nanoid from 'nanoid'
 import firebase from '@/utils/firebase'
 import webhook from '@/utils/webhook'
-
-const chance = new Chance()
 
 export default {
 
@@ -49,7 +48,7 @@ export default {
         projects[key] = {
           draft: value.draft || {},
           id: key,
-          jsonUrl: `https://firebasestorage.googleapis.com/v0/b/${process.env.VUE_APP__FIREBASE_PROJECT_ID}.appspot.com/o/${key}.json?alt=media`,
+          jsonUrl: `https://firebasestorage.googleapis.com/v0/b/${process.env.VUE_APP__FIREBASE_PROJECT_ID}.appspot.com/o/${key}%2Fcontent.json?alt=media&token=${value.token}`,
           name: value.name || null,
           published: value.published || {},
           role: value.users[rootState.auth.id].role || null,
@@ -57,6 +56,7 @@ export default {
           schema: value.schema || null,
           settings: value.settings || {},
           status: value.published && _.isEqual(value.draft, value.published.draft) && value.schema === value.published.schema ? 'published' : 'draft',
+          token: value.token || null,
         }
       })
 
@@ -64,7 +64,8 @@ export default {
     },
 
     activeProject (state, getters, rootState) {
-      return _.find(getters.projects, {id: rootState.route.params.projectId}) || null
+      const projects = _.cloneDeep(getters.projects)
+      return _.find(projects, {id: rootState.route.params.projectId}) || null
     },
 
   },
@@ -72,10 +73,9 @@ export default {
   actions: {
 
     newProject ({state, dispatch, rootState}, payload) {
-      payload.name = payload.name ? payload.name : `Project ${chance.first()}`
-      payload.id = payload.id ? payload.id : slugg(payload.name)
-      // payload.filename = payload.filename ? payload.filename : 'content'
-      payload.schema = payload.schema ? payload.schema : {
+      payload.name = payload.name || `Project ${generate('abcdefghijklmnopqrstuvwxyz', 4)}`
+      payload.id = payload.id || slugg(payload.name)
+      payload.schema = payload.schema || {
         title: 'input',
         description: 'rich-text',
         photo: 'image',
@@ -86,7 +86,7 @@ export default {
         name: payload.name,
         schema: JSON.stringify(payload.schema, '', '\t'),
         users: {},
-        // downloadToken: chance.guid(),
+        token: generate('abcdefghijklmnopqrstuvwxyz0123456789', 32),
       }
 
       newProject.users[rootState.auth.id] = {
@@ -116,7 +116,7 @@ export default {
         publishedAt: firebase.firestoreTimestamp,
         content: payload.content,
         // filename: payload.filename,
-        // downloadToken: payload.downloadToken,
+        token: payload.token,
       })
 
       payload.versionId = docRef.id

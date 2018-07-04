@@ -5,17 +5,17 @@ export default {
 
   data () {
     return {
-      content: this.$store.getters.activeSchema._content,
+      content: this.$store.getters.activeStructure._content,
     }
   },
 
   computed: {
 
     config () {
-      if (!_.has(this.$store, 'getters.activeSchema')) return {}
+      if (!_.has(this.$store, 'getters.activeStructure')) return {}
       let config = {}
 
-      _.each(this.$store.getters.activeSchema, (value, key) => {
+      _.each(this.$store.getters.activeStructure, (value, key) => {
         if (!_.startsWith(key, '_')) config[key] = value
       })
 
@@ -40,17 +40,7 @@ export default {
 
   watch: {
 
-    // '$store.getters.activeSchema._content' (value) {
-    //   this.content = value
-    // },
-
-    // '$store.getters.activeSchema._path' (value) {
-    //   this.content = this.$store.getters.activeSchema._content
-    //   this.$store.commit('setEditorContentValid', true)
-    // },
-
     content (newContent, oldContent) {
-      // if (oldContent === null) return null
       if (this.isValid === false) {
         this.$store.commit('setEditorContentValid', false)
         return null
@@ -65,9 +55,11 @@ export default {
   methods: {
 
     updateContent: _.throttle(function (content) {
+      // TODO: Change this.$route to this.$store.route
+      // console.log('updateContent', content)
       this.$store.dispatch('updateContent', {
         projectId: this.$route.params.projectId,
-        path: this.$store.getters.activeSchema._path,
+        path: this.$store.getters.activeStructure._path,
         content: content,
       })
     }, 500),

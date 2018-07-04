@@ -4,9 +4,9 @@
  * @param {string} content - Content saves automatically when changing
  * @param {string} config.EDITOR - Name of editor
  * @param {string} config.TITLE
- * @param {string} config.OPTIONS[].VALUE
- * @param {string} config.OPTIONS[].LABEL
- * @param {string} config.OPTIONS[].IMAGE
+ * @param {string} config.OPTIONS[].value
+ * @param {string} config.OPTIONS[].label
+ * @param {string} config.OPTIONS[].image
  */
 
 import EditorBase from '@/editors/common/BaseEditor'
@@ -17,6 +17,15 @@ export default {
 
   name: 'SelectImageEditor',
 
+  computed: {
+
+    options () {
+      if (!_.isObject(this.config.OPTIONS)) return false
+      return this.config.OPTIONS
+    },
+
+  },
+
   methods: {
 
     selectImage (value) {
@@ -24,7 +33,7 @@ export default {
     },
 
     // label (option) {
-    //   return option.LABEL ? option.LABEL : option.VALUE
+    //   return option.label ? option.label : option.value
     // },
 
   },
@@ -35,21 +44,29 @@ export default {
 <template>
 <section class="editor -select-image">
 
-  <div
-    class="option"
-    v-for="(option, index) in config.OPTIONS"
-    :key="index"
-  >
+  <alert-core mode="warning" v-if="!options">
+    OPTIONS is required with "select-image" editor. Fix your schema.
+  </alert-core>
 
-    <img
-      class="image"
-      :class="{'-active': option.VALUE === content}"
-      :src="option.IMAGE"
-      :alt="option.VALUE"
-      @click="selectImage(option.VALUE)"
+  <section class="images" v-if="options">
+
+    <div
+      class="option"
+      v-for="(option, index) in options"
+      :key="index"
     >
 
-  </div>
+      <img
+        class="image"
+        :class="{'-active': option.value === content}"
+        :src="option.image"
+        :alt="option.value"
+        @click="selectImage(option.value)"
+      >
+
+    </div>
+
+  </section>
 
 </section>
 </template>
@@ -58,7 +75,7 @@ export default {
 @import '../sass/variables'
 @import '../core/sass/mixins'
 
-.editor.-select-image
+.images
   +grid(1, 3rem)
 
   +breakpoint('large')

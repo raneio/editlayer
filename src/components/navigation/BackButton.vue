@@ -7,20 +7,16 @@ export default {
 
   computed: {
 
-    projects () {
-      return this.$store.getters.projects
-    },
-
     activeProject () {
       return this.$store.getters.activeProject
     },
 
-    schema () {
-      return this.$store.getters.schema
+    structure () {
+      return this.$store.getters.structure
     },
 
-    activeSchema (state, getters) {
-      return this.$store.getters.activeSchema
+    activeStructure (state, getters) {
+      return this.$store.getters.activeStructure
     },
 
     breadcrumb () {
@@ -31,13 +27,13 @@ export default {
         breadcrumbItems = _.split(this.$route.params.path, '>')
       }
 
-      if (_.has(this.activeSchema, 'EDITOR')) {
+      if (_.has(this.activeStructure, 'EDITOR')) {
         breadcrumbItems = _.dropRight(breadcrumbItems)
       }
 
       while (breadcrumbItems.length > 0) {
         let path = _.join(breadcrumbItems, '.')
-        let item = _.get(this.schema, path)
+        let item = _.get(this.structure, path)
 
         if (item && !_.has(item, '_order')) {
           breadcrumb.unshift({

@@ -133,7 +133,7 @@ export default {
     :style="{top: addButton.top}"
     ref="addButton"
     @click.native="$refs.fileInput.click()"
-    v-if="addButton.top !== null"
+    v-if="addButton.top !== null && config.IMAGE !== false"
   >
     <icon name="plus"/>
   </button-core>

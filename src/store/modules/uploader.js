@@ -1,10 +1,10 @@
 import _ from 'lodash'
 import slugg from 'slugg'
 import ImageCompressor from 'image-compressor.js'
-import Chance from 'chance'
+import generate from 'nanoid/generate'
 import firebase from '@/utils/firebase'
 
-const chance = new Chance()
+// const chance = new Chance()
 
 export default {
 
@@ -13,11 +13,10 @@ export default {
     async uploadImage ({commit, dispatch}, payload) {
       if (!_.startsWith(payload.image.type, 'image/')) return false
 
-      let maxWidth = payload.maxWidth ? payload.maxWidth : 800
-      let maxHeight = payload.maxHeight ? payload.maxHeight : 800
+      let maxWidth = payload.maxWidth || 800
+      let maxHeight = payload.maxHeight || 800
       let filenameWithoutExt = slugg(payload.image.name.replace(/\.[^/.]+$/, ''))
-      let randomId = chance.hash({length: 5})
-      let blobUrl = URL.createObjectURL(payload.image)
+      let randomId = generate('abcdefghijklmnopqrstuvwxyz', 4)
 
       commit('setNotification', {
         id: `${payload.projectId}>${payload.path}>upload`,
@@ -48,7 +47,6 @@ export default {
           id: `${payload.projectId}>${payload.path}>upload`,
           mode: 'danger',
           message: 'Max image size 5 MB, try another image.',
-          image: blobUrl,
         })
 
         console.error('Max image size 5 MB, try another image.')
@@ -98,9 +96,17 @@ export default {
             .snapshot
             .ref
             .getDownloadURL()
-            .then((downloadURL) => downloadURL)
+            .then(downloadURL => downloadURL)
         })
         .catch((error) => console.error('Upload task faild', error))
+
+      if (payload.projectId && payload.path && downloadURL) {
+        dispatch('updateContent', {
+          projectId: payload.projectId,
+          path: payload.path,
+          content: downloadURL,
+        })
+      }
 
       return {
         downloadURL: downloadURL,

@@ -49,7 +49,8 @@ export default {
     },
 
     showLoaderOverlay () {
-      return !this.showRouterView && this.$store.state.auth.isLoggedIn === true
+      return false
+      // return !this.showRouterView && this.$store.state.auth.id
     },
 
     showAuth () {
@@ -74,7 +75,7 @@ export default {
     // },
 
     // mobileView () {
-    //   return this.activeSchema._type === 'value' ? 'main' : 'side'
+    //   return this.activeStructure._type === 'item' ? 'main' : 'side'
     // },
 
   },

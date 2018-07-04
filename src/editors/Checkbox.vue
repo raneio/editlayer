@@ -4,8 +4,8 @@
  * @param {string|array} content - Content saves automatically when changing
  * @param {string} config.EDITOR - Name of editor
  * @param {string} config.TITLE
- * @param {string} config.OPTIONS[].LABEL
- * @param {string} config.OPTIONS[].VALUE
+ * @param {string} config.OPTIONS[].label
+ * @param {string} config.OPTIONS[].value
  */
 
 import EditorBase from '@/editors/common/BaseEditor'
@@ -16,72 +16,27 @@ export default {
 
   name: 'CheckboxEditor',
 
-  data () {
-    return {
-      values: [],
-    }
-  },
-
-  watch: {
-
-    values () {
-      this.saveValues()
-    },
-
-  },
-
   computed: {
 
     options () {
-      if (_.has(this.config, 'OPTIONS')) {
-        return this.config.OPTIONS
-      }
-      else {
-        return [{
-          VALUE: (this.config.VALUE) ? this.config.VALUE : true,
-          LABEL: (this.config.LABEL) ? this.config.LABEL : this.config.TITLE,
-        }]
-      }
+      if (!_.isObject(this.config.OPTIONS)) return false
+      return this.config.OPTIONS
     },
 
   },
 
   methods: {
 
-    initValues () {
-      if (_.has(this.config, 'OPTIONS')) {
-        this.values = _.isArray(this.content) ? this.content : [this.content]
-      }
-      else {
-        this.values = this.content === this.options[0].VALUE ? [this.content] : []
-      }
-    },
-
-    saveValues () {
-      if (_.has(this.config, 'OPTIONS')) {
-        let newValues = []
-
-        _.each(this.config.OPTIONS, option => {
-          if (_.includes(this.values, option.VALUE)) {
-            newValues.push(option.VALUE)
-          }
-        })
-
-        this.content = newValues
-      }
-      else {
-        this.content = (this.values.length > 0) ? this.values[0] : false
-      }
-    },
-
     label (option) {
-      return option.LABEL ? option.LABEL : option.VALUE
+      return option.label || option.value
     },
 
   },
 
-  created () {
-    this.initValues()
+  mounted () {
+    if (!_.isArray(this.content)) {
+      this.content = []
+    }
   },
 
 }
@@ -90,12 +45,16 @@ export default {
 <template>
 <section class="editor -checkbox">
 
+  <alert-core mode="warning" v-if="!options">
+    OPTIONS is required with "checkbox" editor. Fix your schema.
+  </alert-core>
+
   <label class="checkbox" v-for="(option, index) in options" :key="index">
     <input
       class="input"
       type="checkbox"
-      v-model="values"
-      :value="option.VALUE"
+      v-model="content"
+      :value="option.value"
     >
     <span v-text="label(option)"></span>
   </label>

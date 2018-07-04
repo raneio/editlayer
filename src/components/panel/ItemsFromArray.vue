@@ -1,11 +1,9 @@
 <script>
 import _ from 'lodash'
-import Chance from 'chance'
+import generate from 'nanoid/generate'
 import firebase from '@/utils/firebase'
 import Item from '@/components/panel/Item'
 import BackButton from '@/components/navigation/BackButton'
-
-const chance = new Chance()
 
 export default {
   name: 'ItemsFromArray',
@@ -32,19 +30,19 @@ export default {
 
   computed: {
 
-    schema () {
-      return this.$store.getters.schema
+    structure () {
+      return this.$store.getters.structure
     },
 
-    activeSchema () {
+    activeStructure () {
       let path = _.replace(this.$route.params.path, />/g, '.')
       let parentPath = _.chain(path).split('.').dropRight().dropRight().join('.').value()
-      let activeItem = _.get(this.schema, path)
+      let activeItem = _.get(this.structure, path)
       if (_.get(activeItem, '_type') === 'array') {
         return activeItem
       }
       else {
-        return _.get(this.schema, parentPath)
+        return _.get(this.structure, parentPath)
       }
     },
 
@@ -52,8 +50,8 @@ export default {
       return this.$route.params.projectId
     },
 
-    projects () {
-      return this.$store.getters.projects
+    activeProject () {
+      return this.$store.getters.activeProject
     },
 
     arrayItems () {
@@ -61,7 +59,7 @@ export default {
       let source = []
       // let lastItem = null
 
-      _.each(this.activeSchema, (value, key) => {
+      _.each(this.activeStructure, (value, key) => {
         if (_.startsWith(key, '-')) {
           source.push(value)
         }
@@ -88,7 +86,7 @@ export default {
 
   watch: {
 
-    activeSchema (value) {
+    activeStructure (value) {
       this.selectFirstItem()
     },
 
@@ -99,17 +97,16 @@ export default {
     newItem () {
       let itemPath = _.replace(this.$route.params.path, />/g, '.')
 
-      if (itemPath !== this.activeSchema._path && _.includes(itemPath, '.-')) {
+      if (itemPath !== this.activeStructure._path && _.includes(itemPath, '.-')) {
         itemPath = _.chain(itemPath).split('.-').slice(0, -1).join('.-').value()
       }
 
-      // TODO: Change hass to random string
-      let randomKey = `-${chance.hash({length: 4})}`
+      let randomKey = generate('abcdefghijklmnopqrstuvwxyz', 4)
       let path = `draft.${itemPath}`
-      let newPath = `${path}.${randomKey}`
+      let newPath = `${path}.-${randomKey}`
       let order = 0
 
-      if (_.has(this.projects[this.projectId], newPath)) {
+      if (_.has(this.activeProject, newPath)) {
         this.newItem()
         return false
       }
@@ -135,13 +132,13 @@ export default {
     selectFirstItem () {
       let path = _.replace(this.$route.params.path, />/g, '.')
 
-      if (path !== this.activeSchema._path) return false
+      if (path !== this.activeStructure._path) return false
       if (this.$route.name !== 'Content') return false
       // if (this.$store.getters.isMobile) return false
 
-      let firstItem = _.find(this.arrayItems[0], { _type: 'value' })
+      let firstItem = _.find(this.arrayItems[0], { _type: 'item' })
 
-      if (firstItem && this.activeSchema._type === 'array') {
+      if (firstItem && this.activeStructure._type === 'array') {
         let firstItemPath = _.replace(firstItem._path, /\./g, '>')
         this.$router.replace({name: 'Content', params: {projectId: this.projectId, path: firstItemPath}})
       }

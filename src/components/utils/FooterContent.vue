@@ -6,27 +6,18 @@ export default {
 
 <template>
 <section class="footer-content">
-  <a class="badge" href="https://editlayer.com">
+  <!-- <a class="badge" href="https://editlayer.com">
     <img class="image" src="/powered-by-editlayer.svg" alt="">
-  </a>
+  </a> -->
 
   <div class="text">
-
     <div class="copyright">
-      Copyright &copy; 2018
-      <button-core light href="https://twitter.com/raneio" target="twitter">
-        Rane Ahonen
-      </button-core>
+      Copyright &copy; 2018 <button-core light href="https://twitter.com/raneio">Rane Ahonen</button-core>
     </div>
 
     <div class="licensed">
-      Licensed <button-core light>DEMO</button-core>. Do you want to upgrade to <button-core light href="https://editlayer.com/pro">Editlayer PRO</button-core> ?
+      Licensed <button-core light>AGPL</button-core>. Upgrade to <button-core light href="https://editlayer.com/pro">PRO</button-core> ?
     </div>
-
-    <!-- <div class="licensed">
-      Licensed to Storevisio.com
-    </div> -->
-
   </div>
 </section>
 </template>
