@@ -46,6 +46,7 @@ export default {
     showSidePanel () {
       return !!this.activeProject &&
         this.$store.state.route.name !== 'Settings' &&
+        (this.$store.state.route.name !== 'Schema' || this.$store.state.utils.windowWidth > 900) &&
         (this.activeStructure._type !== 'item' || this.$store.state.utils.windowWidth > 900)
       // return !!this.activeProject && this.$store.state.route.name !== 'Settings' && (!this.isMobile || this.mobileView === 'side')
     },
@@ -65,7 +66,7 @@ export default {
 
     showMainPanel () {
       return this.$store.state.route.name !== 'Dashboard' &&
-      (this.activeStructure._type === 'item' || this.$store.state.utils.windowWidth > 900)
+      (this.$store.state.route.name !== 'Content' || (this.activeStructure._type === 'item' || this.$store.state.utils.windowWidth > 900))
     },
 
     showDashboard () {
