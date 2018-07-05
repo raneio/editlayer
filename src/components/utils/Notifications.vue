@@ -40,6 +40,7 @@ export default {
   right: 2rem
   top: 2rem
   width: 20rem
+  max-width: calc(100% - 4rem)
   +gap(.5rem)
 
 </style>

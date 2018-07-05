@@ -87,6 +87,7 @@ export default {
   text-transform: none
   padding: 0
   text-align: left
+  max-width: 100%
 
 .tools
   +chain(1rem)

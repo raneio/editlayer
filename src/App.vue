@@ -28,6 +28,10 @@ export default {
       return this.$store.getters.activeProject
     },
 
+    activeStructure () {
+      return this.$store.getters.activeStructure
+    },
+
     showRouterView () {
       return this.activeProject &&
         this.$store.state.auth.id &&
@@ -40,7 +44,9 @@ export default {
     },
 
     showSidePanel () {
-      return !!this.activeProject && this.$store.state.route.name !== 'Settings'
+      return !!this.activeProject &&
+        this.$store.state.route.name !== 'Settings' &&
+        (this.activeStructure._type !== 'item' || this.$store.state.utils.windowWidth > 900)
       // return !!this.activeProject && this.$store.state.route.name !== 'Settings' && (!this.isMobile || this.mobileView === 'side')
     },
 
@@ -58,7 +64,8 @@ export default {
     },
 
     showMainPanel () {
-      return this.$store.state.route.name !== 'Dashboard'
+      return this.$store.state.route.name !== 'Dashboard' &&
+      (this.activeStructure._type === 'item' || this.$store.state.utils.windowWidth > 900)
     },
 
     showDashboard () {
@@ -131,16 +138,17 @@ export default {
 
 .nav-panel
   flex-shrink: 0
-  width: 4rem
+  width: 3.5rem
+  font-size: .8rem
 
   +breakpoint('medium')
     width: 5rem
 
 .side-panel
-  flex-shrink: 0
-  flex-basis: auto
+  flex-grow: 1
 
   +breakpoint('medium')
+    flex-shrink: 0
     width: 22rem
 
 .main-panel
@@ -152,8 +160,8 @@ export default {
 
   .header
     flex-shrink: 0
-    margin-left: 2rem
-    margin-right: 2rem
+    margin-left: 1.5rem
+    margin-right: 1.5rem
     border-bottom: 1px solid $hr-color
 
   .router-view

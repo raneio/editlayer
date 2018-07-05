@@ -9,6 +9,7 @@
  */
 
 import EditorBase from '@/editors/common/BaseEditor'
+import _ from 'lodash'
 
 export default {
   extends: EditorBase,

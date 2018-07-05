@@ -77,7 +77,7 @@ export default {
       payload.id = payload.id || slugg(payload.name)
       payload.schema = payload.schema || {
         title: 'input',
-        description: 'rich-text',
+        description: 'textarea',
         photo: 'image',
       }
 
@@ -86,7 +86,7 @@ export default {
         name: payload.name,
         schema: JSON.stringify(payload.schema, '', '\t'),
         users: {},
-        token: generate('abcdefghijklmnopqrstuvwxyz0123456789', 32),
+        token: generate('abcdefghijklmnopqrstuvwxyz0123456789', 24),
       }
 
       newProject.users[rootState.auth.id] = {

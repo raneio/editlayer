@@ -93,7 +93,9 @@ export default {
     <div class="message">Invalid Content</div>
   </div>
 
-  <!-- <button-core class="close-button" @click.native="closeEditor()" v-if="isMobile">Close</button-core> -->
+  <footer class="close-button">
+    <button-core @click.native="closeEditor()">Close</button-core>
+  </footer>
 
 </section>
 </template>
@@ -126,8 +128,10 @@ export default {
     color: $color-danger
 
 .close-button
-  display: block
-  margin-left: auto
-  margin-right: auto
+  +center()
+  margin-top: 3rem
+
+  +breakpoint('medium')
+    display: none
 
 </style>

@@ -130,6 +130,7 @@ export default {
     },
 
     selectFirstItem () {
+      if (this.$store.state.utils.windowWidth <= 900) return null
       let path = _.replace(this.$route.params.path, />/g, '.')
 
       if (path !== this.activeStructure._path) return false

@@ -31,9 +31,13 @@ export default {
 @import '../core/sass/mixins'
 
 .content
-  display: flex
   +gap()
-  padding: 2rem 3rem
+  display: flex
+  flex-shrink: 0
+  padding: 2rem 1.5rem
+
+  +breakpoint('medium')
+    padding: 2rem 3rem
 
 .no-content
   align-self: stretch

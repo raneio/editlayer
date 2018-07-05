@@ -59,7 +59,8 @@ export default {
     +mode($color-info)
 
   &.-size-small
-    font-size: .8rem
+    font-size: .9rem
+    line-height: 1.3em
 
   &.-size-large
     font-size: 1.4rem

@@ -54,14 +54,15 @@ export default {
   watch: {
 
     activeStructure (value) {
-      this.findFirstItem()
+      this.selectFirstItem()
     },
 
   },
 
   methods: {
 
-    findFirstItem () {
+    selectFirstItem () {
+      if (this.$store.state.utils.windowWidth <= 900) return null
       if (!this.activeStructure) return false
       if (this.$route.name !== 'Content') return false
 
@@ -83,7 +84,7 @@ export default {
   },
 
   created () {
-    this.findFirstItem()
+    this.selectFirstItem()
   },
 
 }

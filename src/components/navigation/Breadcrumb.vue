@@ -115,7 +115,7 @@ export default {
 
     <button-core
       light
-      v-if="idx < breadcrumb.length-1"
+      v-if="idx < breadcrumb.length-1 || $store.state.utils.windowWidth <= 900"
       @click.native="selectItem(item)"
     >
       {{item.name}}
@@ -146,6 +146,7 @@ export default {
 
 .crumb
   +chain(.6em)
+  line-height: 1em
 
 .fa-icon
   width: .4rem

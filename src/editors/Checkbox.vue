@@ -31,12 +31,26 @@ export default {
       return option.label || option.value
     },
 
+    removeNonExitingValues () {
+      let content = []
+
+      _.each(this.content, item => {
+        if (_.find(this.options, {value: item})) {
+          content.push(item)
+        }
+      })
+
+      this.content = content
+    },
+
   },
 
   mounted () {
     if (!_.isArray(this.content)) {
       this.content = []
     }
+
+    this.removeNonExitingValues()
   },
 
 }

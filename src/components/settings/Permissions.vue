@@ -1,8 +1,13 @@
 <script>
-import validator from 'validator'
+// import validator from 'validator'
+import NewUserButton from '@/components/settings/NewUserButton'
 
 export default {
   name: 'Permissions',
+
+  components: {
+    NewUserButton,
+  },
 
   computed: {
 
@@ -18,24 +23,24 @@ export default {
 
   methods: {
 
-    newPermission () {
-      let email = prompt('Email address', '')
-      if (email === null) return false
-
-      if (!validator.isEmail(email)) {
-        console.error('Email is invalid', email)
-        this.$store.commit('setNotification', {
-          mode: 'danger',
-          message: `Email ${email} is invalid`,
-        })
-        return false
-      }
-
-      this.$store.dispatch('newPermission', {
-        email,
-        projectId: this.activeProject.id,
-      })
-    },
+    // newPermission () {
+    //   let email = prompt('Email address', '')
+    //   if (email === null) return false
+    //
+    //   if (!validator.isEmail(email)) {
+    //     console.error('Email is invalid', email)
+    //     this.$store.commit('setNotification', {
+    //       mode: 'danger',
+    //       message: `Email ${email} is invalid`,
+    //     })
+    //     return false
+    //   }
+    //
+    //   this.$store.dispatch('newPermission', {
+    //     email,
+    //     projectId: this.activeProject.id,
+    //   })
+    // },
 
     updatePermission (payload) {
       this.$store.dispatch('updatePermission', payload)
@@ -123,10 +128,12 @@ export default {
     </main>
   </card-core>
 
-  <button-core mode="success" @click.native="newPermission()">
+  <NewUserButton/>
+
+  <!-- <button-core mode="success" @click.native="newPermission()">
     <icon name="plus"/>
     <span>New User</span>
-  </button-core>
+  </button-core> -->
 </section>
 </template>
 

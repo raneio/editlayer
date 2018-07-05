@@ -1,12 +1,21 @@
 <script>
+import validator from 'validator'
 
 export default {
-  name: 'NewProjectModal',
+  name: 'NewUserModal',
 
   data () {
     return {
-      name: '',
+      email: '',
     }
+  },
+
+  computed: {
+
+    activeProject () {
+      return this.$store.getters.activeProject
+    },
+
   },
 
   methods: {
@@ -21,6 +30,24 @@ export default {
       }
     },
 
+    newUser () {
+      if (!validator.isEmail(this.email)) {
+        console.error('Email is invalid', this.email)
+        this.$store.commit('setNotification', {
+          mode: 'danger',
+          message: `Email ${this.email} is invalid`,
+        })
+        return false
+      }
+
+      this.$store.dispatch('newPermission', {
+        email: this.email,
+        projectId: this.activeProject.id,
+      })
+
+      this.closeModal()
+    },
+
     closeModal () {
       this.$store.commit('setActiveModal', null)
     },
@@ -28,30 +55,35 @@ export default {
   },
 
   mounted () {
-    this.$refs.projectName.focus()
+    this.$refs.emailAddress.focus()
   },
 
 }
 </script>
 
 <template>
-<form class="modal" @click.self="closeModal()" @submit.prevent="newProject" method="post">
+<form class="modal" @click.self="closeModal()" @submit.prevent="newUser" method="post">
   <card-core>
     <header class="header">
-      <h1 class="heading -feature">New Project</h1>
+      <h1 class="heading -feature">New user</h1>
     </header>
 
     <main class="main">
+
       <label class="label">
-        <div>Project name</div>
-        <input type="text" v-model="name" ref="projectName">
+        <div>Email address</div>
+        <input type="text" v-model="email" ref="emailAddress">
       </label>
+
+      <alert-core mode="info" size="small">
+        You can add new user even before that user is registered. When user register with the same email address user gets permissions to this project.
+      </alert-core>
     </main>
 
     <footer class="footer">
       <span class="spacer"></span>
       <button-core light @click.native="closeModal()">Cancel</button-core>
-      <button-core type="submit" mode="success">Create new project</button-core>
+      <button-core type="submit" mode="success">Add new user</button-core>
     </footer>
   </card-core>
 </form>
@@ -75,6 +107,9 @@ export default {
     width: $breakpoint--small
     box-shadow: $shadow--small, $shadow--large
     border: 1px solid $hr-color
+
+  .main
+    +gap()
 
   .label
     +gap(.5rem)

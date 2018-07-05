@@ -66,8 +66,11 @@ export default {
 @import '../core/sass/mixins'
 
 .settings
-  padding: 2rem
   background-image: $color-gray--gradient
+  padding: 2rem 1.5rem
+
+  +breakpoint('medium')
+    padding: 2rem 3rem
 
 .section
   padding-top: 5rem

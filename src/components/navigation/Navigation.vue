@@ -143,9 +143,6 @@ export default {
     filter: drop-shadow(0 0 10px mix($color-white, transparent, 60%))
     opacity: 1
 
-    .text
-      // opacity: 1
-
   .text
     transition: opacity 1s
     transition-delay: 1s
@@ -154,5 +151,6 @@ export default {
   .fa-icon
     width: 1.7rem
     fill: $color-white
+    min-height: 1rem
 
 </style>

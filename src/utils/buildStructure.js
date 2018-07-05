@@ -2,6 +2,265 @@ import _ from 'lodash'
 import titleCase from 'title-case'
 import isUpperCase from 'is-upper-case'
 
+const parseSimpleSyntax = (source, schema = {}, parentPath = false) => {
+  _.each(source, (value, key) => {
+    if (isUpperCase(key) || _.startsWith(key, '_')) return true
+    let path = parentPath ? `${parentPath}.${key}` : key
+    let item = {}
+
+    if (_.isString(value)) {
+      item.EDITOR = value
+
+      // Shorten syntax with mode "input:email"
+      if (_.includes(value, ':')) {
+        item.EDITOR = value.split(':')[0].trim()
+        item.MODE = value.split(':')[1].trim()
+      }
+
+      // Shorten syntax with options "radio[one,two,three]"
+      if (_.includes(value, '[') && _.includes(value, ']')) {
+        item.EDITOR = value.split('[')[0].trim()
+        item.OPTIONS = []
+
+        let options = value.match(/\[(.*?)\]/)[1].split(',')
+
+        _.each(options, option => {
+          item.OPTIONS.push({
+            value: option.trim(),
+          })
+        })
+      }
+    }
+    else {
+      item = value
+    }
+
+    _.set(schema, path, item)
+
+    if (_.isObject(value)) {
+      schema = parseSimpleSyntax(value, schema, path)
+    }
+  })
+
+  return schema
+}
+
+const addArrayItems = (structure, source, draft, parentPath = false) => {
+  _.each(source, (value, key) => {
+    if (isUpperCase(key) || _.startsWith(key, '_')) return true
+    let path = parentPath ? `${parentPath}.${key}` : key
+
+    if (_.isArray(value) && _.isArray(_.get(structure, path))) {
+      let schema = value[0]
+      let draftItems = _.get(_.cloneDeep(draft), path)
+      let arrayItems = {
+        _type: 'array',
+      }
+
+      if (!_.isPlainObject(draftItems)) {
+        draftItems = null
+      }
+
+      _.each(draftItems, (draftValue, draftKey) => {
+        _.set(arrayItems, draftKey, draftValue)
+
+        _.each(schema, (schemaValue, schemaKey) => {
+          _.set(arrayItems, `${draftKey}.${schemaKey}`, schemaValue)
+        })
+      })
+
+      _.set(structure, path, arrayItems)
+
+      // Recheck if child arrays
+      structure = addArrayItems(structure, source, draft, parentPath)
+    }
+
+    if (_.isObject(value)) {
+      structure = addArrayItems(structure, value, draft, path)
+    }
+  })
+
+  return structure
+}
+
+const addPaths = (structure, source, parentPath = false) => {
+  _.each(source, (value, key) => {
+    if (isUpperCase(key) || _.startsWith(key, '_')) return true
+    let path = parentPath ? `${parentPath}.${key}` : key
+
+    if (_.isPlainObject(value)) {
+      let item = {
+        ...value,
+        _path: path,
+      }
+
+      _.set(structure, path, item)
+    }
+
+    if (_.isObject(value)) {
+      structure = addPaths(structure, value, path)
+    }
+  })
+
+  return structure
+}
+
+const addContent = (structure, source, draft, parentPath = false) => {
+  _.each(source, (value, key) => {
+    if (isUpperCase(key) || _.startsWith(key, '_')) return true
+    let path = parentPath ? `${parentPath}.${key}` : key
+
+    if (_.has(value, 'EDITOR')) {
+      let content = _.get(_.cloneDeep(draft), path)
+
+      if (content === undefined) {
+        content = value.DEFAULT || null
+      }
+
+      _.set(structure, `${path}._content`, content)
+    }
+
+    if (_.isObject(value)) {
+      structure = addContent(structure, value, draft, path)
+    }
+  })
+
+  return structure
+}
+
+const checkIf = (structure, source, draft, parentPath = false) => {
+  _.each(source, (value, key) => {
+    if (isUpperCase(key) || _.startsWith(key, '_')) return true
+    let path = parentPath ? `${parentPath}.${key}` : key
+
+    if (_.has(value, 'IF') && _.startsWith(value.IF, '@')) {
+      let ifPath = value.IF.split('=')[0].replace('@', '').trim()
+      let sisterPath = _.chain(path).split('.').slice(0, -1).push(ifPath).join('.').value()
+      let draftValue = null
+      let condition = value.IF.split('=')[1].trim().split('|')
+
+      if (_.has(structure, sisterPath)) {
+        draftValue = _.get(_.cloneDeep(draft), sisterPath)
+      }
+      else if (_.has(structure, ifPath)) {
+        draftValue = _.get(_.cloneDeep(draft), ifPath)
+      }
+
+      if (draftValue && !_.includes(condition, draftValue)) {
+        delete source[key]
+      }
+    }
+
+    if (_.isObject(value)) {
+      structure = checkIf(structure, value, draft, path)
+    }
+  })
+
+  return structure
+}
+
+const addType = (structure, source, parentPath = false) => {
+  _.each(source, (value, key) => {
+    if (isUpperCase(key) || _.startsWith(key, '_')) return true
+    let path = parentPath ? `${parentPath}.${key}` : key
+
+    if (_.isPlainObject(value) && !_.has(value, '_type')) {
+      let type = _.has(value, 'EDITOR') ? 'item' : 'object'
+
+      _.set(structure, `${path}._type`, type)
+    }
+
+    if (_.isObject(value)) {
+      structure = addType(structure, value, path)
+    }
+  })
+
+  return structure
+}
+
+const addTitle = (structure, source, parentPath = false) => {
+  _.each(source, (value, key) => {
+    if (isUpperCase(key) || _.startsWith(key, '_')) return true
+    let path = parentPath ? `${parentPath}.${key}` : key
+
+    if (_.isPlainObject(value) && !_.has(value, 'TITLE')) {
+      let title = titleCase(key)
+
+      _.set(structure, `${path}.TITLE`, title)
+    }
+
+    if (_.isObject(value)) {
+      structure = addTitle(structure, value, path)
+    }
+  })
+
+  return structure
+}
+
+const getValueFromPath = (structure, source, draft, parentPath = false) => {
+  _.each(source, (value, key) => {
+    let path = parentPath ? `${parentPath}.${key}` : key
+
+    if (_.isString(value) && _.startsWith(value, '@') && key !== 'IF') {
+      let valuePath = value.replace('@', '').trim()
+      let sisterPath = _.chain(path).split('.').slice(0, -2).push(valuePath).join('.').value()
+      let draftValue = null
+
+      if (_.has(structure, sisterPath)) {
+        draftValue = _.get(_.cloneDeep(draft), sisterPath)
+      }
+      else if (_.has(structure, valuePath)) {
+        draftValue = _.get(_.cloneDeep(draft), valuePath)
+      }
+
+      if (draftValue) {
+        _.set(structure, `${path}`, draftValue)
+      }
+    }
+
+    if (_.isObject(value)) {
+      structure = getValueFromPath(structure, value, draft, path)
+    }
+  })
+
+  return structure
+}
+
+const addStatus = (structure, source, draft, published, parentPath = false) => {
+  _.each(source, (value, key) => {
+    if (isUpperCase(key) || _.startsWith(key, '_')) return true
+    let path = parentPath ? `${parentPath}.${key}` : key
+
+    if (_.isPlainObject(value)) {
+      let status = _.isEqual(_.get(_.cloneDeep(draft), value._path), _.get(_.cloneDeep(published), value._path)) ? 'published' : 'draft'
+
+      _.set(structure, `${path}._status`, status)
+    }
+
+    if (_.isObject(value)) {
+      structure = addStatus(structure, value, draft, published, path)
+    }
+  })
+
+  return structure
+}
+
+export default (rawSchema, draft, published) => {
+  const schema = parseSimpleSyntax(rawSchema)
+
+  let structure = schema
+  addArrayItems(structure, structure, draft)
+  addPaths(structure, structure)
+  addContent(structure, structure, draft)
+  checkIf(structure, structure, draft)
+  addType(structure, structure)
+  addTitle(structure, structure)
+  getValueFromPath(structure, structure, draft)
+  addStatus(structure, structure, draft, published)
+
+  return structure
+}
+
 // const setTemplates = (schema, template) => {
 //   if (!template) return schema
 //
@@ -296,225 +555,3 @@ import isUpperCase from 'is-upper-case'
 //
 //   return draft
 // }
-
-const parseSimpleSyntax = (schema, source, parentPath = false) => {
-  _.each(source, (value, key) => {
-    if (isUpperCase(key) || _.startsWith(key, '_')) return true
-    let path = parentPath ? `${parentPath}.${key}` : key
-
-    if (_.isString(value)) {
-      let item = {
-        EDITOR: value,
-      }
-
-      // Shorten syntax with mode "input:email"
-      if (_.includes(value, ':')) {
-        item.EDITOR = value.split(':')[0].trim()
-        item.MODE = value.split(':')[1].trim()
-      }
-
-      // Shorten syntax with options "radio[one,two,three]"
-      if (_.includes(value, '[') && _.includes(value, ']')) {
-        item.EDITOR = value.split('[')[0].trim()
-        item.OPTIONS = []
-
-        let options = value.match(/\[(.*?)\]/)[1].split(',')
-
-        _.each(options, option => {
-          item.OPTIONS.push({
-            value: option.trim(),
-          })
-        })
-      }
-
-      _.set(schema, path, item)
-    }
-
-    if (_.isObject(value)) {
-      schema = parseSimpleSyntax(schema, value, path)
-    }
-  })
-
-  return schema
-}
-
-const addArrayItems = (structure, source, draft, parentPath = false) => {
-  _.each(source, (value, key) => {
-    if (isUpperCase(key) || _.startsWith(key, '_')) return true
-    let path = parentPath ? `${parentPath}.${key}` : key
-
-    if (_.isArray(value) && _.isArray(_.get(structure, path))) {
-      let schema = value[0]
-      let draftItems = _.get(_.cloneDeep(draft), path)
-      let arrayItems = {
-        _type: 'array',
-      }
-
-      if (!_.isPlainObject(draftItems)) {
-        draftItems = null
-      }
-
-      _.each(draftItems, (draftValue, draftKey) => {
-        _.set(arrayItems, draftKey, draftValue)
-
-        _.each(schema, (schemaValue, schemaKey) => {
-          _.set(arrayItems, `${draftKey}.${schemaKey}`, schemaValue)
-        })
-      })
-
-      _.set(structure, path, arrayItems)
-
-      // Recheck if child arrays
-      structure = addArrayItems(structure, source, draft, parentPath)
-    }
-
-    if (_.isObject(value)) {
-      structure = addArrayItems(structure, value, draft, path)
-    }
-  })
-
-  return structure
-}
-
-const addPaths = (structure, source, parentPath = false) => {
-  _.each(source, (value, key) => {
-    if (isUpperCase(key) || _.startsWith(key, '_')) return true
-    let path = parentPath ? `${parentPath}.${key}` : key
-
-    if (_.isPlainObject(value)) {
-      let item = {
-        ...value,
-        _path: path,
-      }
-
-      _.set(structure, path, item)
-    }
-
-    if (_.isObject(value)) {
-      structure = addPaths(structure, value, path)
-    }
-  })
-
-  return structure
-}
-
-const addContent = (structure, source, draft, parentPath = false) => {
-  _.each(source, (value, key) => {
-    if (isUpperCase(key) || _.startsWith(key, '_')) return true
-    let path = parentPath ? `${parentPath}.${key}` : key
-
-    if (_.has(value, 'EDITOR')) {
-      let content = _.get(_.cloneDeep(draft), path)
-
-      if (content === undefined) {
-        content = value.DEFAULT || null
-      }
-
-      _.set(structure, `${path}._content`, content)
-    }
-
-    if (_.isObject(value)) {
-      structure = addContent(structure, value, draft, path)
-    }
-  })
-
-  return structure
-}
-
-const addType = (structure, source, parentPath = false) => {
-  _.each(source, (value, key) => {
-    if (isUpperCase(key) || _.startsWith(key, '_')) return true
-    let path = parentPath ? `${parentPath}.${key}` : key
-
-    if (_.isPlainObject(value) && !_.has(value, '_type')) {
-      let type = _.has(value, 'EDITOR') ? 'item' : 'object'
-
-      _.set(structure, `${path}._type`, type)
-    }
-
-    if (_.isObject(value)) {
-      structure = addType(structure, value, path)
-    }
-  })
-
-  return structure
-}
-
-const addTitle = (structure, source, parentPath = false) => {
-  _.each(source, (value, key) => {
-    if (isUpperCase(key) || _.startsWith(key, '_')) return true
-    let path = parentPath ? `${parentPath}.${key}` : key
-
-    if (_.isPlainObject(value) && !_.has(value, 'TITLE')) {
-      let title = titleCase(key)
-
-      _.set(structure, `${path}.TITLE`, title)
-    }
-
-    if (_.isObject(value)) {
-      structure = addTitle(structure, value, path)
-    }
-  })
-
-  return structure
-}
-
-const getValueFromPath = (structure, source, draft, parentPath = false) => {
-  _.each(source, (value, key) => {
-    let path = parentPath ? `${parentPath}.${key}` : key
-
-    if (_.isString(value) && _.startsWith(value, '@')) {
-      let valuePath = value.replace('@', '').trim()
-      let sisterPath = _.chain(path).split('.').slice(0, -2).push(valuePath).join('.').value()
-      let draftValue = null
-
-      if (_.has(structure, sisterPath)) {
-        draftValue = _.get(_.cloneDeep(draft), sisterPath)
-      }
-      else if (_.has(structure, valuePath)) {
-        draftValue = _.get(_.cloneDeep(draft), valuePath)
-      }
-
-      if (draftValue) {
-        _.set(structure, `${path}`, draftValue)
-      }
-    }
-
-    if (_.isObject(value)) {
-      structure = getValueFromPath(structure, value, draft, path)
-    }
-  })
-
-  return structure
-}
-
-export default (schema, draft, published) => {
-  // schema = setTemplates(schema, schema.TEMPLATE)
-  // delete schema.TEMPLATE
-  // console.log('draft1', _.cloneDeep(draft))
-  // draft = removeUnusedDraftValues(draft, draft, schema)
-  // console.log('draft2', _.cloneDeep(draft))
-  schema = parseSimpleSyntax(schema, schema)
-  // console.log('schema', schema)
-
-  let structure = _.cloneDeep(schema)
-  structure = addArrayItems(structure, structure, draft)
-  structure = addPaths(structure, structure)
-  structure = addContent(structure, structure, draft)
-  structure = addType(structure, structure)
-  structure = addTitle(structure, structure)
-  schema = getValueFromPath(structure, structure, draft)
-  console.log('structure', _.cloneDeep(structure))
-  // console.log('structure', structure)
-  // structure = simpleToAdvance(structure, schema)
-  // schema = addArrays(schema, draft)
-  // schema = addPaths(schema)
-  // console.log('-bkbb._path', _.cloneDeep(schema.stores2['-bkbb']._path))
-  // schema = addArraysAndPaths(schema, draft)
-  // schema = addData(schema, draft)
-  // schema = removeIfNot(schema)
-  // schema = getDataFromPath(schema, draft)
-  // schema = addStatus(schema, draft, published)
-
-  return structure
-}
