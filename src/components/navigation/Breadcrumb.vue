@@ -15,8 +15,8 @@ export default {
       return this.$store.getters.structure
     },
 
-    activeStructure (state, getters) {
-      return this.$store.getters.activeStructure
+    activeItem (state, getters) {
+      return this.$store.getters.activeItem
     },
 
     breadcrumb () {
@@ -27,7 +27,7 @@ export default {
         breadcrumbItems = _.split(this.$route.params.path, '>')
       }
 
-      if (_.has(this.activeStructure, 'EDITOR')) {
+      if (_.has(this.activeItem, 'EDITOR')) {
         breadcrumbItems = _.dropRight(breadcrumbItems)
       }
 

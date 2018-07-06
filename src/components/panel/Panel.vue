@@ -22,18 +22,18 @@ export default {
       return this.$store.getters.structure
     },
 
-    activeStructure () {
-      return this.$store.getters.activeStructure
+    activeItem () {
+      return this.$store.getters.activeItem
     },
 
     activeType () {
       let path = _.replace(this.$route.params.path, />/g, '.')
       let grandparent = _.get(this.structure, _.chain(path).split('.').dropRight(2).join('.').value())
 
-      if (this.activeStructure && this.activeStructure._type === 'array') {
+      if (this.activeItem && this.activeItem._type === 'array') {
         return 'array'
       }
-      else if (grandparent && this.activeStructure && grandparent._type === 'array' && this.activeStructure._type === 'item') {
+      else if (grandparent && this.activeItem && grandparent._type === 'array' && this.activeItem._type === 'item') {
         return 'array'
       }
       else {
@@ -45,7 +45,7 @@ export default {
 
   watch: {
 
-    activeStructure (value) {
+    activeItem (value) {
       this.redirectToParentIfInvalidPath()
     },
 

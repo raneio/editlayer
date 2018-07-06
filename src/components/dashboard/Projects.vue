@@ -1,6 +1,9 @@
 <script>
 import _ from 'lodash'
-import moment from 'moment'
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+
+dayjs.extend(relativeTime)
 
 export default {
   name: 'Projects',
@@ -29,9 +32,9 @@ export default {
     },
 
     publishedAgo (project) {
-      let seconds = _.get(project, 'published.publishedAt.seconds')
-      let published = moment.unix(seconds).fromNow()
-      return seconds ? `Published ${published}` : 'Never published'
+      let milliseconds = _.get(project, 'published.publishedAt.seconds') * 1000
+      let published = dayjs(milliseconds).fromNow()
+      return milliseconds ? `Published ${published}` : 'Never published'
     },
 
   },
@@ -110,6 +113,7 @@ export default {
       white-space: nowrap
 
     .fa-icon
+      width: 1.2rem
       height: 1.2rem
       fill: $color-gray--dark
 

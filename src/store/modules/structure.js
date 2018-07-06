@@ -16,7 +16,7 @@ export default {
       return buildStructure(schema, draft, published)
     },
 
-    activeStructure (state, getters, rootState) {
+    activeItem (state, getters, rootState) {
       if (!getters.activeProject) return {}
 
       let path = _.replace(rootState.route.params.path, />/g, '.')

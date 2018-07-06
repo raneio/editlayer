@@ -30,7 +30,7 @@ export default {
     },
 
     inputType () {
-      return ['date', 'datetime-local', 'email', 'month', 'number', 'password', 'tel', 'time', 'url', 'week'].includes(this.config.MODE) ? this.config.MODE : 'text'
+      return ['email', 'number', 'password', 'tel', 'url'].includes(this.config.MODE) ? this.config.MODE : 'text'
     },
 
     isDatalist () {
@@ -39,15 +39,6 @@ export default {
 
     datalistId () {
       return (this.isDatalist) ? 'datalist' : false
-    },
-
-    uploadProcess () {
-      if (_.has(this.$store.state.uploadProcesses, `${this.projectId}>${this.$route.params.path}`)) {
-        return _.get(this.$store.state.uploadProcesses, `${this.projectId}>${this.$route.params.path}`)
-      }
-      else {
-        return null
-      }
     },
 
   },

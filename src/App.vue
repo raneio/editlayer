@@ -1,4 +1,5 @@
 <script>
+import _ from 'lodash'
 import Navigation from '@/components/navigation/Navigation'
 import Panel from '@/components/panel/Panel'
 import Breadcrumb from '@/components/navigation/Breadcrumb'
@@ -28,8 +29,8 @@ export default {
       return this.$store.getters.activeProject
     },
 
-    activeStructure () {
-      return this.$store.getters.activeStructure
+    activeItem () {
+      return this.$store.getters.activeItem
     },
 
     showRouterView () {
@@ -47,17 +48,18 @@ export default {
       return !!this.activeProject &&
         this.$store.state.route.name !== 'Settings' &&
         (this.$store.state.route.name !== 'Schema' || this.$store.state.utils.windowWidth > 900) &&
-        (this.activeStructure._type !== 'item' || this.$store.state.utils.windowWidth > 900)
+        (this.activeItem._type !== 'item' || this.$store.state.utils.windowWidth > 900)
       // return !!this.activeProject && this.$store.state.route.name !== 'Settings' && (!this.isMobile || this.mobileView === 'side')
     },
 
     showBreadcrumb () {
-      return !!(this.$store.state.route.name === 'Content' || this.$store.state.route.name === 'Schema')
+      return !!this.activeProject &&
+        !!(this.$store.state.route.name === 'Content' || this.$store.state.route.name === 'Schema')
     },
 
     showLoaderOverlay () {
-      return false
-      // return !this.showRouterView && this.$store.state.auth.id
+      return this.$store.state.auth.id === null ||
+        (_.isString(this.$store.state.auth.id) && this.$store.getters.projects === null)
     },
 
     showAuth () {
@@ -66,7 +68,7 @@ export default {
 
     showMainPanel () {
       return this.$store.state.route.name !== 'Dashboard' &&
-      (this.$store.state.route.name !== 'Content' || (this.activeStructure._type === 'item' || this.$store.state.utils.windowWidth > 900))
+      (this.$store.state.route.name !== 'Content' || (this.activeItem._type === 'item' || this.$store.state.utils.windowWidth > 900))
     },
 
     showDashboard () {
@@ -83,7 +85,7 @@ export default {
     // },
 
     // mobileView () {
-    //   return this.activeStructure._type === 'item' ? 'main' : 'side'
+    //   return this.activeItem._type === 'item' ? 'main' : 'side'
     // },
 
   },

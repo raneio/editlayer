@@ -6,8 +6,8 @@ export default {
   state: {
     activeModal: null,
     editorContentIsValid: true,
-    windowHeight: window.innerWidth,
-    windowWidth: window.innerHeight,
+    windowHeight: window.innerHeight,
+    windowWidth: window.innerWidth,
     invalidSchemas: {},
   },
 

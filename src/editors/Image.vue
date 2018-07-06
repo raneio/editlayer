@@ -24,7 +24,7 @@ export default {
 
   watch: {
 
-    '$store.getters.activeStructure._content' (value) {
+    '$store.getters.activeItem._content' (value) {
       this.content = value
     },
 

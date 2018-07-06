@@ -34,7 +34,7 @@ export default {
       return this.$store.getters.structure
     },
 
-    activeStructure () {
+    activeItem () {
       let path = _.replace(this.$route.params.path, />/g, '.')
       let parentPath = _.chain(path).split('.').dropRight().dropRight().join('.').value()
       let activeItem = _.get(this.structure, path)
@@ -59,7 +59,7 @@ export default {
       let source = []
       // let lastItem = null
 
-      _.each(this.activeStructure, (value, key) => {
+      _.each(this.activeItem, (value, key) => {
         if (_.startsWith(key, '-')) {
           source.push(value)
         }
@@ -86,7 +86,7 @@ export default {
 
   watch: {
 
-    activeStructure (value) {
+    activeItem (value) {
       this.selectFirstItem()
     },
 
@@ -97,7 +97,7 @@ export default {
     newItem () {
       let itemPath = _.replace(this.$route.params.path, />/g, '.')
 
-      if (itemPath !== this.activeStructure._path && _.includes(itemPath, '.-')) {
+      if (itemPath !== this.activeItem._path && _.includes(itemPath, '.-')) {
         itemPath = _.chain(itemPath).split('.-').slice(0, -1).join('.-').value()
       }
 
@@ -133,13 +133,13 @@ export default {
       if (this.$store.state.utils.windowWidth <= 900) return null
       let path = _.replace(this.$route.params.path, />/g, '.')
 
-      if (path !== this.activeStructure._path) return false
+      if (path !== this.activeItem._path) return false
       if (this.$route.name !== 'Content') return false
       // if (this.$store.getters.isMobile) return false
 
       let firstItem = _.find(this.arrayItems[0], { _type: 'item' })
 
-      if (firstItem && this.activeStructure._type === 'array') {
+      if (firstItem && this.activeItem._type === 'array') {
         let firstItemPath = _.replace(firstItem._path, /\./g, '>')
         this.$router.replace({name: 'Content', params: {projectId: this.projectId, path: firstItemPath}})
       }

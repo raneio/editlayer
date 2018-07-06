@@ -1,4 +1,5 @@
 // Editors
+import Calendar from '@/editors/Calendar'
 import Checkbox from '@/editors/Checkbox'
 import Code from '@/editors/Code'
 import Color from '@/editors/Color'
@@ -14,6 +15,7 @@ import Video from '@/editors/Video'
 
 // Previews
 import ArrayPreview from '@/editors/previews/Array'
+import CalendarPreview from '@/editors/previews/Calendar'
 import CodePreview from '@/editors/previews/Code'
 import ColorPreview from '@/editors/previews/Color'
 import ImagePreview from '@/editors/previews/Image'
@@ -21,6 +23,11 @@ import OptionPreview from '@/editors/previews/Option'
 import TextPreview from '@/editors/previews/Text'
 
 export default [
+  {
+    'schemaName': 'calendar',
+    'editor': Calendar,
+    'preview': CalendarPreview,
+  },
   {
     'schemaName': 'checkbox',
     'editor': Checkbox,

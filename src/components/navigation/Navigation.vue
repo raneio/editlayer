@@ -147,6 +147,7 @@ export default {
     transition: opacity 1s
     transition-delay: 1s
     opacity: 0
+    flex-shrink: 0
 
   .fa-icon
     width: 1.7rem

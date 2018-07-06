@@ -23,17 +23,17 @@ export default {
   components,
 
   computed: {
-    activeStructure () {
-      return this.$store.getters.activeStructure
+    activeItem () {
+      return this.$store.getters.activeItem
     },
 
     activeComponentName () {
-      let configItem = _.find(editorConfig, {'schemaName': this.activeStructure.EDITOR})
+      let configItem = _.find(editorConfig, {'schemaName': this.activeItem.EDITOR})
       return configItem.editor.name
     },
 
     isSupported () {
-      return _.includes(this.editors, this.activeStructure.EDITOR)
+      return _.includes(this.editors, this.activeItem.EDITOR)
     },
 
     editorContentIsValid () {
@@ -42,7 +42,7 @@ export default {
   },
 
   watch: {
-    'activeStructure._path' (value) {
+    'activeItem._path' (value) {
       this.forceEditorReload = true
       this.$nextTick(() => {
         this.forceEditorReload = false
@@ -76,17 +76,17 @@ export default {
 <template>
 <section class="editor">
   <heading-core mode="primary">
-    <h1>{{activeStructure.TITLE}}</h1>
+    <h1>{{activeItem.TITLE}}</h1>
   </heading-core>
 
-  <alert-core mode="info" v-if="activeStructure.INFO">
-    {{activeStructure.INFO}}
+  <alert-core mode="info" v-if="activeItem.INFO">
+    {{activeItem.INFO}}
   </alert-core>
 
   <component :is="activeComponentName" v-if="isSupported && !forceEditorReload"/>
 
-  <alert-core mode="warning" v-if="!isSupported && activeStructure.EDITOR">
-    Editor "<strong>{{activeStructure.EDITOR}}</strong>" is not supported, please change editor in the schema. Following editors are supported: <i>{{editors.join(', ')}}</i>
+  <alert-core mode="warning" v-if="!isSupported && activeItem.EDITOR">
+    Editor "<strong>{{activeItem.EDITOR}}</strong>" is not supported, please change editor in the schema. Following editors are supported: <i>{{editors.join(', ')}}</i>
   </alert-core>
 
   <div class="error" v-if="!editorContentIsValid">

@@ -5,17 +5,17 @@ export default {
 
   data () {
     return {
-      content: this.$store.getters.activeStructure._content,
+      content: this.$store.getters.activeItem._content,
     }
   },
 
   computed: {
 
     config () {
-      if (!_.has(this.$store, 'getters.activeStructure')) return {}
+      if (!_.has(this.$store, 'getters.activeItem')) return {}
       let config = {}
 
-      _.each(this.$store.getters.activeStructure, (value, key) => {
+      _.each(this.$store.getters.activeItem, (value, key) => {
         if (!_.startsWith(key, '_')) config[key] = value
       })
 
@@ -59,7 +59,7 @@ export default {
       // console.log('updateContent', content)
       this.$store.dispatch('updateContent', {
         projectId: this.$route.params.projectId,
-        path: this.$store.getters.activeStructure._path,
+        path: this.$store.getters.activeItem._path,
         content: content,
       })
     }, 500),
