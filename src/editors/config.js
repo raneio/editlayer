@@ -21,6 +21,7 @@ import ColorPreview from '@/editors/previews/Color'
 import ImagePreview from '@/editors/previews/Image'
 import OptionPreview from '@/editors/previews/Option'
 import TextPreview from '@/editors/previews/Text'
+import VideoPreview from '@/editors/previews/Video'
 
 export default [
   {
@@ -86,6 +87,6 @@ export default [
   {
     'schemaName': 'video',
     'editor': Video,
-    'preview': ImagePreview,
+    'preview': VideoPreview,
   },
 ]

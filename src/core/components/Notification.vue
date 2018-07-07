@@ -59,7 +59,7 @@ export default {
         }
 
         this.runProgress()
-      }, 300)
+      }, 200)
     },
 
     mouseover () {

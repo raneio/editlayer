@@ -1,27 +1,16 @@
 <script>
 import EditorBase from '@/editors/common/BasePreview'
-import _ from 'lodash'
 
 export default {
   extends: EditorBase,
   // this.content - Content (read-only)
   // this.config - Config data from the schema (read-only)
-  name: 'ImagePreview',
+  name: 'VideoPreview',
 
   computed: {
 
     previewImage () {
-      let selectedOption = _.find(this.config.OPTIONS, {value: this.content})
-
-      if (_.has(selectedOption, 'image')) {
-        return selectedOption.image
-      }
-      else if (_.isString(this.content)) {
-        return this.content
-      }
-      else if (_.has(this.content, 'url')) {
-        return this.content.url
-      }
+      return this.content.thumbnail
     },
 
   },
@@ -32,6 +21,7 @@ export default {
 <template>
 <div class="preview -image">
   <img class="image" :src="previewImage" alt="" v-if="content">
+  <icon name="play-circle"></icon>
 </div>
 </template>
 
@@ -49,5 +39,17 @@ export default {
 
   .image
     max-width: 100%
+
+  .fa-icon
+    position: absolute
+    top: 50%
+    left: 50%
+    transform: translate(-50%, -50%)
+    height: 160%
+    width: auto
+    max-width: none
+    max-height: none
+    color: mix($color-white, transparent, 90%)
+    filter: drop-shadow(0 0 .5rem mix($color-black, transparent, 70%))
 
 </style>

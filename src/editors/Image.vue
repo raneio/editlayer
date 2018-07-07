@@ -57,7 +57,7 @@ export default {
 
       this.$store.dispatch('uploadImage', {
         projectId: this.projectId,
-        path: this.$route.params.path,
+        path: _.replace(this.$route.params.path, />/g, '.'),
         image: image,
         maxWidth: this.config.MAX_WIDTH,
         maxHeight: this.config.MAX_HEIGHT,

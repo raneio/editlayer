@@ -1,6 +1,7 @@
 <script>
 import EditorBase from '@/editors/common/BasePreview'
 import dayjs from 'dayjs'
+import _ from 'lodash'
 
 export default {
   extends: EditorBase,
@@ -27,11 +28,11 @@ export default {
         return `${dayjs(this.content.start).format('YYYY-MM-DD')} – ${dayjs(this.content.end).format('YYYY-MM-DD')}`
       }
       else if (this.config.MODE === 'date-multiple') {
-        let dates = []
-        _.each(this.content, date => {
-          dates.push(dayjs(date).format('YYYY-MM-DD'))
+        if (!_.isArray(this.content)) return ''
+
+        return this.content.map(date => {
+          return dayjs(date).format('YYYY-MM-DD')
         })
-        return dates
       }
       else {
         return dayjs(this.content).format('YYYY-MM-DD')

@@ -12,11 +12,11 @@ export default {
 
   <div class="text">
     <div class="copyright">
-      Copyright &copy; 2018 <button-core light href="https://twitter.com/raneio">Rane Ahonen</button-core>
+      Copyright &copy; 2018 <button-core light href="https://twitter.com/raneio">Lorem Code</button-core>
     </div>
 
     <div class="licensed">
-      Licensed <button-core light>AGPL</button-core>. Upgrade to <button-core light href="https://editlayer.com/pro">PRO</button-core> ?
+      Licensed <button-core light>???</button-core>. Upgrade to <button-core light href="https://editlayer.com/pro">PRO</button-core> ?
     </div>
   </div>
 </section>

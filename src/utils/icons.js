@@ -20,6 +20,7 @@ import 'vue-awesome/icons/regular/copy'
 import 'vue-awesome/icons/regular/thumbs-up'
 import 'vue-awesome/icons/times'
 import 'vue-awesome/icons/kiwi-bird'
+import 'vue-awesome/icons/play-circle'
 
 Icon.register({
   editlayer: {

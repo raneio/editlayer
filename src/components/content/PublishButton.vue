@@ -135,7 +135,7 @@ export default {
   height: 5rem
   font-size: .7rem
   font-weight: 800
-  background-color: mix(black, transparent, 30%)
+  background-color: mix($color-black, transparent, 30%)
   color: $color-white
 
   .fa-icon
@@ -144,15 +144,15 @@ export default {
   &.-published
 
     .fa-icon
-      opacity: .5
+      opacity: .4
       // color: $color-success
 
   &.-publish
 
     .fa-icon,
     .text
-      transition: opacity .2s
-      opacity: .8
+      transition: opacity $time--small
+      opacity: .7
 
     &:hover
       .fa-icon,

@@ -66,13 +66,12 @@ export default {
     },
 
     minuteOptions () {
-      return this.timeOptions(this.config.MINUTE, [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55])
+      return this.timeOptions(this.config.MINUTE, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59])
     },
 
     secondOptions () {
-      return this.timeOptions(this.config.SECOND, [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55])
+      return this.timeOptions(this.config.SECOND, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59])
     },
-
 
     pickerMode () {
       if (_.includes(['date', 'date-time'], this.config.MODE) || !this.config.MODE) {
@@ -97,9 +96,9 @@ export default {
       return _.has(this.config, 'SECOND') && this.config.SECOND !== false
     },
 
-    // preventSave () {
-    //   return dayjs(this.content).isValid() === false
-    // },
+    showNow () {
+      return _.includes(['date', 'time', 'date-time'], this.config.MODE) || !this.config.MODE
+    },
 
   },
 
@@ -222,6 +221,13 @@ export default {
       }
     },
 
+    selectNow () {
+      this.date = dayjs().toDate()
+      this.hour = this.closestValue(this.hourOptions, dayjs(this.date).hour())
+      this.minute = this.closestValue(this.minuteOptions, dayjs(this.date).minute())
+      this.second = this.closestValue(this.secondOptions, dayjs(this.date).second())
+    },
+
   },
 
   created () {
@@ -249,38 +255,46 @@ export default {
     v-model='date'
   ></v-date-picker>
 
-  <div class="time" v-if="showTime">
-    <select class="select" v-model="hour">
-      <option
-        :value="time.value"
-        v-text="time.label"
-        v-for="(time, index) in hourOptions"
-        :key="index"
-      />
-    </select>
+  <section class="tools">
 
-    <span>:</span>
+    <div class="time" v-if="showTime">
+      <select class="select" v-model="hour">
+        <option
+          :value="time.value"
+          v-text="time.label"
+          v-for="(time, index) in hourOptions"
+          :key="index"
+        />
+      </select>
 
-    <select class="select" v-model="minute">
-      <option
-        :value="time.value"
-        v-text="time.label"
-        v-for="(time, index) in minuteOptions"
-        :key="index"
-      />
-    </select>
+      <span>:</span>
 
-    <span v-if="showSecond">:</span>
+      <select class="select" v-model="minute">
+        <option
+          :value="time.value"
+          v-text="time.label"
+          v-for="(time, index) in minuteOptions"
+          :key="index"
+        />
+      </select>
 
-    <select class="select" v-model="second" v-if="showSecond">
-      <option
-        :value="time.value"
-        v-text="time.label"
-        v-for="(time, index) in secondOptions"
-        :key="index"
-      />
-    </select>
-  </div>
+      <span v-if="showSecond">:</span>
+
+      <select class="select" v-model="second" v-if="showSecond">
+        <option
+          :value="time.value"
+          v-text="time.label"
+          v-for="(time, index) in secondOptions"
+          :key="index"
+        />
+      </select>
+    </div>
+
+    <span class="spacer"></span>
+
+    <button-core light @click.native="selectNow" v-if="showNow">Now</button-core>
+
+  </section>
 
 </section>
 </template>
@@ -291,10 +305,17 @@ export default {
 
 .editor.-calendar
   +gap()
+  max-width: 30rem
 
 .c-pane-container
   width: 100%
-  max-width: 30rem
+
+.tools
+  +chain(.25rem)
+  width: 100%
+
+  .spacer
+    flex-grow: 1
 
 .time
   +chain(.25rem)
@@ -302,7 +323,5 @@ export default {
 
   .select
     width: auto
-    padding-left: 1.5rem
-    padding-right: 2.5rem
 
 </style>
