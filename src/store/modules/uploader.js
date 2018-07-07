@@ -1,8 +1,8 @@
 import _ from 'lodash'
 import slugg from 'slugg'
-import ImageCompressor from 'image-compressor.js'
 import generate from 'nanoid/generate'
 import firebase from '@/utils/firebase'
+import ImageCompressor from 'image-compressor.js'
 
 // const chance = new Chance()
 
@@ -25,6 +25,8 @@ export default {
       })
 
       let uploadImage = payload.image
+
+      // console.log('uploadImage', uploadImage)
 
       if (_.includes(['image/jpeg', 'image/png'], payload.image.type)) {
         const imageCompressor = new ImageCompressor()
@@ -101,11 +103,23 @@ export default {
         .catch((error) => console.error('Upload task faild', error))
 
       if (payload.projectId && payload.path && downloadURL) {
-        dispatch('updateContent', {
-          projectId: payload.projectId,
-          path: payload.path,
-          content: downloadURL,
-        })
+        let img = new Image()
+
+        img.onload = () => {
+          dispatch('updateContent', {
+            projectId: payload.projectId,
+            path: payload.path,
+            content: {
+              src: downloadURL,
+              height: img.height,
+              width: img.width,
+              size: uploadImage.size,
+              type: uploadImage.type,
+            },
+          })
+        }
+
+        img.src = URL.createObjectURL(uploadImage)
       }
 
       return {

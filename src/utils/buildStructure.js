@@ -202,11 +202,12 @@ const getValueFromPath = (structure, source, draft, parentPath = false) => {
     let path = parentPath ? `${parentPath}.${key}` : key
 
     if (_.isString(value) && _.startsWith(value, '@') && key !== 'IF') {
+      let sisterLevel = source._type === 'item' ? -2 : -1
       let valuePath = value.replace('@', '').trim()
-      let sisterPath = _.chain(path).split('.').slice(0, -2).push(valuePath).join('.').value()
+      let sisterPath = _.chain(path).split('.').slice(0, sisterLevel).push(valuePath).join('.').value()
       let draftValue = null
-
-      if (_.has(structure, sisterPath)) {
+      
+      if (_.has(structure, sisterPath) && valuePath !== source._path.split('.').pop()) {
         draftValue = _.get(_.cloneDeep(draft), sisterPath)
       }
       else if (_.has(structure, valuePath)) {

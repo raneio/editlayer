@@ -89,7 +89,7 @@ export default {
     },
 
     showTime () {
-      return _.includes(['time', 'date-time'], this.config.MODE)
+      return _.includes(['time', 'date-time'], this.config.MODE) || !this.config.MODE
     },
 
     showSecond () {

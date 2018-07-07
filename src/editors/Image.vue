@@ -41,7 +41,7 @@ export default {
     },
 
     previewImage () {
-      return this.content
+      return this.content.src
     },
 
   },
@@ -63,7 +63,7 @@ export default {
         maxHeight: this.config.MAX_HEIGHT,
       })
         .then((image) => {
-          console.log('uploaded', image)
+          // console.log('uploaded', image)
           // this.content = image.downloadURL
           this.uploading = false
         })

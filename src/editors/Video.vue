@@ -34,22 +34,12 @@ export default {
 
   computed: {
 
-    videoId () {
-      if (!this.content) return false
-      return this.content.id
-    },
-
-    provider () {
-      if (!this.content) return false
-      return this.content.provider
-    },
-
     videoSrc () {
-      if (this.provider === 'youtube') {
-        return `https://www.youtube-nocookie.com/embed/${this.videoId}?rel=0`
+      if (_.get(this.content, 'type') === 'video/youtube') {
+        return `https://www.youtube-nocookie.com/embed/${this.content.videoId}?rel=0`
       }
-      else if (this.provider === 'vimeo') {
-        return `https://player.vimeo.com/video/${this.videoId}?portrait=0`
+      else if (_.get(this.content, 'type') === 'video/vimeo') {
+        return `https://player.vimeo.com/video/${this.content.videoId}?portrait=0`
       }
       else {
         return false
@@ -65,30 +55,39 @@ export default {
   methods: {
 
     initInput () {
-      if (!this.content) {
+      if (!_.has(this.content, 'type') || !_.has(this.content, 'videoId')) {
         this.input = ''
+        this.content = {}
         return null
       }
 
+      let provider = this.content.type.split('/')[1].trim()
+
       let videoInfo = {
-        provider: this.content.provider,
-        id: this.content.id,
+        provider: provider,
+        id: this.content.videoId,
         mediaType: 'video',
       }
+
       this.input = urlParser.create({videoInfo: videoInfo})
     },
 
     saveVideo: async function () {
-      let videoObj = urlParser.parse(this.input)
+      let videoInfo = urlParser.parse(this.input)
 
-      if (!videoObj) {
-        this.content = null
+      if (!videoInfo) {
+        this.content = {}
         return null
       }
 
+      let url = urlParser.create({
+        videoInfo: videoInfo,
+      })
+
       let video = {
-        id: videoObj.id,
-        provider: videoObj.provider,
+        videoId: videoInfo.id,
+        type: `video/${videoInfo.provider}`,
+        url: url,
       }
 
       video.thumbnail = await this.getThumbnail(video)
@@ -98,12 +97,12 @@ export default {
     getThumbnail: async function (video) {
       let thumbnail = null
 
-      if (video.provider === 'youtube') {
-        thumbnail = `http://img.youtube.com/vi/${video.id}/hqdefault.jpg`
+      if (video.type === 'video/youtube') {
+        thumbnail = `http://img.youtube.com/vi/${video.videoId}/hqdefault.jpg`
       }
-      else if (video.provider === 'vimeo') {
+      else if (video.type === 'video/vimeo') {
         try {
-          let vimeoData = await axios.get(`https://vimeo.com/api/v2/video/${video.id}.json`)
+          let vimeoData = await axios.get(`https://vimeo.com/api/v2/video/${video.videoId}.json`)
           thumbnail = vimeoData.data[0].thumbnail_large
         }
         catch (error) {

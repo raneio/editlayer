@@ -12,11 +12,14 @@ export default {
   computed: {
 
     previewText () {
-      if (this.config.MODE === 'date-time' && _.has(this.config, 'SECOND') && this.config.SECOND !== false) {
+      if ((!this.config.MODE || this.config.MODE === 'date-time') && _.has(this.config, 'SECOND') && this.config.SECOND !== false) {
         return dayjs(this.content).format('YYYY-MM-DD HH:mm:ss')
       }
-      else if (this.config.MODE === 'date-time') {
+      else if ((!this.config.MODE || this.config.MODE === 'date-time')) {
         return dayjs(this.content).format('YYYY-MM-DD HH:mm')
+      }
+      else if (this.config.MODE === 'date') {
+        return dayjs(this.content).format('YYYY-MM-DD')
       }
       else if (this.config.MODE === 'time' && _.has(this.config, 'SECOND') && this.config.SECOND !== false) {
         return dayjs(this.content).format('HH:mm:ss')
@@ -33,9 +36,6 @@ export default {
         return this.content.map(date => {
           return dayjs(date).format('YYYY-MM-DD')
         })
-      }
-      else {
-        return dayjs(this.content).format('YYYY-MM-DD')
       }
     },
 

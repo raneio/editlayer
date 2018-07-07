@@ -19,8 +19,8 @@ export default {
       else if (_.isString(this.content)) {
         return this.content
       }
-      else if (_.has(this.content, 'url')) {
-        return this.content.url
+      else if (_.has(this.content, 'src')) {
+        return this.content.src
       }
     },
 
