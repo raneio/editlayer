@@ -206,7 +206,7 @@ const getValueFromPath = (structure, source, draft, parentPath = false) => {
       let valuePath = value.replace('@', '').trim()
       let sisterPath = _.chain(path).split('.').slice(0, sisterLevel).push(valuePath).join('.').value()
       let draftValue = null
-      
+
       if (_.has(structure, sisterPath) && valuePath !== source._path.split('.').pop()) {
         draftValue = _.get(_.cloneDeep(draft), sisterPath)
       }

@@ -5,8 +5,7 @@
  * @param {string} config.EDITOR - Name of editor
  * @param {string} config.TITLE
  * @param {string} config.OPTIONS[].value
- * @param {string} config.OPTIONS[].label
- * @param {string} config.OPTIONS[].image
+ * @param {string} config.OPTIONS[].url
  */
 
 import EditorBase from '@/editors/common/BaseEditor'
@@ -59,7 +58,7 @@ export default {
       <img
         class="image"
         :class="{'-active': option.value === content}"
-        :src="option.image"
+        :src="option.url"
         :alt="option.value"
         @click="selectImage(option.value)"
       >

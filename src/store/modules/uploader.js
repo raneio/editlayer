@@ -110,7 +110,7 @@ export default {
             projectId: payload.projectId,
             path: payload.path,
             content: {
-              src: downloadURL,
+              url: downloadURL,
               height: img.height,
               width: img.width,
               size: uploadImage.size,

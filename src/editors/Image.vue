@@ -41,7 +41,7 @@ export default {
     },
 
     previewImage () {
-      return this.content.src
+      return this.content.url
     },
 
   },
