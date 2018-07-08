@@ -24,11 +24,11 @@ export default {
         maxHeight = payload.downscale
       }
 
-      if (_.isNumber(payload.downscale.width)) {
+      if (_.isPlainObject(payload.downscale) && _.isNumber(payload.downscale.width)) {
         maxWidth = payload.downscale.width
       }
 
-      if (_.isNumber(payload.downscale.height)) {
+      if (_.isPlainObject(payload.downscale) && _.isNumber(payload.downscale.height)) {
         maxHeight = payload.downscale.height
       }
 
@@ -128,8 +128,6 @@ export default {
           placeholder = await blobToDataURL(placeholderBlob)
             .catch((error) => console.error('Blob to base64 failed', error))
         }
-
-        console.log('placeholder', placeholder)
 
         let img = new Image()
         img.src = URL.createObjectURL(uploadImage)

@@ -52,7 +52,7 @@ export default {
     },
 
     initPicker () {
-      let size = 280
+      let size = 200
 
       this.colorPicker = new iro.ColorPicker(this.$refs.colorPicker, {
         width: size,
@@ -144,4 +144,9 @@ export default {
 
   +breakpoint('large')
     width: auto
+
+.picker /deep/
+  svg
+    max-width: none
+
 </style>

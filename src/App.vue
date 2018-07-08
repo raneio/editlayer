@@ -163,9 +163,12 @@ export default {
 
   .header
     flex-shrink: 0
-    margin-left: 1.5rem
-    margin-right: 1.5rem
-    border-bottom: 1px solid $hr-color
+    padding-left: 1.5rem
+    padding-right: 1.5rem
+
+    +breakpoint('medium')
+      padding-left: 3rem
+      padding-right: 3rem
 
   .router-view
     flex-grow: 1
