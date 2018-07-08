@@ -4,8 +4,8 @@
  * @param {string} content - Content saves automatically when changing
  * @param {string} config.EDITOR - Name of editor
  * @param {string} config.TITLE
- * @param {string} config.MAX_WIDTH
- * @param {string} config.MAX_HEIGHT
+ * @param {string} config.PLACEHOLDER
+ * @param {string|object} config.DOWNSCALE
  */
 
 import EditorBase from '@/editors/common/BaseEditor'
@@ -41,7 +41,7 @@ export default {
     },
 
     previewImage () {
-      return this.content.url
+      return _.get(this.content, 'url')
     },
 
   },
@@ -59,12 +59,10 @@ export default {
         projectId: this.projectId,
         path: _.replace(this.$route.params.path, />/g, '.'),
         image: image,
-        maxWidth: this.config.MAX_WIDTH,
-        maxHeight: this.config.MAX_HEIGHT,
+        downscale: this.config.DOWNSCALE,
+        placeholder: this.config.PLACEHOLDER,
       })
         .then((image) => {
-          // console.log('uploaded', image)
-          // this.content = image.downloadURL
           this.uploading = false
         })
     },
@@ -119,11 +117,6 @@ export default {
   justify-content: center
   align-items: flex-start
 
-// .filename
-//   font-size: .8rem
-//   color: $color-gray
-//   text-align: center
-
 .preview
   background-image: url('../assets/image-background.png')
   background-position: center
@@ -135,8 +128,5 @@ export default {
 
   .image
     max-height: 50vh
-
-// Under /deep/ you can also change style of child components
-.editor /deep/
 
 </style>

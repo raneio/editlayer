@@ -5,8 +5,7 @@
  * @param {string} config.EDITOR - Name of editor
  * @param {string} config.TITLE
  * @param {string} config.PLACEHOLDER
- * @param {string} config.IMAGE_MAX_WIDTH
- * @param {string} config.IMAGE_MAX_HEIGHT
+ * @param {string} config.DOWNSCALE
  */
 
 import EditorBase from '@/editors/common/BaseEditor'
@@ -90,8 +89,7 @@ export default {
         projectId: this.projectId,
         path: this.$route.params.path,
         image: image,
-        maxWidth: this.config.IMAGE_MAX_WIDTH,
-        maxHeight: this.config.IMAGE_MAX_HEIGHT,
+        downscale: this.config.DOWNSCALE,
       })
         .then((image) => {
           this.quill.insertEmbed(this.addButton.index, 'image', image.downloadURL)

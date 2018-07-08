@@ -2,9 +2,10 @@ import _ from 'lodash'
 import slugg from 'slugg'
 import generate from 'nanoid/generate'
 import firebase from '@/utils/firebase'
+import { blobToDataURL } from 'blob-util'
 import ImageCompressor from 'image-compressor.js'
 
-// const chance = new Chance()
+const imageCompressor = new ImageCompressor()
 
 export default {
 
@@ -12,11 +13,24 @@ export default {
 
     async uploadImage ({commit, dispatch}, payload) {
       if (!_.startsWith(payload.image.type, 'image/')) return false
-
-      let maxWidth = payload.maxWidth || 800
-      let maxHeight = payload.maxHeight || 800
       let filenameWithoutExt = slugg(payload.image.name.replace(/\.[^/.]+$/, ''))
       let randomId = generate('abcdefghijklmnopqrstuvwxyz', 4)
+
+      let maxWidth = 960
+      let maxHeight = 960
+
+      if (_.isNumber(payload.downscale)) {
+        maxWidth = payload.downscale
+        maxHeight = payload.downscale
+      }
+
+      if (_.isNumber(payload.downscale.width)) {
+        maxWidth = payload.downscale.width
+      }
+
+      if (_.isNumber(payload.downscale.height)) {
+        maxHeight = payload.downscale.height
+      }
 
       commit('setNotification', {
         id: `${payload.projectId}>${payload.path}>upload`,
@@ -26,10 +40,7 @@ export default {
 
       let uploadImage = payload.image
 
-      // console.log('uploadImage', uploadImage)
-
       if (_.includes(['image/jpeg', 'image/png'], payload.image.type)) {
-        const imageCompressor = new ImageCompressor()
         let optimizedImage = await imageCompressor.compress(payload.image, {
           quality: 0.8,
           convertSize: 1000000,
@@ -102,9 +113,26 @@ export default {
         })
         .catch((error) => console.error('Upload task faild', error))
 
-      if (payload.projectId && payload.path && downloadURL) {
-        let img = new Image()
+      let placeholder = null
 
+      if (payload.projectId && payload.path && downloadURL) {
+        if (payload.placeholder === true && _.includes(['image/jpeg', 'image/png', 'image/gif'], payload.image.type)) {
+          const placeholderBlob = await imageCompressor.compress(payload.image, {
+            quality: 0.2,
+            convertSize: 0,
+            maxWidth: 92,
+            maxHeight: 92,
+          })
+            .catch((error) => console.error('Image optimize failed', error.message))
+
+          placeholder = await blobToDataURL(placeholderBlob)
+            .catch((error) => console.error('Blob to base64 failed', error))
+        }
+
+        console.log('placeholder', placeholder)
+
+        let img = new Image()
+        img.src = URL.createObjectURL(uploadImage)
         img.onload = () => {
           dispatch('updateContent', {
             projectId: payload.projectId,
@@ -115,11 +143,10 @@ export default {
               width: img.width,
               size: uploadImage.size,
               type: uploadImage.type,
+              placeholder: placeholder,
             },
           })
         }
-
-        img.src = URL.createObjectURL(uploadImage)
       }
 
       return {
@@ -127,6 +154,9 @@ export default {
         filename: filenameWithoutExt,
         projectId: payload.projectId,
         path: payload.path,
+        size: uploadImage.size,
+        type: uploadImage.type,
+        placeholder: placeholder,
       }
     },
   },

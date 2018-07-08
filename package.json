@@ -17,6 +17,7 @@
     "animejs": "^2.2.0",
     "autosize": "^4.0.2",
     "axios": "^0.18.0",
+    "blob-util": "^2.0.2",
     "caret-pos": "^1.0.1",
     "codemirror": "^5.38.0",
     "compress.js": "^1.1.2",
