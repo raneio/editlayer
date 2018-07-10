@@ -46,10 +46,10 @@ export default {
 
   methods: {
 
-    pickColor () {
-      console.log('pickColor')
-      this.drag = true
-    },
+    // pickColor () {
+    //   console.log('pickColor')
+    //   this.drag = true
+    // },
 
     initPicker () {
       let size = 200

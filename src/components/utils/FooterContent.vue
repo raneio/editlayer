@@ -12,7 +12,7 @@ export default {
 
   <div class="text">
     <div class="copyright">
-      Copyright &copy; 2018 <button-core light href="https://twitter.com/raneio">Lorem Code</button-core>
+      Copyright &copy; 2018 <button-core light href="https://twitter.com/raneio">Rane Ahonen</button-core>
     </div>
 
     <div class="licensed">
