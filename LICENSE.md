@@ -1,1 +1,1 @@
-Copyright 2018 Rane Ahonen @ Editlayer.org
+Copyright 2018 Rane Ahonen - Editlayer.org

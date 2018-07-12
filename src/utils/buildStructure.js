@@ -247,6 +247,7 @@ const addStatus = (structure, source, draft, published, parentPath = false) => {
 }
 
 export default (rawSchema, draft, published) => {
+  // TODO: Change Each to filter, map, reduce
   const schema = parseSimpleSyntax(rawSchema)
 
   let structure = schema
