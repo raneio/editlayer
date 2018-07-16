@@ -116,7 +116,7 @@ export default {
       let placeholder = null
 
       if (payload.projectId && payload.path && downloadURL) {
-        if (payload.placeholder === true && _.includes(['image/jpeg', 'image/png', 'image/gif'], payload.image.type)) {
+        if (_.includes(['image/jpeg', 'image/png', 'image/gif'], payload.image.type)) {
           const placeholderBlob = await imageCompressor.compress(payload.image, {
             quality: 0.2,
             convertSize: 0,

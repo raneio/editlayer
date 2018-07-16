@@ -10,7 +10,7 @@ export default {
     <img class="image" src="/powered-by-editlayer.svg" alt="">
   </a> -->
 
-  <div class="text">
+  <!-- <div class="text">
     <div class="copyright">
       Copyright &copy; 2018 <button-core light href="https://twitter.com/raneio">Rane Ahonen</button-core>
     </div>
@@ -18,7 +18,7 @@ export default {
     <div class="licensed">
       Licensed <button-core light>???</button-core>. Upgrade to <button-core light href="https://editlayer.com/pro">PRO</button-core> ?
     </div>
-  </div>
+  </div> -->
 </section>
 </template>
 
