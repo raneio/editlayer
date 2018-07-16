@@ -1,57 +1,61 @@
 {
   "name": "editlayer-cms",
-  "version": "0.2.0",
+  "description": "Editlayer is headless CMS that saves content as JSON",
+  "version": "0.5.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve --open",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
-    "deploy": "npm run lint && npm run build && firebase deploy"
+    "serve": "vue-cli-service serve",
+    "build:functions": "./node_modules/.bin/babel functions/src --out-dir functions/dist",
+    "build:hosting": "vue-cli-service build",
+    "lint": "vue-cli-service lint && eslint ./functions/src",
+    "deploy:only-functions": "npm run build:functions && firebase use development && firebase deploy --only functions",
+    "deploy:development": "npm run build:functions && firebase use development && firebase deploy --only functions,firestore,storage",
+    "deploy:production": "npm run lint && npm run build:hosting && npm run build:functions && firebase use production && firebase deploy && firebase use development"
   },
   "dependencies": {
-    "@ckeditor/ckeditor5-build-balloon": "^1.0.0-beta.3",
-    "@ckeditor/ckeditor5-build-classic": "^1.0.0-beta.1",
+    "@jaames/iro": "^3.4.1",
     "animejs": "^2.2.0",
-    "autosize": "^4.0.0",
+    "autosize": "^4.0.2",
     "axios": "^0.18.0",
-    "change-case": "^3.0.2",
-    "color": "^3.0.0",
-    "deep-object-diff": "^1.1.0",
-    "devtools-detect": "^2.2.0",
-    "element-ui": "^2.4.0",
-    "escape-json-node": "^2.0.0",
-    "firebase": "^4.9.1",
-    "github-markdown-css": "^2.10.0",
-    "highlight.js": "^9.12.0",
-    "image-compressor.js": "^1.1.1",
+    "blob-util": "^2.0.2",
+    "caret-pos": "^1.0.1",
+    "codemirror": "^5.38.0",
+    "copy-to-clipboard": "^3.0.8",
+    "dayjs": "^1.7.2",
+    "firebase": "^5.0.4",
+    "image-compressor.js": "github:raneio/image-compressor",
+    "is-upper-case": "^1.1.2",
     "js-base64": "^2.4.5",
-    "jsesc": "^2.5.1",
-    "lodash": "^4.17.5",
-    "npm": "^5.7.1",
-    "sanitize-filename": "^1.6.1",
-    "simplemde": "^1.11.2",
+    "js-video-url-parser": "^0.2.7",
+    "lodash": "^4.17.10",
+    "nanoid": "^1.0.4",
+    "parse-json": "^4.0.0",
     "slugg": "^1.2.1",
-    "tui-editor": "^1.0.6",
-    "uuid": "^3.2.1",
-    "validator": "^9.4.1",
-    "vue": "^2.5.13",
-    "vue-codemirror": "^4.0.3",
+    "title-case": "^2.1.1",
+    "typeface-open-sans": "0.0.54",
+    "upper-case": "^1.1.3",
+    "v-calendar": "^0.9.7",
+    "validator": "^10.3.0",
+    "vue": "^2.5.16",
+    "vue-awesome": "^3.0.2",
+    "vue-codemirror": "^4.0.5",
+    "vue-quill-editor": "^3.0.6",
     "vue-router": "^3.0.1",
-    "vue-simplemde": "^0.4.8",
-    "vuefire": "^1.4.5",
+    "vue2-editor": "^2.5.0",
     "vuex": "^3.0.1",
     "vuex-router-sync": "^5.0.0"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.0.0-alpha.9",
-    "@vue/cli-plugin-eslint": "^3.0.0-alpha.9",
-    "@vue/cli-service": "^3.0.0-alpha.9",
-    "@vue/eslint-config-standard": "^3.0.0-alpha.9",
-    "animate-sass": "^0.8.2",
-    "element-theme-chalk": "^2.4.0",
-    "node-sass": "^4.7.2",
-    "sass-loader": "^6.0.6",
-    "vue-template-compiler": "^2.5.13"
+    "@vue/cli-plugin-babel": "^3.0.0-beta.15",
+    "@vue/cli-plugin-eslint": "^3.0.0-beta.15",
+    "@vue/cli-service": "^3.0.0-beta.15",
+    "@vue/eslint-config-standard": "^3.0.0-beta.15",
+    "babel-cli": "^6.26.0",
+    "babel-core": "7.0.0-bridge.0",
+    "babel-preset-env": "^1.7.0",
+    "node-sass": "^4.9.0",
+    "sass-loader": "^7.0.3",
+    "vue-template-compiler": "^2.5.16"
   },
   "babel": {
     "presets": [
@@ -59,6 +63,10 @@
     ]
   },
   "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
     "extends": [
       "plugin:vue/essential",
       "@vue/standard"
@@ -67,7 +75,14 @@
       "comma-dangle": [
         "error",
         "always-multiline"
+      ],
+      "brace-style": [
+        "error",
+        "stroustrup"
       ]
+    },
+    "parserOptions": {
+      "parser": "babel-eslint"
     }
   },
   "postcss": {

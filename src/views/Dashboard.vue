@@ -1,7 +1,8 @@
 <script>
-import Navigation from '@/components/Navigation'
-import Projects from '@/components/Projects'
-import firebase from '@/firebase'
+import Projects from '@/components/dashboard/Projects'
+import NewProjectButton from '@/components/dashboard/NewProjectButton'
+import Navigation from '@/components/dashboard/Navigation'
+import FooterContent from '@/components/utils/FooterContent'
 
 export default {
   name: 'Dashboard',
@@ -9,28 +10,12 @@ export default {
   components: {
     Navigation,
     Projects,
-  },
-
-  computed: {
-    email () {
-      return this.$store.state.user.email
-    },
-  },
-
-  methods: {
-
-    logout () {
-      firebase.auth.signOut().then(() => {
-        window.location.href = 'https://editlayer.com'
-      }).catch((error) => {
-        console.error('Logout failed', error)
-      })
-    },
-
+    NewProjectButton,
+    FooterContent,
   },
 
   mounted () {
-    if (this.$route.params.view && this.$route.params.view !== 'structure') {
+    if (this.$route.params.view && this.$route.params.view !== 'schema') {
       this.$router.push({ name: 'Content', params: { projectId: this.$route.params.view } })
     }
   },
@@ -39,67 +24,61 @@ export default {
 </script>
 
 <template>
-<section class="layout">
-  <Navigation class="navigation"/>
+<section class="dashboard">
+  <Navigation/>
 
-  <main class="main -dashboard">
-    <header class="header">
-      <div class="logo">
-        <svg height="20" viewBox="0 0 28 20" width="28" xmlns="http://www.w3.org/2000/svg"><g fill="#6643ad" fill-rule="evenodd" transform=""><path d="m13.8461538 15.8859592 10.8869191-5.238444 2.9592348 1.2250892v1.1380841l-13.8461539 6.433133-13.8461538-6.433133v-1.1380841l2.86214193-1.2250892z"/><path d="m13.8461538 0 13.8461539 6.72571046v1.13808415l-13.8461539 6.43313299-13.8461538-6.43313299v-1.13808415z"/></g></svg>
-        <div class="text">
-          Editlayer
-        </div>
-      </div>
+  <main class="content">
+    <section class="tools">
+      <heading-core mode="primary">
+        <h1>My Projects</h1>
+      </heading-core>
 
-      <div class="account">
-        <span class="email" v-text="email"></span>
-        <a class="button" @click="logout()">Logout</a>
-      </div>
-    </header>
+      <NewProjectButton/>
+    </section>
+
     <Projects/>
   </main>
+
+  <footer class="footer">
+    <FooterContent/>
+  </footer>
 </section>
 </template>
 
 <style lang="sass" scoped>
-@import '../sass/features'
+@import '../sass/variables'
+@import '../core/sass/mixins'
 
-.main.-dashboard
-  background-image: linear-gradient(to left, mix($color-violet, transparent, 4%), mix($color-violet, transparent, 8%))
-  overflow-y: auto
-  padding: 2.5rem
-  +margin-to-childs(2rem)
+.dashboard
+  display: flex
+  flex-direction: column
+  height: 100%
+  width: 100%
+  background-image: $color-gray--gradient
 
-.header
-  +chain(1rem)
-  align-items: center
-  justify-content: space-between
+.content
+  flex-grow: 1
+  +gap(4rem)
+  +container($breakpoint--huge)
+  padding-top: 2rem
+  padding-bottom: 2rem
 
-  .logo
-    +chain(.5rem)
-    align-items: center
-    font-size: 1.4rem
-    font-weight: 900
-    letter-spacing: -.05em
-    color: $color-violet
+  +breakpoint('small')
+    padding-top: 4rem
+    +gap(3rem)
 
-  .account
-    +chain(1rem)
-    align-items: center
+.tools
+  +gap()
+  text-align: center
 
-    .email
-      display: none
+  +breakpoint('small')
+    +gap(0)
+    text-align: left
+    +chain()
+    justify-content: space-between
 
-      +for-tablet-portrait
-        display: block
-
-    .button
-      font-size: .8rem
-
-.navigation
-  max-width: 1rem
-
-  +for-tablet-portrait
-    max-width: none
+.footer
+  padding-top: 3rem
+  padding-bottom: 1rem
 
 </style>

@@ -1,15 +1,12 @@
 <script>
-import validator from 'validator'
-import firebase from '@/firebase'
-// import Navigation from '@/components/Navigation'
-// import Webhook from '@/components/settings/Webhook'
+// import validator from 'validator'
+import NewUserButton from '@/components/settings/NewUserButton'
 
 export default {
   name: 'Permissions',
 
   components: {
-    // Navigation,
-    // Webhook,
+    NewUserButton,
   },
 
   computed: {
@@ -18,119 +15,50 @@ export default {
       return this.$store.getters.activeProject
     },
 
-    user () {
-      return this.$store.state.user
+    auth () {
+      return this.$store.state.auth
     },
-
-    roles () {
-      return this.activeProject.roles
-    },
-
-    // jsonUrl () {
-    //   return this.$store.getters.jsonUrl
-    // },
-
-    // jsonTarget () {
-    //   if (!this.activeProject) return false
-    //   return this.activeProject.projectId
-    // },
 
   },
 
   methods: {
 
-    newPermission () {
-      let email = prompt('Email address', 'name@example.com')
-
-      if (email !== null && !validator.isEmail(email)) {
-        console.error('Email is invalid', email)
-      } else if (email !== null) {
-        let notificationId = Math.random().toString(36).slice(-8)
-
-        this.$store.commit('setNotification', {
-          id: notificationId,
-          status: 'info',
-          message: `Adding user "${email}", please wait...`,
-        })
-
-        firebase.firestore
-          .collection('projects')
-          .doc(this.activeProject.projectId)
-          .collection('permissionJobs')
-          .add({
-            role: 'editor',
-            email: email,
-          })
-          .then(() => {
-            console.log('Permission job added')
-          })
-          .catch(error => {
-            console.error('Permission job adding failed', error)
-          })
-      }
-    },
+    // newPermission () {
+    //   let email = prompt('Email address', '')
+    //   if (email === null) return false
+    //
+    //   if (!validator.isEmail(email)) {
+    //     console.error('Email is invalid', email)
+    //     this.$store.commit('setNotification', {
+    //       mode: 'danger',
+    //       message: `Email ${email} is invalid`,
+    //     })
+    //     return false
+    //   }
+    //
+    //   this.$store.dispatch('newPermission', {
+    //     email,
+    //     projectId: this.activeProject.id,
+    //   })
+    // },
 
     updatePermission (payload) {
-      let updateData = {}
-      updateData[`roles.${payload.roleId}.role`] = payload.role
-
-      console.log('updatePermission', updateData)
-
-      firebase.firestore
-        .collection('projects')
-        .doc(this.activeProject.projectId)
-        .update(updateData)
-        .then(() => console.log('Permission updated!'))
-        .catch((error) => console.error('Permission updating failed', error))
+      this.$store.dispatch('updatePermission', payload)
     },
 
     removePermission (payload) {
       let deleteConfirm = confirm(`You want to remove "${payload.email}". Are you sure?`)
 
       if (deleteConfirm === true) {
-        let updateData = {}
-        updateData[`roles.${payload.roleId}`] = firebase.firestoreDelete
-
-        firebase.firestore
-          .collection('projects')
-          .doc(this.activeProject.projectId)
-          .update(updateData)
-          .then(() => console.log('Permission deleted'))
-          .catch((error) => console.error('Permission deleting failed', error))
+        this.$store.dispatch('removePermission', payload)
       }
     },
-
-    // deleteProject () {
-    //   let deleteConfirm = prompt(`Write "${this.activeProject.projectId}" if you really want to delete project permanently.`, '')
-    //
-    //   if (deleteConfirm !== null && deleteConfirm !== this.activeProject.projectId) {
-    //     console.error('Project Id is invalid', deleteConfirm)
-    //   } else if (deleteConfirm !== null) {
-    //     firebase.firestore
-    //       .collection('projects')
-    //       .doc(this.activeProject.projectId)
-    //       .collection('deleteJobs')
-    //       .add({
-    //         deleteProjectId: this.activeProject.projectId,
-    //       })
-    //       .then(() => {
-    //         this.$store.commit('setNotification', {
-    //           status: 'info',
-    //           message: `Deleting project "${this.activeProject.projectId}", please wait...`,
-    //         })
-    //
-    //         this.$router.push({ name: 'Dashboard' })
-    //         console.log('Project Deleted')
-    //       })
-    //       .catch((error) => console.error('Project deleting failed', error))
-    //   }
-    // },
 
   },
 
   created () {
-    if (this.$store.getters.activeRole !== 'admin') {
-      this.$router.replace({name: 'Content', params: {projectId: this.$store.getters.activeProject.projectId}})
+    if (this.$store.getters.activeProject.role !== 'admin') {
+      this.$router.replace({name: 'Content', params: {projectId: this.activeProject.id}})
     }
   },
 
@@ -138,132 +66,123 @@ export default {
 </script>
 
 <template>
-<section class="permissions">
-  <h1 class="heading">
-    User permissions
-  </h1>
+<section class="permission">
+  <heading-core mode="secondary">
+    <h2>User permissions</h2>
+  </heading-core>
 
-  <ul class="roles">
-    <li class="role -me">
-      <div class="email" :title="user.email" v-text="user.email"></div>
-      <div class="spacer"></div>
-      <button class="button -pill -active">Admin</button>
-    </li>
-    <li
-      v-for="(role, roleId) in roles"
-      :key="roleId"
-      v-if="roleId !== user.id"
-      class="role"
-    >
-      <div class="email" :title="role.email" v-text="role.email"></div>
+  <card-core>
+    <main class="main">
 
-      <div class="spacer"></div>
+      <ul class="users">
+        <li class="user">
 
-      <button
-        class="button -pill"
-        :class="{ '-active': role.role === 'editor'}"
-        @click="updatePermission({
-          roleId, roleId,
-          role: 'editor',
-          email: role.email,
-        })"
+          <div class="email" :title="auth.email" v-text="auth.email"></div>
+
+          <div class="spacer"></div>
+
+          <div class="permission">
+            <select class="select" disabled>
+              <option>Admin</option>
+            </select>
+          </div>
+
+          <div class="remove">
+            <button-core light disabled>
+                <icon name="trash"/>
+            </button-core>
+          </div>
+
+        </li>
+
+        <li
+          v-for="(user, userId) in activeProject.users"
+          :key="userId"
+          v-if="userId !== auth.id"
+          class="user"
         >
-        Editor
-      </button>
+          <div class="email" :title="user.email" v-text="user.email"></div>
 
-      <button
-        class="button -pill"
-        :class="{ '-active': role.role === 'admin'}"
-        @click="updatePermission({
-          roleId: roleId,
-          role: 'admin',
-          email: role.email,
-        })"
-        >
-        Admin
-      </button>
+          <div class="spacer"></div>
 
-      <button
-        class="button -pill -danger -delete"
-        @click="removePermission({
-          roleId: roleId,
-          email: role.email,
-        })"
-        >
-          <img src="@/assets/icon-delete.svg" alt="">
-      </button>
-    </li>
-  </ul>
+          <div class="permission">
+            <select
+              class="select"
+              v-model="user.role"
+              @change="updatePermission({userId, role: user.role})"
+            >
+              <option value="admin">Admin</option>
+              <option value="editor">Editor</option>
+            </select>
+          </div>
 
-  <button
-    class="button -link -green"
-    @click="newPermission()"
-  >
-    + New User
-  </button>
+          <div class="remove">
+            <button-core light @click.native="removePermission({userId, email: user.email})">
+                <icon name="trash"/>
+            </button-core>
+          </div>
+
+        </li>
+      </ul>
+
+    </main>
+  </card-core>
+
+  <NewUserButton/>
+
+  <!-- <button-core mode="success" @click.native="newPermission()">
+    <icon name="plus"/>
+    <span>New User</span>
+  </button-core> -->
 </section>
 </template>
 
 <style lang="sass" scoped>
-@import '../../sass/features'
+@import '../../sass/variables'
+@import '../../core/sass/mixins'
 
-.main.-settings
-  background-image: linear-gradient(to left, mix($color-violet, transparent, 4%), mix($color-violet, transparent, 8%))
-  overflow-y: auto
-  padding: 2.5rem
-  +margin-to-childs(2rem)
+.permission
+  +gap()
 
-.group
-  +margin-to-childs(.5rem)
-  max-width: 45rem
+.card
+  padding: 1rem 1rem
 
-  & + .group
-    margin-top: 6rem
+  +breakpoint('small')
+    padding-left: 2rem
+    padding-right: 2rem
 
-.roles
-  +margin-to-childs(.5rem)
+.users
+  +gap(.5rem)
 
-  .role
-    +chain(.25rem)
-    align-items: center
+  .user
+    +chain(1rem)
+
+    +breakpoint('small')
+      +chain(2rem)
+
+    &:hover
+      .email
+        color: $color-gray--dark
 
     .email
-      flex-shrink: 1
       min-width: 4rem
       overflow-x: hidden
       text-overflow: ellipsis
 
-    .button.-pill
-      font-size: .8rem
+    .spacer
+      flex-grow: 1
 
-      &.-delete
-        width: 2.5rem
-        flex-shrink: 0
+    .select
+      padding-top: .25rem
+      padding-bottom: .25rem
 
-    &.-me
-      padding-right: 2.75rem
+    .permission
+      flex-shrink: 0
 
-  .spacer
-    height: .8rem
-    flex-grow: 1
-    background-image: linear-gradient(to right, $color-disabled 10%, transparent 0%)
-    background-position: bottom
-    background-size: 10px 1px
-    background-repeat: repeat-x
+    .remove
+      flex-shrink: 0
 
-.danger
-  color: $color-danger
-
-.delete-project
-  font-size: .8rem
-
-.select-method
-  font-size: .9rem
-
-.file-location
-  +chain(1.5rem)
-
-  a
-    font-weight: 700
+    .fa-icon
+      height: 1rem
 
 </style>

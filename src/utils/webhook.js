@@ -8,7 +8,7 @@ const errorHandler = (message) => {
   return false
 }
 
-export default (configString, jsonUrl) => {
+export default (configString, jsonUrl, email) => {
   console.group('Webhook started')
 
   return axios.get(jsonUrl)
@@ -25,9 +25,14 @@ export default (configString, jsonUrl) => {
         configString = _.replace(configString, '{{BASE64_CONTENT}}', base64Content)
       }
 
+      if (_.includes(configString, '{{PUBLISHER_EMAIL}}')) {
+        configString = _.replace(configString, '{{PUBLISHER_EMAIL}}', email)
+      }
+
       try {
         config = JSON.parse(configString)
-      } catch (e) {
+      }
+      catch (e) {
         return errorHandler('Syntax error: Webhook config is not valid JSON', configString)
       }
 
@@ -37,6 +42,14 @@ export default (configString, jsonUrl) => {
 
       if (config.method !== 'post' && config.method !== 'get') {
         return errorHandler('"method" is required and it should be "post" or "get"')
+      }
+
+      if (config.method === 'post' && _.has(config, 'params')) {
+        return errorHandler('With a method "post" you should use "data" insted of "params"')
+      }
+
+      if (config.method === 'get' && _.has(config, 'data')) {
+        return errorHandler('With a method "get" you should use "params" insted of "data"')
       }
 
       // if (config.method === 'get' && config.data && !config.params) {

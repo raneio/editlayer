@@ -1,0 +1,31 @@
+//
+// Grid
+// --------------------------------------------------
+// .my-element
+//   +grid(3, 2rem, 1rem)
+//
+// Param $columns [amount of columns (1-99)]
+
+@mixin grid($columns: 3, $horizontal-gap: null, $vertical-gap: null)
+
+  @if $vertical-gap == null
+    $vertical-gap: $horizontal-gap
+
+  @if type-of($columns) == number and unitless($columns)
+    display: flex
+    flex-wrap: wrap
+
+    > *
+      width: 100% / $columns
+
+    @if $horizontal-gap != null
+      margin-left: $horizontal-gap * -1
+
+      > *
+        padding-left: $horizontal-gap
+
+    @if $vertical-gap != null
+      margin-bottom: $vertical-gap * -1
+
+      > *
+        padding-bottom: $vertical-gap

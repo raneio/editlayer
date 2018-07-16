@@ -1,0 +1,87 @@
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /users/{userId} {
+      allow read: if userId == request.auth.uid;
+      allow create: if request.auth != null
+      							&& request.resource.data.email == request.auth.token.email;
+    }
+
+    match /projects/{projectId} {
+    	function isRole(users) {
+      	return resource.data.users[request.auth.uid].role in users;
+      }
+
+      function allowDraft () {
+      	return isRole(['admin', 'editor'])
+        		&& request.writeFields.size() == 1
+        		&& request.writeFields[0].matches('^draft\\..*');
+      }
+
+      function allowPublished () {
+      	return isRole(['admin', 'editor'])
+        		&& request.writeFields.size() == 4
+            && 'published.schema' in request.writeFields
+            && 'published.draft' in request.writeFields
+            && 'published.publishedAt' in request.writeFields
+            && 'published.versionId' in request.writeFields;
+      }
+
+      function allowWebhook () {
+      	return isRole(['admin'])
+        		&& request.writeFields.size() == 1
+        		&& (request.writeFields[0] == 'settings.webhook.config' || request.writeFields[0] == 'settings.webhook.enabled');
+      }
+
+      function allowSchema () {
+      	return isRole(['admin'])
+        		&& request.writeFields.size() == 1
+        		&& request.writeFields[0] == 'schema';
+      }
+
+      function allowRoles () {
+      	return isRole(['admin'])
+        		&& request.writeFields.size() == 1
+        		&& request.writeFields[0].matches('^users\\..*');
+      }
+
+    	allow list: if isRole(['admin', 'editor']);
+
+      allow create: if request.auth != null
+      							&& request.resource.data.users[request.auth.uid].role == 'admin'
+      							&& request.resource.data.users[request.auth.uid].email == request.auth.token.email
+                    && projectId != 'index'
+                    && projectId != 'edit'
+      							&& projectId != 'content'
+      							&& projectId != 'schema'
+      							&& projectId != 'settings'
+      							&& projectId != 'simple-example'
+      							&& projectId != 'advanced-example'
+      							&& projectId != 'project';
+
+      allow update: if allowDraft()
+      							|| allowPublished()
+      							|| allowWebhook()
+                    || allowRoles()
+                    || allowSchema();
+
+      match /versions/{versionId} {
+        function isRole(users) {
+          return get(/databases/$(database)/documents/projects/$(projectId)).data.users[request.auth.uid].role in users;
+        }
+
+        allow create: if isRole(['admin', 'editor']);
+      }
+
+      match /jobs/{jobId} {
+        function isRole(users) {
+          return get(/databases/$(database)/documents/projects/$(projectId)).data.users[request.auth.uid].role in users;
+        }
+
+        allow create: if isRole(['admin']);
+      }
+
+    }
+
+  }
+}

@@ -1,93 +1,53 @@
 <script>
-import _ from 'lodash'
-import Navigation from '@/components/Navigation'
-import SidePanel from '@/components/SidePanel'
-import Editors from '@/components/Editors'
-import Breadcrumb from '@/components/Breadcrumb'
-import BackButton from '@/components/BackButton'
+import Editor from '@/components/content/Editor'
 
 export default {
   name: 'Content',
 
   components: {
-    Navigation,
-    SidePanel,
-    Breadcrumb,
-    Editors,
-    BackButton,
+    Editor,
   },
 
   computed: {
-
-    structure () {
-      return this.$store.getters.structure
+    activeItem () {
+      return this.$store.getters.activeItem
     },
-
-    activeStructure () {
-      return this.$store.getters.activeStructure
-    },
-
-    isMobile () {
-      return this.$store.getters.isMobile
-    },
-
-    mobileView () {
-      return this.activeStructure.TYPE === 'value' ? 'main' : 'side'
-    },
-
   },
-
-  methods: {
-
-    closeEditor () {
-      let pathItems = _.chain(this.$route.params.path).split('>').dropRight().value()
-
-      while (pathItems.length > 0) {
-        let path = _.join(pathItems, '.')
-        let item = _.get(this.structure, path)
-
-        if (item && !_.has(item, 'ORDER')) {
-          this.$router.push({name: 'Content', params: {projectId: this.$store.getters.activeProject.projectId, path: item.PATH}})
-          return false
-        }
-
-        pathItems = _.dropRight(pathItems)
-      }
-
-      this.$router.push({name: 'Content', params: {projectId: this.$store.getters.activeProject.projectId}})
-    },
-
-  },
-
 }
 </script>
 
 <template>
-<section class="layout">
-  <Navigation v-show="!isMobile || mobileView === 'side'"/>
-  <SidePanel v-show="!isMobile || mobileView === 'side'"/>
+<main class="content">
+  <div class="no-content" v-if="activeItem._type !== 'item'">
+    <icon class="icon" name="kiwi-bird"/>
+  </div>
 
-  <main class="main -content" v-if="!isMobile || mobileView === 'main'">
-    <Breadcrumb/>
-    <Editors/>
-    <button class="button -blue -close" @click="closeEditor()" v-if="isMobile">Close</button>
-  </main>
-</section>
+  <Editor v-if="activeItem._type === 'item'"/>
+</main>
 </template>
 
 <style lang="sass" scoped>
-@import '../sass/features'
+@import '../sass/variables'
+@import '../core/sass/mixins'
 
-.main.-content
-  overflow-y: auto
-  padding: .25rem 1.5rem 1.5rem
+.content
+  +gap()
+  display: flex
+  flex-shrink: 0
+  padding: 2rem 1.5rem
 
-  +for-tablet-portrait
-    padding: .25rem 2.5rem 2.5rem
+  +breakpoint('medium')
+    padding: 2rem 3rem
 
-.button.-close
-  display: block
-  margin-left: auto
-  margin-right: auto
+.no-content
+  align-self: stretch
+  width: 100%
+  +center()
+
+  .icon
+    width: 40%
+    max-height: 40%
+    min-height: 5rem
+    color: $color-gray--lighter
 
 </style>

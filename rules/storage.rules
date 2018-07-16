@@ -1,0 +1,17 @@
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{projectId}/{file} {
+      allow write:  if request.auth != null
+                    && resource == null
+                    && request.resource.size < 5 * 1024 * 1024
+                    && request.resource.contentType.matches('image/.*');
+
+      allow read: if request.auth != null
+                  && resource.contentType.matches('image/.*');
+    }
+
+    // match /{projectId}/public/{file} {
+    //   allow read: if resource.contentType.matches('application/json; charset=utf-8');
+    // }
+  }
+}

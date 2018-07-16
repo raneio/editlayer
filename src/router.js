@@ -1,9 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Content from '@/views/Content.vue'
-import Structure from '@/views/Structure.vue'
+import Schema from '@/views/Schema.vue'
 import Settings from '@/views/Settings.vue'
-import Dashboard from '@/views/Dashboard.vue'
 
 Vue.use(Router)
 
@@ -14,16 +13,15 @@ export default new Router({
     {
       name: 'Dashboard',
       path: '/',
-      component: Dashboard,
     },
     {
       name: 'Register',
       path: '/register',
     },
     {
-      name: 'Structure',
-      path: '/:projectId/structure/:path?',
-      component: Structure,
+      name: 'Schema',
+      path: '/:projectId/schema/:path?',
+      component: Schema,
     },
     {
       name: 'Settings',
@@ -35,23 +33,5 @@ export default new Router({
       path: '/:projectId/:path?',
       component: Content,
     },
-    // {
-    //   path: '*',
-    //   redirect: { name: 'Dashboard' }
-    // },
-    // {
-    //   path: '/:projectId',
-    //   redirect: to => {
-    //     console.log('to', to)
-    //   },
-    // },
-    // {
-    //   path: '/admin',
-    //   redirect: { name: 'Content' }
-    // },
-    // {
-    //   path: '/edit',
-    //   redirect: { name: 'Content' }
-    // },
   ],
 })
