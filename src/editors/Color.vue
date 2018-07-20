@@ -19,7 +19,6 @@ export default {
     return {
       color: null,
       colorPicker: null,
-      // drag: false,
     }
   },
 
@@ -30,26 +29,9 @@ export default {
       this.colorPicker.color.hexString = this.color
     },
 
-    // content () {
-    //   this.color = this.content
-    // },
-
   },
 
-  // computed: {
-  //
-  //   colorGradient () {
-  //     return `linear-gradient(to right, #ffffff, ${this.content})`
-  //   },
-  //
-  // },
-
   methods: {
-
-    // pickColor () {
-    //   console.log('pickColor')
-    //   this.drag = true
-    // },
 
     initPicker () {
       let size = 200
@@ -61,7 +43,6 @@ export default {
         sliderMargin: size * 0.05,
         sliderHeight: size * 0.1,
         padding: 0,
-        // borderWidth: 2,
         anticlockwise: true,
       })
 

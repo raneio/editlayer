@@ -31,10 +31,6 @@ export default {
       this.content = value
     },
 
-    // label (option) {
-    //   return option.label ? option.label : option.value
-    // },
-
   },
 
 }

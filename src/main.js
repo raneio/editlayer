@@ -14,7 +14,7 @@ import '@/utils/icons'
 import '@/core/components/initialize'
 import '@/core/sass/initialize.sass'
 
-// Vue Transisions
+// Vue Transitions
 import '@/sass/transitions.sass'
 
 // Sync router and store
