@@ -118,15 +118,10 @@ export default {
 >
 
   <header class="header">
-
     <h2 class="heading" v-text="title"/>
-
+    <hr>
     <span v-if="isDraft" class="draft">draft</span>
-
-    <span class="spacer"></span>
-
     <icon v-if="isParent" name="chevron-right"/>
-
   </header>
 
   <component :is="activePreviewComponentName" :item="item"/>
@@ -136,7 +131,7 @@ export default {
 
 <style lang="sass" scoped>
 @import '../../sass/variables'
-@import '../../core/sass/mixins'
+@import '../../sass/core/mixins'
 
 .item
   position: relative
@@ -172,9 +167,6 @@ export default {
   .draft
     color: $color-warning
     font-size: .75rem
-
-  .spacer
-    flex-grow: 1
 
   .content
     flex-grow: 1

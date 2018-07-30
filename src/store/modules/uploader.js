@@ -11,6 +11,7 @@ export default {
 
   actions: {
 
+    // TODO: Move this function to utils folder
     async uploadImage ({commit, dispatch}, payload) {
       if (!_.startsWith(payload.image.type, 'image/')) return false
       let filenameWithoutExt = slugg(payload.image.name.replace(/\.[^/.]+$/, ''))

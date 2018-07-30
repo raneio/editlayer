@@ -327,7 +327,7 @@ export default {
 
 // You can use variables, mixins and functions of Page Core
 @import '../../sass/variables'
-@import '../../core/sass/mixins'
+@import '../../sass/core/mixins'
 
 .items-from.-array
 

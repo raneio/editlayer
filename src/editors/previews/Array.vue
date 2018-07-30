@@ -26,7 +26,7 @@ export default {
 
 <style lang="sass" scoped>
 @import '../../sass/variables'
-@import '../../core/sass/mixins'
+@import '../../sass/core/mixins'
 
 .preview.-array
   padding: .3rem .5rem .3rem .75rem

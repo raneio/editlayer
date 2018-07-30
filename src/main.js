@@ -11,8 +11,8 @@ import 'typeface-open-sans'
 import '@/utils/icons'
 
 // Corelayer components and style
-import '@/core/components/initialize'
-import '@/core/sass/initialize.sass'
+import '@/components/core/registerAll'
+import '@/sass/core/initialize.sass'
 
 // Vue Transitions
 import '@/sass/transitions.sass'

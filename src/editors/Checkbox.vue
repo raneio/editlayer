@@ -78,7 +78,7 @@ export default {
 
 <style lang="sass" scoped>
 @import '../sass/variables'
-@import '../core/sass/mixins'
+@import '../sass/core/mixins'
 
 .editor.-checkbox
   +gap(.5rem)

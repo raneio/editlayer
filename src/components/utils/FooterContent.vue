@@ -24,7 +24,7 @@ export default {
 
 <style lang="sass" scoped>
 @import '../../sass/variables'
-@import '../../core/sass/mixins'
+@import '../../sass/core/mixins'
 
 .footer-content
   font-size: .8rem

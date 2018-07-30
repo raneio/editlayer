@@ -133,7 +133,7 @@ export default {
 
 <style lang="sass" scoped>
 @import '../../sass/variables'
-@import '../../core/sass/mixins'
+@import '../../sass/core/mixins'
 
 .notification
   box-shadow: $shadow--large

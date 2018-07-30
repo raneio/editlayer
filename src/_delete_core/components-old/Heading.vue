@@ -23,7 +23,7 @@ export default {
 
 <style lang="sass" scoped>
 @import '../../sass/variables'
-@import '../../core/sass/mixins'
+@import '../../sass/core/mixins'
 
 .heading-core
   color: $color-gray

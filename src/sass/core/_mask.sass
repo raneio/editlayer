@@ -1,0 +1,15 @@
+//
+// Text Masking
+// http://nimbupani.com/using-background-clip-for-text-with-css-fallback.html
+// --------------------------------------------------
+// .my-element
+//   +mask('images/foobar.jpg')
+
+@mixin mask($image-url: null)
+  background-size: cover
+  background-position: center
+  -webkit-background-clip: text
+  -webkit-text-fill-color: transparent
+
+  @if $image-url != null
+    background: -webkit-linear-gradient(transparent, transparent), url($image-url)

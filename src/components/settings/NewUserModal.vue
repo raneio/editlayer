@@ -33,6 +33,7 @@ export default {
     newUser () {
       if (!validator.isEmail(this.email)) {
         console.error('Email is invalid', this.email)
+
         this.$store.commit('setNotification', {
           mode: 'danger',
           message: `Email ${this.email} is invalid`,
@@ -40,10 +41,15 @@ export default {
         return false
       }
 
-      this.$store.dispatch('newPermission', {
+      this.$store.dispatch('addUserToProject', {
         email: this.email,
         projectId: this.activeProject.id,
       })
+
+      // this.$store.dispatch('newPermission', {
+      //   email: this.email,
+      //   projectId: this.activeProject.id,
+      // })
 
       this.closeModal()
     },
@@ -62,27 +68,26 @@ export default {
 </script>
 
 <template>
-<form class="modal" @click.self="closeModal()" @submit.prevent="newUser" method="post">
+<form class="modal" @click.self="closeModal()" @submit.prevent="newUser()" method="post">
   <card-core>
     <header class="header">
       <h1 class="heading -feature">New user</h1>
     </header>
 
     <main class="main">
-
       <label class="label">
         <div>Email address</div>
         <input type="text" v-model="email" ref="emailAddress">
       </label>
 
       <alert-core mode="info" size="small">
-        You can add new user even before that user is registered. When user register with the same email address user gets permissions to this project.
+        You can add new user even before that user is registered. When user register with the same email address user gets permissions to this project. The invitation will not be sent automatically.
       </alert-core>
     </main>
 
     <footer class="footer">
-      <span class="spacer"></span>
-      <button-core light @click.native="closeModal()">Cancel</button-core>
+      <hr>
+      <button-core type="button" light @click.native="closeModal()">Cancel</button-core>
       <button-core type="submit" mode="success">Add new user</button-core>
     </footer>
   </card-core>
@@ -91,7 +96,7 @@ export default {
 
 <style lang="sass" scoped>
 @import '../../sass/variables'
-@import '../../core/sass/mixins'
+@import '../../sass/core/mixins'
 
 .modal
   position: fixed
@@ -106,27 +111,12 @@ export default {
   .card-core
     width: $breakpoint--small
     box-shadow: $shadow--small, $shadow--large
-    border: 1px solid $hr-color
+    border: 1px solid $color-gray--light
 
   .main
     +gap()
 
   .label
     +gap(.5rem)
-
-  // .header,
-  // .content,
-  // .footer
-  //   padding: 1rem 1.5rem
-
-  // .content
-  //   +gap(2rem)
-  //
-  // .footer
-  //   +chain(1rem)
-  //   font-size: .8rem
-
-  .spacer
-    flex-grow: 1
 
 </style>

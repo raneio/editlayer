@@ -85,7 +85,7 @@ export default {
 
 <style lang="sass" scoped>
 @import '../../sass/variables'
-@import '../../core/sass/mixins'
+@import '../../sass/core/mixins'
 
 .panel
   background-image: $color-gray--gradient
@@ -107,7 +107,7 @@ export default {
       justify-content: space-between
       align-items: center
       transition: opacity .2s
-      border-bottom: 1px solid $hr-color
+      border-bottom: 1px solid $color-gray--light
       height: 3rem
       padding: 1.25rem
 

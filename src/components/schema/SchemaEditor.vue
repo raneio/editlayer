@@ -76,7 +76,10 @@ export default {
       }
 
       if (this.schema !== this.activeProject.schema) {
-        this.$store.dispatch('updateSchema', this.schema)
+        this.$store.dispatch('updateSchema', {
+          projectId: this.activeProject.id,
+          schema: this.schema,
+        })
       }
     },
 
@@ -127,7 +130,7 @@ export default {
 
 <style lang="sass" scoped>
 @import '../../sass/variables'
-@import '../../core/sass/mixins'
+@import '../../sass/core/mixins'
 
 .schema-editor
   +gap()

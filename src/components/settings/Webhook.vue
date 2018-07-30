@@ -39,7 +39,7 @@ export default {
     },
 
     jsonUrl () {
-      return this.$store.getters.jsonUrl
+      return this.$store.getters.activeProject.jsonUrl
     },
 
   },
@@ -72,7 +72,7 @@ export default {
     },
 
     testWebhook () {
-      webhook(this.config, this.jsonUrl, this.$store.state.auth.email)
+      webhook(this.config, this.jsonUrl, this.$store.getters.auth.email)
       this.devtoolInfo = true
       this.closeDevtoolInfo()
     },
@@ -144,7 +144,7 @@ export default {
     <transition name="fade">
       <span class="debug" v-show="devtoolInfo">Open web console to debug</span>
     </transition>
-    <span class="spacer"></span>
+    <hr>
     <button-core mode="info" light href="https://github.com/axios/axios#axios-api" target="AxiosDocs">Axios API</button-core>
   </div>
 
@@ -157,10 +157,10 @@ export default {
 
 <style lang="sass" scoped>
 @import '../../sass/variables'
-@import '../../core/sass/mixins'
+@import '../../sass/core/mixins'
 
 .webhook
-  +gap(.5rem)
+  +gap()
 
 .tools
   +chain(1rem)
@@ -172,9 +172,6 @@ export default {
 
     +breakpoint('small')
       display: block
-
-  .spacer
-    flex-grow: 1
 
 .link.-danger
   color: $color-danger

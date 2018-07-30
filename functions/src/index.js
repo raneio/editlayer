@@ -1,7 +1,8 @@
 import * as functions from 'firebase-functions'
 import admin from 'firebase-admin'
 import publishJson from './publishJson'
-import attachRole from './attachRole'
+import attachUserToProject from './attachUserToProject'
+import createUser from './createUser'
 import deleteProject from './deleteProject'
 
 admin.initializeApp()
@@ -11,15 +12,20 @@ exports.publishJson = functions
   .document('projects/{projectId}/versions/{versionId}')
   .onCreate((snap, context) => publishJson(snap, context))
 
-exports.attachRole = functions
+exports.attachUserToProjectWhenAdded = functions
   .firestore
   .document('projects/{projectId}/jobs/{jobId}')
-  .onCreate((snap, context) => attachRole.job(snap, context))
+  .onCreate((snap, context) => attachUserToProject.whenAdded(snap, context))
 
-exports.attachRoleWhenRegister = functions
+exports.attachUserToProjectWhenRegister = functions
   .auth
   .user()
-  .onCreate((snap, context) => attachRole.whenRegister(snap, context))
+  .onCreate((snap, context) => attachUserToProject.whenRegister(snap, context))
+
+exports.createUser = functions
+  .auth
+  .user()
+  .onCreate((snap, context) => createUser(snap, context))
 
 exports.deleteProject = functions
   .firestore

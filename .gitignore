@@ -3,8 +3,7 @@ node_modules
 dist
 
 # env files
-.env
-.env.*
+.env*.local
 
 # Log files
 npm-debug.log*

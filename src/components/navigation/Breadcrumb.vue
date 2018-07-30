@@ -131,13 +131,13 @@ export default {
 
 <style lang="sass" scoped>
 @import '../../sass/variables'
-@import '../../core/sass/mixins'
+@import '../../sass/core/mixins'
 
 .breadcrumb
   +chain(.6em)
   transition: opacity .2s
   font-size: .9rem
-  // border-bottom: 1px solid $hr-color
+  // border-bottom: 1px solid $color-gray--light
   height: 3rem
   color: $color-gray
 

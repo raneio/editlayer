@@ -1,22 +1,6 @@
 <script>
-import Navigation from '@/components/navigation/Navigation'
-import FileLocation from '@/components/settings/FileLocation'
-import Webhook from '@/components/settings/Webhook'
-import Permissions from '@/components/settings/Permissions'
-import DeleteProject from '@/components/settings/DeleteProject'
-import FooterContent from '@/components/utils/FooterContent'
-
 export default {
-  name: 'Settings',
-
-  components: {
-    Navigation,
-    FileLocation,
-    Webhook,
-    Permissions,
-    DeleteProject,
-    FooterContent,
-  },
+  name: 'DeleteProject',
 
   computed: {
 
@@ -48,17 +32,11 @@ export default {
 
   },
 
-  created () {
-    if (this.$store.getters.activeProject.role !== 'admin') {
-      this.$router.replace({name: 'Content', params: {projectId: this.$store.getters.activeProject.id}})
-    }
-  },
-
 }
 </script>
 
 <template>
-<section class="group -delete-project">
+<section class="delete-project">
   <heading-core mode="secondary">
     <h2>Delete project</h2>
     <p>Your project will be deleted permanently and you can’t undo this.</p>
@@ -72,5 +50,9 @@ export default {
 
 <style lang="sass" scoped>
 @import '../../sass/variables'
-@import '../../core/sass/mixins'
+@import '../../sass/core/mixins'
+
+.delete-project
+  +gap()
+
 </style>

@@ -148,10 +148,6 @@ export default {
 
   },
 
-  created () {
-    this.$store.dispatch('authState')
-  },
-
 }
 </script>
 
@@ -220,7 +216,7 @@ export default {
 
 <style lang="sass" scoped>
 @import '../sass/variables'
-@import '../core/sass/mixins'
+@import '../sass/core/mixins'
 
 .auth
   position: absolute

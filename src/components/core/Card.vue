@@ -35,7 +35,7 @@ export default {
 
 <style lang="sass" scoped>
 @import '../../sass/variables'
-@import '../../core/sass/mixins'
+@import '../../sass/core/mixins'
 
 .card-core
   box-shadow: $shadow--small
@@ -48,13 +48,12 @@ export default {
   .footer,
     +chain(1em)
     padding: .5em 1rem
-    justify-content: space-between
 
   .header
     border-top-left-radius: $radius
     border-top-right-radius: $radius
     background-color: $color-gray--lightest
-    border-bottom: 1px solid $hr-color
+    border-bottom: 1px solid $color-gray--lighter
 
     +hx
       font-size: 1.25em

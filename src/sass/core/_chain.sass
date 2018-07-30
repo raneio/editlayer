@@ -1,0 +1,23 @@
+//
+// Chain
+// --------------------------------------------------
+// .my-element
+//   +chain(1rem)
+
+@mixin chain($gap: null)
+  display: flex
+  flex-direction: row
+  align-items: center
+  justify-content: flex-start
+
+  > *
+    flex-shrink: 0
+    flex-grow: 0
+
+  hr
+    flex-shrink: 1
+    flex-grow: 1
+
+  @if $gap != null
+    > * + *
+      margin-left: $gap

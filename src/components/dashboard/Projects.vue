@@ -57,13 +57,13 @@ export default {
         <div class="line">
           <icon name="regular/user"/>
           <span class="text">
-            <span v-if="usersCount(project, 'admin')" :class="{'my-role': project.role === 'admin'}">
+            <span v-if="usersCount(project, 'admin')" :class="{'my-role': project.auth.role === 'admin'}">
               {{usersText(project, 'admin', 'Admin', 'Admins')}}
             </span>
 
             <span v-if="usersCount(project, 'admin') && usersCount(project, 'editor')">, </span>
 
-            <span v-if="usersCount(project, 'editor')" :class="{'my-role': project.role === 'editor'}">
+            <span v-if="usersCount(project, 'editor')" :class="{'my-role': project.auth.role === 'editor'}">
               {{usersText(project, 'editor', 'Editor', 'Editors')}}
             </span>
           </span>
@@ -83,7 +83,7 @@ export default {
 
 <style lang="sass" scoped>
 @import '../../sass/variables'
-@import '../../core/sass/mixins'
+@import '../../sass/core/mixins'
 
 .projects
   +grid(1, 2rem)
@@ -118,7 +118,7 @@ export default {
       fill: $color-gray--dark
 
   .my-role
-    font-weight: 600
+    font-weight: 700
 
   .draft
     color: $color-warning

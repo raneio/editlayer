@@ -1,4 +1,5 @@
 <script>
+import _ from 'lodash'
 import Breadcrumb from '@/components/navigation/Breadcrumb'
 import PublishButton from '@/components/content/PublishButton'
 
@@ -16,31 +17,14 @@ export default {
       return this.$store.getters.activeProject
     },
 
-    jsonUrl () {
-      return this.$store.getters.jsonUrl
-    },
-
-    jsonTarget () {
-      if (!this.activeProject) return false
-      return this.activeProject.id
+    permissions () {
+      return _.get(this.activeProject, 'auth.permissions') || {}
     },
 
     neverPublished () {
       if (!this.activeProject) return false
       return this.activeProject.published === null
     },
-
-  },
-
-  methods: {
-
-    // logout () {
-    //   firebase.auth.signOut().then(() => {
-    //     window.location.href = 'https://editlayer.com'
-    //   }).catch((error) => {
-    //     console.error('Logout failed', error)
-    //   })
-    // }
 
   },
 
@@ -57,34 +41,34 @@ export default {
     <router-link
       v-if="$route.params.projectId"
       class="item"
-      :class="{ '-active': $route.name === 'Content' }"
-      :to="{ name: 'Content', params: { projectId: $route.params.projectId, path: $route.params.path }}"
+      :class="{'-active': $route.name === 'Content'}"
+      :to="{name: 'Content', params: {projectId: $route.params.projectId, path: $route.params.path}}"
     >
       <icon name="regular/edit"/>
       <div class="text">Content</div>
     </router-link>
 
     <router-link
-      v-if="$route.params.projectId && activeProject.role === 'admin'"
+      v-if="$route.params.projectId && permissions.updateSchema === true"
       class="item"
-      :class="{ '-active': $route.name === 'Schema' }"
-      :to="{ name: 'Schema', params: { projectId: $route.params.projectId, path: $route.params.path }}"
+      :class="{'-active': $route.name === 'Schema'}"
+      :to="{name: 'Schema', params: {projectId: $route.params.projectId, path: $route.params.path}}"
     >
       <icon name="schema"/>
       <div class="text">Schema</div>
     </router-link>
 
     <router-link
-      v-if="$route.params.projectId && activeProject.role === 'admin'"
+      v-if="$route.params.projectId && permissions.updateSettings === true"
       class="item"
-      :class="{ '-active': $route.name === 'Settings' }"
-      :to="{ name: 'Settings', params: { projectId: this.$route.params.projectId, path: this.$route.params.path }}"
+      :class="{'-active': $route.name === 'Settings'}"
+      :to="{name: 'Settings', params: {projectId: this.$route.params.projectId, path: this.$route.params.path}}"
     >
       <icon name="cogs"/>
       <div class="text">Settings</div>
     </router-link>
 
-    <div class="spacer"></div>
+    <hr>
 
     <router-link
       class="item"
@@ -101,7 +85,7 @@ export default {
 
 <style lang="sass" scoped>
 @import '../../sass/variables'
-@import '../../core/sass/mixins'
+@import '../../sass/core/mixins'
 
 .navigation
   +invert()
@@ -118,11 +102,11 @@ export default {
       transition: opacity 0s
       opacity: 1
 
+  hr
+    flex-grow: 1
+
 .publish-button
   margin-bottom: 1rem
-
-.spacer
-  flex-grow: 1
 
 .item
   +gap(.2rem)

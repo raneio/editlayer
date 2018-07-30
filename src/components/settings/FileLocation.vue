@@ -21,6 +21,10 @@ export default {
       return `json-${this.activeProject.id}`
     },
 
+    isPublished () {
+      return !_.isEmpty(this.activeProject.published)
+    },
+
   },
 
   methods: {
@@ -41,13 +45,11 @@ export default {
 </script>
 
 <template>
-<section class="group -file-location">
+<section class="file-location">
   <heading-core mode="secondary">
-    <h2>File location</h2>
+    <h2>JSON location</h2>
     <p>You can find latest published JSON file from following URL address</p>
   </heading-core>
-
-  <!-- <a class="link" :href="jsonUrl" :target="jsonTarget" v-text="jsonUrl"></a> -->
 
   <button-core
     :href="activeProject.jsonUrl"
@@ -55,11 +57,12 @@ export default {
     light
     class="json-link"
     mode="primary"
+    v-if="isPublished"
   >
     {{activeProject.jsonUrl}}
   </button-core>
 
-  <section class="tools">
+  <section class="tools" v-if="isPublished">
 
     <button-core light @click.native="copyUrl">
       <icon name="regular/copy"/>
@@ -74,12 +77,19 @@ export default {
 
   </section>
 
+  <alert-core mode="warning" v-if="!isPublished">
+    You haven't published content.
+  </alert-core>
+
 </section>
 </template>
 
 <style lang="sass" scoped>
 @import '../../sass/variables'
-@import '../../core/sass/mixins'
+@import '../../sass/core/mixins'
+
+.file-location
+  +gap()
 
 .json-link
   overflow: hidden

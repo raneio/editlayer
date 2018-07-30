@@ -35,7 +35,7 @@ export default {
 </script>
 
 <template>
-<form class="modal" @click.self="closeModal()" @submit.prevent="newProject" method="post">
+<form class="modal" @click.self="closeModal()" @submit.prevent="newProject()" method="post">
   <card-core>
     <header class="header">
       <h1 class="heading -feature">New Project</h1>
@@ -49,7 +49,7 @@ export default {
     </main>
 
     <footer class="footer">
-      <span class="spacer"></span>
+      <hr>
       <button-core light @click.native="closeModal()">Cancel</button-core>
       <button-core type="submit" mode="success">Create new project</button-core>
     </footer>
@@ -59,7 +59,7 @@ export default {
 
 <style lang="sass" scoped>
 @import '../../sass/variables'
-@import '../../core/sass/mixins'
+@import '../../sass/core/mixins'
 
 .modal
   position: fixed
@@ -74,24 +74,9 @@ export default {
   .card-core
     width: $breakpoint--small
     box-shadow: $shadow--small, $shadow--large
-    border: 1px solid $hr-color
+    border: 1px solid $color-gray--light
 
   .label
     +gap(.5rem)
-
-  // .header,
-  // .content,
-  // .footer
-  //   padding: 1rem 1.5rem
-
-  // .content
-  //   +gap(2rem)
-  //
-  // .footer
-  //   +chain(1rem)
-  //   font-size: .8rem
-
-  .spacer
-    flex-grow: 1
 
 </style>

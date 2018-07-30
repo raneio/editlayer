@@ -1,0 +1,346 @@
+// @import './variables' (variables with !default)
+@import "../variables"
+@import "./mixins"
+
+//
+// Hex color to svg safe
+// --------------------------------------------------
+// Idea: http://codepen.io/jakob-e/pen/doMoML
+// $author Rane.io
+// @param {String} $color - Color value
+// @returns {String} - Svg safe color value
+
+@function svg-safe-hex($color)
+  $color: inspect($color)
+
+  @if str-slice($color, 0, 1) == '#'
+    @return '%23' + str-slice($color, 2)
+
+  @return $color
+
+// @function v($variable)
+//   @return var(--#{$variable})
+
+
+//
+// Rem
+// --------------------------------------------------
+
+\:root
+  font-size: $rem
+
+@if $breakpoint--small != $rem
+  +breakpoint('small')
+    \:root
+      font-size: $rem--small
+
+@if $breakpoint--medium != $breakpoint--small
+  +breakpoint('medium')
+    \:root
+      font-size: $rem--medium
+
+@if $breakpoint--large != $breakpoint--medium
+  +breakpoint('large')
+    \:root
+      font-size: $rem--large
+
+@if $breakpoint--huge != $breakpoint--large
+  +breakpoint('huge')
+    \:root
+      font-size: $rem--huge
+
+//
+// Html & Body
+// --------------------------------------------------
+
+html,
+body,
+  height: 100%
+  width: 100%
+
+html
+  box-sizing: border-box
+
+body
+  background-color: $background-color
+  color: $content-color
+  font-family: $content-font-family
+  font-weight: $content-font-weight
+  line-height: $content-line-height
+  -moz-osx-font-smoothing: grayscale
+  -webkit-font-smoothing: antialiased
+
+
+//
+// Headings
+// --------------------------------------------------
+
++hx
+  color: $heading-color
+  font-family: $heading-font-family
+  font-size: $heading-font-size
+  font-weight: $heading-font-weight
+  line-height: $heading-line-height
+  text-transform: $heading-text-transform
+
+
+//
+// Link
+// --------------------------------------------------
+
+a
+  color: $link-color
+  text-decoration: $link-text-decoration
+  cursor: pointer
+
+  &:hover
+    color: $link-color--hover
+    text-decoration: $link-text-decoration--hover
+
+  &:active
+    color: $link-color--active
+    text-decoration: $link-text-decoration--active
+
+
+//
+// Button
+// --------------------------------------------------
+
+
+button,
+input[type="button"],
+input[type="submit"],
+.button-core,
+  background: $button-background
+  border: $button-border
+  border-radius: $button-border-radius
+  color: $button-text-color
+  cursor: pointer
+  display: inline-block
+  font-family: $button-font-family
+  font-size: $button-font-size
+  font-weight: $button-font-weight
+  letter-spacing: inherit
+  line-height: $content-line-height
+  outline: 0
+  padding: $button-padding
+  text-transform: $button-text-transform
+  -webkit-font-smoothing: inherit
+
+  &:hover
+    background: $button-background--hover
+    border: $button-border--hover
+    color: $button-text-color--hover
+
+  &:active
+    background: $button-background--active
+    border: $button-border--active
+    color: $button-text-color--active
+
+  &[disabled]
+    background: $button-background--disabled
+    border: $button-border--disabled
+    color: $button-text-color--disabled
+    pointer-events: none
+
+
+//
+// Form
+// --------------------------------------------------
+
+input[type="color"],
+input[type="date"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="email"],
+input[type="month"],
+input[type="number"],
+input[type="password"],
+input[type="search"],
+input[type="tel"],
+input[type="text"],
+input[type="time"],
+input[type="url"],
+input[type="week"],
+input:not([type]),
+textarea,
+select,
+  background: $input-background
+  border: $input-border
+  border-radius: $input-border-radius
+  color: $input-text-color
+  display: block
+  font-family: $input-font-family
+  font-size: $input-font-size
+  font-weight: $input-font-weight
+  outline: 0
+  padding: $input-padding
+  width: 100%
+
+  &:hover
+    background: $input-background--hover
+    border: $input-border--hover
+    color: $input-text-color--hover
+
+  &:focus
+    background: $input-background--focus
+    border: $input-border--focus
+    color: $input-text-color--focus
+
+  &[disabled]
+    background: $input-background--disabled
+    border: $input-border--disabled
+    color: $input-text-color--disabled
+
+  &::placeholder
+    color: $input-placeholder-color
+
+textarea
+  resize: vertical
+
+select
+  -webkit-appearance: none
+  -moz-appearance: none
+
+select,
+select:hover,
+select:focus,
+select[disabled],
+  background-repeat: no-repeat
+  background-position: right 12px center
+  padding-right: 36px
+
+select
+  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' width='12' height='14' fill='#{svg-safe-hex($input-select-arrow-color)}' %3E %3Cpolygon points='0,6 6,0 12,6'/%3E %3Cpolygon points='0,8 12,8 6,14' /%3E %3C/svg%3E")
+
+select:hover
+  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' width='12' height='14' fill='#{svg-safe-hex($input-select-arrow-color--hover)}' %3E %3Cpolygon points='0,6 6,0 12,6' /%3E %3Cpolygon points='0,8 12,8 6,14' /%3E %3C/svg%3E")
+
+select:focus
+  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' width='12' height='14' fill='#{svg-safe-hex($input-select-arrow-color--focus)}' %3E %3Cpolygon points='0,6 6,0 12,6' /%3E %3Cpolygon points='0,8 12,8 6,14' /%3E %3C/svg%3E")
+
+select[disabled]
+  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' width='12' height='14' fill='#{svg-safe-hex($input-select-arrow-color--disabled)}' %3E %3Cpolygon points='0,6 6,0 12,6' /%3E %3Cpolygon points='0,8 12,8 6,14' /%3E %3C/svg%3E")
+  cursor: not-allowed
+
+input[type="checkbox"],
+input[type="radio"]
+  margin-left: 5px
+  margin-right: 5px
+
+label
+  display: block
+
+
+//
+// All elements
+// --------------------------------------------------
+
+*,
+*:before,
+*:after
+  box-sizing: inherit
+
+
+//
+// List
+// --------------------------------------------------
+
+ul
+  list-style: none
+
+
+//
+// Media
+// --------------------------------------------------
+
+img
+  display: inline-block
+  vertical-align: top
+  text-align: center
+
+
+svg
+  width: auto
+  height: auto
+  max-width: 100%
+  max-height: 100%
+
+img,
+embed,
+object,
+audio,
+video
+  height: auto
+  max-width: 100%
+
+
+//
+// iframe
+// --------------------------------------------------
+
+iframe
+  border: 0
+  height: auto
+  max-width: 100%
+
+
+//
+// Table
+// --------------------------------------------------
+
+table
+  border-collapse: collapse
+  border-spacing: 0
+
+td,
+th
+  padding: 0
+  text-align: left
+
+
+//
+// Horizontal rule
+// --------------------------------------------------
+
+hr
+  border: 0
+  // height: $hr-height
+  // background: $color-gray--light
+
+
+//
+// Reset margin & padding
+// --------------------------------------------------
+// Source: github.com/jgthms/minireset.css
+
+html,
+body,
+p,
+ol,
+ul,
+li,
+dl,
+dt,
+dd,
+blockquote,
+figure,
+fieldset,
+legend,
+pre,
+iframe,
+hr,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6
+  margin: 0
+  padding: 0
+
+button,
+input,
+select,
+textarea
+  margin: 0

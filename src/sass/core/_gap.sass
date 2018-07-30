@@ -1,0 +1,9 @@
+//
+// Gap between child-elements
+// --------------------------------------------------
+// .my-element
+//   +gap(1rem)
+
+@mixin gap($margin: 1rem)
+  > * + *
+    margin-top: $margin

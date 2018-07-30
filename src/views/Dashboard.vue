@@ -1,4 +1,5 @@
 <script>
+import _ from 'lodash'
 import Projects from '@/components/dashboard/Projects'
 import NewProjectButton from '@/components/dashboard/NewProjectButton'
 import Navigation from '@/components/dashboard/Navigation'
@@ -12,6 +13,16 @@ export default {
     Projects,
     NewProjectButton,
     FooterContent,
+  },
+
+  computed: {
+    allowCreateProject () {
+      return _.get(this.$store.getters, 'auth.permissions.createProject') === true
+    },
+
+    isProjects () {
+      return !_.isEmpty(this.$store.getters.projects)
+    },
   },
 
   mounted () {
@@ -30,10 +41,19 @@ export default {
   <main class="content">
     <section class="tools">
       <heading-core mode="primary">
-        <h1>My Projects</h1>
+        <h1 v-if="isProjects">My projects</h1>
       </heading-core>
 
-      <NewProjectButton/>
+      <hr>
+
+      <NewProjectButton v-if="allowCreateProject"/>
+    </section>
+
+    <section class="no-projects" v-if="!isProjects">
+      <div class="content">
+        <icon class="icon" name="kiwi-bird"/>
+        <div>You don't have a permission to any projects. Come back later or ask more from the administrator.</div>
+      </div>
     </section>
 
     <Projects/>
@@ -47,7 +67,7 @@ export default {
 
 <style lang="sass" scoped>
 @import '../sass/variables'
-@import '../core/sass/mixins'
+@import '../sass/core/mixins'
 
 .dashboard
   display: flex
@@ -56,26 +76,40 @@ export default {
   width: 100%
   background-image: $color-gray--gradient
 
-.content
+  > .content
+    display: flex
+    flex-direction: column
+    flex-grow: 1
+    +gap(4rem)
+    +container($breakpoint--huge)
+    padding-top: 2rem
+    padding-bottom: 2rem
+    // align-items: stretch
+
+    +breakpoint('small')
+      padding-top: 4rem
+      +gap(3rem)
+
+    .tools
+      +gap()
+      text-align: center
+
+      +breakpoint('small')
+        +gap(0)
+        text-align: left
+        +chain()
+
+.no-projects
+  +center()
   flex-grow: 1
-  +gap(4rem)
-  +container($breakpoint--huge)
-  padding-top: 2rem
-  padding-bottom: 2rem
 
-  +breakpoint('small')
-    padding-top: 4rem
-    +gap(3rem)
+  .content
+    +container(300px)
+    text-align: center
 
-.tools
-  +gap()
-  text-align: center
-
-  +breakpoint('small')
-    +gap(0)
-    text-align: left
-    +chain()
-    justify-content: space-between
+  .fa-icon
+    width: 12rem
+    color: $color-gray--light
 
 .footer
   padding-top: 3rem

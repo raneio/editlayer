@@ -30,7 +30,7 @@ export default {
 
 <style lang="sass" scoped>
 @import '../../sass/variables'
-@import '../../core/sass/mixins'
+@import '../../sass/core/mixins'
 
 @mixin mode($color)
   border: 1px solid mix($color, $color-white, 30%)

@@ -11,6 +11,8 @@ const errorHandler = (message) => {
 export default (configString, jsonUrl, email) => {
   console.group('Webhook started')
 
+  console.log('jsonUrl', jsonUrl)
+
   return axios.get(jsonUrl)
     .then((response) => {
       let publishedContent = response.data

@@ -59,7 +59,7 @@ export default {
       this.$store.dispatch('publishJson', {
         projectId: this.activeProject.id,
         projectName: this.activeProject.name,
-        publishedBy: this.$store.state.auth.id,
+        publishedBy: this.$store.getters.auth.id,
         content: content,
         // filename: this.activeProject.filename,
         token: this.activeProject.token,
@@ -68,8 +68,8 @@ export default {
         jsonUrl: this.activeProject.jsonUrl,
         webhookConfig: webhookConfig,
         webhookEnabled: webhookEnabled,
-        email: this.$store.state.auth.email,
-        role: this.activeProject.role,
+        email: this.$store.getters.auth.email,
+        showLink: this.activeProject.auth.permissions.updateSettings,
       })
     },
 
@@ -124,7 +124,7 @@ export default {
 
 <style lang="sass" scoped>
 @import '../../sass/variables'
-@import '../../core/sass/mixins'
+@import '../../sass/core/mixins'
 
 .item
   +gap(.2rem)

@@ -1,6 +1,6 @@
 <script>
 /**
- * Input Editor
+ * Calendar Editor
  * @param {string} content - Content saves automatically when changing
  * @param {string} config.EDITOR - Name of editor
  * @param {string} config.TITLE
@@ -290,7 +290,7 @@ export default {
       </select>
     </div>
 
-    <span class="spacer"></span>
+    <hr>
 
     <button-core light @click.native="selectNow" v-if="showNow">Now</button-core>
 
@@ -301,7 +301,7 @@ export default {
 
 <style lang="sass" scoped>
 @import '../sass/variables'
-@import '../core/sass/mixins'
+@import '../sass/core/mixins'
 
 .editor.-calendar
   +gap()
@@ -313,9 +313,6 @@ export default {
 .tools
   +chain(.25rem)
   width: 100%
-
-  .spacer
-    flex-grow: 1
 
 .time
   +chain(.25rem)

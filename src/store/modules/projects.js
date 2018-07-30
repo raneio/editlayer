@@ -3,7 +3,7 @@ import _ from 'lodash'
 import slugg from 'slugg'
 import axios from 'axios'
 import generate from 'nanoid/generate'
-// import nanoid from 'nanoid'
+import { Base64 } from 'js-base64'
 import firebase from '@/utils/firebase'
 import webhook from '@/utils/webhook'
 
@@ -38,29 +38,37 @@ export default {
   getters: {
 
     projects (state, getters, rootState) {
-      if (rootState.firestore.editorProjects === null || rootState.firestore.adminProjects === null) return null
-      const editorProjects = _.cloneDeep(rootState.firestore.editorProjects)
-      const adminProjects = _.cloneDeep(rootState.firestore.adminProjects)
-      const firestoreProjects = _.merge(editorProjects, adminProjects)
-      let projects = {}
+      if (rootState.firestore.projects === null) return null
 
-      _.each(firestoreProjects, (value, key) => {
-        projects[key] = {
+      return _.map(rootState.firestore.projects, (value, key) => {
+        const users = _.map(value.users, (user, userId) => {
+          let role = 'editor'
+
+          if (_.has(user, 'permissions') && user.permissions.publish && user.permissions.updateDraft && user.permissions.createJob && user.permissions.updateSchema && user.permissions.updateSettings && user.permissions.updateUsers) {
+            role = 'admin'
+          }
+
+          return {
+            ...user,
+            role: role,
+            id: userId,
+          }
+        })
+
+        return {
           draft: value.draft || {},
           id: key,
-          jsonUrl: `https://firebasestorage.googleapis.com/v0/b/${process.env.VUE_APP__FIREBASE_PROJECT_ID}.appspot.com/o/${key}%2Fcontent.json?alt=media&token=${value.token}`,
+          jsonUrl: `https://firebasestorage.googleapis.com/v0/b/${process.env.VUE_APP_FIREBASE_STORAGE_BUCKET}/o/${key}%2Fcontent.json?alt=media&token=${value.token}`,
           name: value.name || null,
           published: value.published || {},
-          role: value.users[rootState.auth.id].role || null,
-          users: value.users || {},
+          auth: _.find(users, {id: getters.auth.id}) || null,
+          users: users,
           schema: value.schema || null,
           settings: value.settings || {},
           status: value.published && _.isEqual(value.draft, value.published.draft) && value.schema === value.published.schema ? 'published' : 'draft',
           token: value.token || null,
         }
       })
-
-      return projects
     },
 
     activeProject (state, getters, rootState) {
@@ -72,7 +80,7 @@ export default {
 
   actions: {
 
-    newProject ({state, dispatch, rootState}, payload) {
+    newProject ({state, dispatch, getters}, payload) {
       payload.name = payload.name || `Project ${generate('abcdefghijklmnopqrstuvwxyz', 4)}`
       payload.id = payload.id || slugg(payload.name)
       payload.schema = payload.schema || {
@@ -89,10 +97,17 @@ export default {
         token: generate('abcdefghijklmnopqrstuvwxyz0123456789', 24),
       }
 
-      newProject.users[rootState.auth.id] = {
-        role: 'admin',
-        email: rootState.auth.email,
+      newProject.users[getters.auth.id] = {
+        email: getters.auth.email,
         userExist: true,
+        permissions: {
+          updateDraft: true,
+          updateSchema: true,
+          updateSettings: true,
+          updateUsers: true,
+          publish: true,
+          createJob: true,
+        },
       }
 
       dispatch('newProjectToFirestore', {
@@ -157,7 +172,7 @@ export default {
 
       let link = {}
 
-      if (payload.role === 'admin') {
+      if (payload.showLink === true) {
         link.url = payload.jsonUrl
         link.target = payload.projectId
         link.text = 'Open JSON'
@@ -193,17 +208,26 @@ export default {
       return null
     },
 
-    newPermission ({commit, dispatch}, payload) {
-      commit('setNotification', {
-        mode: 'info',
-        message: `Adding user "${payload.email}", please wait...`,
-      })
+    addUserToProject ({dispatch}, payload) {
+      payload.awaitId = `await-${Base64.encodeURI(payload.email)}`
+      payload.user = {
+        email: payload.email,
+        userExist: false,
+        permissions: {
+          publish: true,
+          updateDraft: true,
+          updateSchema: false,
+          updateSettings: false,
+          updateUsers: false,
+          createJob: false,
+        },
+      }
 
-      dispatch('newPermissionToFirestore', payload)
+      dispatch('addUserToProjectToFirestore', payload)
     },
 
-    removePermission ({dispatch}, payload) {
-      dispatch('removePermissionToFirestore', payload)
+    removeUserFromProject ({dispatch}, payload) {
+      dispatch('removeUserFromProjectToFirestore', payload)
     },
 
     updatePermission ({dispatch}, payload) {

@@ -17,7 +17,7 @@ export default {
   },
 
   created () {
-    if (this.activeProject.role !== 'admin') {
+    if (this.activeProject.auth.permissions.updateSchema !== true) {
       this.$router.replace({name: 'Content', params: {projectId: this.activeProject.id}})
     }
   },
@@ -36,7 +36,7 @@ export default {
 
 <style lang="sass" scoped>
 @import '../sass/variables'
-@import '../core/sass/mixins'
+@import '../sass/core/mixins'
 
 .schema
   +gap()

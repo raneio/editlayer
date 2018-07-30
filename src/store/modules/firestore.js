@@ -1,70 +1,91 @@
 // import Vue from 'vue'
-// import _ from 'lodash'
-import firebase from '@/utils/firebase'
+import dayjs from 'dayjs'
 import generate from 'nanoid/generate'
+import router from '@/router'
+import firebase from '@/utils/firebase'
 
 export default {
 
   state: {
-    adminProjects: null,
-    editorProjects: null,
+    projects: null,
+    user: null,
   },
 
   mutations: {
 
-    setAdminProjects (state, projects) {
-      state.adminProjects = projects
+    setUser (state, user) {
+      state.user = user
     },
 
-    setEditorProjects (state, projects) {
-      state.editorProjects = projects
+    setProjects (state, projects) {
+      state.projects = projects
     },
 
   },
 
   actions: {
+    authState ({state, commit, dispatch, rootState}) {
+      firebase.auth.onAuthStateChanged(firebaseUser => {
+        if (!firebaseUser) {
+          commit('setUser', false)
+          commit('setProjects', false)
+          return null
+        }
 
-    getProjectsFromFirestore ({state, commit, rootState}) {
-      firebase.firestore
-        .collection('projects')
-        .where(`users.${rootState.auth.id}.role`, '==', 'admin')
-        .onSnapshot(querySnapshot => {
-          let projects = {}
-          querySnapshot.forEach(doc => {
-            projects[doc.id] = doc.data()
-          })
-          commit('setAdminProjects', projects)
+        dispatch('getUserFromFirestore', firebaseUser.uid)
+        dispatch('getProjectsFromFirestore', {
+          id: firebaseUser.uid,
+          email: firebaseUser.email,
         })
 
+        if (rootState.route.name === 'Register') {
+          router.push({name: 'Dashboard'})
+        }
+      })
+    },
+
+    getUserFromFirestore ({state, commit}, userId) {
+      firebase.firestore
+        .collection('users')
+        .doc(userId)
+        .onSnapshot(docSnapshot => {
+          commit('setUser', {
+            id: userId,
+            ...docSnapshot.data(),
+          })
+        })
+    },
+
+    getProjectsFromFirestore ({state, commit}, payload) {
       firebase.firestore
         .collection('projects')
-        .where(`users.${rootState.auth.id}.role`, '==', 'editor')
+        .where(`users.${payload.id}.email`, '==', payload.email)
         .onSnapshot(querySnapshot => {
           let projects = {}
           querySnapshot.forEach(doc => {
             projects[doc.id] = doc.data()
           })
-          commit('setEditorProjects', projects)
+
+          commit('setProjects', projects)
         })
     },
 
     newProjectToFirestore ({state, dispatch}, payload) {
+      console.log('newProjectToFirestore', payload)
       let newProject = payload.newProject
       payload = payload.payload
-
-      console.log('newProject', newProject)
 
       firebase.firestore
         .collection('projects')
         .doc(payload.id)
         .set(newProject)
-        // .then((docRef) => console.log('File added:', projectId))
         .catch(error => {
           payload.tries = !payload.tries ? 1 : payload.tries + 1
 
           if (payload.tries < 5) {
+            const orginalId = payload.tries > 1 ? payload.id.slice(0, -5) : payload.id
             const randomId = generate('abcdefghijklmnopqrstuvwxyz', 4)
-            payload.id = `${payload.id}-${randomId}`
+            payload.id = `${orginalId}-${randomId}`
             dispatch('newProject', payload)
           }
           else {
@@ -101,18 +122,21 @@ export default {
     },
 
     setProjectPublished ({state}, payload) {
+      let updateData = {}
+      updateData['published'] = {
+        draft: payload.draft,
+        schema: payload.schema,
+        publishedAt: dayjs().toDate(),
+        versionId: payload.versionId,
+      }
+
       firebase.firestore
         .collection('projects')
         .doc(payload.projectId)
-        .update({
-          'published.draft': payload.draft,
-          'published.schema': payload.schema,
-          'published.publishedAt': firebase.firestoreTimestamp,
-          'published.versionId': payload.versionId,
-        })
+        .update(updateData)
     },
 
-    updateContentToFirestore ({state, getters}, payload) {
+    updateDraftToFirestore ({state, getters}, payload) {
       let updateContent = {}
       updateContent[`draft.${payload.path}`] = payload.content
 
@@ -123,14 +147,13 @@ export default {
         .catch((error) => console.error('Error updating content:', error))
     },
 
-    updateSchemaToFirestore ({getters}, newSchema) {
+    updateSchemaToFirestore ({state}, payload) {
       firebase.firestore
         .collection('projects')
-        .doc(getters.activeProject.id)
+        .doc(payload.projectId)
         .update({
-          schema: newSchema,
+          schema: payload.schema,
         })
-        // .then(() => console.log('Schema successfully written!'))
         .catch((error) => console.error('Error writing schema:', error))
     },
 
@@ -140,36 +163,65 @@ export default {
         .doc(payload.projectId)
         .collection('jobs')
         .add({
-          job: 'attachRole',
-          role: 'editor',
+          job: 'addUserToProject',
           email: payload.email,
+          permissions: {
+            publish: true,
+            updateDraft: true,
+          },
         })
-        // .then(() => console.log('Permission job added')})
-        .catch(error => console.error('Permission job adding failed', error))
+        .catch(error => console.error('Add user job adding failed', error))
     },
 
-    updatePermissionToFirestore ({getters}, payload) {
-      let newRole = {}
-      newRole[`users.${payload.userId}.role`] = payload.role
+    async addUserToProjectToFirestore ({commit, getters}, payload) {
+      let userData = {}
+      userData[`users.${payload.awaitId}`] = payload.user
+
+      console.log('addUserToProjectToFirestore', payload)
+
+      await firebase.firestore
+        .collection('projects')
+        .doc(payload.projectId)
+        .update(userData)
+        .catch(error => console.error('Add user job adding failed', error))
 
       firebase.firestore
         .collection('projects')
-        .doc(getters.activeProject.id)
+        .doc(payload.projectId)
+        .collection('jobs')
+        .add({
+          job: 'attachUserToProject',
+          email: payload.email,
+          awaitId: payload.awaitId,
+          projectId: payload.projectId,
+        })
+        .catch(error => console.error('Add user job adding failed', error))
+    },
+
+    updatePermissionToFirestore ({state}, payload) {
+      // console.log('updatePermissionToFirestore', payload)
+      let newRole = {}
+      newRole[`users.${payload.userId}.permissions`] = payload.permissions
+
+      firebase.firestore
+        .collection('projects')
+        .doc(payload.projectId)
         .update(newRole)
-        // .then(() => console.log('Permission updated!'))
         .catch((error) => console.error('Permission updating failed', error))
     },
 
-    removePermissionToFirestore ({getters}, payload) {
+    removeUserFromProjectToFirestore ({state}, payload) {
+      // console.log('removeUserFromProjectToFirestore', payload)
       let removeUser = {}
       removeUser[`users.${payload.userId}`] = firebase.firestoreDelete
 
+      // console.log('removeUser', removeUser)
+
       firebase.firestore
         .collection('projects')
-        .doc(getters.activeProject.id)
+        .doc(payload.projectId)
         .update(removeUser)
-        .then(() => console.log('Permission deleted'))
-        .catch((error) => console.error('Permission deleting failed', error))
+        .catch(error => console.error('Permission deleting failed', error))
     },
 
   },

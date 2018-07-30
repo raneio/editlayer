@@ -1,5 +1,5 @@
 <script>
-import _ from 'lodash'
+// import _ from 'lodash'
 import Navigation from '@/components/navigation/Navigation'
 import Panel from '@/components/panel/Panel'
 import Breadcrumb from '@/components/navigation/Breadcrumb'
@@ -35,7 +35,7 @@ export default {
 
     showRouterView () {
       return this.activeProject &&
-        this.$store.state.auth.id &&
+        this.$store.getters.isLoggedIn === true &&
         this.$store.state.projects.admin !== null &&
         this.$store.state.projects.editor !== null
     },
@@ -54,39 +54,30 @@ export default {
 
     showBreadcrumb () {
       return !!this.activeProject &&
-        !!(this.$store.state.route.name === 'Content' || this.$store.state.route.name === 'Schema')
+        (this.$store.state.route.name === 'Content' || this.$store.state.route.name === 'Schema')
     },
 
     showLoaderOverlay () {
-      return this.$store.state.auth.id === null ||
-        (_.isString(this.$store.state.auth.id) && this.$store.getters.projects === null)
+      return this.$store.getters.isLoggedIn === null || this.$store.getters.projects === null
     },
 
     showAuth () {
-      return this.$store.state.auth.id === false
+      return this.$store.getters.isLoggedIn === false
     },
 
     showMainPanel () {
       return this.$store.state.route.name !== 'Dashboard' &&
-      (this.$store.state.route.name !== 'Content' || (this.activeItem._type === 'item' || this.$store.state.utils.windowWidth > 900))
+        (this.$store.state.route.name !== 'Content' || (this.activeItem._type === 'item' || this.$store.state.utils.windowWidth > 900))
     },
 
     showDashboard () {
-      return this.$store.state.auth.id &&
+      return this.$store.getters.isLoggedIn === true &&
         this.$store.state.route.name === 'Dashboard'
     },
 
     showFooterContent () {
       return !!this.activeProject
     },
-
-    // isMobile () {
-    //   return this.$store.getters.isMobile
-    // },
-
-    // mobileView () {
-    //   return this.activeItem._type === 'item' ? 'main' : 'side'
-    // },
 
   },
 
@@ -131,7 +122,7 @@ export default {
 
 <style lang="sass" scoped>
 @import './sass/variables'
-@import './core/sass/mixins'
+@import './sass/core/mixins'
 
 #app
   display: flex

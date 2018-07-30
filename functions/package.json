@@ -6,12 +6,19 @@
     "axios": "^0.18.0",
     "firebase-admin": "~5.12.1",
     "firebase-functions": "^1.0.3",
-    "lodash": "^4.17.10",
-    "node-sha1": "^1.0.1"
+    "js-base64": "^2.4.8",
+    "lodash": "^4.17.10"
   },
   "babel": {
     "presets": [
-      ["env", {"targets": {"node": "6.14.0"}}]
+      [
+        "env",
+        {
+          "targets": {
+            "node": "6.14.0"
+          }
+        }
+      ]
     ]
   },
   "private": true
