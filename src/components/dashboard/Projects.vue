@@ -32,7 +32,7 @@ export default {
     },
 
     publishedAgo (project) {
-      let milliseconds = _.get(project, 'published.publishedAt.seconds') * 1000
+      let milliseconds = _.get(project, 'publishedVersion.publishedAt.seconds') * 1000
       let published = dayjs(milliseconds).fromNow()
       return milliseconds ? `Published ${published}` : 'Never published'
     },

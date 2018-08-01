@@ -9,6 +9,7 @@ export default {
     windowHeight: window.innerHeight,
     windowWidth: window.innerWidth,
     invalidSchemas: {},
+    editlayerUrl: 'https://alpha5.editlayer.org',
   },
 
   mutations: {

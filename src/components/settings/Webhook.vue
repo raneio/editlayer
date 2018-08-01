@@ -38,8 +38,16 @@ export default {
       return this.$store.getters.activeProject.settings.webhook.enabled
     },
 
-    jsonUrl () {
-      return this.$store.getters.activeProject.jsonUrl
+    // jsonUrl () {
+    //   return this.$store.getters.activeProject.jsonUrl
+    // },
+
+    json () {
+      return this.$store.getters.activeProject.publishedVersion.json
+    },
+
+    versionId () {
+      return this.$store.getters.activeProject.publishedVersion.versionId
     },
 
   },
@@ -72,7 +80,12 @@ export default {
     },
 
     testWebhook () {
-      webhook(this.config, this.jsonUrl, this.$store.getters.auth.email)
+      webhook({
+        configString: this.config,
+        email: this.$store.getters.auth.email,
+        json: this.json,
+        versionId: this.versionId,
+      })
       this.devtoolInfo = true
       this.closeDevtoolInfo()
     },

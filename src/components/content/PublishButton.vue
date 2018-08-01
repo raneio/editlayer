@@ -17,12 +17,12 @@ export default {
     },
 
     isDraft () {
-      if (!this.activeProject.published) return true
-      return !_.isEqual(this.activeProject.draft, this.activeProject.published.draft) || this.activeProject.schema !== this.activeProject.published.schema
+      if (!this.activeProject.publishedVersion) return true
+      return !_.isEqual(this.activeProject.draft, this.activeProject.publishedVersion.draft) || this.activeProject.schema !== this.activeProject.publishedVersion.schema
     },
 
     neverPublished () {
-      return this.activeProject.published === null
+      return this.activeProject.publishedVersion === null
     },
 
     publishProcess () {
@@ -51,7 +51,7 @@ export default {
   methods: {
 
     publish () {
-      let content = buildJson(this.structure)
+      let json = buildJson(this.structure)
 
       let webhookConfig = _.has(this.$store.getters.activeProject, 'settings.webhook.config') ? this.$store.getters.activeProject.settings.webhook.config : null
       let webhookEnabled = _.has(this.$store.getters.activeProject, 'settings.webhook.enabled') ? this.$store.getters.activeProject.settings.webhook.enabled : null
@@ -60,7 +60,7 @@ export default {
         projectId: this.activeProject.id,
         projectName: this.activeProject.name,
         publishedBy: this.$store.getters.auth.id,
-        content: content,
+        json: json,
         // filename: this.activeProject.filename,
         token: this.activeProject.token,
         draft: this.activeProject.draft,

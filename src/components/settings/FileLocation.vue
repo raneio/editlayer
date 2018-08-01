@@ -22,7 +22,7 @@ export default {
     },
 
     isPublished () {
-      return !_.isEmpty(this.activeProject.published)
+      return !_.isEmpty(this.activeProject.publishedVersion)
     },
 
   },
@@ -48,7 +48,7 @@ export default {
 <section class="file-location">
   <heading-core mode="secondary">
     <h2>JSON location</h2>
-    <p>You can find latest published JSON file from following URL address</p>
+    <p>You can find latest published JSON file from the following URL address</p>
   </heading-core>
 
   <button-core
@@ -78,7 +78,7 @@ export default {
   </section>
 
   <alert-core mode="warning" v-if="!isPublished">
-    You haven't published content.
+    You haven't published content. Click the "Publish" button at the top-left corner.
   </alert-core>
 
 </section>

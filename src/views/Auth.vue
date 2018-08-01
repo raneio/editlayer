@@ -67,51 +67,51 @@ export default {
 
     register () {
       firebase.auth.createUserWithEmailAndPassword(this.email, this.password)
-        .then(user => {
-          firebase.firestore.collection('users').doc(user.uid).set({
-            email: user.email,
-          })
-            .then(() => {
-              // console.log('Added user', user.email)
-
-              this.$store.dispatch('newProject', {
-                name: 'Simple Example',
-                schema: {
-                  title: 'text',
-                  slogan: 'textarea',
-                  description: 'richtext',
-                  image: 'image',
-                },
-              })
-
-              this.$store.dispatch('newProject', {
-                name: 'Advanced Example',
-                schema: {
-                  simpleField: 'text',
-                  anotherField: {
-                    EDITOR: 'text',
-                    TITLE: 'Advanced Field',
-                    DEFAULT: 'Hello World!',
-                    INFO: 'You can use TITLE, DEFAULT and INFO properties with an object notation.',
-                  },
-                  nestedExample: {
-                    TITLE: 'Nested Fields Example',
-                    title: 'text',
-                    description: 'textarea',
-                  },
-                  arrayExample: [{
-                    TITLE: 'Image Gallery Example',
-                    image: 'image',
-                    caption: 'text',
-                  }],
-                },
-              })
-            })
-            .catch(error => {
-              console.error('Adding user error', error)
-              this.progress = false
-            })
-        })
+        // .then(user => {
+        //   firebase.firestore.collection('users').doc(user.uid).set({
+        //     email: user.email,
+        //   })
+        //     .then(() => {
+        //       console.log('Added user', user.email)
+        //
+        //       this.$store.dispatch('newProject', {
+        //         name: 'Simple Example',
+        //         schema: {
+        //           title: 'text',
+        //           slogan: 'textarea',
+        //           description: 'richtext',
+        //           image: 'image',
+        //         },
+        //       })
+        //
+        //       this.$store.dispatch('newProject', {
+        //         name: 'Advanced Example',
+        //         schema: {
+        //           simpleField: 'text',
+        //           anotherField: {
+        //             EDITOR: 'text',
+        //             TITLE: 'Advanced Field',
+        //             DEFAULT: 'Hello World!',
+        //             INFO: 'You can use TITLE, DEFAULT and INFO properties with an object notation.',
+        //           },
+        //           nestedExample: {
+        //             TITLE: 'Nested Fields Example',
+        //             title: 'text',
+        //             description: 'textarea',
+        //           },
+        //           arrayExample: [{
+        //             TITLE: 'Image Gallery Example',
+        //             image: 'image',
+        //             caption: 'text',
+        //           }],
+        //         },
+        //       })
+        //     })
+        //     .catch(error => {
+        //       console.error('Adding user error', error)
+        //       this.progress = false
+        //     })
+        // })
         .catch(error => {
           console.error('register error', error)
           this.progress = false

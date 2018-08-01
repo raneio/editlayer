@@ -52,7 +52,8 @@ export default {
     <section class="no-projects" v-if="!isProjects">
       <div class="content">
         <icon class="icon" name="kiwi-bird"/>
-        <div>You don't have a permission to any projects. Come back later or ask more from the administrator.</div>
+        <div v-if="allowCreateProject">You don't have any projects. Create the first project by clicking the "New Project" button.</div>
+        <div v-if="!allowCreateProject">You don't have a permission to any projects. Come back later or ask more from the administrator.</div>
       </div>
     </section>
 

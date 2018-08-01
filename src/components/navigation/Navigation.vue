@@ -23,7 +23,7 @@ export default {
 
     neverPublished () {
       if (!this.activeProject) return false
-      return this.activeProject.published === null
+      return this.activeProject.publishedVersion === null
     },
 
   },

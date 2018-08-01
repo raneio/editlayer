@@ -1,5 +1,5 @@
 // import Vue from 'vue'
-import dayjs from 'dayjs'
+// import dayjs from 'dayjs'
 import generate from 'nanoid/generate'
 import router from '@/router'
 import firebase from '@/utils/firebase'
@@ -113,10 +113,13 @@ export default {
         .collection('versions')
         .add({
           publishedBy: payload.publishedBy,
+          // publishedAt: null,
           publishedAt: firebase.firestoreTimestamp,
-          content: payload.content,
+          json: payload.json,
           // filename: payload.filename,
           token: payload.token,
+          schema: payload.schema,
+          draft: payload.draft,
         })
         .catch((error) => console.error('Error adding version:', error))
     },
@@ -126,7 +129,7 @@ export default {
       updateData['published'] = {
         draft: payload.draft,
         schema: payload.schema,
-        publishedAt: dayjs().toDate(),
+        publishedAt: firebase.firestoreTimestamp,
         versionId: payload.versionId,
       }
 

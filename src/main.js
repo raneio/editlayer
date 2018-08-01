@@ -10,7 +10,7 @@ import 'typeface-open-sans'
 // Font awesome icons
 import '@/utils/icons'
 
-// Corelayer components and style
+// Core components and style
 import '@/components/core/registerAll'
 import '@/sass/core/initialize.sass'
 

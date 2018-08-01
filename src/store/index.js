@@ -27,7 +27,7 @@ let store = {
       if (state.firestore.user === null) {
         return null
       }
-      else if (state.firestore.user === false) {
+      else if (state.firestore.user === false || !state.firestore.user.email) {
         return false
       }
       else {
@@ -44,7 +44,7 @@ let store = {
 
       const schema = parseJson(getters.activeProject.schema)
       const draft = getters.activeProject.draft
-      const published = _.has(getters.activeProject, 'published.draft') ? getters.activeProject.published.draft : {}
+      const published = _.has(getters.activeProject, 'publishedVersion.draft') ? getters.activeProject.publishedVersion.draft : {}
 
       return buildStructure(schema, draft, published)
     },

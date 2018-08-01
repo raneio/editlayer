@@ -7,17 +7,18 @@ export default (userRecord, context) => {
     .collection('users')
     .get()
     .then(snap => {
-       const allowCreateProject = snap.size === 0
+      // Add to first user premission create new projects
+      const allowCreateProject = snap.size === 0
 
-       return firestore
-         .collection('users')
-         .doc(userRecord.uid)
-         .set({
-           email: userRecord.email,
-           permissions: {
-             createProject: allowCreateProject,
-           },
-         })
+      return firestore
+        .collection('users')
+        .doc(userRecord.uid)
+        .set({
+          email: userRecord.email,
+          permissions: {
+            createProject: allowCreateProject,
+          },
+        })
     })
     .catch(error => console.error('Create user failed', error))
 }

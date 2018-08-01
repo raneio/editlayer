@@ -11,7 +11,7 @@
 //
 //       const schema = parseJson(getters.activeProject.schema)
 //       const draft = getters.activeProject.draft
-//       const published = _.has(getters.activeProject, 'published.draft') ? getters.activeProject.published.draft : {}
+//       const published = _.has(getters.activeProject, 'publishedVersion.draft') ? getters.activeProject.publishedVersion.draft : {}
 //
 //       return buildStructure(schema, draft, published)
 //     },

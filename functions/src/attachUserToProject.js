@@ -13,7 +13,10 @@ export default {
     const userId = await auth
       .getUserByEmail(jobData.email)
       .then(userRecord => userRecord.uid)
-      .catch(error => false)
+      .catch(error => {
+        console.error(error)
+        return false
+      })
 
     if (userId === false) return false
 
