@@ -1,10 +1,13 @@
-const _ = require('lodash')
 const fs = require('fs')
-const inquirer = require('inquirer')
 const util = require('util')
 const exec = util.promisify(require('child_process').exec)
+
 const firebaserc = JSON.parse(fs.readFileSync(`${__dirname}/../.firebaserc`).toString())
-const projects = _.map(firebaserc.projects, (projectId, alias) => alias)
+const aliases = Object.keys(firebaserc.projects)
+const aliasesSorted = aliases.sort()
+const firstAlias = aliasesSorted.slice(0, 1).toString()
+const arguments = process.argv.slice(2)
+const alias = arguments[0]
 
 const setEnvFile = async (alias) => {
   const envFilePath = `${__dirname}/../.env.${alias}.local`
@@ -49,58 +52,41 @@ const setEnvFile = async (alias) => {
 }
 
 const deploy = async () => {
+  if (!aliases.includes(alias)) {
+    console.log('')
+    console.log(`Alias "${alias}" is not available. Use can use following: ${aliasesSorted.join(', ')}`)
+    console.log(`Example: npm run deploy ${firstAlias}`)
+    return false
+  }
 
   console.log('')
 
-  const alias = await inquirer.prompt([{
-    type: 'list',
-    name: 'answer',
-    message: 'What environment do you want to deploy?',
-    choices: projects.sort(),
-  }])
+  // const alias = await ask(`What environment to deploy?\n ${aliasesSorted.join('\n ')}`)
 
-  if (alias.answer === 'production' && projects.length > 1) {
-    console.log('')
+  console.log(`firebase use ${alias}`)
+  await exec(`firebase use ${alias}`)
 
-    const sure = await inquirer.prompt([{
-      type: 'list',
-      name: 'sure',
-      message: 'Are you sure want to deploy to production?',
-      choices: ['No', 'Yes'],
-    }])
+  setEnvFile(alias)
 
-    if (sure.sure === 'No') {
-      return false
-    }
-  }
-
-
-  console.log(`firebase use ${alias.answer}`)
-  await exec(`firebase use ${alias.answer}`)
-
-  setEnvFile(alias.answer)
-
-  if (alias.answer === 'development') {
+  if (alias === 'development') {
     console.log(`npm run build:only-functions`)
     await exec(`npm run build:only-functions`)
 
     console.log(`firebase deploy --only functions,firestore,storage`)
-    console.log(`  This can take several minutes, please wait...`)
+    console.log(`...this can take several minutes, please wait`)
     await exec(`firebase deploy --only functions,firestore,storage`)
   }
   else {
-    if (projects.length > 1) {
+    if (aliases.length > 1) {
       console.log(`npm run build`)
       await exec(`npm run build`)
     }
     console.log(`firebase deploy`)
-    console.log(`  This can take several minutes, please wait...`)
+    console.log(`...this can take several minutes, please wait`)
     await exec(`firebase deploy`)
   }
 
   console.log('Deploy complete!')
-
-
 }
 
 deploy()

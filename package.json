@@ -7,9 +7,10 @@
     "serve": "vue-cli-service serve",
     "lint": "vue-cli-service lint && eslint ./functions/src",
     "build:only-functions": "./node_modules/.bin/babel functions/src --out-dir functions/dist",
-    "build": "npm run build:only-functions && vue-cli-service build",
+    "build:only-scripts": "./node_modules/.bin/babel scripts/src --out-dir scripts/dist",
+    "build": "npm run build:only-functions && npm run build:only-scripts && vue-cli-service build",
     "license": "node scripts/license.js",
-    "deploy": "npm run lint && node scripts/deploy.js",
+    "deploy": "node scripts/deploy.js",
     "cors": "node scripts/cors.js"
   },
   "dependencies": {
@@ -54,8 +55,6 @@
     "babel-core": "7.0.0-bridge.0",
     "babel-preset-env": "^1.7.0",
     "colors": "^1.3.0",
-    "inquirer": "^6.0.0",
-    "node-cmd": "^3.0.0",
     "node-sass": "^4.9.2",
     "prompt": "^1.0.0",
     "prompt-choices": "^5.0.0",
