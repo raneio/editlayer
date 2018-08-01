@@ -1,6 +1,6 @@
 {
   "projects": {
-    "development": "editlayer-alpha5-test",
-    "production": "editlayer-production"
+    "production": "editlayer-production",
+    "development": "editlayer-alpha5-test"
   }
 }

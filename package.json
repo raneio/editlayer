@@ -5,16 +5,12 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build:functions": "./node_modules/.bin/babel functions/src --out-dir functions/dist",
-    "build:hosting": "vue-cli-service build",
     "lint": "vue-cli-service lint && eslint ./functions/src",
-    "deploy:only-functions": "npm run build:functions && firebase use development && firebase deploy --only functions",
-    "deploy:development": "npm run build:functions && firebase use development && firebase deploy --only functions,firestore,storage",
-    "deploy:production": "npm run lint && npm run build:hosting && npm run build:functions && firebase use production && firebase deploy && firebase use development",
-    "env:production": "firebase use production && firebase setup:web > .env.production.local && node scripts/environment.js production",
-    "env:development": "firebase use development && firebase setup:web > .env.development.local && node scripts/environment.js development",
+    "build:only-functions": "./node_modules/.bin/babel functions/src --out-dir functions/dist",
+    "build": "npm run build:only-functions && vue-cli-service build",
     "license": "node scripts/license.js",
-    "init": "npm install && cd functions && npm install"
+    "deploy": "npm run lint && node scripts/deploy.js",
+    "cors": "node scripts/cors.js"
   },
   "dependencies": {
     "@jaames/iro": "^3.4.1",
@@ -58,8 +54,11 @@
     "babel-core": "7.0.0-bridge.0",
     "babel-preset-env": "^1.7.0",
     "colors": "^1.3.0",
+    "inquirer": "^6.0.0",
+    "node-cmd": "^3.0.0",
     "node-sass": "^4.9.2",
     "prompt": "^1.0.0",
+    "prompt-choices": "^5.0.0",
     "sass-loader": "^7.0.3",
     "string-hash": "^1.1.3",
     "vue-template-compiler": "^2.5.16"
