@@ -59,22 +59,25 @@ const deploy = async () => {
     return false
   }
 
+  const url = `https://${firebaserc.projects[alias]}.firebaseapp.com/`
+
   console.log('')
-
-  // const alias = await ask(`What environment to deploy?\n ${aliasesSorted.join('\n ')}`)
-
   console.log(`firebase use ${alias}`)
   await exec(`firebase use ${alias}`)
 
   setEnvFile(alias)
 
   if (alias === 'development') {
-    console.log(`npm run build:only-functions`)
-    await exec(`npm run build:only-functions`)
+    console.log(`npm run build:functions`)
+    await exec(`npm run build:functions`)
 
     console.log(`firebase deploy --only functions,firestore,storage`)
     console.log(`...this can take several minutes, please wait`)
+
     await exec(`firebase deploy --only functions,firestore,storage`)
+
+    console.log('Deploy complete!')
+    console.log('Run development environment: npm run serve')
   }
   else {
     if (aliases.length > 1) {
@@ -83,10 +86,12 @@ const deploy = async () => {
     }
     console.log(`firebase deploy`)
     console.log(`...this can take several minutes, please wait`)
-    await exec(`firebase deploy`)
-  }
 
-  console.log('Deploy complete!')
+    await exec(`firebase deploy`)
+
+    console.log('Deploy complete!')
+    console.log(`Open deployed Editlayer: ${url}`)
+  }
 }
 
 deploy()

@@ -6,11 +6,10 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "lint": "vue-cli-service lint && eslint ./functions/src",
-    "build:only-functions": "./node_modules/.bin/babel functions/src --out-dir functions/dist",
-    "build:only-scripts": "./node_modules/.bin/babel scripts/src --out-dir scripts/dist",
-    "build": "npm run build:only-functions && npm run build:only-scripts && vue-cli-service build",
-    "license": "node scripts/license.js",
-    "deploy": "node scripts/deploy.js",
+    "init": "npm install && cd functions && npm install",
+    "build:functions": "./node_modules/.bin/babel functions/src --out-dir functions/dist",
+    "build": "npm run build:functions && vue-cli-service build",
+    "deploy": "npm run lint && npm run build && node scripts/deploy.js",
     "cors": "node scripts/cors.js"
   },
   "dependencies": {
@@ -24,7 +23,7 @@
     "copy-to-clipboard": "^3.0.8",
     "dayjs": "^1.7.2",
     "firebase": "^5.0.4",
-    "image-compressor.js": "github:raneio/image-compressor",
+    "image-compressor.js": "^1.1.4",
     "is-upper-case": "^1.1.2",
     "js-base64": "^2.4.5",
     "js-video-url-parser": "^0.2.7",
@@ -47,10 +46,11 @@
     "vuex-router-sync": "^5.0.0"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.0.0-beta.15",
-    "@vue/cli-plugin-eslint": "^3.0.0-beta.15",
-    "@vue/cli-service": "^3.0.0-beta.15",
-    "@vue/eslint-config-standard": "^3.0.0-beta.15",
+    "@vue/cli": "^3.0.0-rc.10",
+    "@vue/cli-plugin-babel": "^3.0.0-rc.10",
+    "@vue/cli-plugin-eslint": "^3.0.0-rc.10",
+    "@vue/cli-service": "^3.0.0-rc.10",
+    "@vue/eslint-config-standard": "^3.0.0-rc.10",
     "babel-cli": "^6.26.0",
     "babel-core": "7.0.0-bridge.0",
     "babel-preset-env": "^1.7.0",
