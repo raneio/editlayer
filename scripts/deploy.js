@@ -101,4 +101,9 @@ Example: npm run deploy production
     console.log('Run development environment: npm run serve')
   }
 
+  // Back to development env if exsist
+  if (aliases.includes('development')) {
+    execa.shellSync(`npx firebase use development`, { stdio: 'inherit' })
+  }
+
 })().catch(err => console.error(err))

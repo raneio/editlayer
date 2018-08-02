@@ -53,7 +53,7 @@ Example: npm run deploy production
     .toString()
     .replace('VUE_APP_FIREBASE_STORAGE_BUCKET=', '')
 
-  // Run job
+  // Run the job
   if (job === 'allow') {
     console.log(`Allow CORS on the alias ${alias}`)
     execa.shellSync(`gsutil cors set ${__dirname}/../rules/cors.json gs://${storageBucket}`, { stdio: 'inherit' })
