@@ -1,6 +1,6 @@
 {
   "name": "editlayer-functions",
-  "description": "Firebase cloud functions for Editlayer",
+  "description": "Firebase Cloud Functions for Editlayer",
   "main": "dist/index.js",
   "dependencies": {
     "firebase-admin": "~5.12.1",

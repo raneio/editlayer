@@ -180,7 +180,7 @@ export default {
       let userData = {}
       userData[`users.${payload.awaitId}`] = payload.user
 
-      console.log('addUserToProjectToFirestore', payload)
+      // console.log('addUserToProjectToFirestore', payload)
 
       await firebase.firestore
         .collection('projects')

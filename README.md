@@ -1,2 +1,2 @@
-### Enable cors
-gsutil cors set rules/cors.rules gs://<PROJECT_ID>.appspot.com
+# Documentation
+https://alpha5.editlayer.org/documentation

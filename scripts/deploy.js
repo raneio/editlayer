@@ -1,97 +1,104 @@
 const fs = require('fs')
-const util = require('util')
-const exec = util.promisify(require('child_process').exec)
+const execa = require('execa')
 
-const firebaserc = JSON.parse(fs.readFileSync(`${__dirname}/../.firebaserc`).toString())
-const aliases = Object.keys(firebaserc.projects)
-const aliasesSorted = aliases.sort()
-const firstAlias = aliasesSorted.slice(0, 1).toString()
-const arguments = process.argv.slice(2)
-const alias = arguments[0]
+const createEnvFile = (envPath, alias) => {
+  const setupWeb = execa.shellSync(`firebase setup:web`)
+  const envFileContent = setupWeb.stdout
+    .toString()
+    .split('\n')
+    .map(line => {
+      if (line.includes('": "')) {
+        const pair = line.split('"')
+        const key = pair[1]
+        const value = pair[3]
 
-const setEnvFile = async (alias) => {
-  const envFilePath = `${__dirname}/../.env.${alias}.local`
-
-  if (!fs.existsSync(envFilePath)) {
-    console.log(`firebase setup:web > .env.${alias}.local`)
-    await exec(`firebase setup:web > ${envFilePath}`)
-
-    const envFileContent = fs.readFileSync(envFilePath)
-      .toString()
-      .split('\n')
-      .map(line => {
-        if (line.includes('": "')) {
-          const pair = line.split('"')
-          const key = pair[1]
-          const value = pair[3]
-
-          if (key === 'apiKey') {
-            return `VUE_APP_FIREBASE_API_KEY=${value}`
-          }
-          else if (key === 'authDomain') {
-            return `VUE_APP_FIREBASE_AUTH_DOMAIN=${value}`
-          }
-          else if (key === 'databaseURL') {
-            return `VUE_APP_FIREBASE_DATABASE_URL=${value}`
-          }
-          else if (key === 'projectId') {
-            return `VUE_APP_FIREBASE_PROJECT_ID=${value}`
-          }
-          else if (key === 'storageBucket') {
-            return `VUE_APP_FIREBASE_STORAGE_BUCKET=${value}`
-          }
+        if (key === 'apiKey') {
+          return `VUE_APP_FIREBASE_API_KEY=${value}`
         }
+        else if (key === 'authDomain') {
+          return `VUE_APP_FIREBASE_AUTH_DOMAIN=${value}`
+        }
+        else if (key === 'databaseURL') {
+          return `VUE_APP_FIREBASE_DATABASE_URL=${value}`
+        }
+        else if (key === 'projectId') {
+          return `VUE_APP_FIREBASE_PROJECT_ID=${value}`
+        }
+        else if (key === 'storageBucket') {
+          return `VUE_APP_FIREBASE_STORAGE_BUCKET=${value}`
+        }
+      }
 
-        return null
-      })
-      .filter(line => line)
-      .join('\n')
+      return null
+    })
+    .filter(line => line)
+    .join('\n')
 
-    fs.writeFileSync(envFilePath, envFileContent, 'utf-8')
-  }
+  fs.writeFileSync(envPath, envFileContent, 'utf-8')
+
+  console.log(`
+Created file .env.${alias}.local
+${envFileContent}
+`)
 }
 
-const deploy = async () => {
-  if (!aliases.includes(alias)) {
-    console.log('')
-    console.log(`Alias "${alias}" is not available. Use can use following: ${aliasesSorted.join(', ')}`)
-    console.log(`Example: npm run deploy ${firstAlias}`)
+;(async () => {
+  const firebaserc = JSON.parse(fs.readFileSync(`${__dirname}/../.firebaserc`).toString())
+  const aliases = Object.keys(firebaserc.projects)
+  const arguments = process.argv.slice(2)
+  const alias = arguments[0]
+  const envPath = `${__dirname}/../.env.${alias}.local`
+
+  // Is gsutil installed
+  try {
+    execa.shellSync(`npx firebase --version`)
+  }
+  catch (error) {
+    console.log(`
+You need to Firebase Tools
+npm install -g firebase-tools
+https://firebase.google.com/docs/cli/
+`)
     return false
   }
 
-  const url = `https://${firebaserc.projects[alias]}.firebaseapp.com/`
+  // Alias need to be in .firebaserc
+  if (!aliases.includes(alias)) {
+    console.log(`
+Alias "${alias}" is not available. Use can use the following:
+ - ${aliases.join('\n - ')}
+Example: npm run deploy production
+`)
+    return false
+  }
 
-  console.log('')
-  console.log(`firebase use ${alias}`)
-  await exec(`firebase use ${alias}`)
+  // Lint
+  execa.shellSync(`npx vue-cli-service lint`, { stdio: 'inherit' })
+  execa.shellSync(`npx eslint ./functions/src`, { stdio: 'inherit' })
 
-  setEnvFile(alias)
+  // Use selected alias
+  execa.shellSync(`npx firebase use ${alias}`, { stdio: 'inherit' })
 
-  if (alias === 'development') {
-    console.log(`npm run build:functions`)
-    await exec(`npm run build:functions`)
+  // Create .env.[alias].local File if not exists
+  if (!fs.existsSync(envPath)) {
+    createEnvFile(envPath, alias)
+  }
 
-    console.log(`firebase deploy --only functions,firestore,storage`)
-    console.log(`...this can take several minutes, please wait`)
+  // Build functions
+  execa.shellSync('npx babel functions/src --out-dir functions/dist', { stdio: 'inherit' })
 
-    await exec(`firebase deploy --only functions,firestore,storage`)
+  // Build app if not development
+  if (alias !== 'development') {
+    execa.shellSync(`npx vue-cli-service build --mode ${alias}`, { stdio: 'inherit' })
+  }
 
-    console.log('Deploy complete!')
-    console.log('Run development environment: npm run serve')
+  // Deploy to Firebase
+  if (alias !== 'development') {
+    execa.shellSync('npx firebase deploy', { stdio: 'inherit' })
   }
   else {
-    if (aliases.length > 1) {
-      console.log(`npm run build`)
-      await exec(`npm run build`)
-    }
-    console.log(`firebase deploy`)
-    console.log(`...this can take several minutes, please wait`)
-
-    await exec(`firebase deploy`)
-
-    console.log('Deploy complete!')
-    console.log(`Open deployed Editlayer: ${url}`)
+    execa.shellSync('npx firebase deploy --only functions,firestore,storage', { stdio: 'inherit' })
+    console.log('Run development environment: npm run serve')
   }
-}
 
-deploy()
+})().catch(err => console.error(err))

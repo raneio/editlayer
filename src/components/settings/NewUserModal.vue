@@ -1,5 +1,4 @@
 <script>
-import validator from 'validator'
 
 export default {
   name: 'NewUserModal',
@@ -31,7 +30,7 @@ export default {
     },
 
     newUser () {
-      if (!validator.isEmail(this.email)) {
+      if (!/\S+@\S+\.\S+/.test(this.email)) {
         console.error('Email is invalid', this.email)
 
         this.$store.commit('setNotification', {
