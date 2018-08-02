@@ -1,7 +1,7 @@
 {
   "name": "editlayer-cms",
   "description": "Editlayer is headless CMS that saves content as JSON",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "private": true,
   "scripts": {
     "init": "npm install && cd functions && npm install",
