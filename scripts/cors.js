@@ -1,13 +1,15 @@
 const fs = require('fs')
+const path = require('path')
 const execa = require('execa')
 
 ;(async () => {
-  const firebaserc = JSON.parse(fs.readFileSync(`${__dirname}/../.firebaserc`).toString())
+  const firebasersPath = path.join(__dirname, '/../.firebaserc')
+  const firebaserc = JSON.parse(fs.readFileSync(firebasersPath).toString())
   const aliases = Object.keys(firebaserc.projects)
   const arguments = process.argv.slice(2)
   const job = arguments[0]
   const alias = arguments[1]
-  const envPath = `${__dirname}/../.env.${alias}.local`
+  const envPath = path.join(__dirname, `/../.env.${alias}.local`)
 
   // Is gsutil installed
   try {
@@ -56,16 +58,17 @@ Example: npm run deploy production
   // Run the job
   if (job === 'allow') {
     console.log(`Allow CORS on the alias ${alias}`)
-    execa.shellSync(`gsutil cors set ${__dirname}/../rules/cors.json gs://${storageBucket}`, { stdio: 'inherit' })
+    const rulesCorsPath = path.join(__dirname, `/../rules/cors.jsonl`)
+    execa.shellSync(`gsutil cors set ${rulesCorsPath} gs://${storageBucket}`, { stdio: 'inherit' })
   }
-  else if (job === 'disallow'){
+  else if (job === 'disallow') {
     console.log(`Disallow CORS on the alias ${alias}`)
-    const tempPath = `${__dirname}/tempDisallow.json`
+    const tempPath = path.join(__dirname, `/tempDisallow.json`)
     fs.writeFileSync(tempPath, '[]', 'utf-8')
     execa.shellSync(`gsutil cors set ${tempPath} gs://${storageBucket}`, { stdio: 'inherit' })
     fs.unlinkSync(tempPath)
   }
-  else if (job === 'status'){
+  else if (job === 'status') {
     console.log(`Get CORS status from the alias ${alias}`)
   }
 

@@ -40,8 +40,8 @@ export default {
 .alert-core
   padding: .75em 1rem
   border-radius: $radius--small
-  overflow: hidden
-  text-overflow: ellipsis
+  // overflow: hidden
+  // text-overflow: ellipsis
 
   &.-mode-default
     +mode($color-gray--dark)

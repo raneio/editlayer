@@ -52,6 +52,7 @@ export default (snap, context) => {
           .delete()
       })
 
+      console.log('deleteProject done')
       return firestore
         .collection('projects')
         .doc(context.params.projectId)

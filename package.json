@@ -7,7 +7,8 @@
     "init": "npm install && cd functions && npm install",
     "serve": "vue-cli-service serve",
     "deploy": "node scripts/deploy.js",
-    "cors": "node scripts/cors.js"
+    "cors": "node scripts/cors.js",
+    "open": "node scripts/open.js"
   },
   "dependencies": {
     "@jaames/iro": "^3.4.1",
@@ -49,6 +50,7 @@
     "babel-preset-env": "^1.7.0",
     "firebase-tools": "^4.0.2",
     "node-sass": "^4.9.2",
+    "opn": "^5.3.0",
     "sass-loader": "^7.0.3",
     "vue-template-compiler": "^2.5.16"
   },

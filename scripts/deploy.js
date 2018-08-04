@@ -1,4 +1,5 @@
 const fs = require('fs')
+const path = require('path')
 const execa = require('execa')
 
 const createEnvFile = (envPath, alias) => {
@@ -43,11 +44,12 @@ ${envFileContent}
 }
 
 ;(async () => {
-  const firebaserc = JSON.parse(fs.readFileSync(`${__dirname}/../.firebaserc`).toString())
+  const firebasersPath = path.join(__dirname, '/../.firebaserc')
+  const firebaserc = JSON.parse(fs.readFileSync(firebasersPath).toString())
   const aliases = Object.keys(firebaserc.projects)
   const arguments = process.argv.slice(2)
   const alias = arguments[0]
-  const envPath = `${__dirname}/../.env.${alias}.local`
+  const envPath = path.join(__dirname, `/../.env.${alias}.local`)
 
   // Is gsutil installed
   try {

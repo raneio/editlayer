@@ -46,7 +46,6 @@ export default {
 
     login () {
       firebase.auth.signInWithEmailAndPassword(this.email, this.password)
-        // .then(user => console.log('Logged in', user.email))
         .catch((error) => {
           console.error('Logged in faild', error)
           this.progress = false
@@ -67,51 +66,6 @@ export default {
 
     register () {
       firebase.auth.createUserWithEmailAndPassword(this.email, this.password)
-        // .then(user => {
-        //   firebase.firestore.collection('users').doc(user.uid).set({
-        //     email: user.email,
-        //   })
-        //     .then(() => {
-        //       console.log('Added user', user.email)
-        //
-        //       this.$store.dispatch('newProject', {
-        //         name: 'Simple Example',
-        //         schema: {
-        //           title: 'text',
-        //           slogan: 'textarea',
-        //           description: 'richtext',
-        //           image: 'image',
-        //         },
-        //       })
-        //
-        //       this.$store.dispatch('newProject', {
-        //         name: 'Advanced Example',
-        //         schema: {
-        //           simpleField: 'text',
-        //           anotherField: {
-        //             EDITOR: 'text',
-        //             TITLE: 'Advanced Field',
-        //             DEFAULT: 'Hello World!',
-        //             INFO: 'You can use TITLE, DEFAULT and INFO properties with an object notation.',
-        //           },
-        //           nestedExample: {
-        //             TITLE: 'Nested Fields Example',
-        //             title: 'text',
-        //             description: 'textarea',
-        //           },
-        //           arrayExample: [{
-        //             TITLE: 'Image Gallery Example',
-        //             image: 'image',
-        //             caption: 'text',
-        //           }],
-        //         },
-        //       })
-        //     })
-        //     .catch(error => {
-        //       console.error('Adding user error', error)
-        //       this.progress = false
-        //     })
-        // })
         .catch(error => {
           console.error('register error', error)
           this.progress = false
@@ -126,7 +80,7 @@ export default {
             alert(error.message)
           }
           else {
-            alert('Unknown error! Try again later or contact us editlayer@gmail.com')
+            alert('Unknown error! Try again later or contact admin.')
           }
         })
     },
@@ -135,11 +89,12 @@ export default {
       firebase.auth.sendPasswordResetEmail(this.email).then(() => {
         this.changeState('login')
         this.progress = false
-      }).catch((error) => {
-        this.error = 'email'
-        console.error('Reseting faild', error)
-        this.progress = false
       })
+        .catch((error) => {
+          this.error = 'email'
+          console.error('Reseting faild', error)
+          this.progress = false
+        })
     },
 
     changeState (state) {
@@ -152,32 +107,34 @@ export default {
 </script>
 
 <template>
-<section class="auth" :class="{ '-progress': progress}">
+<section class="auth" :class="{ 'progress': progress}">
 
   <div class="content">
 
     <form class="form" @submit.prevent="submit()">
 
-      <h1 class="heading -logo">
-        <span v-if="state === 'login'">
-          Login to your account
-        </span>
+      <heading-core class="heading">
+        <h1>
+          <span v-if="state === 'login'">
+            Login to your account
+          </span>
 
-        <span v-if="state === 'register'">
-          Register new account
-        </span>
+          <span v-if="state === 'register'">
+            Register new account
+          </span>
 
-        <span v-if="state === 'forget'">
-          Reset your password
-        </span>
-      </h1>
+          <span v-if="state === 'forget'">
+            Reset your password
+          </span>
+        </h1>
+      </heading-core>
 
-      <label class="field" :class="{'-error': error === 'email'}">
+      <label class="field" :class="{'error': error === 'email'}">
         <div>Email</div>
         <input class="input" type="email" v-model="email">
       </label>
 
-      <label class="field" :class="{'-error': error === 'password'}" v-if="state !== 'forget'">
+      <label class="field" :class="{'error': error === 'password'}" v-if="state !== 'forget'">
         <div>Password</div>
         <input class="input" type="password" v-model="password">
         <div v-if="state === 'login'" class="forget">
@@ -194,6 +151,11 @@ export default {
       <div v-if="state === 'forget'" class="forget">
         <a @click="changeState('login')">Back</a>
       </div>
+
+      <section class="register-spinner" v-if="progress && state === 'register'">
+        <icon name="spinner" spin/>
+        <div>Creating user account may take a while</div>
+      </section>
 
     </form>
 
@@ -231,8 +193,15 @@ export default {
   align-items: center
   width: 100%
 
-  &.-progress
+  &.progress
     cursor: progress
+
+    .heading,
+    .field,
+    .button-core,
+    .footer,
+      opacity: .2
+      pointer-events: none
 
   .content
     +gap()
@@ -243,14 +212,18 @@ export default {
     box-shadow: 0 5px 12px 0 mix(transparent, $color-black, 90%), 0 2px 5px 0 mix(transparent, black, 93%)
     background-color: $color-white
     padding: 3rem 4rem
+    position: relative
     +gap()
+
+  .heading
+    margin-bottom: 2rem
 
   .field
     text-align: left
     font-weight: 600
     +gap(.25rem)
 
-    &.-error
+    &.error
       color: $color-danger
 
       .input
@@ -270,5 +243,15 @@ export default {
 
   .footer
     font-weight: 600
+
+  .register-spinner
+    position: absolute
+    top: 50%
+    left: 30%
+    right: 30%
+    transform: translateY(-50%)
+
+    .fa-icon
+      width: 6rem
 
 </style>

@@ -45,6 +45,7 @@ export default {
       .doc(context.params.projectId)
       .update(updateData)
 
+    console.log('attachUserToProjectWhenAdded done')
     return true
   },
 
@@ -78,6 +79,7 @@ export default {
           }
         })
 
+        console.log('attachUserToProjectWhenRegister done')
         return true
       })
       .catch(error => console.error('User adding when register failed', error))

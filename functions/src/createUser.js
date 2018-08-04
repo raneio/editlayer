@@ -1,24 +1,34 @@
 import admin from 'firebase-admin'
 
-export default (userRecord, context) => {
+export default async (userRecord, context) => {
   const firestore = admin.firestore()
 
-  return firestore
+  const settings = await firestore
+    .collection('settings')
+    .doc('general')
+    .get()
+    .then(snap => snap.data())
+    .catch(error => console.error('Settings getting failed', error))
+
+  const firstUser = await firestore
     .collection('users')
     .get()
-    .then(snap => {
-      // Add to first user premission create new projects
-      const allowCreateProject = snap.size === 0
+    .then(snap => snap.size === 0)
+    .catch(error => console.error('Users getting failed', error))
 
-      return firestore
-        .collection('users')
-        .doc(userRecord.uid)
-        .set({
-          email: userRecord.email,
-          permissions: {
-            createProject: allowCreateProject,
-          },
-        })
+  const allowCreateProject = settings.allowNewUsersCreateProject === true || firstUser === true
+
+  await firestore
+    .collection('users')
+    .doc(userRecord.uid)
+    .set({
+      email: userRecord.email,
+      permissions: {
+        createProject: allowCreateProject,
+      },
     })
-    .catch(error => console.error('Create user failed', error))
+    .catch(error => console.error('User added failed', error))
+
+  console.log('createUser done')
+  return true
 }

@@ -44,6 +44,7 @@ export default (snap, context) => {
         .doc(context.params.projectId)
         .update(updateData)
 
+      console.log('publishJson done')
       return true
     })
     .catch((error) => console.error('JSON publishing failed', error.message))

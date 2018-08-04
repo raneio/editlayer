@@ -1,6 +1,5 @@
 <script>
 import _ from 'lodash'
-// import firebase from '@/utils/firebase'
 import editorConfig from '@/editors/config'
 
 // Codemirror

@@ -4,30 +4,33 @@ import publishJson from './publishJson'
 import attachUserToProject from './attachUserToProject'
 import createUser from './createUser'
 import deleteProject from './deleteProject'
+import initSettings from './initSettings'
 
 admin.initializeApp()
 
-exports.publishJson = functions
+exports.newUser = functions
+  .auth
+  .user()
+  .onCreate(async (snap, context) => {
+    await initSettings(snap, context)
+    await createUser(snap, context)
+    await attachUserToProject.whenRegister(snap, context)
+    return true
+  })
+
+exports.newVersion = functions
   .firestore
   .document('projects/{projectId}/versions/{versionId}')
-  .onCreate((snap, context) => publishJson(snap, context))
+  .onCreate(async (snap, context) => {
+    await publishJson(snap, context)
+    return true
+  })
 
-exports.attachUserToProjectWhenAdded = functions
+exports.newJob = functions
   .firestore
   .document('projects/{projectId}/jobs/{jobId}')
-  .onCreate((snap, context) => attachUserToProject.whenAdded(snap, context))
-
-exports.attachUserToProjectWhenRegister = functions
-  .auth
-  .user()
-  .onCreate((snap, context) => attachUserToProject.whenRegister(snap, context))
-
-exports.createUser = functions
-  .auth
-  .user()
-  .onCreate((snap, context) => createUser(snap, context))
-
-exports.deleteProject = functions
-  .firestore
-  .document('projects/{projectId}/jobs/{jobId}')
-  .onCreate((snap, context) => deleteProject(snap, context))
+  .onCreate(async (snap, context) => {
+    await attachUserToProject.whenAdded(snap, context)
+    await deleteProject(snap, context)
+    return true
+  })

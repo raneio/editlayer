@@ -71,7 +71,7 @@ export default {
     },
 
     newProjectToFirestore ({state, dispatch}, payload) {
-      console.log('newProjectToFirestore', payload)
+      // console.log('newProjectToFirestore', payload)
       let newProject = payload.newProject
       payload = payload.payload
 
