@@ -14,9 +14,6 @@ export default {
 
     logout () {
       firebase.auth.signOut()
-        // .then(() => {
-        //   window.location.href = 'https://editlayer.com'
-        // })
         .catch(error => console.error('Logout failed', error))
     },
 
@@ -27,10 +24,9 @@ export default {
 
 <template>
 <nav class="navigation">
-  <button-core mode="invert" light class="logo" href="https://editlayer.com">
+  <button-core mode="invert" light class="logo" href="https://editlayer.org">
     <icon name="editlayer"/>
     <span>Editlayer</span>
-    <!-- <span class="light">Tietokeskus</span><span>TV</span> -->
   </button-core>
 
   <hr>

@@ -33,10 +33,10 @@ Example: npm run deploy production
 
   if (alias !== 'development') {
     console.log(`Opening URL ${url} in the browser.`)
-    opn(url)
+    opn(url, {wait: false})
   }
   else {
-    execa.shellSync(`npx vue-cli-service serve --open`, { stdio: 'inherit' })
+    execa.shellSync(`npm run serve`, { stdio: 'inherit' })
   }
 
 })().catch(err => console.error(err))

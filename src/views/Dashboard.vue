@@ -75,12 +75,14 @@ export default {
   flex-direction: column
   height: 100%
   width: 100%
+  overflow-y: auto
   background-image: $color-gray--gradient
 
   > .content
     display: flex
     flex-direction: column
     flex-grow: 1
+    flex-shrink: 0
     +gap(4rem)
     +container($breakpoint--huge)
     padding-top: 2rem

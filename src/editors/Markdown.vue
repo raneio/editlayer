@@ -4,7 +4,6 @@
  * @param {string} content - Content saves automatically when changing
  * @param {string} config.EDITOR - Name of editor
  * @param {string} config.TITLE
- * @param {string} config.PLACEHOLDER
  * @param {string} config.DOWNSCALE
  */
 

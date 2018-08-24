@@ -114,19 +114,19 @@ export default {
         })
         .catch((error) => console.error('Upload task faild', error))
 
-      let placeholder = null
+      let thumbnail = null
 
       if (payload.projectId && payload.path && downloadURL) {
         if (_.includes(['image/jpeg', 'image/png', 'image/gif'], payload.image.type)) {
-          const placeholderBlob = await imageCompressor.compress(payload.image, {
+          const thumbnailBlob = await imageCompressor.compress(payload.image, {
             quality: 0.2,
             convertSize: 0,
-            maxWidth: 92,
-            maxHeight: 92,
+            maxWidth: 64,
+            maxHeight: 64,
           })
             .catch((error) => console.error('Image optimize failed', error.message))
 
-          placeholder = await blobToDataURL(placeholderBlob)
+          thumbnail = await blobToDataURL(thumbnailBlob)
             .catch((error) => console.error('Blob to base64 failed', error))
         }
 
@@ -142,7 +142,7 @@ export default {
               width: img.width,
               size: uploadImage.size,
               type: uploadImage.type,
-              placeholder: placeholder,
+              thumbnail: thumbnail,
             },
           })
         }
@@ -155,7 +155,7 @@ export default {
         path: payload.path,
         size: uploadImage.size,
         type: uploadImage.type,
-        placeholder: placeholder,
+        thumbnail: thumbnail,
       }
     },
   },

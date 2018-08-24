@@ -4,6 +4,7 @@ dist
 __*
 .env*.local
 .firebaserc
+editalyer-archive.zip
 
 # Log files
 npm-debug.log*

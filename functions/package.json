@@ -3,8 +3,8 @@
   "description": "Firebase Cloud Functions for Editlayer",
   "main": "dist/index.js",
   "dependencies": {
-    "firebase-admin": "~5.12.1",
-    "firebase-functions": "^1.0.3",
+    "firebase-admin": "~6.0.0",
+    "firebase-functions": "^2.0.4",
     "js-base64": "^2.4.8",
     "lodash": "^4.17.10"
   },

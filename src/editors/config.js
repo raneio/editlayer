@@ -4,12 +4,14 @@ import Checkbox from '@/editors/Checkbox'
 import Code from '@/editors/Code'
 import Color from '@/editors/Color'
 import Image from '@/editors/Image'
-import Input from '@/editors/Input'
+// import Input from '@/editors/Input'
 import Markdown from '@/editors/Markdown'
+import Number from '@/editors/Number'
 import Radio from '@/editors/Radio'
 import RichText from '@/editors/RichText'
 import Select from '@/editors/Select'
 import SelectImage from '@/editors/SelectImage'
+import Text from '@/editors/Text'
 import Textarea from '@/editors/Textarea'
 import Video from '@/editors/Video'
 
@@ -49,14 +51,19 @@ export default [
     'editor': Image,
     'preview': ImagePreview,
   },
-  {
-    'schemaName': 'input',
-    'editor': Input,
-    'preview': TextPreview,
-  },
+  // {
+  //   'schemaName': 'input',
+  //   'editor': Input,
+  //   'preview': TextPreview,
+  // },
   {
     'schemaName': 'markdown',
     'editor': Markdown,
+    'preview': TextPreview,
+  },
+  {
+    'schemaName': 'number',
+    'editor': Number,
     'preview': TextPreview,
   },
   {
@@ -78,6 +85,11 @@ export default [
     'schemaName': 'select-image',
     'editor': SelectImage,
     'preview': ImagePreview,
+  },
+  {
+    'schemaName': 'text',
+    'editor': Text,
+    'preview': TextPreview,
   },
   {
     'schemaName': 'textarea',

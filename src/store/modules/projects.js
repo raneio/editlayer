@@ -84,7 +84,7 @@ export default {
       payload.name = payload.name || `Project ${generate('abcdefghijklmnopqrstuvwxyz', 4)}`
       payload.id = payload.id || slugg(payload.name)
       payload.schema = payload.schema || {
-        title: 'input',
+        title: 'text',
         description: 'textarea',
         photo: 'image',
       }

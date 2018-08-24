@@ -51,7 +51,7 @@ ${envFileContent}
   const alias = arguments[0]
   const envPath = path.join(__dirname, `/../.env.${alias}.local`)
 
-  // Is gsutil installed
+  // Is firebase-tools installed
   try {
     execa.shellSync(`npx firebase --version`)
   }
@@ -81,9 +81,31 @@ Example: npm run deploy production
   // Use selected alias
   execa.shellSync(`npx firebase use ${alias}`, { stdio: 'inherit' })
 
-  // Create .env.[alias].local File if not exists
+  // Create .env.[alias].local File if not exists or project id is changed
   if (!fs.existsSync(envPath)) {
     createEnvFile(envPath, alias)
+  }
+  else {
+    const projectId = fs.readFileSync(envPath)
+      .toString()
+      .split('\n')
+      .map(line => {
+        const pair = line.split('=')
+        const key = pair[0]
+        const value = pair[1]
+
+        if (key === 'VUE_APP_FIREBASE_PROJECT_ID') {
+          return value
+        }
+
+        return null
+      })
+      .filter(line => line)
+      .toString()
+
+    if (firebaserc.projects[alias] !== projectId) {
+      createEnvFile(envPath, alias)
+    }
   }
 
   // Build functions
@@ -100,7 +122,6 @@ Example: npm run deploy production
   }
   else {
     execa.shellSync('npx firebase deploy --only functions,firestore,storage', { stdio: 'inherit' })
-    console.log('Run development environment: npm run serve')
   }
 
   // Back to development env if exsist
