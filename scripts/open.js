@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const execa = require('execa')
-const opn = require('opn')
+const open = require('open')
 
 ;(async () => {
   const firebasersPath = path.join(__dirname, '/../.firebaserc')
@@ -14,7 +14,7 @@ const opn = require('opn')
   // Alias need to be in .firebaserc
   if (!aliases.includes(alias)) {
     console.log(`
-Alias "${alias}" is not available. Use can use the following:
+Alias "${alias}" is not available. You can use the following:
  - ${aliases.join('\n - ')}
 Example: npm run deploy production
 `)
@@ -33,7 +33,7 @@ Example: npm run deploy production
 
   if (alias !== 'development') {
     console.log(`Opening URL ${url} in the browser.`)
-    opn(url, {wait: false})
+    open(url, {wait: false})
   }
   else {
     execa.shellSync(`npm run serve`, { stdio: 'inherit' })
