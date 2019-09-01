@@ -42,7 +42,7 @@ export default {
     },
 
     activePreviewComponentName () {
-      let configItem = _.find(editorConfig, {'schemaName': this.item.EDITOR})
+      let configItem = _.find(editorConfig, { 'schemaName': this.item.EDITOR })
       return configItem ? configItem.preview.name : false
     },
 
@@ -61,7 +61,7 @@ export default {
       let path = _.replace(item._path, /\./g, '>')
 
       if (item._type === 'item') {
-        this.$router.push({name: routeName, params: {projectId: projectId, path: path}})
+        this.$router.push({ name: routeName, params: { projectId: projectId, path: path } })
         return false
       }
 
@@ -83,10 +83,10 @@ export default {
           duration: 0,
           complete: (anim) => {
             if (path) {
-              this.$router.push({name: routeName, params: {projectId: projectId, path: path}})
+              this.$router.push({ name: routeName, params: { projectId: projectId, path: path } })
             }
             else {
-              this.$router.push({name: routeName, params: {projectId: projectId}})
+              this.$router.push({ name: routeName, params: { projectId: projectId } })
             }
           },
         })

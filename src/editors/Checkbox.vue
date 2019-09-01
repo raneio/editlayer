@@ -35,7 +35,7 @@ export default {
       let content = []
 
       _.each(this.content, item => {
-        if (_.find(this.options, {value: item})) {
+        if (_.find(this.options, { value: item })) {
           content.push(item)
         }
       })

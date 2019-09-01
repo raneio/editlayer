@@ -24,7 +24,7 @@ export default {
 
   created () {
     if (this.activeProject.auth.permissions.updateSettings !== true) {
-      this.$router.replace({name: 'Content', params: {projectId: this.activeProject.id}})
+      this.$router.replace({ name: 'Content', params: { projectId: this.activeProject.id } })
     }
   },
 

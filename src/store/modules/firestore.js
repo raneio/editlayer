@@ -24,7 +24,7 @@ export default {
   },
 
   actions: {
-    authState ({state, commit, dispatch, rootState}) {
+    authState ({ state, commit, dispatch, rootState }) {
       firebase.auth.onAuthStateChanged(firebaseUser => {
         if (!firebaseUser) {
           commit('setUser', false)
@@ -39,12 +39,12 @@ export default {
         })
 
         if (rootState.route.name === 'Register') {
-          router.push({name: 'Dashboard'})
+          router.push({ name: 'Dashboard' })
         }
       })
     },
 
-    getUserFromFirestore ({state, commit}, userId) {
+    getUserFromFirestore ({ state, commit }, userId) {
       firebase.firestore
         .collection('users')
         .doc(userId)
@@ -56,7 +56,7 @@ export default {
         })
     },
 
-    getProjectsFromFirestore ({state, commit}, payload) {
+    getProjectsFromFirestore ({ state, commit }, payload) {
       firebase.firestore
         .collection('projects')
         .where(`users.${payload.id}.email`, '==', payload.email)
@@ -70,7 +70,7 @@ export default {
         })
     },
 
-    newProjectToFirestore ({state, dispatch}, payload) {
+    newProjectToFirestore ({ state, dispatch }, payload) {
       // console.log('newProjectToFirestore', payload)
       let newProject = payload.newProject
       payload = payload.payload
@@ -94,7 +94,7 @@ export default {
         })
     },
 
-    deleteProjectFromFirestore ({state}, payload) {
+    deleteProjectFromFirestore ({ state }, payload) {
       firebase.firestore
         .collection('projects')
         .doc(payload.id)
@@ -106,7 +106,7 @@ export default {
         .catch((error) => console.error('Project deleting failed', error))
     },
 
-    newProjectVersionToFirestore ({state}, payload) {
+    newProjectVersionToFirestore ({ state }, payload) {
       return firebase.firestore
         .collection('projects')
         .doc(payload.projectId)
@@ -124,7 +124,7 @@ export default {
         .catch((error) => console.error('Error adding version:', error))
     },
 
-    setProjectPublished ({state}, payload) {
+    setProjectPublished ({ state }, payload) {
       let updateData = {}
       updateData['published'] = {
         draft: payload.draft,
@@ -139,7 +139,7 @@ export default {
         .update(updateData)
     },
 
-    updateDraftToFirestore ({state, getters}, payload) {
+    updateDraftToFirestore ({ state, getters }, payload) {
       let updateContent = {}
       updateContent[`draft.${payload.path}`] = payload.content
 
@@ -150,7 +150,7 @@ export default {
         .catch((error) => console.error('Error updating content:', error))
     },
 
-    updateSchemaToFirestore ({state}, payload) {
+    updateSchemaToFirestore ({ state }, payload) {
       firebase.firestore
         .collection('projects')
         .doc(payload.projectId)
@@ -160,7 +160,7 @@ export default {
         .catch((error) => console.error('Error writing schema:', error))
     },
 
-    newPermissionToFirestore ({commit, getters}, payload) {
+    newPermissionToFirestore ({ commit, getters }, payload) {
       firebase.firestore
         .collection('projects')
         .doc(payload.projectId)
@@ -176,7 +176,7 @@ export default {
         .catch(error => console.error('Add user job adding failed', error))
     },
 
-    async addUserToProjectToFirestore ({commit, getters}, payload) {
+    async addUserToProjectToFirestore ({ commit, getters }, payload) {
       let userData = {}
       userData[`users.${payload.awaitId}`] = payload.user
 
@@ -201,7 +201,7 @@ export default {
         .catch(error => console.error('Add user job adding failed', error))
     },
 
-    updatePermissionToFirestore ({state}, payload) {
+    updatePermissionToFirestore ({ state }, payload) {
       // console.log('updatePermissionToFirestore', payload)
       let newRole = {}
       newRole[`users.${payload.userId}.permissions`] = payload.permissions
@@ -213,7 +213,7 @@ export default {
         .catch((error) => console.error('Permission updating failed', error))
     },
 
-    removeUserFromProjectToFirestore ({state}, payload) {
+    removeUserFromProjectToFirestore ({ state }, payload) {
       // console.log('removeUserFromProjectToFirestore', payload)
       let removeUser = {}
       removeUser[`users.${payload.userId}`] = firebase.firestoreDelete

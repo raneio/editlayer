@@ -5,6 +5,7 @@ __*
 .env*.local
 .firebaserc
 editalyer-archive.zip
+.firebase
 
 # Log files
 npm-debug.log*

@@ -73,7 +73,7 @@ export default {
 
       if (firstItem && this.activeItem._type !== 'item') {
         let firstItemPath = _.replace(firstItem._path, /\./g, '>')
-        this.$router.replace({name: 'Content', params: {projectId: this.$route.params.projectId, path: firstItemPath}})
+        this.$router.replace({ name: 'Content', params: { projectId: this.$route.params.projectId, path: firstItemPath } })
       }
     },
 

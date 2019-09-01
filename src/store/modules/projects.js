@@ -61,7 +61,7 @@ export default {
           jsonUrl: `https://firebasestorage.googleapis.com/v0/b/${process.env.VUE_APP_FIREBASE_STORAGE_BUCKET}/o/${key}%2Fcontent.json?alt=media&token=${value.token}`,
           name: value.name || null,
           publishedVersion: value.publishedVersion || {},
-          auth: _.find(users, {id: getters.auth.id}) || null,
+          auth: _.find(users, { id: getters.auth.id }) || null,
           users: users,
           schema: value.schema || null,
           settings: value.settings || {},
@@ -73,14 +73,14 @@ export default {
 
     activeProject (state, getters, rootState) {
       const projects = _.cloneDeep(getters.projects)
-      return _.find(projects, {id: rootState.route.params.projectId}) || null
+      return _.find(projects, { id: rootState.route.params.projectId }) || null
     },
 
   },
 
   actions: {
 
-    newProject ({state, dispatch, getters}, payload) {
+    newProject ({ state, dispatch, getters }, payload) {
       payload.name = payload.name || `Project ${generate('abcdefghijklmnopqrstuvwxyz', 4)}`
       payload.id = payload.id || slugg(payload.name)
       payload.schema = payload.schema || {
@@ -116,11 +116,11 @@ export default {
       })
     },
 
-    deleteProject ({dispatch}, payload) {
+    deleteProject ({ dispatch }, payload) {
       dispatch('deleteProjectFromFirestore', payload)
     },
 
-    async publishJson ({state, commit, dispatch}, payload) {
+    async publishJson ({ state, commit, dispatch }, payload) {
       commit('setPublishProcess', {
         projectId: payload.projectId,
       })
@@ -148,8 +148,8 @@ export default {
       dispatch('isPublishReady', payload)
     },
 
-    isPublishReady ({commit, getters, dispatch}, payload) {
-      const project = _.find(getters.projects, {id: payload.projectId})
+    isPublishReady ({ commit, getters, dispatch }, payload) {
+      const project = _.find(getters.projects, { id: payload.projectId })
 
       if (project.publishedVersion.versionId === payload.versionId) {
         commit('updatePublishProcess', {
@@ -252,7 +252,7 @@ export default {
     //   return null
     // },
 
-    addUserToProject ({dispatch}, payload) {
+    addUserToProject ({ dispatch }, payload) {
       payload.awaitId = `await-${Base64.encodeURI(payload.email)}`
       payload.user = {
         email: payload.email,
@@ -270,11 +270,11 @@ export default {
       dispatch('addUserToProjectToFirestore', payload)
     },
 
-    removeUserFromProject ({dispatch}, payload) {
+    removeUserFromProject ({ dispatch }, payload) {
       dispatch('removeUserFromProjectToFirestore', payload)
     },
 
-    updatePermission ({dispatch}, payload) {
+    updatePermission ({ dispatch }, payload) {
       dispatch('updatePermissionToFirestore', payload)
     },
 

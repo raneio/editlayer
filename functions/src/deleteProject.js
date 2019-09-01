@@ -9,7 +9,7 @@ export default (snap, context) => {
   if (storeData.deleteProjectId !== context.params.projectId) return false
 
   return bucket
-    .getFiles({prefix: context.params.projectId})
+    .getFiles({ prefix: context.params.projectId })
     .then((result) => {
       let files = result[0]
 

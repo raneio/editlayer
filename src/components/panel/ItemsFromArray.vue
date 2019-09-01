@@ -141,7 +141,7 @@ export default {
 
       if (firstItem && this.activeItem._type === 'array') {
         let firstItemPath = _.replace(firstItem._path, /\./g, '>')
-        this.$router.replace({name: 'Content', params: {projectId: this.projectId, path: firstItemPath}})
+        this.$router.replace({ name: 'Content', params: { projectId: this.projectId, path: firstItemPath } })
       }
     },
 
@@ -209,7 +209,7 @@ export default {
       let parentPath = _.chain(this.$route.params.path).split('>').slice(0, -1).join('.').value()
 
       if (redirectPath && arrayItem._path === parentPath) {
-        this.$router.replace({name: this.$route.name, params: {projectId: this.projectId, path: redirectPath}})
+        this.$router.replace({ name: this.$route.name, params: { projectId: this.projectId, path: redirectPath } })
       }
 
       firebase.firestore

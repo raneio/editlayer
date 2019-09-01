@@ -69,7 +69,7 @@ export default {
         mediaType: 'video',
       }
 
-      this.input = urlParser.create({videoInfo: videoInfo})
+      this.input = urlParser.create({ videoInfo: videoInfo })
     },
 
     saveVideo: async function () {

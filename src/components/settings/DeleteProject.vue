@@ -20,7 +20,7 @@ export default {
         return null
       }
 
-      this.$store.dispatch('deleteProject', {id: this.activeProject.id})
+      this.$store.dispatch('deleteProject', { id: this.activeProject.id })
 
       this.$store.commit('setNotification', {
         mode: 'info',

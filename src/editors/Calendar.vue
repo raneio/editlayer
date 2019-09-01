@@ -14,7 +14,7 @@
 import EditorBase from '@/editors/common/BaseEditor'
 import _ from 'lodash'
 import dayjs from 'dayjs'
-import {setupCalendar, DatePicker} from 'v-calendar'
+import { setupCalendar, DatePicker } from 'v-calendar'
 import 'v-calendar/lib/v-calendar.min.css'
 
 setupCalendar({

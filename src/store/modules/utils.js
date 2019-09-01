@@ -42,7 +42,7 @@ export default {
 
   actions: {
 
-    resizeListener ({commit}) {
+    resizeListener ({ commit }) {
       window.addEventListener('resize', _.debounce(function () {
         commit('setwWindowSize')
       }, 250))

@@ -28,7 +28,7 @@ export default {
     },
 
     activeComponentName () {
-      let configItem = _.find(editorConfig, {'schemaName': this.activeItem.EDITOR})
+      let configItem = _.find(editorConfig, { 'schemaName': this.activeItem.EDITOR })
       return configItem.editor.name
     },
 
@@ -59,14 +59,14 @@ export default {
         let item = _.get(this.schema, path)
 
         if (item && !_.has(item, '_order')) {
-          this.$router.push({name: 'Content', params: {projectId: this.$store.getters.activeProject.id, path: item._path}})
+          this.$router.push({ name: 'Content', params: { projectId: this.$store.getters.activeProject.id, path: item._path } })
           return false
         }
 
         pathItems = _.dropRight(pathItems)
       }
 
-      this.$router.push({name: 'Content', params: {projectId: this.$store.getters.activeProject.id}})
+      this.$router.push({ name: 'Content', params: { projectId: this.$store.getters.activeProject.id } })
     },
   },
 

@@ -58,7 +58,7 @@ Example: npm run deploy production
   // Run the job
   if (job === 'allow') {
     console.log(`Allow CORS on the alias ${alias}`)
-    const rulesCorsPath = path.join(__dirname, `/../rules/cors.jsonl`)
+    const rulesCorsPath = path.join(__dirname, `/../rules/cors.json`)
     execa.shellSync(`gsutil cors set ${rulesCorsPath} gs://${storageBucket}`, { stdio: 'inherit' })
   }
   else if (job === 'disallow') {

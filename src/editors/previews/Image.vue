@@ -11,7 +11,7 @@ export default {
   computed: {
 
     previewImage () {
-      let selectedOption = _.find(this.config.OPTIONS, {value: this.content})
+      let selectedOption = _.find(this.config.OPTIONS, { value: this.content })
 
       if (_.has(selectedOption, 'image')) {
         return selectedOption.image

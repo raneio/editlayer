@@ -19,11 +19,11 @@ export default {
   methods: {
 
     selectProject (project) {
-      this.$router.push({name: 'Content', params: {projectId: project.id}})
+      this.$router.push({ name: 'Content', params: { projectId: project.id } })
     },
 
     usersCount (project, role) {
-      return _.filter(project.users, {role: role}).length
+      return _.filter(project.users, { role: role }).length
     },
 
     usersText (project, role, singular, plural) {

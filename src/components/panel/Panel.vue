@@ -62,10 +62,10 @@ export default {
       let parentPath = _.chain(this.$route.params.path).split('>').slice(0, -1).join('>').value()
 
       if (parentPath) {
-        this.$router.replace({name: this.$route.name, params: {projectId: this.projectId, path: parentPath}})
+        this.$router.replace({ name: this.$route.name, params: { projectId: this.projectId, path: parentPath } })
       }
       else {
-        this.$router.replace({name: this.$route.name, params: {projectId: this.projectId}})
+        this.$router.replace({ name: this.$route.name, params: { projectId: this.projectId } })
       }
     },
 

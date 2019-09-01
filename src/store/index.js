@@ -64,7 +64,7 @@ let store = {
   },
 
   actions: {
-    updateContent ({getters, dispatch}, payload) {
+    updateContent ({ getters, dispatch }, payload) {
       let currentContent = _.get(getters.structure, `${payload.path}._content`)
 
       if (!_.isEqual(currentContent, payload.content)) {
@@ -72,7 +72,7 @@ let store = {
       }
     },
 
-    updateSchema ({dispatch}, payload) {
+    updateSchema ({ dispatch }, payload) {
       dispatch('updateSchemaToFirestore', payload)
     },
   },

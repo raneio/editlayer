@@ -71,7 +71,7 @@ export default {
     },
 
     close () {
-      this.$store.commit('deleteNotification', {id: this.id})
+      this.$store.commit('deleteNotification', { id: this.id })
     },
 
   },

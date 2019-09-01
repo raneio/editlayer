@@ -65,7 +65,7 @@ export default {
         this.selectItem(backItem)
       }
       else {
-        this.$router.push({name: 'Dashboard'})
+        this.$router.push({ name: 'Dashboard' })
       }
     },
 
@@ -86,10 +86,10 @@ export default {
           duration: 0,
           complete: (anim) => {
             if (item.projectId && path) {
-              this.$router.push({name: this.$route.name, params: {projectId: item.projectId, path: path}})
+              this.$router.push({ name: this.$route.name, params: { projectId: item.projectId, path: path } })
             }
             else if (item.projectId) {
-              this.$router.push({name: this.$route.name, params: {projectId: item.projectId}})
+              this.$router.push({ name: this.$route.name, params: { projectId: item.projectId } })
             }
           },
         })

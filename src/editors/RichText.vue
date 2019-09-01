@@ -9,7 +9,7 @@
  */
 
 import EditorBase from '@/editors/common/BaseEditor'
-import {quillEditor} from 'vue-quill-editor'
+import { quillEditor } from 'vue-quill-editor'
 import { offset } from 'caret-pos'
 import _ from 'lodash'
 
@@ -50,8 +50,8 @@ export default {
           toolbar: {
             container: [
               [
-                {header: 1},
-                {header: 2},
+                { header: 1 },
+                { header: 2 },
                 'bold',
                 'italic',
               ],
@@ -60,8 +60,8 @@ export default {
                 'blockquote',
               ],
               [
-                {list: 'ordered'},
-                {list: 'bullet'},
+                { list: 'ordered' },
+                { list: 'bullet' },
               ],
               [
                 'clean',
