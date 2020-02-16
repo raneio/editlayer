@@ -1,2 +1,2 @@
 # Editlayer documentation
-https://alpha6.editlayer.org/documentation
+https://editlayer.rane.io/documentation
